@@ -1,0 +1,118 @@
+===============================================================================
+  SKY LEDGER  v1.1  -  browser version
+  A Plane of Sky class-unlock tracker for EverQuest Legends
+===============================================================================
+
+  This is the ten-second version. Nothing to install, no warning boxes,
+  works on any computer.
+
+  What it does: reads your EverQuest chat log while you play and tells you
+  what you still need, where it drops, and which tests you can hand in NOW.
+
+  Nothing is uploaded. There is no server and no account. The page cannot
+  make a network request of any kind - that is enforced by the page itself,
+  not merely promised. Your log never leaves your computer.
+
+
+-------------------------------------------------------------------------------
+  RUN IT
+-------------------------------------------------------------------------------
+
+  Double-click   SkyLedger.html
+
+  It opens in your browser. Use CHROME or EDGE - they can follow your log
+  file live as you play. Firefox and Safari cannot; there you drag the log
+  onto the panel for a one-off read and re-drop it to refresh.
+
+
+-------------------------------------------------------------------------------
+  SET UP (one minute, once)
+-------------------------------------------------------------------------------
+
+  In game:
+
+     /log on                     turn logging on. A log only knows what
+                                 happened while it was running.
+
+     /outputfile inventory       stand at a banker and type this. Strongly
+                                 recommended - it is how Sky Ledger learns
+                                 what you ALREADY hold, wind runes included.
+
+  In Sky Ledger (scroll the setup panel, there is more below the fold):
+
+     1) "Add inventory dump"  -> the file /outputfile just made. It is in
+                                 your EverQuest Legends folder, named
+                                 <YourName>-Inventory.txt
+
+     2) "Follow a log file"   -> eqlog_<YourName>_<server>.txt
+                                 Double-click Open-EQ-Logs-Folder.bat if you
+                                 cannot find it.
+
+     3) "Your trio"           -> up to three classes you are working on
+
+     4) "What to track"       -> tick the tests you care about
+
+     5) "Show overlay"        -> done. It remembers everything.
+
+
+-------------------------------------------------------------------------------
+  USING IT
+-------------------------------------------------------------------------------
+
+  gear icon         back to setup
+  click a test      mark it done by hand (always beats auto-detection)
+  bottom-right      drag the little corner grip to make the panel bigger.
+                    Double-click that grip to snap back to the default size.
+  left-hand rail    one rung per island; the number is how many pieces you
+                    still need from there. Click a rung to filter.
+  slider in bar     transparency
+
+  THE STRIP ABOVE THE BOTTOM BAR is where it admits what it could not work
+  out - kills it could not credit to you, bags sold whose contents the game
+  never named, trades it refused to guess at. Empty means it had nothing to
+  admit.
+
+
+-------------------------------------------------------------------------------
+  WHAT YOU DO NOT GET IN THIS VERSION
+-------------------------------------------------------------------------------
+
+  A web page cannot float on top of another program, and it cannot pass your
+  mouse clicks through to the game underneath. Those are the two things
+  browsers physically cannot do.
+
+  So here you would alt-tab to it, or park it on a second monitor.
+
+  If you want it floating over the game with click-through and global
+  hotkeys, ask Lindsey for the OVERLAY package instead. Same tracking, same
+  data - it just runs as a proper desktop window. It is a larger download and
+  Windows will show a "protected your PC" warning the first time, because the
+  program is not code-signed.
+
+
+-------------------------------------------------------------------------------
+  IF SOMETHING LOOKS WRONG
+-------------------------------------------------------------------------------
+
+  Nothing shows as ready even though I have the pieces
+      Load an inventory dump. A log cannot see anything you looted before
+      logging was switched on.
+
+  Drop rates say "no kills yet" after I killed the boss
+      Send Lindsey the exact line your log printed for that kill.
+
+  It does not notice I am in Sky
+      Hover the zone name in the strip above the bottom bar - it shows what
+      the game actually called the zone. That text is the useful part.
+
+  A number looks WRONG
+      That is the most valuable thing you can report. This tool is built on
+      the principle that a number without a source is a number that can lie,
+      so a wrong figure is a real bug and not a nitpick.
+
+  Log files can contain private tells. Do not post a whole log publicly -
+  send the relevant lines only.
+
+
+  Fan project. Not affiliated with Daybreak Game Company, Game Jawn or
+  Darkpaw Studios. Your game install is only ever read, never modified.

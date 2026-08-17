@@ -1,0 +1,177 @@
+===============================================================================
+  SKY LEDGER  v1.1
+  A Plane of Sky class-unlock tracker that sits on top of EverQuest Legends
+===============================================================================
+
+  It reads your chat log while you play and tells you, without alt-tabbing:
+  what you still need, where it drops, and which tests you can hand in NOW.
+
+  Nothing is uploaded. There is no server, no account, no telemetry. The app
+  cannot make a network request of any kind - that is enforced by the app
+  itself, not just promised.
+
+
+-------------------------------------------------------------------------------
+  1. RUN IT
+-------------------------------------------------------------------------------
+
+  Double-click            SkyLedger.exe
+
+  Nothing to install. It is one self-contained file. First launch takes a few
+  seconds while it unpacks itself; after that it is instant.
+
+
+  >>> WINDOWS WILL WARN YOU THE FIRST TIME. THIS IS EXPECTED. <<<
+
+  You will see a blue box: "Windows protected your PC".
+
+      Click  "More info"      then      "Run anyway"
+
+  This happens to every program that has not been code-signed. Signing costs
+  a few hundred dollars a year, which this fan project does not have. If you
+  would rather not click through it, use the browser version instead - see
+  section 5 - which needs no exe at all.
+
+  If your antivirus quarantines it, same cause. It is an Electron app, which
+  is the same technology Discord and Slack are built on.
+
+
+-------------------------------------------------------------------------------
+  2. SET UP EVERQUEST (one minute, once)
+-------------------------------------------------------------------------------
+
+  a) Put the game in WINDOWED or BORDERLESS mode.
+
+     Options > Display > Mode
+
+     This matters. Exclusive fullscreen draws over EVERY other window on your
+     computer, including this one. It is a Windows limitation, not a bug.
+     Borderless looks identical to fullscreen and lets overlays work.
+
+  b) Turn logging on. Type in game:
+
+        /log on
+
+     A log only knows what happened while it was running, so do this before
+     you start farming.
+
+  c) RECOMMENDED - stand at a banker and type:
+
+        /outputfile inventory
+
+     This writes a snapshot of everything you are carrying. Loading it into
+     Sky Ledger is how it learns what you ALREADY hold, including wind runes,
+     rather than starting from zero.
+
+
+-------------------------------------------------------------------------------
+  3. SET UP SKY LEDGER (one minute, once)
+-------------------------------------------------------------------------------
+
+  The setup panel opens automatically the first time. Scroll it - there is
+  more below the fold.
+
+  1) "Add inventory dump"  ->  pick the file /outputfile just made.
+                               It lands in your EverQuest Legends folder and
+                               is called  <YourName>-Inventory.txt
+
+  2) "Follow a log file"   ->  pick  eqlog_<YourName>_<server>.txt
+
+                               Double-click  Open-EQ-Logs-Folder.bat
+                               (included here) if you cannot find it.
+
+                               Use Chrome or Edge behaviour: the picker gives
+                               the app permission to re-read that ONE file.
+
+  3) "Your trio"           ->  click up to three classes you are working on.
+
+  4) "What to track"       ->  tick the tests you care about, or "Track all".
+
+  5) "Show overlay"        ->  done. Drag the panel where you want it.
+
+  Everything is remembered. You only do this once.
+
+
+-------------------------------------------------------------------------------
+  4. USING IT
+-------------------------------------------------------------------------------
+
+  Ctrl+Shift+O      show / hide the panel
+  Ctrl+Shift+L      click-through - the panel stops eating your mouse clicks
+                    so you can play straight through it
+  drag title bar    move it
+  bottom-right      drag the little corner grip to RESIZE.
+                    Double-click that grip to snap back to default size.
+  slider in dock    transparency, 15% to 100%
+  gear icon         back to setup
+  click a test      mark it done by hand (always wins over auto-detection)
+  left-hand rail    one rung per island; the number is how many pieces you
+                    still need from there. Click a rung to filter.
+
+  Both hotkeys work while EverQuest has focus.
+
+  THE STRIP ABOVE THE BOTTOM BAR is where it admits what it could not work
+  out - kills it could not credit to you, bags sold whose contents the game
+  never named, trades it refused to guess at. If it is empty, it had nothing
+  to admit.
+
+
+-------------------------------------------------------------------------------
+  5. NO-INSTALL ALTERNATIVE
+-------------------------------------------------------------------------------
+
+  Do not want to run an exe? Open  SkyLedger.html  in Chrome or Edge.
+
+  Identical tracking, same data, no install, no warning box. The only things
+  you lose are the ones a web page physically cannot do: it cannot float over
+  the game, and it cannot pass clicks through. You would alt-tab to it, or put
+  it on a second monitor.
+
+  Firefox and Safari cannot follow a file live - drag the log onto the panel
+  for a one-off read instead, and re-drop to refresh.
+
+
+-------------------------------------------------------------------------------
+  6. IF SOMETHING LOOKS WRONG
+-------------------------------------------------------------------------------
+
+  Panel is invisible over the game
+      You are in exclusive fullscreen. Switch to Borderless. (Section 2a.)
+
+  Panel ignores my clicks
+      Click-through is on. Ctrl+Shift+L toggles it. It never survives a
+      restart, so closing and reopening always gives you a clickable panel.
+
+  Hotkeys do nothing
+      Another program has claimed them. The setup panel will say so. Use the
+      buttons in the panel instead.
+
+  Drop rates say "no kills yet" after I killed the boss
+      Send Lindsey the exact line your log printed for the kill. The patterns
+      come from the game client's own message table, but Plane of Sky itself
+      has not been verified in a live session yet - that is what this test is
+      for.
+
+  It does not notice I am in Sky
+      Hover the zone name in the strip above the bottom bar. It shows exactly
+      what the game called the zone. Send that text - it is the useful bit.
+
+  Nothing shows as ready even though I have the pieces
+      Load an inventory dump (section 2c). A log cannot see anything you
+      looted before logging was switched on.
+
+
+-------------------------------------------------------------------------------
+  WHAT TO REPORT BACK
+-------------------------------------------------------------------------------
+
+  Most useful of all: anything where the number looked WRONG. This tool is
+  built on the principle that a number without a source is a number that can
+  lie, so a wrong figure is a real bug, not a nitpick.
+
+  Log files can contain private tells. Do not post a whole log publicly -
+  send the relevant lines.
+
+
+  Fan project. Not affiliated with Daybreak Game Company, Game Jawn or
+  Darkpaw Studios. The game install is only ever read, never modified.
