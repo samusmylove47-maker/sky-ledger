@@ -13,24 +13,35 @@ that can lie.* Every figure below names its source. Every gap says so out loud.
 
 ## 0. The verdict
 
-**The deciding variable is not the class. It is where you stand.**
+### If you are TANKING — front arc, multiple enemies, fights lasting minutes
 
-| You are… | Better third slot | Confidence |
-|---|---|---|
-| In the mob's **front arc** — you tank, or the mob faces you | **RANGER** | Wins under *every* parameter combination at G ≈ 30% |
-| **Behind** the mob — someone else holds aggro | **MONK** | Wins across essentially its whole range at G ≈ 10% |
-| Mid-range group content (G ≈ 15–25%) | **Cannot be called** | Bands overlap; see §4 |
+**RANGER**, unless you dual-wield.
 
-Where **G** = the target's *active-defense* avoidance (dodge + block + parry + riposte).
+| Your weapon setup | Monk's priced edge | Ranger needs, from ATK alone | Winner |
+|---|---|---|---|
+| **Shield + 1H, or 2H** (Dual Wield contributes 0) | +4.86% | c > 2.56% per 100 ATK | **RANGER** |
+| **Dual-wielding** | +9.86% + unpriced kicks | c > 6.91% per 100 ATK | **MONK** |
 
-Because Paladin + Enchanter is fundamentally a **front-line chassis** — plate, Defensive
-and Mage Hunter stances, taunt, heals, mez — the archetypal build for this trio stands in
-the front arc. **On that reading, Ranger is the better third slot.** If you are instead the
-back-line damage slot in a group with a real tank, take Monk.
+Monk's second-largest term, Dual Wield 252 vs 210, is worth **exactly zero** unless the
+character actually holds two weapons — and a multi-mob front tank normally holds a shield
+(AC, block) or a two-hander. That, plus **Force of Nature**, is why the tanking case goes
+to the Ranger.
 
-Anyone telling you this is a blowout either way is using one of three refuted things: the
-backwards "Striker = 5× weapon skills" figure, the additive reading of strikethrough, or a
-made-up value for the ATK coefficient.
+The margin is small: low single digits on own melee, and own melee is only **~31%** of this
+character's output once the Enchanter's charm pet (~2x a player) is in the denominator. This
+is a tiebreaker-grade decision, not a build-defining one.
+
+### The general case, by position
+
+| You are… | Better third slot |
+|---|---|
+| Front arc, tanking, long fights | **RANGER** (endurance + ATK; see above) |
+| Behind the mob, someone else tanks, dual-wielding | **MONK** |
+
+**Correction to an earlier version of this document.** It asserted that front-arc tanking
+put the character at G ~ 30%, where Ranger won "under every combination." That rested on an
+*assumed* G. G has since been **measured at 5.98%** (§4.1). The Ranger verdict survives for
+the tanking case, but on entirely different grounds — endurance and ATK, not strikethrough.
 
 ---
 
@@ -71,7 +82,7 @@ largest direct ATK source available to this character, and gear cannot dilute it
 *k* is **refused by the developers**: *"We aren't going to spoil the exact formula."*
 "Hardest to gain" and "most worth having" are different claims. Only the first is established.
 
-### 1.2 Strikethrough is worth ~6.6%, not 30%
+### 1.2 Strikethrough is worth ~1.9%, not 30%
 
 Three separate deductions apply to the headline number:
 
@@ -84,14 +95,16 @@ Three separate deductions apply to the headline number:
 
 | G | strikethrough gain |
 |---|---|
+| **5.98% — MEASURED (§4.1)** | **+1.91%** |
 | 10% | +3.33% |
-| 15% | +5.29% |
 | 18% | +6.59% |
-| 25% | +10.00% |
 | 30% | +12.86% |
 
-And if you fight from **behind**, riposte never fires and probably parry doesn't either —
-G collapses and this ability collapses with it. That is why position decides the question.
+G is no longer a free parameter: it has been **measured at 5.98%** across 22,604 parsed
+swings (§4.1), so the real value of this ability is **+1.91% of own melee** — under +1% once
+the charm pet is in the denominator. Fighting from behind would shrink it further, but even
+front-arc, where all four gates are live, it is small. Riposte was measured at **0.00%**
+outside Enrage.
 
 ---
 
@@ -108,8 +121,12 @@ across all 16 class boards returns **exactly two hits**: this, and a Magician pe
 **Paladin has no haste. Enchanter has no haste on its AA board. Ranger has none at any
 layer.** This term is not duplicated anywhere on the chassis and Ranger has no answer to it.
 
-It is the largest single term in the comparison — *if the cap-raise works*. Nobody has ever
-observed it in a stat window. See §6.
+**The cap-raise works — confirmed in play.** Maximum haste is **175** (+75%); a Monk raises
+it to **185** (+85%). That is a **185/175 = +5.71%** swing-rate gain, and both builds have
+enough haste sources to pin their respective caps (96 points available against a 75 cap, 106
+against 85), so the gain is exactly +5.71% and not the larger clipped-regime figure. Applied
+to the auto-attack share of melee (~85%), it is **+4.86% of own melee** — the largest single
+*priced* term on either side.
 
 ### Ranger — Unbounded Strikethrough  ·  **T1 wording, mirrors only**
 
@@ -228,6 +245,97 @@ melee difference is a 1.25pp character difference. Whatever the answer is, it is
 
 ---
 
+## 4.1 G is no longer unknown — it is measured
+
+Prior rounds could not find a single published dodge/parry/block/riposte rate. They exist —
+not in a wiki, but inside the log fixtures that Legends log-parser projects commit to
+GitHub. Parsed across **22,604 resolved player swings** against 50+ distinct NPCs
+(Lord Nagafen, Master Yael, Avatar of Abhorrence, Lord of Ire, Grandmaster R`tal, King
+Tranix):
+
+| gate | rate |
+|---|---|
+| dodge | 2.74% |
+| parry | 2.33% |
+| block | 0.92% |
+| riposte | **0.00%** |
+| **G — front-arc active defense** | **5.98%** |
+
+Miss is a **separate** 36.25% bucket that strikethrough never touches.
+
+Verbatim from the fixtures: `1105 Lord Nagafen, but miss!` / `94 ... blocks!` /
+`48 ... parries!` / `22 ... dodges!` — 94+48+22 = 164 = 5.10% of n=3,218. Per-target spread:
+Yael 3.97% (n=881) · Nagafen 5.10% (n=3,218) · dar ghoul knight 6.47% (n=1,807) ·
+Avatar of Abhorrence 8.92% (n=695) · Lord of Ire 11.09% (n=613). <span>**TM**</span>
+
+**Consequences.** Strikethrough at rank 3 is worth `0.3 x 0.0598/(1-0.0598)` = **+1.91%** of
+own melee — not the +12.9% an assumed G of 30% implied, and well under +1% of
+character-plus-pet output. Two further measured results: **slow does NOT shrink G** (7.95%
+slowed vs 6.88% unslowed, z=1.53, not significant — EQL slow is a flat attack-speed change
+while the gates are skill-driven), and **NPCs do not multiclass** (every catalogued named-mob
+stat block carries exactly one class), which kills an inference chain an earlier round used
+to argue endgame G was high.
+
+**The one place G reaches 1.0:** Enrage — 31 of 34 catalogued named mobs carry it, 100%
+frontal riposte at ~10% HP. Standard practice is to stop attacking through it.
+
+---
+
+## 4.2 Endurance is the binding constraint, and only one slot can raise it
+
+This is what actually decides the tanking case.
+
+Offensive Stance charges **1 endurance per point of bonus damage**, so its drain scales 1:1
+with your own damage. The Paladin's Defensive stance drains the *same pool*, charging 1
+endurance per point of damage prevented — so tanking and damaging compete for one resource.
+Offensive therefore behaves as a **battery, not a multiplier**.
+
+**Only the Ranger can refill it.** <span>**T1**</span>
+
+> "The Ranger spell Force of Nature is now a permanent self-only buff. Force of Nature's hit
+> Point regeneration has been increased, and it has been given Endurance regeneration as
+> well, at the same scaling as Chloroplast."
+> — official patch notes, 23 June 2026
+
+Force of Nature: **+6/tick base, max +19/tick** (a tick is 6s), permanent, self-only, free
+after one cast. Paladin, Enchanter **and** Monk have **zero** endurance restoration between
+them — all four class spell lists and AA lists were checked. The only other endurance-regen
+AA is Circular Breathing, an Archetype AA open to every class, so it cancels.
+
+**Magnitude is unknown; sign is certain.** Base endurance regen and per-class pool sizes are
+unpublished, and the Strategy savings curve is listed as an open question by the site that
+mines the client files. Any specific "Offensive uptime %" figure is therefore fabricated and
+is not stated here. What *is* established: endurance is finite, contested by two stances,
+scales with your own damage, and **exactly one of the two candidate slots adds to it.**
+
+**Two hypotheses tested and killed.** Monk's Strategy cap is 250 — identical to Ranger's, and
+Paladin's is *also* 250, so with best-of-three caps the third slot cannot move endurance
+efficiency at all. And the Striker opener is a **net damage loss**: Offensive converts
+endurance to damage 1.5x better, so endurance burned in Striker is endurance not spent in
+Offensive. Drop it regardless of which class you pick.
+
+---
+
+## 4.3 Two Monk channels that do not exist
+
+- **Return Kick — does not exist in EverQuest Legends.** Three sources enumerate the Monk AA
+  list as exactly five entries: Dragon Force, Improved Mend, Purify Body, Rapid Feign,
+  Unbound Alacrity. The single site carrying Return Kick self-labels it `ref` =
+  *"seeded from the classic EQ AA framework as a reference backbone."* A plain web search
+  returns an AI-generated summary asserting it is a Legends Monk AA; the underlying links are
+  Allakhazam (classic) and that `ref` row. **The search layer manufactures the claim.**
+- **Double Riposte** is an Archetype AA available to all classes, and riposte caps are equal
+  across Paladin, Monk and Ranger. Cancels.
+
+Ranger's complete AA list, for symmetry: Hunter's Attack Power, Innate Called Shot,
+Unbounded Strikethrough, Weapon Mastery of the Scout.
+
+**Damage shield very nearly cancels.** The Enchanter — in *both* builds — supplies Feedback
+(DS 11, slot 1). Ranger's Shield of Brambles is DS 12 in the same slot: a marginal **+1** per
+landed incoming swing. Not a tiebreaker.
+
+---
+
 ## 5. Chassis fit — what each slot actually adds
 
 **Stances.** Monk's set is a strict **superset** of Ranger's:
@@ -268,21 +376,27 @@ PAL+MNK 2,599 items / **320 weapons**; PAL+RNG 2,553 / **350 weapons**.
 
 ## 6. Known gaps — the honest ledger
 
-These are the reasons the middle of the range cannot be called. None is a rounding error.
+Struck-through entries were closed by later evidence. The rest still stand.
 
 - **k (%DPS per +100 ATK)** — dev-refused outright. Not invented here; parameterised instead.
-- **G for any Legends target** — dodge/parry/block/riposte rates are published **nowhere**.
-  eqlsource, the most rigorous source for this game, carries no such measurement.
-- **Whether Unbound Alacrity's cap-raise functions** — never observed in a stat window. It
-  is the largest single term in the comparison and it rests on one patch-note sentence.
-- **The haste cap's numeric value** — the "75%" figure sits on a page that is a near-verbatim
-  fork of a Project 1999 classic guide, carrying level-60 parse tables and Kunark drops.
-  *(Resolved:* haste is percentage-denominated and multiple sources combine **additively** —
-  proven by a dev worked example where 41% + 34% reaches the cap at 75.)*
+- ~~**G for any Legends target**~~ — **CLOSED.** Measured at **5.98%** across 22,604 parsed
+  swings in committed log fixtures (§4.1).
+- ~~**Whether Unbound Alacrity's cap-raise functions**~~ — **CLOSED.** Confirmed in play:
+  max haste 175, Monk 185.
+- ~~**The haste cap's numeric value**~~ — **CLOSED.** 175 (+75%), Monk 185 (+85%). Sources
+  combine **additively**, per a dev worked example where 41% + 34% reaches the cap.
+- **Base endurance regeneration and per-class endurance pool size** — unpublished, and the
+  Strategy savings curve is an open question on the site that mines the client files. This
+  bounds the *magnitude* of Force of Nature's advantage, not its sign (§4.2). Any specific
+  "Offensive uptime %" figure would be fabricated, so none is stated.
+- **Monk kick-line damage** (Flying Kick, Round Kick, Eagle Strike, Tiger Claw) — withheld as
+  balance-sensitive. Only "Flying Kick damage starts at 50" is published, with no scaling
+  formula. **The largest unpriced quantity remaining, and it is on the Monk side.**
 - **The Striker partition** — which abilities count as "weapon skill". Listed as an open
   question by the site that mines the client files.
 - **Dual Wield 252 vs 210** — calibrated by a single parse at skill 252 and extrapolated
-  linearly down to 210. The weakest link in Monk's case.
+  linearly down to 210. The weakest link in Monk's case — and worth **exactly zero** if the
+  character carries a shield or a two-hander.
 - **Whether strikethrough applies to archery** — unpublished, and it matters, because
   Ranger's other free AAs push toward a bow build.
 - **eqlsource excludes AA data by policy** (*"AA planning… belong to other tools"*), so no
