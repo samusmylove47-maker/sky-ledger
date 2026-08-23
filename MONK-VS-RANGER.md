@@ -9,6 +9,12 @@ parse > **T1** dev > **T2** structured wiki > **T3** named guide > **T4** aggreg
 This file follows `CLIENT-TRUTH.md`'s standard: *a number without its source is a number
 that can lie.* Every figure below names its source. Every gap says so out loud.
 
+> **See also `BUILDS.md`** — the same method applied to all 560 trios. It finds that
+> **Berserker + Enchanter** is the dominant core in the game, and that the build analysed
+> here (Paladin+Enchanter+Monk, 147.1 sustained DPS) sits 47% below the optimum. The
+> weapon reasoning below also predates the client-validated damage-bonus formula, which
+> shows damage/delay **ratio** to be the wrong metric — see `BUILDS.md` §2.
+
 ---
 
 ## 0. The verdict
