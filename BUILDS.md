@@ -1,8 +1,25 @@
-# EQ LEGENDS — WHAT THE TOP BUILDS ACTUALLY ARE
+# EQ LEGENDS — THE TOP MARTIAL / MELEE BUILDS
 
 **Established:** 23 August 2026
 **Method:** 44 research agents across five rounds, plus a damage model run over all
 **560** class trios. Every numeric claim graded and adversarially re-derived.
+
+> ### SCOPE CORRECTION — read this first
+>
+> An earlier version of this document claimed these were the top DPS builds **in the game**.
+> **That claim was not supported and has been withdrawn.** The model scores damage from
+> melee weapons, stances, combat skills, pets and a flat proc term. It has **no spell-damage
+> model at all** — a Wizard contributes literally nothing to it. Casters were therefore
+> structurally invisible, not evaluated and found wanting.
+>
+> What the model actually ranks is **martial / melee builds**, and within that scope the
+> finding stands. It also ignored the **RANGE slot** entirely, so archery (Windstriker,
+> 90/60 at +10) and thrown weapons were unscored.
+>
+> Caster, hybrid and all-around META rankings are in progress and will be published
+> separately once the spell, DoT, archery, pet and song systems have been researched to the
+> same standard as the melee model.
+
 Tiers: **TM** measured parse > **T1** dev > **T2** structured wiki > **T3** named guide >
 **T4** aggregator > **T5** inherited classic prose.
 
@@ -14,9 +31,10 @@ The model is committed as `model.py` — every row below re-runs with one comman
 
 ## 0. The finding
 
-**Berserker + Enchanter is the dominant core in the game, and almost nobody is playing it.**
+**Berserker + Enchanter is the dominant core among martial builds, and almost nobody is
+playing it.**
 
-Every one of the top eleven trios by sustained damage contains both. The third slot is
+Every one of the top eleven *melee* trios by sustained damage contains both. The third slot is
 nearly free — it buys mitigation, aggro or healing, and costs only 0–10% damage.
 
 | # | Trio | Sustained | Starved | Burst | Mitigation | Aggro | Note |
