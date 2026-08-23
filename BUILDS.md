@@ -1,334 +1,265 @@
-# EQ LEGENDS — THE TOP MARTIAL / MELEE BUILDS
+# EQ LEGENDS — WHAT THE EVIDENCE CAN AND CANNOT SAY ABOUT BUILDS
 
-**Established:** 23 August 2026
-**Method:** 44 research agents across five rounds, plus a damage model run over all
-**560** class trios. Every numeric claim graded and adversarially re-derived.
+**Established:** 23 August 2026 · **Revised after adversarial review:** 24 August 2026
+**Method:** 64 research agents across seven rounds, a damage model over all 560 trios, and a
+five-front adversarial attack on that model. Tiers: **TM** measured parse > **T1** dev >
+**T2** structured wiki > **T3** named guide > **T4** aggregator > **T5** classic prose.
 
-> ### SCOPE CORRECTION — read this first
->
-> An earlier version of this document claimed these were the top DPS builds **in the game**.
-> **That claim was not supported and has been withdrawn.** The model scores damage from
-> melee weapons, stances, combat skills, pets and a flat proc term. It has **no spell-damage
-> model at all** — a Wizard contributes literally nothing to it. Casters were therefore
-> structurally invisible, not evaluated and found wanting.
->
-> What the model actually ranks is **martial / melee builds**, and within that scope the
-> finding stands. It also ignored the **RANGE slot** entirely, so archery (Windstriker,
-> 90/60 at +10) and thrown weapons were unscored.
->
-> Caster, hybrid and all-around META rankings are in progress and will be published
-> separately once the spell, DoT, archery, pet and song systems have been researched to the
-> same standard as the melee model.
-
-Tiers: **TM** measured parse > **T1** dev > **T2** structured wiki > **T3** named guide >
-**T4** aggregator > **T5** inherited classic prose.
-
-Companion to `MONK-VS-RANGER.md`, which answers the narrower Paladin+Enchanter question.
 Same standard as `CLIENT-TRUTH.md`: *a number without its source is a number that can lie.*
-The model is committed as `model.py` — every row below re-runs with one command.
+Models committed as `model.py` (v1) and `model2c.py` (corrected). Every claim below re-runs.
 
 ---
 
-## 0. The finding
+## 0. What was asked for, and what is deliverable
 
-**Berserker + Enchanter is the dominant core among martial builds, and almost nobody is
-playing it.**
+Four ranked lists were requested: top 25 martial, top 10 caster, top 10 hybrid, top 10 META.
+After adversarial review, **only one of the four is deliverable, and not as a ranking.**
 
-Every one of the top eleven *melee* trios by sustained damage contains both. The third slot is
-nearly free — it buys mitigation, aggro or healing, and costs only 0–10% damage.
-
-| # | Trio | Sustained | Starved | Burst | Mitigation | Aggro | Note |
-|---|---|---|---|---|---|---|---|
-| 1 | **BER+ENC+SHD** | **216.2** | 176.2 | 290.5 | Defensive | single | the optimum |
-| 1= | BER+ENC+NEC | 216.2 | 176.2 | 290.5 | Channeler | weak | ties, but no plate |
-| 3 | BER+ENC+RNG | 210.5 | 169.3 | 287.1 | Channeler | weak | wins if ATK coeff is high |
-| 4 | BER+ENC+MNK | 208.0 | 168.7 | 281.0 | Channeler | weak | haste cap 185 |
-| 5 | **BER+ENC+WAR** | 206.7 | 166.7 | 281.0 | Defensive | **AE** | the only real multi-mob tank |
-| 5= | BER+ENC+PAL | 206.7 | 166.7 | 281.0 | Defensive | single | + Mage Hunter, + heals |
-| 12 | **BER+CLR+ENC** | 194.2 | 158.2 | 261.0 | Channeler | weak | charm + best 2H + real healing |
-| — | ENC+RNG+SHD | 159.1 | 139.2 | 196.0 | Defensive | single | *no Berserker* |
-| — | *ENC+MNK+PAL* | *147.1* | *127.9* | *182.6* | Defensive | single | *the current character* |
-| — | *BER+RNG+SHD* | *150.6* | *109.4* | *227.2* | Defensive | single | *the proposed trio* |
-| — | *CLR+ENC+RNG* | *138.0* | *121.7* | *168.4* | Channeler | weak | *the Cleric concept* |
-| — | CLR+RNG+WAR | 59.6 | 41.3 | 93.8 | Defensive | AE | survivability, not damage |
-
-**The single highest-value change available: swap the Ranger for an Enchanter.**
-
-```
-BER+RNG+SHD  150.6   ->   BER+ENC+SHD  216.2      +44%
-```
-
-Trade +104 ATK and strikethrough — worth about **+4.5%** of own melee — for a charm pet
-worth **85 DPS that costs zero endurance**. Two separate instincts, both right, that belong
-in the *same* build.
-
-Optimum vs the three builds under consideration: **+44%** over SHD+RNG+BER, **+47%** over
-PAL+ENC+MNK, **+57%** over RNG+CLR+ENC.
-
----
-
-## 1. Why Berserker + Enchanter
-
-They win for unrelated reasons, which is why the pair compounds.
-
-### Berserker brings three things nobody else has
-
-**The only cap-breaking stance.** Verbatim:
-
-> "While this stance is active, **attack speed and combat skill recharge rate is doubled**
-> and your chance to hit and **combat skill damage is increased by 25%**. Every point of
-> damage dealt consumes **half** that amount in endurance… You also take **8.3% of outgoing
-> damage to yourself**." <span>T2</span>
-
-Haste otherwise caps at **175** (Monk 185). Berserker doubles *through* the cap — the only
-route to 350 effective attack speed in the game.
-
-**Against Offensive specifically, the 2× cancels** — Offensive gets its 2× from damage per
-swing, Berserker from swing rate. The real edge is elsewhere:
-
-| channel | Berserker | Offensive | edge |
-|---|---|---|---|
-| auto-attack | 2× speed | 2× damage/swing | **equal** |
-| combat skills | 1.25× dmg × 2 uses = 2.5× | 2× | **1.25×** |
-| weapon procs | 2× swings = **2× procs** | 1× procs | **2×** |
-
-Blended: **+7% to +20%** if Offensive also buffs combat skills, **+14% to +59%** if
-"melee damage" means auto-attack only. Unresolved, and it is the largest open question on
-the Berserker side.
-
-**The best two-handed weapon**, and **Frenzy** (real, trainable — 209 skill-ups in the log
-corpus; 216 hits / 190 misses, mean 60.8, max 637), which doubles in frequency under the
-stance. Plus **Unbound Fury**, +6% crit, autogranted.
-
-### Enchanter brings a second body that costs nothing
-
-Measured over 133 committed EverQuest Legends client-log fixtures — 88,701 timestamped
-lines, 24,264 damage events: <span>**TM**</span>
-
-| | value | n |
+| Asked for | Status | Why |
 |---|---|---|
-| charmed pet ÷ owner damage | **0.774×** (range 0.40–1.89) | 475 vs 733 hits, 887s |
-| per swing: charmed / owner / summoned | **87.0 / 75.4 / 26.2** | 587 / 11,800 / 417 |
-| charmed pet, best sustained | **112.6 DPS** | 14,864 dmg / 132s |
-| same target vs a named boss | **4.05× owner** | 6,453/66 vs 1,594/37 on Grandmaster R\`tal |
-| summoned pet ÷ owner | **0.167×** | 495 hits, 1,035s |
-| **charm ÷ summon** | **4.65×** | — |
+| Top 25 martial DPS | **Delivered as an unordered TIER** | Top-8 spread is 21.5 pts against +/-25 pts per-trio uncertainty. The ordering is noise. |
+| Top 10 caster DPS | **WITHDRAWN** | Every public spell-damage figure is classic-EQ formula output, and the error is *non-uniform* — so neither absolute nor ordinal claims survive. |
+| Top 10 hybrid DPS | **WITHDRAWN** | The model has zero resolution in the slot the ranking is about: seven trios tie to the decimal. |
+| Top 10 META | **Delivered with its headline retracted** | "Every top build contains ENC+SHD" is an artifact of an untested constant. |
 
-**Charmed pets hit harder per swing than a level-50 player** (87.0 vs 75.4) and only trail
-on total because they swing 0.69× as often.
-
-The decisive property is not the size — it is that **pet damage is not billed to endurance.**
-Every point of a Berserker's or a knight's output draws on a bar that only Force of Nature
-refills, at 3.17/sec. The pet draws on nothing. In a fight measured in minutes, that is the
-whole ballgame: it is why Build A wins the *starved* column even where it loses the *burst*
-column.
+This is the second scope correction in this document's history. The first withdrew a
+game-wide DPS claim. Publishing caster and hybrid rankings now would have reinstated exactly
+that claim under new headings.
 
 ---
 
-## 2. The damage model
+## 1. The three findings that killed the caster and hybrid lists
 
-`DPS = swing_rate × multi_attack × mean_hit × land_rate × cast_duty`
+### F1 — The caster and melee "sustained" columns were different physical quantities
 
-**Mean hit** uses the client-validated damage-bonus formula — **not** damage/delay ratio:
+Melee sustained was defined as Balanced stance: free, 100% uptime, forever. Caster sustained
+came from a mana model. Back-solving the published caster numbers from their own inputs:
 
 ```
-Damage Bonus = HandMod × max(Level, WeaponDamage) × (min(Delay,50)/40) × (Level/100)
-               HandMod = 1.1 two-handed, 0.8 one-handed.  MAIN HAND ONLY.
+NEC  166.7 DPS / 41.24 mana/s = 4.0422 dmg/mana -> 21.5 / 4.0422 = 5.319 mana/s implied
+WIZ  808 dmg / 203 mana       = 3.9803 dmg/mana -> 21.1 / 3.9803 = 5.301 mana/s implied
 ```
 
-Validated 2-for-2 against live client captures: Earthshaker (2H, 70 delay) predicts **50**,
-client shows 50; Whitened Treant Fists (1H, 28 delay) predicts **13**, client shows 13.
-<span>**TM**</span>
+Two classes pin the same hidden constant to within **0.34%**: the caster column assumed
+**5.31 mana/s**, which is 32x the documented in-combat regen (0.167) and 0.84x the
+out-of-combat figure (6.333). So it silently modelled a caster spending **~84% of wall-clock
+out of combat** — then compared that against a melee column defined as never stopping.
+**The two halves were not comparable in either direction.**
 
-**Ratio is the wrong metric and it misled this analysis for two rounds.** The bonus scales
-with *delay* and *weapon damage*, both of which ratio divides away:
+### F2 — Spell damage data is classic-EQ output, and the error is non-uniform
 
-| weapon @+10 | ratio | mean hit | note |
-|---|---|---|---|
-| Cudgel of the Fool (BER) 90/52 | 1.731 | **123.69** | delay 52 — 2 past the cap, near-optimal |
-| Baton of the Sky (CLR) 66/40 | 1.650 | **76.82** | +50 AC, +150 mana |
+eqlwiki spell pages self-label `{{Classic Era}}`; Ice Comet's 808 damage / 203 mana / 5.00s
+are the classic values verbatim. Official Legends notes state the spell-upgrade tiers move
+damage, mana, cast time and duration **"depending on the spell."**
 
-The Cudgel is **1.53× the Baton per hit** — not the 1.049× ratio implies. Because
-`min(Delay,50)` caps the bonus, **delay beyond 50 is pure waste**: Earthshaker at 70 delay
-has the highest raw damage of any reachable 2H and one of the worst scores.
+That clause forecloses the usual escape. If tiers scaled damage and mana *together*,
+damage-per-mana would be tier-invariant and the ordinal ranking would survive stale
+absolutes. It does not. And this is not theoretical: the committed spell DB gives **Denon's
+Disruptive Discord 4 damage/tick against 32 measured** — an 8x error on a named spell, with
+the official change note naming that spell.
 
-**Swing rate** `= 10 / floor(delay / haste_multiplier)` — delay in tenths of a second.
-Cudgel at the 175 cap = 0.345/s; under Berserker (350) = **0.714/s**.
+**Withdraw the caster column. Not reorder — withdraw.**
 
-**Parameters, stated once.** R = 0.55 mean weapon roll · land 0.8394 damage stance /
-0.7387 Balanced · multi-attack 1.8 with BER or WAR, else 1.6 · cast duty 0.85 with a healer
-class, else 1.00 · crit 5% base, +6% with Berserker's Unbound Fury · charm pet 85 DPS ·
-summoned pet 15.6 DPS · Ranger +1.91% strikethrough and +104 ATK × k, k = 2.5%/100 ATK.
+### F3 — The Shadow Knight's biggest measured lane is neither portable nor a skill
 
-**Sustained** = 0.65 × starved + 0.35 × burst, reflecting that endurance binds in long fights.
+`Reave` prints two lines per activation. The verb averages 4.34 DPS; the other 36.06 comes
+from `Reaving Strike` — **a flat 306 that never varies, never crits, never resists**, because
+it converts a percentage of *max HP*. That is one raid-buffed tank's HP pool, not a class
+value. All 62 self-reave lines sit in a single 11-minute window against one boss, in a file
+the upstream repo labels a bug-report slice with **zero stance lines surviving** — so the
+lane has no Balanced sample at all, and Balanced is what "sustained" means.
 
----
-
-## 3. Sensitivity — does the ranking survive?
-
-**Yes.** BER+ENC tops every run; only the third slot reshuffles.
-
-| pet value | #1 | #2 | #3 |
-|---|---|---|---|
-| 44.5 (measured all-fights floor) | BER+ENC+SHD 175.7 | BER+ENC+NEC 175.7 | BER+ENC+RNG 170.0 |
-| **85 (baseline)** | **BER+ENC+SHD 216.2** | BER+ENC+NEC 216.2 | BER+ENC+RNG 210.5 |
-| 112.6 (best measured sustained) | BER+ENC+SHD 243.8 | BER+ENC+NEC 243.8 | BER+ENC+RNG 238.1 |
-
-| ATK coefficient k | #1 |
-|---|---|
-| 2.5% / 100 ATK | BER+ENC+SHD 216.2 |
-| 10% / 100 ATK (classic folklore) | **BER+ENC+RNG 217.2** — Ranger takes the third slot |
-
-So *k* decides only whether the third slot is Shadow Knight or Ranger. It never dislodges
-the core.
+Corrected: **40.1 -> 13.4**. Paladin's Smite has the identical structure (its magic half
+scales with max *mana*): **28.4 -> 20.3**.
 
 ---
 
-## 4. Choosing the third slot
+## 2. The martial tier — unordered, and that is the finding
 
-The damage spread across viable third slots is under 5%. Pick on what the number cannot show.
+Corrected model (`model2c.py`), all constants re-measured. **These twelve trios are
+statistically indistinguishable.** Read the membership, not the order.
 
-| Third | Damage | What it uniquely adds |
+| Trio | score | sust | burst | autoskills | weapon |
+|---|---|---|---|---|---|
+| BST+MNK+ROG | 166.5 | 155.4 | 187.2 | 94.2 | DW Wu's Fist of Mastery |
+| BER+BST+ROG | 157.8 | 145.3 | 181.0 | 80.8 | 2H Cudgel of the Fool |
+| **BST+RNG+ROG** | 156.2 | 149.5 | 168.8 | 70.6 | **2H Windstriker (bow)** |
+| MNK+ROG+SHD | 152.5 | 140.9 | 174.1 | 93.6 | 2H Khyldorn |
+| BST+PAL+ROG | 152.1 | 141.7 | 171.3 | 82.3 | 2H Truvinan |
+| BER+BST+MNK | 148.1 | 135.1 | 172.2 | 69.6 | 2H Cudgel of the Fool |
+| BST+ROG+SHD | 147.1 | 136.0 | 167.7 | 74.8 | 2H Khyldorn |
+| **BST+MNK+RNG** | 145.0 | 138.3 | 157.6 | 59.4 | **2H Windstriker (bow)** |
+| BER+MNK+ROG | 143.1 | 130.1 | 167.2 | 99.6 | 2H Cudgel of the Fool |
+| BST+MNK+PAL | 142.5 | 131.7 | 162.7 | 71.1 | 2H Truvinan |
+| BER+ROG+SHD | 142.2 | 129.7 | 165.5 | 80.3 | 2H Cudgel of the Fool |
+| **RNG+ROG+SHD** | 140.7 | 133.9 | 153.2 | 70.0 | **2H Windstriker (bow)** |
+
+**Spread across the top eight: 21.5 points. Per-trio uncertainty: +/-25 points.** The
+ordering is noise and is printed only so the arithmetic can be checked.
+
+**What is robust: ROGUE appears in nine of twelve.** Backstab at **41.5 DPS** is the largest
+single autoskill lane in the game and it survived every attack — including the front-arc
+worry, which was refuted outright (zero positioning-failure messages in the corpus, and
+backstab land rate while tanking is *higher*, 0.588 vs 0.538).
+
+**Berserker is no longer dominant.** Once land rate, crit, weapon roll and multi-attack are
+corrected, the Cudgel's advantage shrinks and BER holds four of twelve slots rather than
+eleven of eleven. The earlier "Berserker + Enchanter is the dominant core" finding **does
+not survive correction.**
+
+**Archery arrives.** Three of the twelve are Windstriker bow builds — a channel the earlier
+model could not see at all.
+
+---
+
+## 3. Archery, corrected twice
+
+Windstriker +10 = **90/60**, confirmed, RNG-only, and a category break (runner-up bow is
+ratio 1.100 against its 1.500).
+
+The first research pass claimed archery was **2x Ranger melee**. That was refuted: it fed
+archery and melee onto **two different damage scales** by quoting half a sentence. The full
+clause reads *"a melee weapon's base damage ... is (DMG*2+1), for archery, the base damage is
+Bow DMG + Arrow DMG."* Corrected, **archery is at parity: 0.87x-1.30x of Ranger melee.**
+
+Hard limits, each confirmed three ways: **Berserker and Monk have no Archery skill at all**
+(skill table, client scrape, and zero of 72 bows listing them), and only Rangers get the 4x
+AA package, so a Rogue or Warrior archer does one-quarter the base damage.
+
+**Thrown is not a channel:** ~28 DPS best case, and Throwing Boulder is race-locked to
+BAR/TRL/OGR/IKS.
+
+---
+
+## 4. The META list, with its headline retracted
+
+**Retraction:** "every top-10 META build contains ENC+SHD" is an artifact. In the committed
+model **SHD and NEC are perfectly interchangeable** — both are pet-flag classes with no other
+differentiating term. `BER+RNG+SHD 150.6 = BER+NEC+RNG 150.6` exactly. The finding decodes to
+*"contains ENC, plus a pet class that also wears plate."* It was never about Shadow Knights.
+
+**And the ENC half rests on an untested constant.** The charm-pet value is **48% of the top
+build's score**, and the sensitivity test run on it was vacuous — every build in the tested
+set contained ENC, so varying the constant was common-mode. Tested properly, against non-ENC
+builds:
+
+| charm pet value | #1 overall | ENC builds in top 10 |
 |---|---|---|
-| **SHD** | 216.2 | Defensive stance · plate · lifetap sustain · procs · best shield in game (Obtenebrate, 35 AC) |
-| **WAR** | 206.7 | **The only AE aggro in the game** — Heroic Leap, Area Taunt, Cleave |
-| **PAL** | 206.7 | Defensive **and** Mage Hunter · heals · Unbound Life |
-| **CLR** | 194.2 | Best healing kit · Channeler · the Baton (if you want AC on the weapon) |
-| **RNG** | 210.5 | +104 ATK · strikethrough · **Force of Nature**, the only endurance regen |
-| **MNK** | 208.0 | Haste cap 185 · Striker · Feign Death |
+| 44.5 (measured all-fights floor) | MNK+NEC+ROG | **4 / 10** |
+| 85 (interpolated, used above) | ENC+NEC+ROG | 10 / 10 |
+| 112.6 (best measured window) | ENC+NEC+ROG | 10 / 10 |
 
-**If you tank, take Warrior.** Across the entire AA tree there are exactly **two**
-multi-target hate tools and both are Warrior-only:
+**At the measured floor the Enchanter core collapses.** Everything resting on "the charm pet
+is worth 85 DPS" rests on an interpolation, not a measurement.
 
-> **Heroic Leap** | 1 rank | **0 AA cost** | *"attracting the attention of up to 8 opponents
-> within a 40 foot radius… increasing their hatred for you by 1250 points."* Refresh 30s.
-> **Requires Level 12.** <span>T2</span>
+**What survives for META purposes** is qualitative and well-sourced:
 
-10,000 hate per 30 seconds across 8 mobs, free, from level 12. Without it your only AE
-anything is Rampage on a **10-minute** cooldown. **One AE swing per 10 minutes is not a tank.**
-
-And the aggro hole is worse than it looks for caster-ish trios: Ranger's only hate spell
-(**Jolt**) is a *dump*, Cleric's (**Atone**) *wipes* the hate list, and the Enchanter's aggro
-AA is a third dump. **Damage shields generate zero aggro.** Whether healing generates threat
-in Legends is **unverified** — eqlwiki's Aggro, Hate_Management and Tanking pages are empty.
+- **The death penalty is zero.** No corpse, no XP loss, no item loss; respawn at bind.
+  Survivability is worth materially less than intuition says, and every corpse-recovery and
+  rez utility is worth ~nothing outside a combat rez in a raid.
+- **Travel utility is not loadout-gated.** The Rituals system lets any trio cast Gate, Bind,
+  every Druid ring and every Wizard port off-loadout. **Do not credit Druid or Wizard for
+  ports.** What *is* gated is small: SoW/levitate/invis/see-invis, Tracking (RNG>DRU>BRD),
+  Pick Lock (ROG/BRD), Shroud of Stealth.
+- **Aggro:** Heroic Leap and Area Taunt are Warrior-only AE hate (8 targets, 40ft, +1250,
+  30s, 0 AA cost). Every other hate tool in the game is a *dump* except Shadow Knight's two
+  Terror spells. eqlwiki's Aggro, Hate_Management, Tanking and Crowd_Control pages **all
+  404** — verified, not "reportedly". Whether healing generates threat is unpublished at
+  every tier.
+- **Aggro is worth ~zero solo**, and for a charm-pet build high taunt is an actual *malus* —
+  you want the mob on the pet.
+- **Control-resist is a real axis nobody scored.** The **Unyielding** invocation grants *"25%
+  resistance increase to loss of control from fear, mez, and charm"* and is **BER/MNK/ROG/WAR
+  only**. It counters the mechanic the difficulty sources name as the D3-D4 killer. ENC, SHD
+  and every pure caster lack it.
 
 ---
 
-## 5. Mitigation — and a correction
+## 5. Corrected constants
 
-Cleric and Enchanter both grant **Channeler**: *−40% to all incoming damage.* An earlier
-version of this analysis claimed a non-knight trio had "no mitigation stance." That was wrong.
-
-| fight | Defensive `0.5+0.3m` | Channeler `0.60` | winner |
+| Term | Was | Corrected | Basis |
 |---|---|---|---|
-| pure melee | **2.00× eHP** | 1.67× | Defensive +20% |
-| ⅓ magic | 1.67× | 1.67× | tie |
-| pure magic | 1.25× | **1.67×** | Channeler +33% |
+| Land rate, Offensive | 0.8394 | **0.62** | measured, two independent parses |
+| Land rate, Balanced | 0.7387 | **0.56** | measured |
+| Crit multiplier | 2.006x | **1.664x** | measured, n=386, controlled |
+| Crit rate | 5% / 11% | **13.2%**, and it fires on autoskills too | measured |
+| Weapon roll R | 0.55 | **0.40 raid / 0.50 soft** | measured 0.287-0.51 |
+| Multi-attack M | 1.6 / 1.8 | **1.44** | DA 240/630 = 38.1% |
+| SHD Reave | 40.1 | **13.4** | see F3 |
+| PAL Smite | 28.4 | **20.3** | engaged-seconds denominator |
+| WAR lane | 2.6 (Cleave) | **9.5** (Kick) | zero player self-cleaves in 89,190 lines |
+| RNG lane | 0 | **9.5** | Ranger has Kick at level 1 |
 
-**The entire cost of having no knight is ≤20% effective HP, melee-only.** Crossover at
-m = 1/3 magic damage.
+**Autoskills survived intact and are the model's best-supported term.** Direct proof — one
+character, one second:
 
-**Evasive is refuted as a posture.** *"95% chance to evade all incoming attacks. Every point
-of damage evaded consumes 2 endurance."* Its cost scales with the damage that *would have*
-landed, so it worsens exactly as the fight gets harder:
+```
+You try to backstab a large spider, but miss!
+You bash a large spider for 1 point of damage.
+You frenzy on a large spider for 33 points of damage.
+You kick a large spider for 5 points of damage.
+You try to smite a large spider, but miss!
+You slash a large spider for 35 points of damage. (Critical)
+```
 
-| stance | endurance per point neutralized |
-|---|---|
-| Channeler | 0.5 end + 0.5 mana |
-| Defensive | 1.0 |
-| **Evasive** | **2.1** |
-
-9.5× Channeler's rate. It is an 8–15 second panic button, not a stance.
-
----
-
-## 6. Stance economics
-
-Verbatim costs, normalized. Base damage rate D:
-
-| stance | dmg rate | endurance/sec | gain per endurance |
-|---|---|---|---|
-| Balanced | 1.0 | **0** | free — *and doubles endurance regen* |
-| Offensive | 2.0 | 1.0 | 1.000 |
-| **Berserker** | 2.0 | 1.0 | **1.000** + 2× skill recharge + 25% skill dmg |
-| Striker | 3.0 | 3.0 | **0.667** |
-
-**Striker is the worst damage stance in the game** and Berserker strictly dominates it.
-Offensive charges only *bonus* damage; Striker charges **all** damage — hence half the
-efficiency. Corroborated behaviourally in the log corpus: **berserker 128 uses, striker 8.**
-
-A Striker opener is a **net loss**: worth at most +0.83% of a 180s fight even if endurance
-were free, and endurance spent there is endurance not spent in Offensive, which converts
-1.5× better.
+Five class lanes plus auto-attack, same second. Whole-corpus census: 49 seconds containing
+five distinct combat skills, 133 with four, 311 with three. `/autoskill` toggles them
+per-skill with no slot budget. **There is no global cooldown and no lane cap.**
 
 ---
 
-## 7. Risk the damage number does not show
+## 6. Channels still unmodelled
 
-**Charm break, measured:** 33 events. **21% turned on the owner within 30 seconds** — worst
-case **2,821 damage across 24 hits**. 64% were re-charmed inside 30s. That is the variance
-you buy with the pet, and it lands hardest on a build with no Defensive stance.
+- **Striker stance** (BER/MNK/ROG/WAR): 3x weapon-skill / 5x non-weapon-skill abilities. The
+  BURST column is defined as "resources ignored", which is *exactly* Striker's regime — so
+  burst is wrong for every trio and wrong **asymmetrically**, under-crediting the four
+  classes that have it.
+- **Spellblade** (BST/PAL/RNG/SHD): turns the first spell gem into a melee proc with no cast
+  bar — a genuine exception to the model's melee-or-cast rule. Measured **17.55 DPS**, 417
+  damage/proc, 352/352 exclusive attribution at 1.1M-line scale. It needs an ENC spell *and*
+  a hybrid invocation, so no additive per-class model can express it.
+- **Damage shields:** exactly **1.00 tick per landed incoming hit** across four fixtures
+  (60/60, 58/58, 39/39, 8/8), none on a miss. ~17.5 DPS single-target, **~105 DPS against six
+  attackers**, for 0.13 mana/s. They do not stack and do not scale with gear. Requires that
+  *you* tank — which the pet builds avoid.
+- **Multi-target generally.** The whole model is single-target.
 
-**Berserker self-damage:** 8.3% of outgoing damage reflected onto you. Fine with a healer,
-dangerous solo.
+---
 
-**Charm may be barred where it matters most.** Named-mob stat blocks carry flags including
-`Uncharmable` and `Unmezzable`. Prevalence across the full named roster is **not established
-here** — it is the largest single unknown in the charm case, and it would not change trash
-or leveling performance at all.
+## 7. The one absolute validation, and its limit
+
+`ENC+MNK+PAL` predicted **147.1** against **151.4 measured** over 3,201 seconds — 2.8% error.
+It is the strongest single result here and worth stating.
+
+It is also **n=1 trio, one character, one corpus, and right by cancellation** — a melee lane
+roughly 2x too high against roughly 2x of missing everything else. The proof: correcting the
+model *moved it away* from the anchor, to 166.6 (+10.0%). **A model that is right by
+cancellation cannot be perturbed.** So quote 147.1 ~ 151.4 as one validated point estimate
+for that one trio, and quote **no decomposition of it**.
 
 ---
 
 ## 8. Known gaps
 
-Struck-through entries were closed by later evidence.
+- **The charm-pet constant** — 48% of the top score, interpolated not measured, and decisive
+  for whether Enchanter cores rank at all.
+- **Spell damage, all of it** — classic-EQ formula output, non-uniformly wrong.
+- **The ATK coefficient** — dev-refused: *"We aren't going to spoil the exact formula."*
+- **Whether the main-hand damage bonus applies to bows** — eqlwiki's own top-priority
+  unverified mechanic. Swings archery by ~19%.
+- **Striker uptime** — never measured, and it decides the burst column.
+- **Endurance pool sizes and base regen** — unpublished. No stance-uptime figure appears
+  anywhere in this document because any such figure would be fabricated.
+- **In-combat mana regen** — documented at 0.167 mana/s, but the withdrawn caster model
+  implies 5.31. The discrepancy is unexplained and is why F1 is fatal rather than a
+  correction.
 
-- **k, %DPS per +100 ATK** — dev-refused: *"We aren't going to spoil the exact formula."*
-  Parameterised, never invented. Decides only SHD vs RNG in slot three.
-- **Whether Offensive's +100% buffs combat skills** — decides whether Berserker's edge over
-  Offensive is +7% or +59%.
-- **Base endurance regen and per-class pool sizes** — unpublished. Bounds the *magnitude* of
-  the starved-vs-burst split, not its direction. No uptime percentage is quoted here because
-  any such figure would be fabricated.
-- **`Uncharmable` prevalence on named and raid mobs** — see §7.
-- **Monk kick-line damage** — withheld as balance-sensitive.
-- ~~**G, target avoidance**~~ — **CLOSED.** Measured **5.98%** across 22,604 swings
-  (dodge 2.74 · parry 2.33 · block 0.92 · riposte 0.00). Miss is a separate 36.25% bucket
-  strikethrough never touches. Slow does **not** shrink G (7.95% vs 6.88%, n.s.).
-- ~~**Haste cap value**~~ — **CLOSED.** 175, Monk 185, sources combine additively.
-- ~~**Whether the Monk cap-raise works**~~ — **CLOSED.** Confirmed in play.
-- ~~**Whether charmed pets can be geared**~~ — **CLOSED.** Since 7 Jul 2026 charmed pets
-  equip from the pet inventory; items are removed when charm breaks.
-
-**Rejected as evidence:** the Master Yael D0–D4 sweep. Same boss, same group, tier the only
-variable — but re-measurement does not reproduce (**D1 −12%, D2 −9%, D4 +64%**) at n=1 per
-tier. Not used.
-
-**What the model does not price:** aggro, survivability, charm-break variance, group
-desirability, or gear contention. It is a damage model. §4 and §7 exist because the damage
-number alone would mislead.
+**Rejected as evidence:** the Master Yael D0-D4 sweep (re-measurement does not reproduce:
+D1 -12%, D2 -9%, D4 +64%, n=1 per tier). And the "model is 4x inflated" worry, which
+dissolved: the 57.5 DPS anchor is a median-of-fights over a level-7-to-50 corpus, while the
+level-50 raid aggregate in the same corpus is **213.7**.
 
 ---
 
-## 9. Recommendations
-
-**Maximum damage, and you have a healer:** `BER + ENC + SHD` — 216.2. Charm pet, best 2H,
-Defensive stance, plate, lifetaps.
-
-**Maximum damage that can hold multiple mobs:** `BER + ENC + WAR` — 206.7, and the **only**
-build in the game with AE aggro. Costs 4% damage. If you tank, this is the pick.
-
-**Self-sufficient, no healer:** `BER + CLR + ENC` — 194.2 with the best healing kit in the
-game. Costs 10% damage for near-total independence.
-
-**If the ATK coefficient turns out to be high:** `BER + ENC + RNG` — 210.5, and the only one
-that refills its own endurance bar.
-
-**Currently played, `PAL+ENC+MNK` at 147.1**, is a sound build and its utility case is real —
-the damage gap to the optimum is 47%, but roughly two-thirds of that is the Cudgel and the
-Berserker stance, not the Enchanter, which it already has.
-
----
-
-*Reproduce: `python3 model.py`. Fan analysis. Not affiliated with Daybreak Game Company,
+*Reproduce: `python3 model2c.py`. Fan analysis. Not affiliated with Daybreak Game Company,
 Game Jawn or Darkpaw Studios.*
