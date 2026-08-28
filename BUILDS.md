@@ -35,8 +35,9 @@ Models committed as `model.py` (v1) and `model2c.py` (corrected). Every claim be
 > defects bias every trio equally — which S2 explicitly does not.
 >
 > Two further channels were found unmodelled on 28 August and are **not** in any figure here:
-> the **two ANY equipment slots** (worth ~+53 Wrath, about half a Ranger's ATK line, to every
-> build) and the **Exaltation sub-slots** above. Both are documented in `EQUIPMENT-TRUTH.md`.
+> the **two ANY equipment slots** — real, confirmed, but *not* an ATK workaround, because STR
+> caps out — and the **Exaltation sub-slots** above. Both are documented in
+> `EQUIPMENT-TRUTH.md`.
 
 ---
 

@@ -59,30 +59,33 @@ restriction, not the *class* restriction.
 
 ### What the two ANY slots are worth
 
-They are worth whatever the two best items your trio can legally equip are
-worth, unconstrained by position. Since **0 of 2,263 catalogued items carry an
-ATTACK stat** (re-verified on the current catalogue; the previous count was 0 of
-3,663), the damage-relevant currency in an ANY slot is STR, which enters Wrath
-at `((2 × STR) − 150) / 3` — **0.667 Wrath per point of STR**.
+They are worth whatever the two best items your trio can legally equip are worth,
+unconstrained by position. That is a real gain of two slots — but **the obvious way to
+spend them does not work**, and the reason is worth recording.
 
-For a `WAR / RNG / BER` trio the best legal STR item in the game is
-`Red Dragonscale Armor` (STR 20 base, **40 at +10**, and **not LORE**, so it can
-be worn twice):
+Since **0 of 2,263 catalogued items carry an ATTACK stat** (re-verified on the current
+catalogue; the previous count was 0 of 3,663), the naive plan is to buy Wrath through STR,
+which enters at `((2 x STR) - 150) / 3` — 0.667 Wrath per point. The best legal STR item
+for a `WAR / RNG / BER` trio is `Red Dragonscale Armor` (STR 20 base, **40 at +10**, and
+**not LORE**, so it can be worn twice), which would be +80 STR = +53 Wrath.
 
-```
-2 ANY slots × 40 STR  =  +80 STR  =  +53.3 Wrath
-```
+**That gain is almost certainly zero in practice.** eqlwiki caps STR at 255, which pins
+`StrengthModifier` at its maximum of 120. Any character geared well enough to be having
+this conversation is already at the cap, so STR bought in an ANY slot converts to nothing.
+The two slots are real, but they are **not** an ATK workaround. Spend them on AC, HP, mana,
+resists, or a click/proc effect — their damage value is whatever that effect is worth, not
+a Wrath gain.
 
-For scale, the Ranger's entire `Hunter's Attack Power` AA line — 26 ranks — is
-**+104 ATK = +104 Wrath**. So the two ANY slots are worth roughly **half a
-Ranger's ATK line**, they cost nothing but the drops, and they stack with it.
+> **Contradiction, recorded rather than smoothed over.** The client panel in section 4
+> reads **INT 295**, above 255. So either the cap is per-stat, or something raises it, or
+> the display is uncapped while the cap still binds internally. Until this is settled, treat
+> "STR caps at 255" as the *conservative* assumption — it is the one that makes the ANY
+> slots worth less, not more.
 
-> **Open.** Whether *worn* haste stacks across positions is unresolved, and it
-> matters here: the catalogue's haste ceiling is 41 (class-specific belts) and
-> 36 (`Cloak of Flames`, ALL classes). If worn haste stacks, two ANY slots are
-> worth far more than 53 Wrath. If only the highest worn source counts — the
-> classic behaviour — they are worth the STR and nothing more. **Do not model
-> stacked worn haste until this is measured.**
+> **Also open.** Whether *worn* haste stacks across positions. The catalogue's haste ceiling
+> is 41 (class-specific belts) and 36 (`Cloak of Flames`, ALL classes). If worn haste stacks,
+> two ANY slots are worth a great deal; if only the highest worn source counts — the classic
+> behaviour — they are not. **Do not model stacked worn haste until this is measured.**
 
 ---
 
