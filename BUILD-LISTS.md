@@ -2,7 +2,9 @@
 
 **Established:** 28 August 2026 · **Model:** `model3.py`, rankings `lists.py`
 **Chain:** `DAMAGE-CHAIN.md` · **Itemisation:** `EQUIPMENT-TRUTH.md`
-**Constraint:** Enchanter excluded from every list. Support buffs are assumed supplied by
+**Constraint:** Enchanter excluded from **List 1** only. List 2 is explicitly about an
+Enchanter charm pet, so ENC competes there; lists 3 and the AOE ranking are pending a re-run
+with ENC included. Support buffs are assumed supplied by
 a partner, so no class is credited for buffing.
 
 These supersede everything in `BUILDS.md`.
@@ -234,7 +236,7 @@ lifetap self-sustain, which the Warrior's mitigation and your partner's heals al
 
 | Unknown | Which list it moves |
 |---|---|
-| **Do armour Proc Exaltation sockets fire on melee swings?** (a 60-second in-game test) | All of them — worth +100 to +260 DPS, and it favours whoever has the most worn slots free |
+| ~~Do armour Proc Exaltation sockets fire?~~ **ANSWERED: no.** Only primary + secondary, plus ranged for a Ranger. So 1 proc on a two-hander, 2 dual-wielding, +1 on a Ranger's bow | Lists 1-3. Dual wield gains a proc lane over two-handers; Ranger may gain a third from the bow. **Every list needs re-running.** |
 | Whether a Bard really holds a bigger pull | The AOE top 3, decisively |
 | Multi-attack (DA/TA) law — the last classic-sourced constant | ±1.5–2x on every melee lane in lists 1–3 |
 | Defensive stance's damage multiplier (assumed 1.0) | The absolute numbers in list 2 and the AOE lists |

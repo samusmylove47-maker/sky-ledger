@@ -251,18 +251,50 @@ derived.
 **The chain reproduces the 600 anchor and lands ~1.25x short of the top two.** The old
 model was 4–8x low; this is ~1.25x low, and nothing was tuned to get there.
 
-### The one test that would close it
+### The one test that would close it — ANSWERED, AND THE ANSWER IS NO
 
-**Do Proc Exaltation sockets on *armour* fire on melee swings?** Every item gains a Proc
-socket at +4 and a character has 23 worn positions. If armour proc sockets fire, proc
-lanes go from 4 to 10–20 — worth **+100 to +260 DPS**, which closes the residual by
-itself.
+**29 August 2026, from the player.** Proc Exaltations fire **only from the primary and
+secondary weapon slots**, plus the ranged slot for a Ranger. Armour sockets do not proc.
+So the ceiling is:
 
-> **This is a 60-second in-game check**, and it is the single highest-value thing that
-> could be handed back to this analysis: socket a Proc Exaltation into a piece of armour,
-> swing at something for a minute, and see whether it fires.
+| Setup | Proc slots that actually fire |
+|---|---|
+| Two-hander | **1** |
+| Dual wield | **2** |
+| Ranger with a bow equipped | **+1** (ranged slot) |
 
----
+**This kills the leading explanation for the residual.** The "armour proc sockets go from
+4 lanes to 10-20, worth +100 to +260 DPS" hypothesis is dead. The gap between the chain's
+610 / 743 / 926 and the observed 600 / 900-1000 / 1200+ has to come from somewhere else.
+
+What is left, in order of remaining size:
+
+1. **The multi-attack (DA/TA) law** — still the only constant in the chain sourced from
+   classic EverQuest, and the corpus measures swing rates **1.5-2x above** what it
+   predicts. This is now the largest unexplained term.
+2. **Berserker Stance doubling combat-skill recharge**, which would double the autoskill
+   lanes (~156 DPS on a lane-heavy build).
+3. **Striker Stance** (3x weapon-skill / 5x non-weapon-skill), never measured.
+4. **Burst vs sustained framing** — Offensive charges endurance 1:1 on bonus damage, so
+   the top anchors may be a 30-120 s burn rather than a five-minute average.
+5. Kunark/Velious weapons quarantined from the Sky-era catalogue.
+
+> **An unresolved tension, recorded rather than smoothed over.** The corpus shows four
+> distinct Exaltation proc messages in one 466-second window, and **two of them are not
+> weapons**:
+>
+> ```
+> Your Serpentine Bracer (Exaltation) feels alive with power.      x96   <- WRIST
+> Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.        x60   <- FINGERS
+> Your Mane Attraction (Exaltation) flickers with a pale light.    x69
+> Your Idol of the Underking (Exaltation) feels alive with power.  x21   <- RANGE
+> ```
+>
+> The inventory dump confirms `Fingers-Slot7 Djarn's Amethyst Ring (Exaltation)` — a ring
+> Exaltation socketed into a ring, firing 60 times in eight minutes. Either these are
+> **worn/click effects rather than damage procs** (most likely), or the slot rule is
+> narrower than the messages suggest. **Resolving which decides whether the 37.3% non-melee
+> share of a real 426-DPS parse is reachable at all**, so it is the first thing to settle.
 
 ## 9. Does the corrected chain explain the community stacking Ranger?
 
