@@ -373,6 +373,31 @@ Content-dependent; its own term.
 
 ---
 
+## 11b. Four measurements that came back small, recorded so nobody re-runs them
+
+- **Riposte is ~2% of damage and does not favour tanks.** It fires 730 times in the corpus
+  against Flurry's 35, which looked significant. As a share of total damage it is **1.9%
+  while tanking (n=5) and 2.2% while not (n=7)** — no meaningful difference, because a
+  character taking hits is also missing swings of their own. Not worth modelling.
+
+- **Pet DPS is not measurable at level 50 from this corpus.** Only three named allies attack
+  the same targets as the logging character, two are group members rather than pets, and the
+  one clear pet log runs at 8–12 DPS owner damage — a low-level fight. The project's earlier
+  *"charm pets measure 0.774x owner damage"* should be treated as **unverified**, not as a
+  measurement.
+
+- **Berserker Stance has no damage multiplier.** Compared within the same file and verb so
+  the weapon is held fixed, its max-endpoint ratio against Balanced is **1.000**, where
+  Offensive is exactly **2.000** by the same method. Berserker is a pure speed and
+  skill-recharge stance, and since stances are exclusive its 2x speed does **not** stack with
+  Offensive's 2x damage — they are alternatives. *(n=2 file-verb pairs; small.)*
+
+- **Berserker's Frenzy is a burst lane, not an ordinary autoskill.** Attempts sharing one
+  timestamp average **2.89 for frenzy** against 1.48–1.71 for every other verb, with a max of
+  seven. Modelling Frenzy as one hit per activation understates Berserker by roughly half.
+
+---
+
 ## 12. What is still open, ranked by how much it moves the answer
 
 | Unknown | Swing |
