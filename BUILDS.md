@@ -10,6 +10,36 @@ Models committed as `model.py` (v1) and `model2c.py` (corrected). Every claim be
 
 ---
 
+> ## ⚠ THE MODEL BELOW IS SUPERSEDED — DPS FIGURES ARE 4–8× TOO LOW
+>
+> **28 August 2026.** In-game observation supplied by the player puts real sustained
+> single-target DPS at **600+** for an above-average martial character with no Enchanter,
+> **900–1000** min/maxed, and **1200+** best-in-slot. `model2c.py` tops out at **166.5**.
+> That is not a tuning error; it is a structural one. Three defects are identified:
+>
+> | # | Defect | Effect |
+> |---|---|---|
+> | **S1** | Final damage was computed as `R × DMG` — a *fraction* of the raw DMG stat. The wiki says base damage is `(DMG × 2 + 1)` **"before strength, skill, or level are factored in."** | Ratio **4.47× too small** |
+> | **S2** | **No Wrath term at all.** ATK feeds `Wrath = WeaponSkill + ((2×STR)−150)/3 + WornATK + SpellATK`, which scales variable damage on *every swing*. The model priced the Ranger's +104 ATK at +2.6%. Under Wrath it is **+149 Wrath ≈ +37%**. | Ranger undervalued **~14×** |
+> | **S3** | **Exaltations were modelled as zero.** A real inventory dump shows **five augment sub-slots on Primary and five on Secondary** — see `EQUIPMENT-TRUTH.md` §3. | Unknown, plausibly large |
+>
+> S2 is the one that matters for the standing dispute. The player reports that essentially
+> every elite martial build now includes Ranger, and that top builds cluster on
+> warrior / ranger / berserker / monk **+ Shaman for Puma procs**. The model marginalised
+> Ranger. Under a Wrath-scaled chain it should not. **Whether the corrected chain actually
+> reproduces that preference is the whole test of the rebuild**, and if it does not, that
+> will be said plainly here.
+>
+> A rebuild is in progress. Until it lands, **every DPS number in this file is wrong in
+> absolute terms**, and the ordinal claims are only as good as the assumption that all three
+> defects bias every trio equally — which S2 explicitly does not.
+>
+> Two further channels were found unmodelled on 28 August and are **not** in any figure here:
+> the **two ANY equipment slots** (worth ~+53 Wrath, about half a Ranger's ATK line, to every
+> build) and the **Exaltation sub-slots** above. Both are documented in `EQUIPMENT-TRUTH.md`.
+
+---
+
 ## 0. What was asked for, and what is deliverable
 
 Four ranked lists were requested: top 25 martial, top 10 caster, top 10 hybrid, top 10 META.
