@@ -279,22 +279,15 @@ What is left, in order of remaining size:
    the top anchors may be a 30-120 s burn rather than a five-minute average.
 5. Kunark/Velious weapons quarantined from the Sky-era catalogue.
 
-> **An unresolved tension, recorded rather than smoothed over.** The corpus shows four
-> distinct Exaltation proc messages in one 466-second window, and **two of them are not
-> weapons**:
->
-> ```
-> Your Serpentine Bracer (Exaltation) feels alive with power.      x96   <- WRIST
-> Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.        x60   <- FINGERS
-> Your Mane Attraction (Exaltation) flickers with a pale light.    x69
-> Your Idol of the Underking (Exaltation) feels alive with power.  x21   <- RANGE
-> ```
->
-> The inventory dump confirms `Fingers-Slot7 Djarn's Amethyst Ring (Exaltation)` — a ring
-> Exaltation socketed into a ring, firing 60 times in eight minutes. Either these are
-> **worn/click effects rather than damage procs** (most likely), or the slot rule is
-> narrower than the messages suggest. **Resolving which decides whether the 37.3% non-melee
-> share of a real 426-DPS parse is reachable at all**, so it is the first thing to settle.
+> **The tension is resolved, in the player's favour.** The corpus shows six distinct
+> Exaltation sources firing in one log — a bracer 96 times, a ring 60, boots, a medallion, a
+> girdle, a mask — none of them weapons, which looked like a direct contradiction. It is not.
+> Tested against a control (`tools/exaltation.py`): a spell-damage line falls within ±1 s of
+> an ordinary melee swing **20.9%** of the time, and within ±1 s of an Exaltation message
+> **16.9%** of the time — *below* the coincidence baseline. Every armour and jewellery
+> Exaltation sits at or under it. They are click and worn-effect activations, not damage.
+> **The slot rule stands: 1 proc on a two-hander, 2 dual-wielding, +1 on a Ranger's bow.**
+> Full table in `EQUIPMENT-TRUTH.md` §3.
 
 ## 9. Does the corrected chain explain the community stacking Ranger?
 

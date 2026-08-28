@@ -168,6 +168,59 @@ differ from each other (2 vs 3), so the count is a property of the item.
 > geared character is not something the current model is within range of
 > estimating. It was assumed to be zero. It is not zero.
 
+### Only weapon proc sockets fire — confirmed, against my own earlier doubt
+
+**29 August 2026.** The player states that Proc Exaltations fire **only from the primary and
+secondary weapon slots**, plus the ranged slot for a Ranger — so **one proc on a two-hander,
+two dual-wielding, and one on a bow.** Armour sockets do not proc.
+
+I flagged this as contradicting the corpus, which shows six distinct Exaltation sources
+firing in a single log — a bracer 96 times, a ring 60, boots, a medallion, a girdle, a mask.
+**The corpus agrees with the player, and I was reading the messages wrong.**
+
+The test is in `tools/exaltation.py`. If those were damage procs a spell-damage line would
+follow, but a busy combat log has spell damage flying constantly, so the measurement needs a
+control: the same ±1 s window around an ordinary melee swing.
+
+```
+CONTROL  spell damage within ±1s of an ordinary melee swing : 384/1834 = 20.9%
+POOLED   same window around an (Exaltation) message          : 162/958  = 16.9%
+```
+
+**Exaltation messages are BELOW the coincidence baseline.** Per source:
+
+| Exaltation | slot | fires | with damage | vs 20.9% baseline |
+|---|---|---|---|---|
+| Djarn's Amethyst Ring | FINGERS | 425 | 7% | far below |
+| Idol of the Underking | RANGE | 210 | 3% | far below |
+| Serpentine Bracer | WRIST | 96 | 18% | below |
+| Mane Attraction | — | 69 | 28% | at chance |
+| Black Alloy Medallion | NECK | 59 | 46% | above, but no damage is ever *attributed* to it |
+| Golden Efreeti Boots | FEET | 25 | **0%** | a movement click, as in classic |
+| **Polished Mithril Mask** | FACE | 62 | **100%** | fires on *every cast* — a spell-linked worn effect, and no damage line names it |
+
+Not one of them is a damage source. The messages are **click and worn-effect activations**.
+
+**What this costs the model.** The "armour proc sockets take proc lanes from 4 to 10–20,
+worth +100 to +260 DPS" hypothesis in `DAMAGE-CHAIN.md` was the leading explanation for the
+chain's remaining shortfall against the 900–1000 and 1200+ anchors. It is dead. And the
+37.3% non-melee share of that real 426-DPS parse turns out to need no armour procs at all —
+it decomposes entirely into DoTs, class spells and one class proc buff (Envenomed Bolt 30.7,
+Smiting Strike 24.6, Plague 13.1, Puma Maw 12.7, and a tail).
+
+**What it costs a build.** Proc capacity is now a hard structural gate, not a stat:
+
+| Setup | Proc sockets that fire |
+|---|---|
+| Two-hander | **1** |
+| Dual wield | **2** |
+| Ranger with a bow equipped | **+1** |
+
+Dual wield gains a whole proc lane over any two-hander — which weakens every
+`Cudgel of the Fool` build and strengthens the Paladin-blade builds.
+
+---
+
 ### The KeyRing is not the Exaltation library
 
 The dump's `KeyRing / Equipment` section lists 36 items. **None of the six worn
