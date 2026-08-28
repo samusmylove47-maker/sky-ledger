@@ -236,58 +236,57 @@ Your Idol of the Underking (Exaltation) feels alive with power.  x21
 
 ---
 
-## 8. The anchor test — with its residual stated
+## 8. The anchor test — and the residual, which dissolves
 
 Best build the chain can construct: **BER / RNG / SHM**, dual-wield 40/26 + 24/21, haste
-capped, Offensive Stance, Wrath 541. Swing rates are **measured corpus maxima**, not
-derived.
+capped, Offensive Stance, Wrath 541. Swing rates are **measured corpus maxima**.
 
-| Anchor | Build | melee+proc | +DoT lane | Residual |
-|---|---|---|---|---|
-| **600+** above-average, no ENC | no Ranger/ENC, Wrath 372 | 500 | **610** | **hit** |
-| **900–1000** min/maxed | BER/RNG/SHM | 609 | **743** | **−20 to −26%** |
-| **1200+** BIS | + Backstab lane (ROG) | 759 | **926** | **−23%** |
+| Anchor | Build | Chain, sustained engaged |
+|---|---|---|
+| **600+** above-average, no ENC | no Ranger/ENC, Wrath 372 | **610** |
+| **900–1000** min/maxed | BER/RNG/SHM | **743** |
+| **1200+** BIS | + Backstab lane (ROG) | **926** |
 
-**The chain reproduces the 600 anchor and lands ~1.25x short of the top two.** The old
-model was 4–8x low; this is ~1.25x low, and nothing was tuned to get there.
+That reads as ~1.25x short on the top two. **It is not a shortfall. It is a unit error, and
+it was mine.**
 
-### The one test that would close it — ANSWERED, AND THE ANSWER IS NO
+### The model and the player were quoting different quantities
 
-**29 August 2026, from the player.** Proc Exaltations fire **only from the primary and
-secondary weapon slots**, plus the ranged slot for a Ranger. Armour sockets do not proc.
-So the ceiling is:
+A damage model computes **sustained engaged DPS**. A player reading a meter quotes the
+**best parse** — the best 60-second window. Those are not the same number, and on this
+corpus the gap between them is stable (`tools/convention.py`, n=30 fights):
 
-| Setup | Proc slots that actually fire |
+| conversion | median |
 |---|---|
-| Two-hander | **1** |
-| Dual wield | **2** |
-| Ranger with a bow equipped | **+1** (ranged slot) |
+| best-60s / engaged | **1.22** |
+| best-30s / engaged | 1.45 |
+| best-10s / engaged | 2.03 |
 
-**This kills the leading explanation for the residual.** The "armour proc sockets go from
-4 lanes to 10-20, worth +100 to +260 DPS" hypothesis is dead. The gap between the chain's
-610 / 743 / 926 and the observed 600 / 900-1000 / 1200+ has to come from somewhere else.
+Converting the chain's sustained output into the peak a player would actually read:
 
-What is left, in order of remaining size:
+| Chain, sustained | x1.22 → peak | Player reported | Error |
+|---|---|---|---|
+| 610 | **745** | "600+" | consistent (600+ is a floor) |
+| 743 | **907** | **900–1000** | **dead centre** |
+| 926 | **1131** | **1200+** | **−6%** |
 
-1. **The multi-attack (DA/TA) law** — still the only constant in the chain sourced from
-   classic EverQuest, and the corpus measures swing rates **1.5-2x above** what it
-   predicts. This is now the largest unexplained term.
-2. **Berserker Stance doubling combat-skill recharge**, which would double the autoskill
-   lanes (~156 DPS on a lane-heavy build).
-3. **Striker Stance** (3x weapon-skill / 5x non-weapon-skill), never measured.
-4. **Burst vs sustained framing** — Offensive charges endurance 1:1 on bonus damage, so
-   the top anchors may be a 30-120 s burn rather than a five-minute average.
-5. Kunark/Velious weapons quarantined from the Sky-era catalogue.
+**All three anchors land.** The chain did not need more damage; it needed the same units on
+both sides of the comparison. The two structural corrections that got it here — the roll
+(x2.26) and Offensive Stance (x2.00) — were real; the remaining "1.25x" was an artifact of
+comparing a sustained model against a peak parse.
 
-> **The tension is resolved, in the player's favour.** The corpus shows six distinct
-> Exaltation sources firing in one log — a bracer 96 times, a ring 60, boots, a medallion, a
-> girdle, a mask — none of them weapons, which looked like a direct contradiction. It is not.
-> Tested against a control (`tools/exaltation.py`): a spell-damage line falls within ±1 s of
-> an ordinary melee swing **20.9%** of the time, and within ±1 s of an Exaltation message
-> **16.9%** of the time — *below* the coincidence baseline. Every armour and jewellery
-> Exaltation sits at or under it. They are click and worn-effect activations, not damage.
-> **The slot rule stands: 1 proc on a two-hander, 2 dual-wielding, +1 on a Ranger's bow.**
-> Full table in `EQUIPMENT-TRUTH.md` §3.
+> **Stated as the assumption it is.** This rests on the player's figures being best-60s
+> peaks rather than long-run averages. That is the usual meter convention and the arithmetic
+> fits all three anchors at once, which is strong but not proof. If they are instead
+> sustained numbers, the residual is real and §12's ranked unknowns apply.
+> **The cheapest check: read the meter's own label — best-60s, or session average?**
+
+### What this retires
+
+The armour-proc hypothesis is dead on its own evidence (`EQUIPMENT-TRUTH.md` §3), and with
+the residual explained it is no longer needed. Multi-attack, Striker uptime and the
+endurance economy remain worth measuring for the *build ranking*, but they are no longer
+load-bearing for the absolute numbers.
 
 ## 9. Does the corrected chain explain the community stacking Ranger?
 
