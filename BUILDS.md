@@ -10,34 +10,37 @@ Models committed as `model.py` (v1) and `model2c.py` (corrected). Every claim be
 
 ---
 
-> ## ⚠ THE MODEL BELOW IS SUPERSEDED — DPS FIGURES ARE 4–8× TOO LOW
+> ## ⚠ THE MODEL BELOW IS SUPERSEDED — SEE `DAMAGE-CHAIN.md`
 >
-> **28 August 2026.** In-game observation supplied by the player puts real sustained
-> single-target DPS at **600+** for an above-average martial character with no Enchanter,
-> **900–1000** min/maxed, and **1200+** best-in-slot. `model2c.py` tops out at **166.5**.
-> That is not a tuning error; it is a structural one. Three defects are identified:
+> **28 August 2026.** Real in-game DPS is **600+** for an above-average martial character
+> with no Enchanter, **900–1000** min/maxed, **1200+** best-in-slot. `model2c.py` tops out
+> at **166.5**. That is structural, not tuning — and it was refutable without leaving this
+> repository: a mid-tier level-50 character in a committed log fixture sustains **426.5
+> DPS** and peaks at 502.
 >
-> | # | Defect | Effect |
+> The chain has been rebuilt from ~100,000 lines of committed client log and is in
+> **`DAMAGE-CHAIN.md`**. The gap decomposes as:
+>
+> | Term | Old | Corrected |
 > |---|---|---|
-> | **S1** | Final damage was computed as `R × DMG` — a *fraction* of the raw DMG stat. The wiki says base damage is `(DMG × 2 + 1)` **"before strength, skill, or level are factored in."** | Ratio **4.47× too small** |
-> | **S2** | **No Wrath term at all.** ATK feeds `Wrath = WeaponSkill + ((2×STR)−150)/3 + WornATK + SpellATK`, which scales variable damage on *every swing*. The model priced the Ranger's +104 ATK at +2.6%. Under Wrath it is **+149 Wrath ≈ +37%**. | Ranger undervalued **~14×** |
-> | **S3** | **Exaltations were modelled as zero.** A real inventory dump shows **five augment sub-slots on Primary and five on Secondary** — see `EQUIPMENT-TRUTH.md` §3. | Unknown, plausibly large |
+> | **Offensive Stance** | *absent* | **x2.00 damage, x1.084 accuracy** — the largest single term |
+> | Base roll | `0.45 x DMG` | **`U = 2 x DMG + 1`**, confirmed against two identified weapons |
+> | Lane count | ~2 | **5–7 co-firing, 3.15–5.78 swings/s** |
+> | Procs | 9.5 DPS flat, per-swing | **per-minute; 9–55% of total damage** |
+> | Spell/proc crit | *absent* | **3.00x**, across ten spells |
+> | +104 ATK | +2.6% | **+11–13% of total DPS, +19% on a raid boss** |
 >
-> S2 is the one that matters for the standing dispute. The player reports that essentially
-> every elite martial build now includes Ranger, and that top builds cluster on
-> warrior / ranger / berserker / monk **+ Shaman for Puma procs**. The model marginalised
-> Ranger. Under a Wrath-scaled chain it should not. **Whether the corrected chain actually
-> reproduces that preference is the whole test of the rebuild**, and if it does not, that
-> will be said plainly here.
+> The rebuilt chain reproduces the **600** anchor and lands ~1.25x short of 900–1000 and
+> 1200+, with the residual attributed and not tuned away.
 >
-> A rebuild is in progress. Until it lands, **every DPS number in this file is wrong in
-> absolute terms**, and the ordinal claims are only as good as the assumption that all three
-> defects bias every trio equally — which S2 explicitly does not.
+> **Every DPS number below is wrong in absolute terms, and the ordinal claims are only as
+> good as the assumption that all of these bias every trio equally — which the stance and
+> lane-count terms do not.** The four rankings need re-deriving on the corrected chain
+> before anything here should be acted on.
 >
-> Two further channels were found unmodelled on 28 August and are **not** in any figure here:
-> the **two ANY equipment slots** — real, confirmed, but *not* an ATK workaround, because STR
-> caps out — and the **Exaltation sub-slots** above. Both are documented in
-> `EQUIPMENT-TRUTH.md`.
+> Two channels found on 28 August and absent from every figure below: the **two ANY
+> equipment slots** (real, confirmed, but not an ATK workaround — STR caps out) and the
+> **Exaltation sub-slots**, five on each weapon. Both in `EQUIPMENT-TRUTH.md`.
 
 ---
 
