@@ -52,7 +52,7 @@ been caught here, not in-game.
 Wrath  = Offense + ((2 x STR) - 150)/3 + WornATK + SpellATK
 U      = 2 x DMG + 1                                   base-roll maximum
 B      = HandMod x max(Level, DMG) x (min(Delay,50)/40) x (Level/100)
-         HandMod = 0.69 (1H) | 1.10 (2H)               MAIN HAND ONLY, else 0
+         HandMod = 0.80 (1H) | 1.10 (2H)               MAIN HAND ONLY, else 0
 
 r  ~  continuous on (0,1]     offense-vs-mitigation roll,  E[r] = 0.721 measured
 x  =  1                                              with probability 1 - 0.49
@@ -392,7 +392,7 @@ Everything a build model needs. `[REV]` = a reviewer's number adopted over the r
 | **`SPELL_ATK`** | **61** (was 15) | `Share Form of the Great Wolf` DRU 45 = **+51 ATK**, + `Spiritual Brawn` +10 |
 | `WORN_ATK` | **0** | 2 of 11,534 items carry ATK and both are era-gated; all 12 worn ATK effects are Kunark/Velious |
 | `U` | `2·DMG + 1` | TM, two identified weapons |
-| `B` | `HandMod · max(50,DMG) · (min(dly,50)/40) · 0.5`, **main hand only** | 0.69 (1H) / 1.10 (2H). **2H confirmed** by a client `Dmg Bon` line: `Skycleaver` prints 24, formula gives 24.06 (+0.3%). **1H rests on two client windows** (`Garduk`, `Arydryidriyorn`) solving to 0.680 and 0.686 — tier M. **One open conflict:** the only 1H `Dmg Bon` line on a wiki statblock, `Efreeti Standard`, prints 5 against a predicted 4.31 (−13.7%) and wants 0.75–0.80. Tier M beats T2 so 0.69 stands, but a 3-damage/10-delay weapon is exactly the row a classic import carries through unchanged. **One more client 1H screenshot settles it.** |
+| `B` | `HandMod · max(50,DMG) · (min(dly,50)/40) · 0.5`, **main hand only** | **0.80 (1H) / 1.10 (2H).** ~~0.69 (1H)~~ **corrected 29 Aug 2026 — see `handmod.py`.** 0.69 reproduces **0 of the 9** one-handed figures in eqlwiki `Game_Mechanics` § Confirmed Legends Observations (rev 2026-08-11, re-fetched raw 43,724 B on 29 Aug), missing every one LOW by 1–3. **0.80 is the largest modifier that never over-predicts**, 5 of 9 exact, and its four remaining misses are all +1 — the direction an unrecorded DMG above character level produces through the `max` branch. Independently, `Efreeti Standard` 3/10 prints `Dmg Bon` **5**, and `floor(hand × 6.25) == 5` forces hand into **[0.80, 0.96)**. **The tier-M claim that overrode this — "two client windows solving to 0.680 and 0.686" — has no data in this repository**, so it was never tier M. **2H confirmed** by `Skycleaver` printing 24 against 24.06, and by 4 of the 5 two-handed observations. **Still open:** the 5th, dly 70 → 38, which the 50-delay cap cannot produce (it predicts the same 33.01 as dly 58, observed 33). Cost: the one pinned character's slash lane moves +1.6% → +3.4%, so it mildly prefers the refuted value. Recorded, not hidden. |
 | `E_rx` base | **0.967 at Wrath 365** | TM, back-solved from an identified main hand |
 | Order of operations | **stance multiplies BEFORE the crit, and scales `B` too** | non-crit damage is 100.00% even under Offensive (760/760 once killing blows are removed); crit damage only 42.2% |
 

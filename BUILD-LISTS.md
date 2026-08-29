@@ -28,6 +28,15 @@ pet, so ENC competes there and wins a slot.
 > **The ORDER of these lists is more trustworthy than the VALUES**, because the inflating
 > assumptions apply to every trio. Read the ranks. Do not quote the DPS.
 > Full working in `HANDOFF.md` §1.
+>
+> **Erratum, same day.** All three ranking tables were regenerated after the one-handed
+> damage-bonus modifier was corrected from 0.69 to 0.80 (`handmod.py`). List 1 moved by
+> +0.5% with its order unchanged. **Lists 2 and 3 were already stale before that** — they
+> had not been regenerated after the model changed earlier in the week, and List 2's order
+> was wrong from #7 down: `NEC+PAL+ROG` leaves the top ten and `NEC+PAL+WIZ` enters at #10.
+> Both are now generated from the current `lists2.py`. Publishing a table and not
+> regenerating it when the model beneath it moves is the same fault as typing a figure
+> beside its data, and this file had it twice.
 
 ---
 
@@ -107,16 +116,16 @@ boss · abilities on cooldown · **Enchanter excluded**.
 
 | # | Trio | sustained | peak (×1.46) | Weapons |
 |---|---|---|---|---|
-| **1** | **PAL+RNG+ROG** | **522** | **762** | Aldryn 40/26 + Arydryidriyorn |
-| 2 | NEC+PAL+RNG | 505 | 737 | Aldryn + Arydryidriyorn |
-| 3 | PAL+RNG+WIZ | 494 | 721 | Aldryn + Arydryidriyorn |
-| 4 | MNK+PAL+ROG | 491 | 717 | **Aldryn + Wu's Fist** |
-| 5 | MNK+PAL+RNG | 488 | 712 | **Aldryn + Wu's Fist** |
-| 6 | BER+PAL+RNG | 486 | 710 | Aldryn + Arydryidriyorn |
-| 7 | MNK+NEC+PAL | 486 | 709 | Aldryn + Wu's Fist |
-| 8 | NEC+PAL+ROG | 481 | 702 | Aldryn + Fanged Skull Stiletto |
-| 9 | PAL+RNG+SHM | 478 | 698 | Aldryn + Arydryidriyorn |
-| 10 | MNK+PAL+WIZ | 475 | 694 | Aldryn + Wu's Fist |
+| **1** | **PAL+RNG+ROG** | **524** | **766** | Aldryn 40/26 + Arydryidriyorn |
+| 2 | NEC+PAL+RNG | 507 | 741 | Aldryn + Arydryidriyorn |
+| 3 | PAL+RNG+WIZ | 497 | 725 | Aldryn + Arydryidriyorn |
+| 4 | MNK+PAL+ROG | 494 | 721 | **Aldryn + Wu's Fist** |
+| 5 | MNK+PAL+RNG | 491 | 716 | **Aldryn + Wu's Fist** |
+| 6 | BER+PAL+RNG | 489 | 714 | Aldryn + Arydryidriyorn |
+| 7 | MNK+NEC+PAL | 489 | 713 | Aldryn + Wu's Fist |
+| 8 | NEC+PAL+ROG | 483 | 706 | Aldryn + Fanged Skull Stiletto |
+| 9 | PAL+RNG+SHM | 481 | 702 | Aldryn + Arydryidriyorn |
+| 10 | MNK+PAL+WIZ | 478 | 697 | Aldryn + Wu's Fist |
 
 **`PAL+RNG+ROG` is #1, and it is the one build that is robust to every open question below.**
 It stacks the three highest-value classes in the game: Paladin's blades *and* smite rider,
@@ -189,16 +198,16 @@ included.**
 
 | # | Trio | sustained | peak | tank | charm |
 |---|---|---|---|---|---|
-| **1** | **NEC+PAL+RNG** | **562** | **821** | 80 | NEC → 51, undead |
-| 2 | MNK+NEC+PAL | 530 | 774 | 88 | NEC → 51, undead |
-| 3 | BRD+PAL+RNG | 507 | 740 | 80 | **BRD → 51, any** |
-| 4 | **ENC+PAL+RNG** | 507 | 740 | 80 | **ENC → 51, any** |
-| 5 | **NEC+PAL+WAR** | 504 | 737 | **110** | NEC → 51, undead |
-| 6 | PAL+RNG+SHM | 491 | 717 | 80 | SHM → 33, animal |
-| 7 | BST+NEC+PAL | 485 | 708 | 80 | NEC → 51, undead |
-| 8 | NEC+PAL+ROG | 475 | 694 | 80 | NEC → 51, undead |
-| 9 | BRD+MNK+PAL | 475 | 693 | 88 | BRD → 51, any |
-| 10 | ENC+MNK+PAL | 475 | 693 | 88 | ENC → 51, any |
+| **1** | **NEC+PAL+RNG** | **552** | **806** | 80 | NEC → 51, undead |
+| 2 | MNK+NEC+PAL | 533 | 778 | 88 | NEC → 51, undead |
+| 3 | BRD+PAL+RNG | 496 | 725 | 80 | **BRD → 51, any** |
+| 4 | **ENC+PAL+RNG** | 496 | 725 | 80 | **ENC → 51, any** |
+| 5 | **NEC+PAL+WAR** | 493 | 719 | **110** | NEC → 51, undead |
+| 6 | PAL+RNG+SHM | 481 | 702 | 80 | SHM → 33, animal |
+| 7 | BRD+MNK+PAL | 477 | 697 | 88 | BRD → 51, any |
+| 8 | ENC+MNK+PAL | 477 | 697 | 88 | ENC → 51, any |
+| 9 | BST+NEC+PAL | 474 | 692 | 80 | NEC → 51, undead |
+| 10 | NEC+PAL+WIZ | 474 | 692 | 80 | NEC → 51, undead |
 
 **NEC+PAL+RNG is the damage answer; NEC+PAL+WAR is the durable one** (tank 110 — Warrior's
 free permanent 5% melee mitigation plus Lay on Hands). **ENC and BRD tie at #3–4 and are the
@@ -227,19 +236,19 @@ by a factor of about twenty-five. Shaman's three DoTs at 42 s median → 4.2/min
 
 | # | Trio | DPS | actions/min | DPS per action |
 |---|---|---|---|---|
-| **1** | **BER+MNK+WAR** | 499 | **2.0** | **166.5** |
-| 2 | BER+RNG+WAR | 502 | 2.5 | 143.5 |
-| 3 | MNK+RNG+WAR | 495 | 3.0 | 123.6 |
-| 4 | BER+MNK+RNG | 490 | 3.0 | 122.5 |
-| 5 | BER+PAL+WAR | 552 | 4.0 | 110.4 |
-| 6 | **BER+MNK+PAL** | **574** | 4.5 | 104.4 |
-| 7 | **BER+PAL+RNG** | **602** | 5.0 | 100.4 |
-| 8 | MNK+PAL+WAR | 526 | 4.5 | 95.6 |
-| 9 | PAL+RNG+WAR | 548 | 5.0 | 91.3 |
-| 10 | MNK+PAL+RNG | 584 | 5.5 | 89.9 |
+| **1** | **BER+MNK+WAR** | 481 | **2.0** | **160.2** |
+| 2 | BER+RNG+WAR | 482 | 2.5 | 137.7 |
+| 3 | MNK+RNG+WAR | 479 | 3.0 | 119.7 |
+| 4 | BER+MNK+RNG | 475 | 3.0 | 118.6 |
+| 5 | BER+PAL+WAR | 535 | 4.0 | 106.9 |
+| 6 | **BER+MNK+PAL** | **577** | 4.5 | 104.9 |
+| 7 | **BER+PAL+RNG** | **588** | 5.0 | 98.0 |
+| 8 | MNK+PAL+WAR | 528 | 4.5 | 96.1 |
+| 9 | PAL+RNG+WAR | 533 | 5.0 | 88.9 |
+| 10 | MNK+PAL+RNG | 587 | 5.5 | 90.3 |
 
 **`BER+MNK+WAR` is the rest-your-hands build**: three classes with no damage spells at all,
-so all 499 DPS comes from auto-attack and autoskills. Five lanes, every stance in the game,
+so all 481 DPS comes from auto-attack and autoskills. Five lanes, every stance in the game,
 Triple Attack, Berserker's free +6% crit rate, Warrior's free +30% crit damage, Monk's +10%
 haste-cap break. Set a stance and hold auto-attack.
 

@@ -86,7 +86,7 @@ over `seconds` 167 = **124.5 DPS**. We are reading the file the same way.
 
 | test | result |
 |---|---|
-| fights exceeding the model's **ceiling** (best trio, avg mitigation, abilities on cooldown) = 631.4 DPS | **0 of 213** |
+| fights exceeding the model's **ceiling** (best trio, avg mitigation, abilities on cooldown) = 634.0 DPS | **0 of 213** |
 | fights below the model's **floor** (worst of 560 trios, raid mitigation) = 108.5 DPS | **162 of 213 (76%)** |
 | model floor ÷ measured median (71.9 DPS per our character) | **1.51×** |
 
@@ -173,6 +173,60 @@ The remaining gap after stance and rates is almost certainly gear, and **gear
 is the one input `raids-measured.json` does not record.** Which is the honest
 end of this analysis: *the dataset cannot confirm or refute the model, and I
 can say exactly why.*
+
+#### 1c. A constant of mine was wrong, and its tier grade was false
+
+A parallel audit of eqlsource.com came back the same day and its best finding
+was aimed at me. I checked it myself before accepting it; it is right.
+
+**`HandMod` for one-handed weapons was 0.69. It is 0.80.** `SOURCING.md` graded
+it **tier M — "two client windows (`Garduk`, `Arydryidriyorn`) solving to 0.680
+and 0.686"**. Those readings are **nowhere in this repository.** No parse, no
+numbers, no screenshot. A tier-M grade on a measurement whose data is not
+committed is not a tier-M grade, it is a typed number wearing one — which is
+precisely the Sky tracker's fault, one level up, in my own file.
+
+I re-derived it from evidence anyone can re-fetch (`handmod.py`; eqlwiki
+`Game_Mechanics`, curled raw, 43,724 bytes, matching the stated revision size).
+I do not use that page's formula — it is wiki prose, tier 5, and says of itself
+it is not exact. I use its **observation table**, tested against candidates:
+
+| 1H modifier | exact of 9 | over-predicts | residuals (observed − predicted) |
+|---|---|---|---|
+| **0.69 — what we shipped** | **0** | 0 | `[1, 3, 1, 2, 3, 2, 3, 3, 3]` |
+| 0.75 | 0 | 0 | `[1, 2, 1, 1, 2, 1, 1, 1, 2]` |
+| **0.80** | **5** | **0** | `[1, 1, 0, 0, 1, 0, 0, 0, 1]` |
+| 0.85 | 3 | 4 | `[0, 1, −1, 0, 0, −1, −1, −1, 1]` |
+
+0.80 is **the largest modifier that never over-predicts**, and every remaining
+miss is +1 — the direction an unrecorded DMG above character level produces
+through the formula's `max(Level, Damage)` branch. Above 0.82 the residuals
+change sign, which no unrecorded-DMG story explains.
+
+**And the repo already held an independent tier-2 check it had overridden.**
+`Efreeti Standard`, 3 dmg / 10 delay, prints `Dmg Bon` **5**. At level 50,
+`floor(hand × 6.25) == 5` forces hand into **[0.80, 0.96)**. `DAMAGE-CHAIN.md`
+called this "one open conflict" and kept 0.69 because "tier M beats T2". With
+the M evidence absent from the repo, the conflict resolves against 0.69 on both
+lines at once.
+
+**What it costs, stated rather than buried:** on the one fully-pinned character,
+the slash lane moves from +1.6% to +3.4%. That character mildly prefers the
+refuted value. 1.8 points on one lane of one parse does not outweigh nine
+observations and a printed statblock, and I would rather record the disagreement
+than let it look clean.
+
+**Two-handed 1.10 survives** — 4 of 5 observations exact, plus `Skycleaver`
+printing 24 against 24.06. The fifth is open and I cannot close it: delay 70
+observed 38, where the 50-delay cap predicts the same 33.01 it predicts for
+delay 58 (observed 33). Either the cap is wrong or that weapon's DMG exceeds the
+character's level; DMG 57 reproduces 38 exactly. **Named, not resolved.**
+
+**Impact on §1:** small and in the wrong direction for me. The rankings' order is
+unchanged and their values rise ~0.5%, so the model's over-prediction gets very
+slightly worse. **Regenerating the tables surfaced a second fault**: Lists 2 and
+3 in `BUILD-LISTS.md` had not been regenerated after an earlier model change at
+all, and List 2's order was wrong from #7 down. Both errata are on the file.
 
 ---
 
@@ -302,7 +356,7 @@ A derived claim publishes with all seven of these, or it does not publish:
    claimed at all. Mine: level 50, one target, front unless stated, no
    movement, no deaths, buffs assumed.
 7. **What would falsify it,** named specifically. For §1 that is: any logged
-   fight whose per-character DPS exceeds 631.4, or any set of fights with gear
+   fight whose per-character DPS exceeds 634.0, or any set of fights with gear
    recorded whose median lands within 20% of the model floor.
 
 **The test is not whether the claim is well-hedged. It is whether a stranger
@@ -358,12 +412,24 @@ survive.
 2. **The three `raidstats.py` fields (§2).** Retroactive across 213 fights,
    needs no new play, and turns a dataset that cannot test a model into one
    that can.
-3. **D3/D4 boss hit points.** You name this as the obvious modellable gap and I
+3. **Publish the damage bonus in the 50 Upgrades tool.** The site says in four
+   places that damage bonus "cannot be computed, so it is not printed", and names
+   the settle condition as *two client tooltips for the same weapon at different
+   levels*. **That condition is already met on a page a per-item scraper never
+   touches** — eqlwiki `Game_Mechanics` carries the same 24-delay one-hander at
+   L32/48/49/50. §1c is the working. The tool already holds every input it needs
+   (`wp.skill`, the tier-upgraded damage, `wp.dly`, and `ht(item, ctx)` for the
+   level); it is one pure function and one render term on the Weapons card, main
+   hand only. Badge it *"T5 formula, T2 corroboration"* and carry the two caveats
+   the wiki states itself: rounding at low level is unsettled, and the
+   `max(Level, Damage)` branch is not isolated. Both are invisible at level 50
+   with sub-50 damage, which is nearly every row the tool ships.
+4. **D3/D4 boss hit points.** You name this as the obvious modellable gap and I
    agree it is the best target — but **not until §2 lands.** Damage-to-kill is
    an upper bound on HP only when the view is full, and the attacker-count rule
    that decides fullness is the one D-1 puts in question. Fix the count first,
    then the bound means something.
-4. **The haste question.** Your F-05 quotes an *Unbound Alacrity* AA giving
+5. **The haste question.** Your F-05 quotes an *Unbound Alacrity* AA giving
    "a passive 3/6/10% increase in your **current and maximum haste value**".
    That matters to me directly: my model carries `HASTE_CAP = 75` with a
    `+10` Monk adjustment, and I struck its citation myself because the 75 came
@@ -384,6 +450,14 @@ survive.
 - Which clock `seconds` uses (D-3).
 - Whether Session B's contaminated exaltation rule is the same claim as my slot
   rule or a different one (§0).
+- The two-handed damage bonus at delay 70 (§1c). The 50-delay cap and the
+  observation cannot both be right unless that weapon's DMG exceeds the
+  character's level. **One tooltip of any two-hander above 50 delay settles it**,
+  and it is the same screenshot that would settle the `max(Level, Damage)` branch.
+- Whether any other constant in `SOURCING.md` carries a tier-M grade whose parse
+  is not committed. §1c found one by accident. I intend to check all of them
+  against the repo rather than against my memory of them, and I would not be
+  surprised to find another.
 - An in-game Amplification toggle test the owner has offered, which decides
   whether that AA multiplies a Bard's Denon's Desperate Dirge by ~2.4×. Until
   it lands, `DDD.md` states the effect and refuses the multiplier.

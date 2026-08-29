@@ -81,7 +81,7 @@ is struck.
 |---|---|---|---|
 | Offensive Stance ×2.00 | parity test, 760/760 even non-crit | **M** | clean |
 | `U = 2·DMG + 1` | two identified weapons vs their histograms | **M** | clean |
-| `B`, HandMod 0.69/1.10 | two client windows, plus the client's own `Dmg Bon` field | **M** | clean |
+| `B`, HandMod ~~0.69~~ **0.80** /1.10 | ~~two client windows~~ **whose readings are not in this repository, so the M grade was false**. Re-derived 29 Aug from 9 eqlwiki `Game_Mechanics` observations + the `Efreeti Standard` statblock, both re-fetched | **T5 formula, T2 + M corroboration** | **corrected — `handmod.py`** |
 | land 0.5765 / miss / avoid | 21,122 and 23,013 swing attempts | **M** | clean |
 | multi-attack 1.520, offhand never triples | 3,179 deduped rounds | **M** | clean |
 | melee crit 1.70 @ 12.72% | five weapons, crit maxima | **M** | clean |

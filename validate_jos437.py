@@ -29,7 +29,7 @@ hm = 1 + (M.HASTE_CAP + M.MNK_ALACRITY_ADD) / 100.0
 
 r_mh = hm / (MAIN[2] / 10.0) * M.MH_CHAIN
 r_oh = min(hm / (OFF[2] / 10.0) * M.OH_CHAIN * M.DW_SUCCESS, M.OH_RATE_CAP)
-slash = M.lane_dps(2*MAIN[1]+1, M.bonus(MAIN[1], MAIN[2], 0.69), r_mh,
+slash = M.lane_dps(2*MAIN[1]+1, M.bonus(MAIN[1], MAIN[2], M.HAND_1H), r_mh,
                    wrath, MODE, sm, pland, M.CRIT_RATE, M.CRIT_MULT, 0.0)
 punch = M.lane_dps(2*OFF[1]+1, 0.0, r_oh,
                    wrath, MODE, sm, pland, M.CRIT_RATE, M.CRIT_MULT, 0.0)

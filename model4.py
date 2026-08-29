@@ -105,6 +105,14 @@ def weapon_rows():
                         proc=pd,cond=cond,sl=sl))
     return out
 WROWS=weapon_rows()
+# Main-hand damage bonus. HAND_1H was 0.69 until 29 Aug 2026 and that was wrong:
+# 0.69 reproduces 0 of the 9 one-handed observations on eqlwiki `Game_Mechanics`
+# (rev 2026-08-11, re-fetched 43,724 B on 29 Aug), missing every one LOW by 1 to 3.
+# 0.80 reproduces 5 of 9 exactly and is the LARGEST modifier that never over-predicts;
+# every remaining miss is +1, the direction unrecorded DMG-above-level produces through
+# the max(L,dmg) branch. Independently, `Efreeti Standard` 3/10 prints Dmg Bon 5, and
+# floor(hand * 6.25) == 5 forces hand into [0.80, 0.96). See handmod.py.
+HAND_1H=0.80; HAND_2H=1.10
 def bonus(dmg,dly,hand): return hand*max(L,dmg)*(min(dly,50)/40.0)*(L/100.0)
 
 def lane_dps(U,B,rate,wrath,mode,sm,pland,cr,cm,st):
@@ -136,7 +144,7 @@ def evaluate(trio,mode='raid',front=False,charm=True,rates='max'):
     for mh in WROWS:
         if not legal_w(mh,T) or 'PRIMARY' not in mh['sl']: continue
         U=2*mh['dmg']+1
-        B=bonus(mh['dmg'],mh['dly'],1.10 if mh['kind']=='2H' else 0.69)
+        B=bonus(mh['dmg'],mh['dly'],HAND_2H if mh['kind']=='2H' else HAND_1H)
         rate=hm/(mh['dly']/10.0)*mhc
         d=lane_dps(U,B,rate,wrath,mode,sm,pland,cr,cm,st)
         pm=weap_proc_dps(mh['proc'],1.0) if (mh['proc'] and not mh['cond']) else 0.0
