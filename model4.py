@@ -26,6 +26,11 @@ STANCE_DMG=2.00; CRIT_RATE=0.1272; CRIT_MULT=1.70
 
 # ---- multi-attack --------------------------------------------------------
 MH_CHAIN=1.520; OH_CHAIN=1.4911; DW_SUCCESS=0.88
+# Measured ceiling on offhand attempts/s across 138 logs. Without it the model picks
+# Efreeti Standard (3 dmg / 10 delay) and swings it at 2.30/s -- 62% beyond anything ever
+# observed. Capping at the measured maximum is the conservative choice and it makes the
+# model agree with the player's own list of real offhands (Wu's Fist, Arydryidriyorn, Dagas).
+OH_RATE_CAP=1.42
 
 # ---- haste ---------------------------------------------------------------
 HASTE_CAP=75.0; MNK_ALACRITY_ADD=10.0
@@ -141,7 +146,7 @@ def evaluate(trio,mode='raid',front=False,charm=True,rates='max'):
                 if o['kind']!='1H' or not legal_w(o,T) or o['n']==mh['n']: continue
                 if 'SECONDARY' not in o['sl']: continue
                 Uo=2*o['dmg']+1
-                ro=hm/(o['dly']/10.0)*ohc
+                ro=min(hm/(o['dly']/10.0)*ohc, OH_RATE_CAP)
                 dd=lane_dps(Uo,0.0,ro,wrath,mode,sm,pland,cr,cm,st)
                 pp=weap_proc_dps(o['proc'],0.5) if (o['proc'] and not o['cond']) else 0.0
                 if dd+pp>oh_d+oh_pm: oh_d,oh_pm,oh=dd,pp,o

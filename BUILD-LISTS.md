@@ -64,9 +64,12 @@ support partner, so **haste sets the level but does not differentiate builds.**
 | **`Wu's Fist of Mastery`** | **32/22** | **MNK** | either hand |
 | `Windstriker` | 90/60 | RNG | bow |
 
-**Aldryn and Thelvorn cannot be paired — both are PRIMARY-only.** The best dual-wield set in
-the game is `Aldryn`/`Thelvorn` main + `Wu's Fist` off, which **requires PAL + MNK**, and
-**dual-wield beats every two-hander**. Legends is Classic-era only: loading all 223 in-era
+**Aldryn and Thelvorn cannot be paired.** Both are PRIMARY-only, and they are mutually
+exclusive besides. **A weapon can only go in the offhand if its slot list contains
+SECONDARY** — 232 of 444 melee weapons are PRIMARY-only. The legal offhands worth carrying
+are `Wu's Fist of Mastery` 32/22 (MNK), `Arydryidriyorn` 24/21 (RNG) and `Dagas` 22/21 (WAR).
+The best pair in the game is `Aldryn` main + `Wu's Fist` off, which **requires PAL + MNK**,
+and **dual-wield still beats every two-hander**. Legends is Classic-era only: loading all 223 in-era
 weapons the catalogue is missing changes the top trio by **+0.0 DPS**.
 
 **4. Paladin has a damage lane nothing else has.** `Smiting Strike` carries a **flat +417
@@ -86,16 +89,16 @@ boss · abilities on cooldown · **Enchanter excluded**.
 
 | # | Trio | sustained | peak (×1.46) | Weapons |
 |---|---|---|---|---|
-| **1** | **PAL+RNG+ROG** | **535** | **781** | Aldryn 40/26 + Efreeti Standard |
-| 2 | NEC+PAL+RNG | 518 | 756 | Aldryn + Efreeti Standard |
-| 3 | PAL+RNG+WIZ | 507 | 740 | Aldryn + Efreeti Standard |
-| 4 | BER+PAL+RNG | 500 | 730 | Aldryn + Efreeti Standard |
-| 5 | NEC+PAL+ROG | 495 | 722 | Aldryn + Efreeti Standard |
-| 6 | PAL+RNG+SHM | 491 | 717 | Aldryn + Efreeti Standard |
-| 7 | MNK+PAL+ROG | 491 | 717 | **Aldryn + Wu's Fist** |
-| 8 | MNK+PAL+RNG | 488 | 712 | **Aldryn + Wu's Fist** |
-| 9 | MNK+NEC+PAL | 486 | 709 | Aldryn + Wu's Fist |
-| 10 | PAL+ROG+WIZ | 484 | 706 | Aldryn + Efreeti Standard |
+| **1** | **PAL+RNG+ROG** | **522** | **762** | Aldryn 40/26 + Arydryidriyorn |
+| 2 | NEC+PAL+RNG | 505 | 737 | Aldryn + Arydryidriyorn |
+| 3 | PAL+RNG+WIZ | 494 | 721 | Aldryn + Arydryidriyorn |
+| 4 | MNK+PAL+ROG | 491 | 717 | **Aldryn + Wu's Fist** |
+| 5 | MNK+PAL+RNG | 488 | 712 | **Aldryn + Wu's Fist** |
+| 6 | BER+PAL+RNG | 486 | 710 | Aldryn + Arydryidriyorn |
+| 7 | MNK+NEC+PAL | 486 | 709 | Aldryn + Wu's Fist |
+| 8 | NEC+PAL+ROG | 481 | 702 | Aldryn + Fanged Skull Stiletto |
+| 9 | PAL+RNG+SHM | 478 | 698 | Aldryn + Arydryidriyorn |
+| 10 | MNK+PAL+WIZ | 475 | 694 | Aldryn + Wu's Fist |
 
 **`PAL+RNG+ROG` is #1, and it is the one build that is robust to every open question below.**
 It stacks the three highest-value classes in the game: Paladin's blades *and* smite rider,
@@ -114,10 +117,11 @@ Ranger's +104 ATK, Rogue's Backstab (178.7 mean, the highest per-hit lane measur
 > The five-minute test: cast Smite twenty times and see whether every landed one carries a
 > flat ~417 on top.
 
-> The `Efreeti Standard` offhand (13/10) runs at 2.30 attempts/s, beyond anything measured
-> (max 1.42). Capping it at the measured maximum leaves the **top three identical and 9 of
-> 10 of the set unchanged** — so the ranking survives, but that one number is an
-> extrapolation.
+> **The offhand is now capped at the measured maximum of 1.42 attempts/s.** Uncapped, the
+> model picked `Efreeti Standard` (3 damage / 10 delay) and swung it at 2.30/s — 62% beyond
+> anything ever observed. Capping it costs the top build 13 DPS and makes the model choose
+> exactly the offhands a player would name: **Arydryidriyorn, Wu's Fist of Mastery**. The
+> top three are unchanged either way.
 
 ### Ranger: the safest pick, not the single best
 
@@ -230,51 +234,96 @@ Backstab requires standing behind the target continuously. `BRD+DRU+SHD` is 330 
 
 ---
 
-## THE AOE FARMING TRIO — and the verdict on `SHD+DRU+BRD`
+## THE AOE FARMING TRIO — rebuilt, because my first answer was wrong
 
-### The finding that reframes it
+> **The previous version of this section gated on having a tank class.** That excluded every
+> kiting and caster trio — i.e. the entire real AOE meta — and it is why none of the builds
+> the player named appeared. Three things were wrong with it, and fixing them changed the
+> answer completely.
 
-Holding a pull means **Defensive stance**, which forfeits Offensive's ×2.00 and costs 5%
-accuracy. What is left scales with the number of mobs:
+### What was wrong, and what the corpus says
 
-| pull | damage shield | AE spells | melee |
-|---|---|---|---|
-| 8 | 43% | 10% | 47% |
-| 24 | **45%** | **36%** | 19% |
+**1. AOE does not require tanking.** There are four survival modes, and only one of them
+involves holding aggro. Sustained movement speed at level 50, from the spell database:
 
-**The damage shield is the engine.** It is measured at exactly 1.00 tick per landed incoming
-hit — ~17.5 DPS *per attacker* for ~0.13 mana/s — while every AE spell costs 0.6–1.0 damage
-per mana and starves within seconds. `Upheaval` is 618 damage for **625 mana**.
-
-So AOE is decided by: **how many mobs you can hold**, **whether you survive them**, and
-**how much mana you can manufacture.** The engines that exist:
-
-| | | |
+| | speed | duration |
 |---|---|---|
-| **SHM** `Cannibalize` | 0 mana, converts HP→mana, spammable | **~8/s** with a healer |
-| WIZ `Harvest` | +251 mana for 1 mana | ~4/s |
-| NEC `Lich` | +20/tick, costs HP | 3.3/s |
-| BRD `Chorus of Clarity` | 0 mana, **group-wide** | 1.17/s |
+| DRU / SHM `Scale of Wolf` | **+57%** | 45 min |
+| SHM `Spirit of Bih'Li` | +55% | 36 min |
+| DRU / RNG `Greater Wolf Form` | +52% | permanent |
+| **BRD `Selo's Accelerando`** | **+15%** | 3 ticks |
 
-### Your pick, measured
+**Bard is not the swarm-kite engine in Legends** — `Selo's Song of Travel` (+65%) is level 51
+and out of reach at cap. **Druid, Shaman and Ranger carry the kiting speed.**
 
-`SHD+DRU+BRD` computes to **325 / 670 DPS** at pulls of 8 / 24 — rank ~**206–236 of 249**,
-about **72% of the leader**. Three specific reasons: **no mana engine** (4.2/s against 15),
-Druid's `Upheaval` is the most expensive AE at its damage tier, and a weak melee floor.
+**2. AE spells have no target cap.** Not one of the 42 AE spells at level ≤50 states a
+numeric limit, so damage scales linearly with the pull, unbounded. **Pull size is the
+dominant term**, which is exactly why a kiter beats a tank: the crossover is only **~1.5×**
+the tank's pull, and kiting routinely gathers 3–5×.
 
-### But you are right about the variable that matters
+**3. Rain and storm spells land in waves — a 3× undercount.** Measured directly:
 
-**Bard's AOE contribution is pull size, not damage** — and pull size is the one term
-everything scales on linearly. If a Bard holds twice what anything else can, it wins
-outright. I cannot measure that; swarm pulling is not in the corpus.
+```
+[13:46:05] You begin casting Frost Storm VII.
+[13:46:06] You hit a revultant rat for 741 points of cold damage by Frost Storm.
+[13:46:09] You hit a revultant rat for 741 points of cold damage by Frost Storm.
+[13:46:12] You hit a revultant rat for 741 points of cold damage by Frost Storm.
+[13:46:22] You begin casting Frost Storm VII.        <- next cast
+```
+
+**Three waves, three seconds apart, from one cast** — and at 13:47:16 three waves land in the
+same second on *three different targets*, so each wave hits everything in the area. Median 7
+hits per cast over 24 casts.
+
+### That makes Wizard the AOE engine outright
+
+| spell | total damage/cast | mana | cycle | dmg/s/mob | **dmg/mana** |
+|---|---|---|---|---|---|
+| **WIZ `Frost Storm` ×3** | **1,536** | 271 | 17 s | **90.4** | **5.67** |
+| WIZ `Lava Storm` ×3 | 1,203 | 234 | 17 s | 70.8 | 5.14 |
+| DRU `Lightning Blast` | 477 | 234 | 7.6 s | 62.8 | 2.04 |
+| MAG `Rain of Swords` ×3 | 972 | 375 | 19.5 s | 49.8 | 2.59 |
+| WIZ `Supernova` | 854 | 875 | 18.3 s | 46.7 | 0.98 |
+| **BRD `Denon's Desperate Dirge`** | 315 | **800** | 3 s | 105.0 | **0.39** |
+
+**Frost Storm is best on both axes at once.** And Bard's AE, the one spell with higher
+nominal throughput, is the least mana-efficient in the game by a factor of fourteen — while
+**87 of 91 Bard songs cost zero mana**, its actual free AE songs do **0.3–0.7 DPS per mob**.
+Bard is an enabler in an AOE trio, not a damage source.
+
+### The fourth correction: mana conversion competes with casting
+
+Shaman's `McMerin's Feast` is 1.25 s cast + 1.5 s recast for +36 mana — **13.1 mana/s if you
+spend every second on it.** But those are seconds you are not casting AE. Modelled as a
+steady state (fraction of time casting vs converting) rather than as free income. Wizard's
+`Harvest` turns out to be **+251 mana on a 600-second recast = 0.42 mana/s**, not the 4.0 I
+had — a tenfold error.
 
 ### Top 3
 
-| # | Trio | Case |
-|---|---|---|
-| **1** | **BRD+SHM+WAR** | **Your build, corrected.** Keep the Bard for pull size; swap Druid → **Shaman** for `Cannibalize` (0 → 8 mana/s, the single biggest AOE upgrade in the game) and Shadow Knight → **Warrior** for `Area Taunt`, the free permanent mitigation, and real weapons. |
-| **2** | **SHM+WAR+WIZ** | **The best at a fixed pull.** 15 mana/s, a 12,000 pool, `Supernova` at 854 PBAE. **933 DPS at a pull of 24** — the highest any trio reaches without assuming Bard pull mechanics. |
-| **3** | **CLR+SHM+WAR** | **The one that never dies.** Tank 105, `Divine Aura` as an 18-second panic button, 11 mana/s, 12,000 pool. **849 at 24** — 9% behind for a large margin of safety. |
+| # | Trio | DPS at a pull of 30 | Why |
+|---|---|---|---|
+| **1** | **NEC+SHM+WIZ** | **1,852** | Wizard is the engine. **Shaman does two jobs in one slot** — `Cannibalize` for mana *and* `Spirit of Bih'Li` +55% for the kite — and Necromancer's `Lich` adds 3.3 mana/s passively. Casting 68% of the time, the highest duty cycle in the game. |
+| **2** | **DRU+NEC+WIZ** | **1,810** | Same engine, Druid supplying `Scale of Wolf` +57% and a second AE line for when Frost Storm is down. Lower mana income (6.8/s) but the best mobility. |
+| **3** | **BRD+SHM+WIZ** | **1,651** | **Your first pick, one slot changed.** Bard for gathering — snare −30%, AE aggro, a free group mana song — with Shaman replacing Druid because it covers mana *and* speed at once. |
+
+### Where your three picks land
+
+| your pick | DPS | rank | mode | the gap |
+|---|---|---|---|---|
+| **BRD+DRU+WIZ** | **1,336** | **18 / 525** | kite | 28% off the top. DRU and BRD both spend their slot on mobility; neither generates real mana, so it casts only 29% of the time against 68% for the leader. |
+| **ENC+MAG+WIZ** | **1,020** | **38 / 525** | AE-mez | Three casters, but MAG and ENC bring weaker AE than the Wizard already has, and AE damage breaks mez — so the lockdown does not combine with the damage. |
+| **SHD+DRU+BRD** | 458 | 196 / 525 | tank | No Wizard, so no storm waves; the best AE it can reach is Lightning Blast at a 14% duty cycle. |
+
+**You were right that my list was wrong** — the tank gate excluded the whole real meta — and
+right that Wizard-and-caster trios belong at the top. Where the model still disagrees is
+narrower than it looks: it wants the non-Wizard slots spent on **mana**, not mobility, and
+Shaman is the one class that supplies both.
+
+> **The assumption doing the work is pull size by mode** — tank 10, kite 30, AE-mez 20. I
+> cannot measure it; the corpus has no swarm-kiting log. If a Bard's snare and AE aggro
+> genuinely gather more than a Druid's speed alone, `BRD+SHM+WIZ` moves up and your
+> `BRD+DRU+WIZ` moves with it. **The test: pull until it breaks, with and without the Bard.**
 
 ---
 
