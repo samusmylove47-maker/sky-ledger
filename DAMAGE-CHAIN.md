@@ -236,57 +236,76 @@ Your Idol of the Underking (Exaltation) feels alive with power.  x21
 
 ---
 
-## 8. The anchor test — and the residual, which dissolves
+## 8. The anchor test — the residual dissolves, but not where §8 first said
 
-Best build the chain can construct: **BER / RNG / SHM**, dual-wield 40/26 + 24/21, haste
-capped, Offensive Stance, Wrath 541. Swing rates are **measured corpus maxima**.
+> **This section was wrong twice and is now right for a checkable reason.** The first
+> version said the chain was 1.25x short. The second said the shortfall was a unit error and
+> applied a x1.22 best-60s conversion. **Both halves of that second answer were off, in
+> opposite directions, and they cancelled.** The model was ~1.22x too *fast* (haste cap 175
+> where it is 75), and the conversion is ~1.20x *larger* (best-30s, not best-60s). Two
+> offsetting errors gave the right answer for the wrong reasons.
 
-| Anchor | Build | Chain, sustained engaged |
-|---|---|---|
-| **600+** above-average, no ENC | no Ranger/ENC, Wrath 372 | **610** |
-| **900–1000** min/maxed | BER/RNG/SHM | **743** |
-| **1200+** BIS | + Backstab lane (ROG) | **926** |
+### Validation first — does the chain describe a real character?
 
-That reads as ~1.25x short on the top two. **It is not a shortfall. It is a unit error, and
-it was mine.**
+`jos437-finishing-blow.log`, PAL/MNK/ENC at 50, both weapons identified from their damage
+endpoints, provably in Offensive stance (93.6% even damage), 395 s engaged. **Nothing here
+is fitted to its damage.**
 
-### The model and the player were quoting different quantities
-
-A damage model computes **sustained engaged DPS**. A player reading a meter quotes the
-**best parse** — the best 60-second window. Those are not the same number, and on this
-corpus the gap between them is stable (`tools/convention.py`, n=30 fights):
-
-| conversion | median |
-|---|---|
-| best-60s / engaged | **1.22** |
-| best-30s / engaged | 1.45 |
-| best-10s / engaged | 2.03 |
-
-Converting the chain's sustained output into the peak a player would actually read:
-
-| Chain, sustained | x1.22 → peak | Player reported | Error |
+| lane | predicted DPS | measured DPS | err |
 |---|---|---|---|
-| 610 | **745** | "600+" | consistent (600+ is a floor) |
-| 743 | **907** | **900–1000** | **dead centre** |
-| 926 | **1131** | **1200+** | **−6%** |
+| slash `Thelvorn +10` 40/26 | 152.3 | 148.7 | +2.4% |
+| punch `Wu's Fist +10` 32/22 | 101.6 | 92.5 | +9.9% |
+| bash | 36.7 | 38.5 | −4.8% |
+| kick | 22.5 | 22.8 | −1.4% |
+| smite (with the +417 rider) | 58.9 | 57.2 | **+1.0%** |
+| strike | 32.9 | 21.3 | +54% ← the one bad lane |
+| **total melee** | **404.9** | **381.0** | **+6.3%** |
 
-**All three anchors land.** The chain did not need more damage; it needed the same units on
-both sides of the comparison. The two structural corrections that got it here — the roll
-(x2.26) and Offensive Stance (x2.00) — were real; the remaining "1.25x" was an artifact of
-comparing a sustained model against a peak parse.
+Re-run from the repo's own `model4.py`, that character's melee comes out at **381 against a
+measured 381.0**. Both swing rates predict from constants alone to within 3%
+(slash 1.082 vs 1.111 measured; punch 1.103 vs 1.132). **A chain this tight cannot be
+1.84x low.**
 
-> **Stated as the assumption it is.** This rests on the player's figures being best-60s
-> peaks rather than long-run averages. That is the usual meter convention and the arithmetic
-> fits all three anchors at once, which is strong but not proof. If they are instead
-> sustained numbers, the residual is real and §12's ranked unknowns apply.
-> **The cheapest check: read the meter's own label — best-60s, or session average?**
+### The haste correction — the single largest change in this revision
 
-### What this retires
+`HASTE_CAP = 175` was unsourced. Three independent lines kill it:
 
-The armour-proc hypothesis is dead on its own evidence (`EQUIPMENT-TRUTH.md` §3), and with
-the residual explained it is no longer needed. Multi-attack, Striker uptime and the
-endurance economy remain worth measuring for the *build ranking*, but they are no longer
-load-bearing for the absolute numbers.
+| | |
+|---|---|
+| **T2, re-fetched** | eqlwiki `Haste_Guide`: levels 31–50 → **75%**. *"For haste items, only the item with highest haste % counts."* |
+| **175 is unbuildable** | best worn haste in 2,604 items is 41%; best partner-castable at L≤50 is +60% (ENC 47); Monk Alacrity +10. Ceiling **111%**. |
+| **direct measurement** | the identified `Thelvorn` at delay 26 swings **1.111 att/s**; `model3.py` predicted 1.788 — **61% too fast**. At the 85% cap a Monk trio gets, prediction is 1.082. |
+
+### The three anchors
+
+| | sustained engaged | ×1.46 → peak | reported | factor the anchor demands |
+|---|---|---|---|---|
+| **(a)** above-average martial, no ENC, median ability rates | **425** | 621 | 600+ | **×1.411** |
+| **(b)** min/maxed, +10 BIS, full partner package, abilities on cooldown | **648** | 946 | 900–1000 | **×1.466** |
+| **(c)** BIS, every open constant at the favourable end of its band | **848** | 1238 | 1200+ | **×1.416** |
+
+The three anchors independently demand **×1.411 / ×1.466 / ×1.416 — a spread of 3.9%** —
+against an independently measured **best-30s / engaged = 1.462**.
+
+Three things make this a result rather than a lucky fit:
+
+1. **The uniformity is the evidence.** A unit error is multiplicative and moves all three
+   together. Under the *old* model the three anchors demanded ×0.98 / ×1.28 / ×1.30 — a
+   **32% spread**, which is a *shape* error and cannot be a units artefact. Fixing the
+   physics collapsed the spread to 3.9%; only then does a single conversion apply cleanly.
+2. **The mechanism is sourced.** `eql-log-reader` — a shipped Legends parser sitting in this
+   corpus — offers **`Rolling 10s` / `Rolling 30s`** readouts, documented as *"what's hitting
+   right now — better reflects bursts."* A player quoting the highest number on a Rolling-30s
+   display **is quoting best-30s.**
+3. **Every correction moved the model AWAY from the anchors.** Haste 175→75 costs −22%; the
+   missing `P(land)` on ability lanes −7%; multi-attack 1.589→1.520 −1.3%; the offhand slot
+   fix −36 DPS. The only additions are the smite lane (+80, from a 658/658 adjacency count)
+   and `SPELL_ATK` 15→61 (a wiki spell page). A fitter does not report a chain of changes
+   that all cost ceiling and *then* close the gap with a factor measured beforehand.
+
+> **What would falsify it:** the player saying that number was a fight average rather than a
+> rolling peak. Under a fight-average reading the residual reopens to ~×1.6.
+> **The check is one sentence: which meter, and was it the Rolling-30s field or the average?**
 
 ## 9. Does the corrected chain explain the community stacking Ranger?
 
@@ -340,36 +359,103 @@ cap 50.**
 
 ---
 
-## 11. Corrected constants
+## 11. Corrected constants — the full table
 
-| Quantity | Old | Corrected | Evidence |
-|---|---|---|---|
-| Base-roll max | `0.45 x DMG` | **`U = 2 x DMG + 1`** | two identified weapons, −2.1% / −2.5% |
-| `maxExtra` | — | **2.25** | measured 2.230 / 2.282; wiki says 2.10 |
-| **Offensive Stance** | absent | **x2.00 damage, x1.084 land** | 98.8% even damage, n=1,069 |
-| Melee crit | 1.664x @ 13.2% | **`1.7 x (max(D,DMG)+5)` @ 12.72%** | 23,013 swings |
-| **Spell/proc crit** | absent | **3.00x** | ten spells |
-| Land rate | 0.62 / 0.56 | **0.5765** base, **0.6231** Offensive | n=23,013 / 2,258 |
-| Avoidance G | 5.98% | **5.97–6.29%** | three independent parses |
-| Wrath skill term | weapon skill | **Offense** | Statistics page |
-| Offense caps | — | WAR/MNK/ROG/**RNG 252** · PAL/SHD 225 · BRD 215 · SHM/CLR/DRU 200 · casters 140 | Skill_Offense |
-| Proc model | per-swing, 9.5 DPS flat | **per-minute; 9–55% of total damage** | ΔlogLik +8.19 |
-| HandMod | 0.8 (1H) | **0.69 (1H) / 1.10 (2H)** | two client windows |
-| ATK cap | assumed | **none** | Statistics page |
+Everything a build model needs. `[REV]` = a reviewer's number adopted over the researcher's.
 
-### Damage tags that are not part of the normal roll
+### Wrath and the roll
 
-`(Riposte)` 411 · `(Strikethrough)` 23 · `(Flurry)` 19 · `(Rampage)` 6 are **extra
-swings** — pool with normals. `(Slay Undead)` 88 and `(Finishing Blow)` 51 are separate
-multiplicative lanes and contaminate a roll fit:
+| Quantity | Value | Source |
+|---|---|---|
+| `Wrath` | `Offense + ((2·STR)−150)/3 + WornATK + SpellATK` | T2 |
+| **Offense cap at 50** | **WAR 210 · MNK 230 · ROG 210 · RNG 210 · BER 210 · PAL/SHD/BRD/BST/SHM/CLR/DRU 200 · ENC/MAG/NEC/WIZ 140** | T2 ×2, 15/15 agree; validated 21/21 against skill plateaus in the logs |
+| `STR_MOD` | 120 (STR capped at 255) | **ASSUMED — see §12 item 2** |
+| **`SPELL_ATK`** | **61** (was 15) | `Share Form of the Great Wolf` DRU 45 = **+51 ATK**, + `Spiritual Brawn` +10 |
+| `WORN_ATK` | **0** | 2 of 11,534 items carry ATK and both are era-gated; all 12 worn ATK effects are Kunark/Velious |
+| `U` | `2·DMG + 1` | TM, two identified weapons |
+| `B` | `HandMod · max(50,DMG) · (min(dly,50)/40) · 0.5`, **main hand only** | 0.69 (1H) / 1.10 (2H); the client's own `Dmg Bon` field matches to the decimal |
+| `E_rx` base | **0.967 at Wrath 365** | TM, back-solved from an identified main hand |
+| Order of operations | **stance multiplies BEFORE the crit, and scales `B` too** | non-crit damage is 100.00% even under Offensive (760/760 once killing blows are removed); crit damage only 42.2% |
 
-```
-You slash a dar ghoul knight for 1047 points of damage. (Slay Undead)
-```
+### Stances — all eight, measured
 
-off a weapon whose normal maximum was 99. Paladin's `Slay Undead` is 2.25/2.35/2.4% for
-445/850/1250% damage — expected **+30% against undead**, i.e. most of Fear, Hate and Guk.
-Content-dependent; its own term.
+The instrument was an accident of gear: a **bash lane floored at exactly 1 damage** turns
+every stance into a direct multiplier readout.
+
+| stance | damage | accuracy | swing/recharge | who |
+|---|---|---|---|---|
+| **offensive** | **×2.00** | ×1.081 *(band 1.00–1.21)* | ×1.00 | the 9 martial classes |
+| balanced | ×1.00 | ×1.00 | ×1.00 | 9 martial |
+| defensive | ×1.00 | **×0.95** | ×1.00 | WAR PAL SHD · incoming dmg/hit ×0.47 |
+| **berserker** | **×1.00** | ×1.01 | **×1.90** | BER only |
+| evasive | ×1.00 | ×1.00 | ×1.00 | BRD BST MNK RNG ROG · incoming **hit rate ×0.08** |
+| **striker** | **not a flat multiplier** | ×1.00 | ×1.00 | BER MNK ROG WAR — **see §12 item 4** |
+| ranged | ×1.00 | ×1.081 | ×1.00 | grants DA/TA to the bow; **no damage multiplier** |
+| mage hunter | ×1.00 | ×0.97 | ×1.00 | BER PAL SHD |
+
+**Offensive does not touch procs or spells** (Puma Maw 172→172). **Berserker never clearly
+beats Offensive**: ×1.90 rate against ×2.00 damage × ×1.081 accuracy = ×2.16, but the
+intervals overlap and two open unknowns push toward Berserker.
+
+### Rates
+
+| Quantity | Value | Note |
+|---|---|---|
+| **`HASTE_CAP`** | **75** (**85** with a Monk's `Unbound Alacrity`) | **was 175 — worth ×1.28.** Worn haste does **not** stack; only the highest item counts |
+| `MH_CHAIN` | **1.520** `[REV]` | DA 56%, TA 14% conditional. CI [1.465, 1.569]; between-session sd 0.11 |
+| `OH_CHAIN` | **1.4911** `[REV]` | **the offhand never triples** — P(≥3) 0.0017 vs 0.0406 main, a 24× gap |
+| `DW_SUCCESS` | **0.88** | newly separable, because haste must be identical in both hands |
+| Skill gates | Dual Wield BRD BST MNK RNG ROG WAR · Double Attack BER MNK PAL RNG ROG SHD WAR · **Triple Attack BER MNK RNG WAR + ROG** | Rogue was missing |
+| Flurry / Rampage / riposte | +0.21% / 0 sustained / ~2% | all rounding errors |
+
+### Lanes
+
+| Quantity | Value |
+|---|---|
+| pre-stance lane means | kick **58.50** · bash **71.15** · strike **35.05** · smite **31.30** · frenzy 57.21 · backstab 178.69 |
+| lane rates (median / on cooldown) | kick .32/.54 · bash .33/.54 · strike .27/.50 · smite .17/.31 · frenzy .47/.72 · backstab .29/.47 |
+| **`SMITE_RIDER`** | **+417 flat**, not stance-doubled, **never crits**, fires 658/658 landed smites | 
+| lane ownership | kick BST MNK RNG WAR · bash PAL SHD WAR · strike MNK · frenzy BER · backstab ROG · **smite PAL** |
+| **Slam** | **remove — it is a racial (Barbarian/Ogre/Troll), not a class skill** |
+| Frenzy | **2.918 attempts per activation**, P(3) > P(2) — a distinct multi-hit ability |
+
+> **`SMITE_RIDER` is free money the old model missed entirely: ~80 DPS on every Paladin
+> trio**, which is most of why Paladin now appears in nine of the top ten.
+
+### Procs and non-melee
+
+| Quantity | Value |
+|---|---|
+| **proc lanes** | **1 two-handed · 2 dual-wielding · +1 on a Ranger's bow.** Mechanistic, not just testimony: an Exaltation carries its **source item's slot restriction** onto the host, and 382/385 combat effects live on PRIMARY/SECONDARY/RANGE items — a proc in a bracer makes the bracer weapon-slot-only |
+| sub-slot ladder | Slot1/2 Ornamentation (+0) · **Slot7 Focus (+1)** · Slot8 Click (+2) · Slot9 Worn (+3) · **Slot10 Proc (+4)** — 66/66 dump rows |
+| `WEAPON_PROC_PPM` | **2.4** `[REV]` (band 2.1–2.7). The researcher's 4.02 counted AE hit lines as separate proc events |
+| proc crit | 3.00× at 12.2% — **but not universal**: Earthquake 0/39, Smiting Strike 0/658, Scream 0/29 never crit |
+| **spell rank** | **×1.00** `[REV]` — `Spirit of the Puma V` delivers Puma Maw at exactly its rank-I book value (n=93). The "ranks multiply 3–4×" claim is dead |
+| **charm pet** | **66.8 DPS** `[REV]` (coefficient-free: pet damage inside the owner's engaged segments) |
+| **charm caps** | ENC 51 *any* · **BRD 51 *any*, on an 18 s song** · NEC 51 *undead* · **DRU 49** *animal* · SHM 33 *animal* |
+| **the player tanks, not the pet** | bosses aimed **1,318 melee attempts at the player and 59 at anything else** (4.3%); on Nagafen 186:1 |
+| summoned pets | MAG 35 · BST 30 · ENC 31 · NEC 22 · SHD 9 — a charm pet is ~9× a summoned one |
+| damage shield | 17.5 DPS per attacker, ~0.13 mana/s, **0 unless you are tanking** |
+
+### Items
+
+| | |
+|---|---|
+| upgrade | `v + max(tier, floor(v·0.1·tier))`; DMG doubles at +10, **delay never changes**. *A T2 page says weapons get +5%/tier — the tier-change ceiling test favours 10%. See §12 item 6.* |
+| **slot legality** | main hand needs `PRIMARY` in `sl`; offhand needs `SECONDARY`. **232 of 444 melee weapons are PRIMARY-only** |
+| **Aldryn and Thelvorn cannot be paired** | both are PRIMARY-only. The old #1 build was illegal |
+| best pair in the game | **`Aldryn`/`Thelvorn` 40/26 main + `Wu's Fist of Mastery` 32/22 off — needs PAL + MNK.** Dual-wield beats every two-hander |
+| not in EQL | `Rheumguls`, `Wu's Tranquil Fist`, `Beckon` are eqlwiki `{{Delete}}` |
+| era | **Classic only.** One Kunark zone string in 138 logs, dated nine days pre-launch. Loading all 223 catalogue-missing in-era weapons changes the top trio by **+0.0 DPS** |
+
+### Bugs this revision fixed in `model3.py`, in order of damage
+
+`HASTE_CAP = 175` (×1.28) · ability lanes missing `P(land)` (×0.93) · **no smite lane at
+all** (−80 DPS per Paladin trio) · `CLASSES` missing `ENC` (**105 of 560 trios never
+evaluated, including the ground-truth character**) · offhand accepted PRIMARY-only weapons ·
+`ONEH` missing `'Piercing'` (92 weapons) · `ALL_EXCEPT` inverted (80 weapons) · `{{Delete}}`
+items still ranked · `spells.json` path unresolvable, so **every weapon proc silently
+scored 0**.
 
 ---
 
