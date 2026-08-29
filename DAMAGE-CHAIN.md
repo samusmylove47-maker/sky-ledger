@@ -272,9 +272,9 @@ measured 381.0**. Both swing rates predict from constants alone to within 3%
 
 | | |
 |---|---|
-| **T2, re-fetched** | eqlwiki `Haste_Guide`: levels 31–50 → **75%**. *"For haste items, only the item with highest haste % counts."* |
+| ~~T2~~ **T5, struck** | eqlwiki `Haste_Guide` says 75% for levels 31–50 — but it is a **prose guide page carrying the classic delay-dividing formula**, which `eqlsource.com/learn/contamination.html` names as the one mechanic *known* to have changed. **Do not cite it.** See `SOURCING.md` §2. |
 | **175 is unbuildable** | best worn haste in 2,604 items is 41%; best partner-castable at L≤50 is +60% (ENC 47); Monk Alacrity +10. Ceiling **111%**. |
-| **direct measurement** | the identified `Thelvorn` at delay 26 swings **1.111 att/s**; `model3.py` predicted 1.788 — **61% too fast**. At the 85% cap a Monk trio gets, prediction is 1.082. |
+| **direct measurement — the only citation that survives** | the identified `Thelvorn` at delay 26 swings **1.111 att/s** over 395 s. Against an unhasted `(10/26) × 1.520 = 0.585`, the **effective attack-speed multiplier is 1.900** — an attack-speed stat of 190 where the client panel reads 100 unhasted. `model3.py`'s 175 predicted 1.788 att/s, **61% too fast**; the value now in use is 2.7% low. |
 
 ### The three anchors
 
