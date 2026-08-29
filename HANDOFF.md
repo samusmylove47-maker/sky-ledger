@@ -39,6 +39,28 @@ correcting it downstream.*
   `HANDOFF.md` 311,020 B, `CLAUDE.md` 44,510 B, `raids-measured.json` 207,239 B,
   read as bytes, not summarised.
 
+### Standing rulings I am under, 29 Aug 2026
+
+- **Addressing.** I may address only sessions whose name maps to a known EQLS
+  repository — `eql-source`, `EQLSLockouts`, `EQL50ups`, `EQLSAuras`,
+  `sky-ledger`. Addressee-based deliberately: a rule about what context may cross
+  is unverifiable, a rule about who you may address is a list. **Binding, and it
+  costs me nothing today** — my outbound is unavailable in either direction, so
+  the rule takes effect the moment it is not.
+- **The Routines delivery path is available and DECLINED.** `create_trigger` with
+  `persistent_session_id` plus `fire_trigger` with `text` does deliver into
+  another session. Declined as off-label use of a scheduler that leaves a
+  persistent Routine object per correspondent, against a stated freeze. Recorded
+  so nobody rediscovers it and thinks it is new.
+- **The relay that works:** `claude -p "<message>" --cloud <session-id>`, from the
+  owner's terminal, signed in with `claude auth login`. Not from a container.
+- **Where the log tailer actually is** (the Director corrected this themselves
+  after I reported it absent here): the built artefact at
+  `public/app/sky-ledger.<hash>.html` inside `eql-source`, copied there by
+  `_build/skyledger.py` from a Ledger repo whose location is env-var driven.
+  **Nothing in this repository was ever going to contain it**, and its
+  windows-1252 assumption is not inherited here.
+
 ---
 
 ## To the Director
@@ -589,3 +611,98 @@ mine:**
    2659s — no roll at all. But the visier took 1415 unamped where the golem took
    1583, 12% apart. Resist, level or type; **not identified**, and I am not
    going to guess which.
+
+---
+
+### 10. First verified audit finding: the haste entry can be closed, and one of its accusations is wrong
+
+**`/learn/still-true.html`, the entry *"Is haste a percentage, or a flat
+attack-speed value?"*, graded Open.** Page fetched raw, 34,173 bytes, 29 Aug.
+The audit flagged it; I did not take the audit's word for it, and its argument
+turned out to be inverted (§7b). This is my own working, from primary sources.
+
+**The entry can be closed, by the owner's own client.** The panel reads: base
+**100%**, at the haste cap **175%**, a Monk trio **185%**. That is tier M and it
+answers the question the page asks:
+
+- **The stat is a flat attack-speed value with a base of 100** — EQL Tools'
+  description, exactly.
+- **It is printed as a percentage** — so the percent sign is Legends' own
+  notation, not a classic import.
+
+**So the page's framing is a false dichotomy.** It says *"the two best sources in
+this community disagree"* and treats one as necessarily contaminated. They do not
+disagree: they describe one mechanic in two notations, and **the arithmetic is
+identical**. `delay/(1+h)` gives `10(1+h)/delay` swings per second; an attack
+speed of 100 → 175 gives ×1.75. At h = 75% both give ×1.75, on every weapon. **No
+observation can separate them, so no screenshot was ever going to settle it as
+posed.**
+
+**And the settling test, as written, would produce the wrong answer.** The page
+says: *"One screenshot of a Legends haste item tooltip. If it reads a bare number
+rather than a percentage, EQL Tools is right and every percentage figure on this
+site is a classic import."* The real client prints **175%** — a percent sign on
+the very flat attack-speed stat EQL Tools describes. Run the test as written and
+you conclude EQL Tools is wrong, when it is right. **The test's criterion is
+orthogonal to its question.**
+
+#### The accusation that is wrong, and this is the part worth acting on
+
+> *"Six Plane of Sky reward tooltips on this site carry percentage haste — **five
+> of them the identical +41%, which is a copied constant rather than five
+> readings** — they are marked suspect in place."*
+
+**They are five readings.** A separate scrape of item pages in this repository —
+2,604 items across 18 slot files — holds exactly **five** items at 41 haste, and
+they are five distinct named belts, every one of them WAIST:
+
+| item | slot | haste |
+|---|---|---|
+| Renard's Belt of Quickness | WAIST | 41 |
+| Pegasus-Hide Belt | WAIST | 41 |
+| Golden Sash of Tranquility | WAIST | 41 |
+| Girdle of Faith | WAIST | 41 |
+| Belt of the Four Winds | WAIST | 41 |
+
+**And 41 sits at the top of a designed ladder.** The complete set of worn haste
+values in the corpus is **41, 36, 31, 26, 21, 16** — differences of exactly five,
+with 15 and 10 below. A value that is a copied constant does not land at the top
+of a regular arithmetic progression. **41% is the game's top worn-haste tier and
+five belts legitimately share it.**
+
+**Stated limit, because it matters:** my scrape and the site's both descend from
+eqlwiki, so this is not a fully independent witness and a shared upstream error
+would survive it. What it *does* refute is the specific charge — *"a copied
+constant rather than five readings"* — because the value attaches to five
+separate item records, not one repeated field. **Five distinct pages each
+carrying 41 is not a copy.**
+
+#### What I would change on the page
+
+1. **Move the entry from Open to Changed**, and state the closed half: Legends'
+   stat is called Attack Speed, its unhasted base is 100, it is printed in
+   percent, and a "+41%" figure is therefore Legends' own unit.
+2. **Delete the settling test** and say why it cannot work — the two models are
+   arithmetically identical, so no tooltip distinguishes them. Replacing a test
+   that would mislabel correct data is worth more than the entry itself.
+3. **Keep two genuinely live questions**, which the entry currently buries under
+   the units argument: **the cap** (75 at 50, +10 for a Monk — now tier M from
+   the panel, so arguably also closed) and **stacking**, where eqlwiki says
+   highest worn item only and EQL Tools says item + spell + overhaste to the cap.
+   That one is a real conflict and nothing I hold settles it.
+4. **Unmark the five +41% belts.** They are correct data currently flagged as
+   contamination, which is the more expensive direction of that error.
+
+**One thing I cannot corroborate and will not pretend to.** The page's
+characterisation of eqlwiki's `Haste_Guide` as carrying "the classic percentage
+formula and classic-era raid content around it" is **half right and I have said so
+against myself already** (§7). Fetched raw, 31,563 bytes: it does carry 12
+mentions of Velious, Kunark, VoG and SoS, none of which exist in this era — so
+the classic-content half stands. But its caps table is Legends-authored (the
+51–60 row is annotated *"Will need to test once available!"*), it names Magician's
+Frenzied Burnout as the only overhaste source **in Everquest Legends**, and it
+states the Monk Unbound Alacrity rule that the owner's panel then confirmed. **A
+page can be classic in its surroundings and Legends-authored in the field you are
+reading, and this is one.** That is the site's own doctrine — a tier-5 sentence
+inside a tier-2 container — running in the opposite direction, and the page has
+not applied it to itself.
