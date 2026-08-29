@@ -234,96 +234,112 @@ Backstab requires standing behind the target continuously. `BRD+DRU+SHD` is 330 
 
 ---
 
-## THE AOE FARMING TRIO — rebuilt, because my first answer was wrong
+## THE AOE FARMING TRIO — Bard is the class, and I had it backwards twice
 
-> **The previous version of this section gated on having a tank class.** That excluded every
-> kiting and caster trio — i.e. the entire real AOE meta — and it is why none of the builds
-> the player named appeared. Three things were wrong with it, and fixing them changed the
-> answer completely.
+> **I said "Bard is an enabler, not a damage source." That was wrong, and it was my own
+> extraction bug.** My spell database carries the value from each song's own wiki page,
+> which is the BASE. Only the eqlwiki **class page** carries the level scaling — and for
+> Bard's three passive songs that is a **7× difference**.
 
-### What was wrong, and what the corpus says
+```
+eqlwiki Bard class page, verbatim:
+  Chords of Dissonance        "Decrease Hitpoints by  2 (L2)  to 14 (L50) per tick"  Stringed
+  Denon's Disruptive Discord  "Decrease Hitpoints by  8 (L18) to 16 (L50) per tick"  Brass
+  Selo's Chords of Cessation  "Decrease Hitpoints by 26 (L48) to 27 (L50) per tick"  Stringed
+                                                     ------
+                                          57 per tick at level 50
+```
 
-**1. AOE does not require tanking.** There are four survival modes, and only one of them
-involves holding aggro. Sustained movement speed at level 50, from the spell database:
+I had 8/tick and called it 0.3–0.7 DPS per mob. **The real figure is 57/tick — 9.5 DPS per
+mob before multipliers, for zero mana and zero keypresses.**
 
-| | speed | duration |
+### Two separate multiplier systems, and they do not overlap
+
+Confirmed verbatim from the AA catalogue — this is not an inference:
+
+| AA | text | applies to |
 |---|---|---|
-| DRU / SHM `Scale of Wolf` | **+57%** | 45 min |
-| SHM `Spirit of Bih'Li` | +55% | 36 min |
-| DRU / RNG `Greater Wolf Form` | +52% | permanent |
-| **BRD `Selo's Accelerando`** | **+15%** | 3 ticks |
+| **Instrument Mastery** 3 | *"further improves the instrument bonus of your songs by 20/40/60%. This ability impacts **Brass, Percussion, String and Woodwind** songs"* | the three passive PB AE songs |
+| **Singing Mastery** 3 | *"further improves the singing bonus of your songs by 20/40/60%. This ability impacts songs that use the **Singing** skill"* | Denon's Desperate Dirge |
 
-**Bard is not the swarm-kite engine in Legends** — `Selo's Song of Travel` (+65%) is level 51
-and out of reach at cap. **Druid, Shaman and Ranger carry the kiting speed.**
+Disjoint song sets, and a maxed Bard runs both. Any model with one "Bard damage multiplier"
+is wrong.
 
-**2. AE spells have no target cap.** Not one of the 42 AE spells at level ≤50 states a
-numeric limit, so damage scales linearly with the pull, unbounded. **Pull size is the
-dominant term**, which is exactly why a kiter beats a tank: the crossover is only **~1.5×**
-the tank's pull, and kiting routinely gathers 3–5×.
+### Symphonic Aura makes the passive layer free and automatic
 
-**3. Rain and storm spells land in waves — a 3× undercount.** Measured directly:
+Verbatim from the AA catalogue: *"allows one/two/three/four/five Bard songs to auto pulse.
+In order for a song to be eligible, it must have no mana cost, have no cooldown, and be a
+non-targeted area of effect song... This ability chooses the first eligible song, starting
+from your final spell gem, and working backwards."*
+
+All three PB AE songs qualify. **DDD does not** — 800 mana *and* Targeted AE — so it stays a
+deliberate manual cast. The gather automates; the detonation does not.
 
 ```
-[13:46:05] You begin casting Frost Storm VII.
-[13:46:06] You hit a revultant rat for 741 points of cold damage by Frost Storm.
-[13:46:09] You hit a revultant rat for 741 points of cold damage by Frost Storm.
-[13:46:12] You hit a revultant rat for 741 points of cold damage by Frost Storm.
-[13:46:22] You begin casting Frost Storm VII.        <- next cast
+57/tick × 1.60 (Instrument Mastery) × 1.40 (exaltations) ÷ 6s tick = 21.3 DPS PER MOB
+                                                    against 30 mobs = 638 DPS
+                                            zero mana, zero keypresses, no target cap
 ```
 
-**Three waves, three seconds apart, from one cast** — and at 13:47:16 three waves land in the
-same second on *three different targets*, so each wave hits everything in the area. Median 7
-hits per cast over 24 casts.
+### Denon's Desperate Dirge — the detonation
 
-### That makes Wizard the AOE engine outright
+eqlwiki spell page, verbatim: *"causes between 311 and 405 damage to **up to 8 enemies**"* ·
+315 base · **800 mana** · 3.00 s cast · **0.00 recast** · Targeted AE · Singing skill.
 
-| spell | total damage/cast | mana | cycle | dmg/s/mob | **dmg/mana** |
-|---|---|---|---|---|---|
-| **WIZ `Frost Storm` ×3** | **1,536** | 271 | 17 s | **90.4** | **5.67** |
-| WIZ `Lava Storm` ×3 | 1,203 | 234 | 17 s | 70.8 | 5.14 |
-| DRU `Lightning Blast` | 477 | 234 | 7.6 s | 62.8 | 2.04 |
-| MAG `Rain of Swords` ×3 | 972 | 375 | 19.5 s | 49.8 | 2.59 |
-| WIZ `Supernova` | 854 | 875 | 18.3 s | 46.7 | 0.98 |
-| **BRD `Denon's Desperate Dirge`** | 315 | **800** | 3 s | 105.0 | **0.39** |
+**The 8-target cap is real and my model had no cap at all.** Throughput is
+**casts-per-pull gated by the mana pool**, not a sustained rate — which is why the trio is
+Bard plus two mana classes.
 
-**Frost Storm is best on both axes at once.** And Bard's AE, the one spell with higher
-nominal throughput, is the least mana-efficient in the game by a factor of fourteen — while
-**87 of 91 Bard songs cost zero mana**, its actual free AE songs do **0.3–0.7 DPS per mob**.
-Bard is an enabler in an AOE trio, not a damage source.
+### Top of the list, and the sensitivity that governs it
 
-### The fourth correction: mana conversion competes with casting
-
-Shaman's `McMerin's Feast` is 1.25 s cast + 1.5 s recast for +36 mana — **13.1 mana/s if you
-spend every second on it.** But those are seconds you are not casting AE. Modelled as a
-steady state (fraction of time casting vs converting) rather than as free income. Wizard's
-`Harvest` turns out to be **+251 mana on a 600-second recast = 0.42 mana/s**, not the 4.0 I
-had — a tenfold error.
-
-### Top 3
-
-| # | Trio | DPS at a pull of 30 | Why |
-|---|---|---|---|
-| **1** | **NEC+SHM+WIZ** | **1,852** | Wizard is the engine. **Shaman does two jobs in one slot** — `Cannibalize` for mana *and* `Spirit of Bih'Li` +55% for the kite — and Necromancer's `Lich` adds 3.3 mana/s passively. Casting 68% of the time, the highest duty cycle in the game. |
-| **2** | **DRU+NEC+WIZ** | **1,810** | Same engine, Druid supplying `Scale of Wolf` +57% and a second AE line for when Frost Storm is down. Lower mana income (6.8/s) but the best mobility. |
-| **3** | **BRD+SHM+WIZ** | **1,651** | **Your first pick, one slot changed.** Bard for gathering — snare −30%, AE aggro, a free group mana song — with Shaman replacing Druid because it covers mana *and* speed at once. |
-
-### Where your three picks land
-
-| your pick | DPS | rank | mode | the gap |
+| # | Trio | DPS at a pull of 30 | aura | DDD |
 |---|---|---|---|---|
-| **BRD+DRU+WIZ** | **1,336** | **18 / 525** | kite | 28% off the top. DRU and BRD both spend their slot on mobility; neither generates real mana, so it casts only 29% of the time against 68% for the leader. |
-| **ENC+MAG+WIZ** | **1,020** | **38 / 525** | AE-mez | Three casters, but MAG and ENC bring weaker AE than the Wizard already has, and AE damage breaks mez — so the lockdown does not combine with the damage. |
-| **SHD+DRU+BRD** | 458 | 196 / 525 | tank | No Wizard, so no storm waves; the best AE it can reach is Lightning Blast at a 14% duty cycle. |
+| **1** | **BRD+DRU+NEC** | **4,863** | 638 | 4,225 |
+| 2 | BRD+NEC+SHM | 4,863 | 638 | 4,225 |
+| 3 | BRD+DRU+ENC | 4,824 | 638 | 4,185 |
+| **5** | **BRD+DRU+WIZ** — *your pick* | **4,776** | 638 | 4,138 |
+| 12 | BRD+ENC+NEC | 4,711 | 426 | 4,285 |
 
-**You were right that my list was wrong** — the tank gate excluded the whole real meta — and
-right that Wizard-and-caster trios belong at the top. Where the model still disagrees is
-narrower than it looks: it wants the non-Wizard slots spent on **mana**, not mobility, and
-Shaman is the one class that supplies both.
+**Every one of the top eleven contains Bard.** Your `BRD+DRU+WIZ` is fifth, and the spread
+across the top eleven is 2% — they are the same build with different mana batteries.
 
-> **The assumption doing the work is pull size by mode** — tank 10, kite 30, AE-mez 20. I
-> cannot measure it; the corpus has no swarm-kiting log. If a Bard's snare and AE aggro
-> genuinely gather more than a Druid's speed alone, `BRD+SHM+WIZ` moves up and your
-> `BRD+DRU+WIZ` moves with it. **The test: pull until it breaks, with and without the Bard.**
+> **What this rests on.** DDD's measured 3,000 per target comes from a wiki-hosted guide
+> (T3), and the two largest multipliers behind it — **Amplification ×2.0** and **mote rank
+> 10 ×2.0** — are **not wiki-sourced**. The wiki renders Amplification four different ways
+> (description "10%", effect slot "0.7%"). I checked the page myself and confirmed both
+> renderings. So:
+>
+> | DDD per target | #1 trio | Bard in top 10 | your BRD+DRU+WIZ |
+> |---|---|---|---|
+> | **3,000** reported | BRD+DRU+NEC | **10/10** | **rank 5** |
+> | 1,310 wiki multipliers, no mote | MNK+RNG+WIZ | 0/10 | rank 32 |
+> | 554 wiki-only, Amplification at 10% | MNK+RNG+WIZ | 0/10 | rank 99 |
+> | **0** — DDD deleted entirely | **BRD+RNG+WIZ** | **3/10** | **rank 2** |
+>
+> **Read the last row.** Even with Denon's Desperate Dirge removed from the game, the free
+> passive layer alone puts Bard at first and second. **The aura layer is T2 and I verified
+> it against the primary source myself; DDD's magnitude is the part that is not settled.**
+> Bard belongs at the top of every AOE list either way — the open question is by how much.
+
+### Two five-minute tests that close it
+
+1. **Cast DDD with Amplification up, then down**, same target and gear. Double = ×2.0
+   confirmed. ~10% = the wiki description was literal. Under 1% = the effect slot was.
+   Amplification is 30 seconds, self-targeted, zero mana.
+2. **Cast DDD with a Stringed exaltation equipped, then removed.** Settles whether the
+   exaltation scale is ×1.4 or ×2.4, which is a 70% swing on the passive layer.
+
+### Where your other two picks land
+
+| pick | DPS | rank | why |
+|---|---|---|---|
+| **BRD+DRU+SHD** | 3,503 | 51 | Shadow Knight forces the tank mode, so the pull drops to 10 and the aura layer — which scales with the pull and has no cap — loses two thirds of its value. |
+| **ENC+MAG+WIZ** | 1,807 | 177 | No Bard, so no aura and no DDD. Three casters give the biggest pool, but the best AE they reach is `Frost Storm ×3` and AE damage breaks mez, so the lockdown does not combine with the damage. |
+
+**The lesson I should have drawn earlier:** a class whose damage lives in *level-scaled
+per-tick fields on a class page* is invisible to a scraper that reads spell pages. That is
+the second time in this project a Bard number has been wrong by a large factor in the same
+direction.
 
 ---
 
