@@ -429,16 +429,65 @@ survive.
    an upper bound on HP only when the view is full, and the attacker-count rule
    that decides fullness is the one D-1 puts in question. Fix the count first,
    then the bound means something.
-5. **The haste question.** Your F-05 quotes an *Unbound Alacrity* AA giving
-   "a passive 3/6/10% increase in your **current and maximum haste value**".
-   That matters to me directly: my model carries `HASTE_CAP = 75` with a
-   `+10` Monk adjustment, and I struck its citation myself because the 75 came
-   from eqlwiki's Haste Guide — **prose, tier 5, and the single mechanic the
-   contamination scanner names as known-changed.** The number survived on
-   measurement at −2.7% with no source behind it. A T1 string describing a
-   *capped* value is the first real evidence the cap exists at all. When you
-   settle F-05 I would like the raw string, because "3/6/10% of 75" and
-   "75 + 10 points" differ by 2.5 and my Monk numbers sit inside that.
+5. **The haste question — F-05, partly settled from here, and I owe you a
+   retraction with it.** You quote an *Unbound Alacrity* AA giving "a passive
+   3/6/10% increase in your **current and maximum haste value**", and asked what
+   it does to my Monk numbers. **eqlwiki's `Haste_Guide` carries the same rule
+   in different words** — re-fetched raw, 31,563 bytes, 29 Aug: *"Monk's Unbound
+   Alacrity AA grants up to 10% haste, and increases the haste cap by 10% as
+   well."* Two independent strings, one in-client and one on the wiki, both
+   reading **+10 percentage points at max rank, on the current value and on the
+   cap**. That kills the rival reading — 10% *of* 75, giving 82.5 — and my
+   `MNK_ALACRITY_ADD = 10.0` on a 75 cap stands. The 2.5 I flagged as ambiguous
+   is resolved.
+
+   **And the retraction.** I struck that page's 75% cap as *"prose carrying the
+   classic delay-dividing formula"*. **That was too strong and I have withdrawn
+   it in `DAMAGE-CHAIN.md`.** The caps table is Legends-authored: its 51–60 row
+   is annotated *"Will need to test once available!"*, which nobody writing
+   about classic EverQuest would say about levels that already exist there. The
+   page names Magician's *Frenzied Burnout* as the only overhaste source **in
+   Everquest Legends** and the Bard *Melody of Ervaj* line as v2 haste. It is
+   still tier-5 prose, still uncitable as fact, and still genuinely mixed — 12
+   mentions of Velious, Kunark, VoG and SoS, none of which exist in this era.
+   But the cap figure specifically is not a classic import, and I said it was.
+
+   **What is now interestingly open rather than dismissed:** my measured
+   effective multiplier is **1.900**, i.e. 90% attack speed, which is *above*
+   even the Monk-adjusted 85% cap, by 2.7%. Either that character carried
+   overhaste, or the cap is higher than 75, or the swing-rate parse absorbs
+   something I have not identified. **One client reading of the Attack Speed
+   field, hasted, on a known trio, settles it** — and it is the same reading
+   that would settle your F-05 outright.
+
+---
+
+### 7b. The audit itself, and how far I would trust it
+
+`BRIEF-eqlsource.md`, `audit-findings.json` and three specs under `design/` are
+in this repo. They are the output of a 14-agent audit of the live site, and they
+are **not verified**. The brief carries a header saying so.
+
+**I checked two of its 55 findings myself, and they came out differently.**
+
+- **The damage bonus (§1c) — right, and it corrected me.** It found a false
+  tier-M grade in my own `SOURCING.md` and a constant 14% low. Verified against
+  sources I re-fetched as raw bytes.
+- **The haste finding — right conclusion, wrong argument.** It says eqlwiki's
+  haste caps table "cannot be a Project 1999 import" because it has a 51–60 row
+  covering "levels that do not exist in this game". **That reasoning is
+  inverted:** a 51–60 row is exactly what a classic table carries, so it is
+  evidence *for* import, not against. The conclusion survives for a different
+  reason, which I found by fetching the page — the row's own annotation reads
+  *"Will need to test once available!"*, which is a Legends author looking
+  forward, not a classic table looking back.
+
+**One in two spot-checks had a load-bearing argument that does not hold.** So
+the findings are worth working through and none of them should reach a reader on
+the audit's say-so. I would treat the file as a queue, not a report. If it is
+useful to you, the cheapest next step is for me to verify the eight
+`impact: high` findings the same way I did these two, and report which survive —
+including the ones that turn out to be the site being right.
 
 ---
 

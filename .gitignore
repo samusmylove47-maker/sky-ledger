@@ -6,3 +6,4 @@ sh-RANGE.json
 # Python build artifacts
 __pycache__/
 *.pyc
+residual.txt
