@@ -1,0 +1,395 @@
+[Sat Aug 29 12:46:31 2026] You feel replenished.
+[Sat Aug 29 12:46:31 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:46:31 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:46:31 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:46:31 2026] You feel protected from poison.
+[Sat Aug 29 12:46:31 2026] Your voice booms.
+[Sat Aug 29 12:46:32 2026] Korvus tells the guild, 'if you hit the unscribed checkbox in the spell thingy, it'll show what spells'
+[Sat Aug 29 12:46:37 2026] You feel replenished.
+[Sat Aug 29 12:46:37 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:46:37 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:46:37 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:46:37 2026] You feel protected from poison.
+[Sat Aug 29 12:46:37 2026] Your voice booms.
+[Sat Aug 29 12:46:42 2026] This song cannot be played while Symphonic Aura is enabled.
+[Sat Aug 29 12:46:44 2026] You feel replenished.
+[Sat Aug 29 12:46:44 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:46:44 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:46:44 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:46:44 2026] You feel protected from poison.
+[Sat Aug 29 12:46:44 2026] Your voice booms.
+[Sat Aug 29 12:46:44 2026] You forget Amplification.
+[Sat Aug 29 12:46:50 2026] You feel replenished.
+[Sat Aug 29 12:46:50 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:46:50 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:46:50 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:46:50 2026] You feel protected from poison.
+[Sat Aug 29 12:46:51 2026] An elemental visier begins casting Instill.
+[Sat Aug 29 12:46:51 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:46:51 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:46:51 2026] Your guildmate Tritonus has completed Get the Broom! achievement.
+[Sat Aug 29 12:46:53 2026] Mardana tells General1:1, 'from facing?'
+[Sat Aug 29 12:46:53 2026] You hit an elemental visier for 1415 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:46:53 2026] An elemental visier staggers back a step.
+[Sat Aug 29 12:46:53 2026] You resist an elemental visier's Instill!
+[Sat Aug 29 12:46:54 2026] An elemental visier is pierced by YOUR thorns for 16 points of non-melee damage.
+[Sat Aug 29 12:46:54 2026] An elemental visier tries to hit YOU, but YOUR magical skin absorbs the blow!
+[Sat Aug 29 12:46:54 2026] An elemental visier tries to hit YOU, but misses!
+[Sat Aug 29 12:46:55 2026] An elemental visier begins casting Instill.
+[Sat Aug 29 12:46:56 2026] You feel replenished.
+[Sat Aug 29 12:46:56 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:46:56 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:46:56 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:46:56 2026] You feel protected from poison.
+[Sat Aug 29 12:46:56 2026] Tulisin tells General1:1, 'Yeah'
+[Sat Aug 29 12:46:57 2026] You resist an elemental visier's Instill!
+[Sat Aug 29 12:46:57 2026] An elemental visier tries to hit YOU, but misses!
+[Sat Aug 29 12:46:59 2026] An elemental visier tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:46:59 2026] An elemental visier tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:46:59 2026] Beginning to memorize Amplification...
+[Sat Aug 29 12:47:00 2026] You have finished memorizing Amplification.
+[Sat Aug 29 12:47:01 2026] Mardana tells General1:1, 'what does that mean?'
+[Sat Aug 29 12:47:02 2026] An elemental visier tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:02 2026] An elemental visier tries to hit YOU, but misses!
+[Sat Aug 29 12:47:02 2026] You feel replenished.
+[Sat Aug 29 12:47:02 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:02 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:02 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:02 2026] You feel protected from poison.
+[Sat Aug 29 12:47:02 2026] Your voice booms.
+[Sat Aug 29 12:47:03 2026] An elemental visier begins casting Instill.
+[Sat Aug 29 12:47:03 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:47:03 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:47:05 2026] You resist an elemental visier's Instill!
+[Sat Aug 29 12:47:05 2026] An elemental visier tries to hit YOU, but misses!
+[Sat Aug 29 12:47:05 2026] An elemental visier tries to hit YOU, but misses!
+[Sat Aug 29 12:47:06 2026] Your faction standing with Minions of Underfoot could not possibly get any worse.
+[Sat Aug 29 12:47:06 2026] You gain experience!
+[Sat Aug 29 12:47:06 2026] You receive 9 gold, 7 silver and 9 copper from the corpse.
+[Sat Aug 29 12:47:06 2026] You hit an elemental visier for 2491 points of magic damage by Denon's Desperate Dirge. (Critical)
+[Sat Aug 29 12:47:06 2026] An elemental visier staggers back a step.
+[Sat Aug 29 12:47:06 2026] You have slain an elemental visier!
+[Sat Aug 29 12:47:06 2026] Korvus tells the guild, 'if you've scribed all the vendor stuff up to 50'
+[Sat Aug 29 12:47:08 2026] You feel replenished.
+[Sat Aug 29 12:47:08 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:08 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:08 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:08 2026] You feel protected from poison.
+[Sat Aug 29 12:47:08 2026] Your voice booms.
+[Sat Aug 29 12:47:09 2026] Tulisin tells General1:1, 'No parry/riposte from the back'
+[Sat Aug 29 12:47:14 2026] You feel replenished.
+[Sat Aug 29 12:47:14 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:14 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:14 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:14 2026] You feel protected from poison.
+[Sat Aug 29 12:47:14 2026] Your voice booms.
+[Sat Aug 29 12:47:15 2026] Tulisin tells General1:1, 'A lot less dropped swings'
+[Sat Aug 29 12:47:20 2026] You feel replenished.
+[Sat Aug 29 12:47:20 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:20 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:20 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:20 2026] You feel protected from poison.
+[Sat Aug 29 12:47:20 2026] Your voice booms.
+[Sat Aug 29 12:47:22 2026] You say, 'amp cast crit, not enough hp'
+[Sat Aug 29 12:47:26 2026] You forget Amplification.
+[Sat Aug 29 12:47:26 2026] You feel replenished.
+[Sat Aug 29 12:47:26 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:26 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:26 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:26 2026] You feel protected from poison.
+[Sat Aug 29 12:47:27 2026] Mardana tells General1:1, 'wouldnt u just take the back with archery as well?'
+[Sat Aug 29 12:47:32 2026] You feel replenished.
+[Sat Aug 29 12:47:32 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:32 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:32 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:32 2026] You feel protected from poison.
+[Sat Aug 29 12:47:34 2026] You slow down.
+[Sat Aug 29 12:47:38 2026] You feel replenished.
+[Sat Aug 29 12:47:38 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:38 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:38 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:38 2026] You feel protected from poison.
+[Sat Aug 29 12:47:43 2026] Your Golden Efreeti Boots (Exaltation) shimmers briefly.
+[Sat Aug 29 12:47:43 2026] You begin singing Selo's Accelerating Chorus VI.
+[Sat Aug 29 12:47:44 2026] Your feet move faster.
+[Sat Aug 29 12:47:44 2026] You feel replenished.
+[Sat Aug 29 12:47:44 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:44 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:44 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:44 2026] You feel protected from poison.
+[Sat Aug 29 12:47:45 2026] Tulisin tells General1:1, 'Not getting parried or riposted with archery either way'
+[Sat Aug 29 12:47:46 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:47:46 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:47:48 2026] You hit a rock golem for 1583 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:47:48 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:47:50 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to cleave YOU, but YOU dodge!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to cleave YOU, but YOU dodge!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:47:50 2026] A rock golem tries to bash YOU, but misses!
+[Sat Aug 29 12:47:50 2026] You feel replenished.
+[Sat Aug 29 12:47:50 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:50 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:50 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:50 2026] You feel protected from poison.
+[Sat Aug 29 12:47:51 2026] Beginning to memorize Amplification...
+[Sat Aug 29 12:47:52 2026] You have finished memorizing Amplification.
+[Sat Aug 29 12:47:53 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:53 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:53 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:53 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:47:53 2026] A rock golem is pierced by YOUR thorns for 16 points of non-melee damage.
+[Sat Aug 29 12:47:53 2026] A rock golem tries to kick YOU, but YOUR magical skin absorbs the blow!
+[Sat Aug 29 12:47:53 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:47:53 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:47:54 2026] Snurulf tells the guild, 'Thanks, Whopper, Korvus'
+[Sat Aug 29 12:47:54 2026] Dropshadows tells General1:1, 'WTS: Imbued Granite Spaulders +1 '
+[Sat Aug 29 12:47:55 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:56 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:56 2026] You feel replenished.
+[Sat Aug 29 12:47:56 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:47:56 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:47:56 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:47:56 2026] You feel protected from poison.
+[Sat Aug 29 12:47:56 2026] Your voice booms.
+[Sat Aug 29 12:47:57 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:47:57 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:47:58 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:58 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:47:59 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:47:59 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:47:59 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:47:59 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:01 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:01 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:01 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:01 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:01 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:01 2026] A rock golem tries to bash YOU, but misses!
+[Sat Aug 29 12:48:02 2026] A rock golem tries to cleave YOU, but YOU dodge!
+[Sat Aug 29 12:48:02 2026] You feel replenished.
+[Sat Aug 29 12:48:02 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:02 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:02 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:02 2026] You feel protected from poison.
+[Sat Aug 29 12:48:02 2026] Your voice booms.
+[Sat Aug 29 12:48:04 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:04 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:04 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:04 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:05 2026] A rock golem tries to cleave YOU, but YOU dodge!
+[Sat Aug 29 12:48:05 2026] You say, 'done'
+[Sat Aug 29 12:48:06 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:06 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:07 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:07 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:08 2026] A rock golem says, 'You will not evade me, Shara!'
+[Sat Aug 29 12:48:08 2026] You have been summoned!
+[Sat Aug 29 12:48:08 2026] You feel replenished.
+[Sat Aug 29 12:48:08 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:08 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:08 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:08 2026] You feel protected from poison.
+[Sat Aug 29 12:48:08 2026] Your voice booms.
+[Sat Aug 29 12:48:09 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:09 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:09 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:09 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to cleave YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:10 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:14 2026] You feel replenished.
+[Sat Aug 29 12:48:14 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:14 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:14 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:14 2026] You feel protected from poison.
+[Sat Aug 29 12:48:14 2026] Your voice booms.
+[Sat Aug 29 12:48:14 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to hit YOU, but YOU parry!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:14 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:15 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:15 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:15 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:16 2026] Korvus tells the guild, 'shammy has a bunch of imbue spells that i feel like are probably bought from a jewelry guy or something... then remove currse that might be quested'
+[Sat Aug 29 12:48:17 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:17 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:17 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:17 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:17 2026] A rock golem is pierced by YOUR thorns for 26 points of non-melee damage.
+[Sat Aug 29 12:48:17 2026] A rock golem tries to hit YOU, but YOUR magical skin absorbs the blow!
+[Sat Aug 29 12:48:17 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to kick YOU, but misses!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:18 2026] A rock golem is pierced by YOUR thorns for 26 points of non-melee damage.
+[Sat Aug 29 12:48:18 2026] The shield of songs fades.
+[Sat Aug 29 12:48:18 2026] A rock golem bashes YOU for 5 points of damage.
+[Sat Aug 29 12:48:18 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:18 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:19 2026] A rock golem says, 'You will not evade me, Shara!'
+[Sat Aug 29 12:48:19 2026] You have been summoned!
+[Sat Aug 29 12:48:20 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:20 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:20 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:20 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:20 2026] You feel replenished.
+[Sat Aug 29 12:48:20 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:20 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:20 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:20 2026] You feel protected from poison.
+[Sat Aug 29 12:48:20 2026] Your voice booms.
+[Sat Aug 29 12:48:21 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:22 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to bash YOU, but misses!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to bash YOU, but misses!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to hit YOU, but YOU parry!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:23 2026] A rock golem tries to kick YOU, but YOU parry!
+[Sat Aug 29 12:48:23 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:23 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:24 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:25 2026] You hit a rock golem for 7978 points of magic damage by Denon's Desperate Dirge. (Critical)
+[Sat Aug 29 12:48:25 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:25 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:25 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:25 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:25 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:25 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:25 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to bash YOU, but YOU parry!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to bash YOU, but misses!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to bash YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to kick YOU, but YOU dodge!
+[Sat Aug 29 12:48:26 2026] You feel replenished.
+[Sat Aug 29 12:48:26 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:26 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:26 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:26 2026] You feel protected from poison.
+[Sat Aug 29 12:48:26 2026] Your voice booms.
+[Sat Aug 29 12:48:26 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:26 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:27 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:27 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:28 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:28 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:29 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:29 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:29 2026] You hit a rock golem for 2659 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:29 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:29 2026] Your faction standing with Minions of Underfoot could not possibly get any worse.
+[Sat Aug 29 12:48:29 2026] You gain experience!
+[Sat Aug 29 12:48:29 2026] You receive 7 platinum, 8 gold and 9 silver from the corpse.
+[Sat Aug 29 12:48:29 2026] You hit a rock golem for 1147 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:29 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:29 2026] You have slain a rock golem!
+[Sat Aug 29 12:48:29 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:30 2026] Your Djarn's Amethyst Ring (Exaltation) shimmers briefly.
+[Sat Aug 29 12:48:30 2026] You begin singing Denon's Desperate Dirge IX.
+[Sat Aug 29 12:48:31 2026] A rock golem tries to hit YOU, but YOU dodge!
+[Sat Aug 29 12:48:31 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:31 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:31 2026] A rock golem tries to hit YOU, but misses!
+[Sat Aug 29 12:48:32 2026] A rock golem tries to cleave YOU, but misses!
+[Sat Aug 29 12:48:32 2026] You gain experience!
+[Sat Aug 29 12:48:32 2026] You receive 7 platinum, 9 gold, 7 silver and 2 copper from the corpse.
+[Sat Aug 29 12:48:32 2026] You hit a rock golem for 1851 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:32 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:32 2026] You have slain a rock golem!
+[Sat Aug 29 12:48:32 2026] You gain experience!
+[Sat Aug 29 12:48:32 2026] You receive 1 platinum and 1 gold from the corpse.
+[Sat Aug 29 12:48:32 2026] You hit a rock golem for 1831 points of magic damage by Denon's Desperate Dirge.
+[Sat Aug 29 12:48:32 2026] A rock golem staggers back a step.
+[Sat Aug 29 12:48:32 2026] You have slain a rock golem!
+[Sat Aug 29 12:48:32 2026] You feel replenished.
+[Sat Aug 29 12:48:32 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:32 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:32 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:32 2026] You feel protected from poison.
+[Sat Aug 29 12:48:32 2026] Your voice booms.
+[Sat Aug 29 12:48:37 2026] Mardana tells General1:1, 'so u dont need positioning but the melee better anyway?'
+[Sat Aug 29 12:48:38 2026] Korvus tells the guild, 'been too lazy to look lol'
+[Sat Aug 29 12:48:38 2026] You feel replenished.
+[Sat Aug 29 12:48:38 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:38 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:38 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:38 2026] You feel protected from poison.
+[Sat Aug 29 12:48:38 2026] Your voice booms.
+[Sat Aug 29 12:48:39 2026] You must be in a resting state to use the Port Ring.
+[Sat Aug 29 12:48:41 2026] You must be in a resting state to use the Port Ring.
+[Sat Aug 29 12:48:43 2026] You begin casting Ring of Toxxulia.
+[Sat Aug 29 12:48:44 2026] You feel replenished.
+[Sat Aug 29 12:48:44 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:44 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:44 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:44 2026] You feel protected from poison.
+[Sat Aug 29 12:48:44 2026] Your voice booms.
+[Sat Aug 29 12:48:50 2026] You feel replenished.
+[Sat Aug 29 12:48:50 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:50 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:50 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:50 2026] You feel protected from poison.
+[Sat Aug 29 12:48:50 2026] Your voice booms.
+[Sat Aug 29 12:48:51 2026] Your Ring of Toxxulia spell is interrupted.
+[Sat Aug 29 12:48:52 2026] You begin casting Ring of Toxxulia.
+[Sat Aug 29 12:48:52 2026] Tulisin tells General1:1, 'Melee is better than archery normally, and gains even more in a group setting'
+[Sat Aug 29 12:48:56 2026] You feel replenished.
+[Sat Aug 29 12:48:56 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:48:56 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:48:56 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:48:56 2026] You feel protected from poison.
+[Sat Aug 29 12:48:56 2026] Your voice booms.
+[Sat Aug 29 12:49:02 2026] You feel replenished.
+[Sat Aug 29 12:49:02 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:49:02 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:49:02 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:49:02 2026] You feel protected from poison.
+[Sat Aug 29 12:49:02 2026] Your voice booms.
+[Sat Aug 29 12:49:08 2026] Mareck tells General1:1, 'do your AA stay when you swap clsases?'
+[Sat Aug 29 12:49:09 2026] Snurulf tells the guild, 'No, those are racial. For examplre, only Barbs have Imbue Ivory.'
+[Sat Aug 29 12:49:09 2026] You feel replenished.
+[Sat Aug 29 12:49:09 2026] Your weapons whir with a magical rhythm.
+[Sat Aug 29 12:49:09 2026] You gain a rune for 60 points of absorption.
+[Sat Aug 29 12:49:09 2026] You are surrounded by a shield of songs.
+[Sat Aug 29 12:49:09 2026] You feel protected from poison.
+[Sat Aug 29 12:49:09 2026] Your voice booms.
+[Sat Aug 29 12:49:13 2026] LOADING, PLEASE WAIT...
+[Sat Aug 29 12:49:18 2026] Voidweaver tells General1:1, 'general aa do'
+[Sat Aug 29 12:49:23 2026] You have entered Toxxulia Forest.
+[Sat Aug 29 12:49:23 2026] Whoopedu tells General1:1, 'yes'

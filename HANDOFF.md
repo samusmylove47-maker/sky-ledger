@@ -525,11 +525,67 @@ including the ones that turn out to be the site being right.
   is not committed. §1c found one by accident. I intend to check all of them
   against the repo rather than against my memory of them, and I would not be
   surprised to find another.
-- An in-game Amplification toggle test the owner has offered, which decides
-  whether that AA multiplies a Bard's Denon's Desperate Dirge by ~2.4×. Until
-  it lands, `DDD.md` states the effect and refuses the multiplier.
+- ~~An in-game Amplification toggle test the owner has offered.~~ **Landed
+  29 Aug and answered — see §9.**
 
 Nothing in this repo is published, and I am not proposing that any of it be
 published as it stands. §1 is the reason: I would be shipping ceilings labelled
 as estimates, which is the fault this project keeps finding in other people's
 work.
+
+
+---
+
+### 9. The Amplification test landed, and it cost me a constant and gained me four
+
+The owner ran the toggle test in Rivervale on 29 Aug: sing `Denon's Desperate
+Dirge IX` with Amplification out of the spell bar, memorise it, sing again, on
+the same mob type. Log committed at `corpus/amp/`, parsed by `amp.py`.
+
+| | rock golem | elemental visier |
+|---|---|---|
+| Amplification **off** | **1583** (n=1) | 1415 (n=1) |
+| Amplification **on** | **2659** — identical across 6 non-kill hits | unusable |
+
+**Amplification is ×1.6797, or +1076 flat. `DDD.md` carried ×2.00 and it is
+struck** — ×2.00 predicts 3,166 where 2,659 was measured.
+
+**I am not picking between multiplicative and additive.** One mob type cannot
+separate them. The pair that would is unusable — the visier's amped line is
+flagged `(Critical)` *and* is a killing blow — and it is suggestive in a way I
+want on the record without leaning on it: additive predicts 1415 + 1076 = 2491
+and the log reads **2491**, where multiplicative predicts 2377. Two clean
+non-kill hits on a second mob type settle it, and that is a two-minute test.
+
+**The part worth your attention is that correcting the constant made the model
+worse.** The published chain gave 2,097 against a measured 2,659 (−21%);
+correcting Amplification down to 1.68 gives 1,761 (−34%). *A term I fixed moved
+the total away from measurement*, which is proof that a different term carries
+the error and that the old agreement was two errors cancelling — the same shape
+as §1b, found twice in one week in two unrelated parts of my own work. I have
+not closed it by fitting, and `DDD.md` names the two untested candidates.
+
+**Four findings fell out of the same 400 lines, and two of them are yours, not
+mine:**
+
+1. **Killing blows truncate to remaining hit points.** Six hits land on a kill
+   and every one reads below the deterministic value for its mob and state —
+   2491, 2659, 2659, 1147, 1851, 1831 where the true value is 2659. **This is a
+   parsing hazard for `raidstats.py` and for anything that builds a damage
+   histogram**, including my own weapon identifications, which I now need to
+   re-check for the same contamination. It may also bear on `damage_low` /
+   `damage_high` in `raids-measured.json`: a killing blow contributes applied
+   damage, not the roll.
+2. **`"Your voice booms."` is Amplification's own pulse**, on the same 6-second
+   tick as every other song, correlating perfectly with the memorised state
+   across 20 firings. **A log can be read for this state with one regex** — no
+   boom, no Amplification. Offered for the log tooling.
+3. **The client floors the display and crits the unfloored number.** 7978
+   against a 2659 non-crit is not 3 × 2659 = 7977. A true value of **2659.33**
+   floors to 2659 and triples to exactly 7978. So displayed song damage is a
+   floor of a non-integer, and a crit reveals the fraction. That is a free
+   precision gain on any spell you can crit.
+4. **DDD is deterministic per target and target-dependent.** Six identical
+   2659s — no roll at all. But the visier took 1415 unamped where the golem took
+   1583, 12% apart. Resist, level or type; **not identified**, and I am not
+   going to guess which.

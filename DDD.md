@@ -48,11 +48,58 @@ the mana cut. The earlier handoff *back-solved* mote rank 10 as ×2.0 damage to 
 residual against a guide's measured 3,000. With the real ×1.60 the accounting is:
 
 ```
-504 × 1.60 (Singing Mastery 3) × 2.00 (Amplification) × 1.30 (Empowering) = 2,097 non-crit
+504 × 1.60 (Singing Mastery 3) × ~~2.00~~ 1.68 (Amplification, MEASURED) × 1.30 = 1,761
 ```
 
-against the guide's 3,000 — a **1.43× residual**, down from 2.3×, and with no back-solved
-constant. Jam Fest 3 (+5 casting levels) and Improved Familiar (+9) plausibly cover it.
+> ### MEASURED 29 August 2026 — the Amplification toggle test, and it moves two things
+>
+> `corpus/amp/eqlog_Shara_rivervale_20260829.txt`, parsed by `amp.py`. The player's own
+> design: sing `Denon's Desperate Dirge IX` with Amplification out of the spell bar,
+> memorise it, sing again, on the same mob type. State tracked line by line.
+>
+> | | rock golem | elemental visier |
+> |---|---|---|
+> | Amplification **off** | **1583** (n=1) | 1415 (n=1) |
+> | Amplification **on** | **2659** (n=6, identical every time) | unusable — see below |
+>
+> **Amplification is ×1.6797, or +1076 flat.** ~~×2.00~~ **struck.** ×2.00 would have
+> predicted 3,166 where 2,659 was measured — 1.19× too high.
+>
+> **Multiplicative or additive cannot be separated from one mob type, and I will not
+> pick.** The second pair would separate them and is unusable: the visier's amped line is
+> flagged `(Critical)` *and* is a killing blow. Recorded anyway because it is suggestive —
+> additive predicts 1415 + 1076 = **2491** and the log reads **2491**, where multiplicative
+> predicts 2377. **One truncated line is not evidence.** Two clean non-kill hits on a
+> second mob type settle it.
+>
+> **The chain now misses by more, not less, and that is the useful part.** With ×2.00 the
+> build above gave 2,097 against a measured 2,659 — **−21%**. Correcting Amplification down
+> to the measured 1.68 gives 1,761 — **−34%**. *Correcting one term made the total worse*,
+> which means a different term carries the error. This file already names two untested
+> candidates, Jam Fest 3 (+5 casting levels) and Improved Familiar (+9). **Neither is
+> measured and I am not closing this by fitting to it.**
+>
+> **Four things fell out of the same 400 lines, free:**
+>
+> 1. **`"Your voice booms."` is Amplification's own pulse**, on the same 6-second tick as
+>    every other song, and it correlates perfectly with the memorised state across 20
+>    firings. **That is how to read this state out of any log** — no boom, no Amplification.
+> 2. **Killing blows truncate to remaining hit points.** Six hits land on a kill and *every
+>    one* is below the deterministic value for its mob and state: 2491, 2659, 2659, 1147,
+>    1851, 1831 where the true value is 2659. **Any histogram of song damage that keeps
+>    killing blows carries phantom low values**, and this repo's earlier weapon-endpoint
+>    identifications should be re-checked for the same contamination.
+> 3. **The crit multiplier is ×3.00 and the true damage is not an integer.** 7978 against a
+>    2659 non-crit is 3.0004 — but 3 × 2659 = 7977. A pre-floor value of **2659.33** floors
+>    to 2659 and triples to exactly 7978. The client floors the display and crits the
+>    unfloored number.
+> 4. **DDD damage is deterministic per target, and target-dependent.** Six identical 2659s,
+>    no variance at all — so it is not a roll. But the visier took 1415 unamped where the
+>    golem took 1583, a 12% difference. Resist, level or type; **not identified**.
+
+~~against the guide's 3,000 — a 1.43× residual, down from 2.3×, and with no back-solved
+constant. Jam Fest 3 (+5 casting levels) and Improved Familiar (+9) plausibly cover it.~~
+**Struck: measurement replaced the guide as the anchor, and the residual grew.**
 
 The **−150 resist check** is a large and entirely unmodelled gain: DDD checks Magic resist,
 and at max rank it lands against targets that would otherwise resist it.

@@ -38,6 +38,14 @@ INSTRUMENT_EXALT   = 1.40     # REPORT ONLY -- absent from the wiki entirely
 DDD_MANA, DDD_CAST, DDD_CAP = 800.0, 3.0, 8
 DDD_WIKI     = 315.0 * SINGING_MASTERY * 1.10   # Amplification at the wiki description's 10%
 DDD_REPORTED = 3000.0                            # T3 measured, wiki-hosted guide, rank 10
+# TIER M, 29 Aug 2026 -- toggle test, corpus/amp/eqlog_Shara_rivervale_20260829.txt, amp.py.
+# Denon's Desperate Dirge IX on rock golems: 1583 without Amplification, 2659 with it,
+# the latter identical across 6 non-kill hits. AMPLIFICATION IS x1.6797 (or +1076 flat --
+# one mob type cannot separate the two readings). DDD.md carried x2.00; that is struck.
+# This is a DIFFERENT character, rank and gear from DDD_REPORTED, so it does not replace
+# it as the model's input -- it bounds it. Left unwired deliberately.
+DDD_MEASURED_AMP_ON, DDD_MEASURED_AMP_OFF = 2659.0, 1583.0
+AMPLIFICATION_MULT = 2659.0 / 1583.0             # 1.6797
 
 # ── MANA ────────────────────────────────────────────────────────────────────
 PASSIVE = {'NEC':3.33,'BRD':1.17,'ENC':2.00,'WIZ':0.42}    # runs while you cast
