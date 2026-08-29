@@ -373,7 +373,7 @@ Everything a build model needs. `[REV]` = a reviewer's number adopted over the r
 | **`SPELL_ATK`** | **61** (was 15) | `Share Form of the Great Wolf` DRU 45 = **+51 ATK**, + `Spiritual Brawn` +10 |
 | `WORN_ATK` | **0** | 2 of 11,534 items carry ATK and both are era-gated; all 12 worn ATK effects are Kunark/Velious |
 | `U` | `2·DMG + 1` | TM, two identified weapons |
-| `B` | `HandMod · max(50,DMG) · (min(dly,50)/40) · 0.5`, **main hand only** | 0.69 (1H) / 1.10 (2H); the client's own `Dmg Bon` field matches to the decimal |
+| `B` | `HandMod · max(50,DMG) · (min(dly,50)/40) · 0.5`, **main hand only** | 0.69 (1H) / 1.10 (2H). **2H confirmed** by a client `Dmg Bon` line: `Skycleaver` prints 24, formula gives 24.06 (+0.3%). **1H rests on two client windows** (`Garduk`, `Arydryidriyorn`) solving to 0.680 and 0.686 — tier M. **One open conflict:** the only 1H `Dmg Bon` line on a wiki statblock, `Efreeti Standard`, prints 5 against a predicted 4.31 (−13.7%) and wants 0.75–0.80. Tier M beats T2 so 0.69 stands, but a 3-damage/10-delay weapon is exactly the row a classic import carries through unchanged. **One more client 1H screenshot settles it.** |
 | `E_rx` base | **0.967 at Wrath 365** | TM, back-solved from an identified main hand |
 | Order of operations | **stance multiplies BEFORE the crit, and scales `B` too** | non-crit damage is 100.00% even under Offensive (760/760 once killing blows are removed); crit damage only 42.2% |
 
