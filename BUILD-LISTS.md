@@ -1,246 +1,294 @@
-# FOUR RANKINGS, ON THE CORRECTED DAMAGE CHAIN
+# FOUR RANKINGS, ON THE MEASURED CHAIN
 
-**Established:** 28 August 2026 · **Model:** `model3.py`, rankings `lists.py`
+**Established:** 29 August 2026 · **Model:** `model4.py` · **Rankings:** `lists2.py`
 **Chain:** `DAMAGE-CHAIN.md` · **Itemisation:** `EQUIPMENT-TRUTH.md`
-**Constraint:** Enchanter excluded from **List 1** only. List 2 is explicitly about an
-Enchanter charm pet, so ENC competes there; lists 3 and the AOE ranking are pending a re-run
-with ENC included. Support buffs are assumed supplied by
-a partner, so no class is credited for buffing.
+**Built from:** 24 research agents over 138 committed Legends client logs, each dossier
+followed by an independent from-scratch refutation, plus direct measurement here.
 
-These supersede everything in `BUILDS.md`.
+Supersedes the 28 August version of this file entirely. Nine bugs in the previous model
+were material; the largest changed every number by 28%.
+
+**Constraint:** Enchanter excluded from **List 1** only. List 2 is explicitly about a charm
+pet, so ENC competes there and wins a slot.
 
 ---
 
-## 0. The four structural facts that decide all four lists
+## 0. Does the model describe a real character?
 
-Before any number, these are what actually sort the 455 non-Enchanter trios.
+Before any ranking. `jos437-finishing-blow.log` is a level-50 PAL/MNK/ENC with both weapons
+identified from their damage endpoints. Nothing below was fitted to it.
 
-**1. Offensive Stance is x2.00 damage, and only the nine martial classes have it.**
-`BER BRD BST MNK PAL RNG ROG SHD WAR` get Offensive; the seven pure casters get
-Channeler only. A trio with no martial class cannot ever have the largest multiplier in
-the game. Measured: damage is even 98.8% of the time under Offensive against ~55% for
-every other stance (n=1,069).
+```
+model4.py, PAL+MNK+ENC, average mitigation, median ability rates
+   melee output   381   ·   measured   381.0
+   swing rates    slash 1.082/s vs 1.111 measured · punch 1.103/s vs 1.132 measured
+   total          444   ·   measured   426.5      (+4.0%)
+```
 
-**2. Weapon access is class-gated, and the gates are narrow.**
+**Both hands predict from constants alone to within 3%.**
 
-| Weapon | +10 | Who can hold it |
-|---|---|---|
-| `Cudgel of the Fool` | 90/52, best 2H ratio in the game | **BER only** |
-| `Aldryn, Blade of the Ocean` | 40/26 | **PAL only** |
-| `Thelvorn, Blade of Light` | 40/26 **+ a 226-damage proc** | **PAL only** |
-| `Wu's Fist of Mastery` | 32/22 | **MNK only** |
-| `Windstriker` | 90/60, best bow | **RNG only** |
-| `Khyldorn the Blood Drinker` | 72/43 | **SHD only** |
+### The three player-reported anchors
 
-The best 1H pair in the game is **both** Paladin-only — and **Paladin has no Dual Wield
-skill.** So the best dual-wield build in the game *requires* PAL for the weapons plus one
-of `BRD BST MNK RNG ROG WAR` to actually swing two of them.
+| | sustained engaged | ×1.46 → peak | reported |
+|---|---|---|---|
+| above-average martial, no ENC | 425 | **621** | 600+ |
+| min/maxed, abilities on cooldown | 648 | **946** | 900–1000 |
+| BIS, open constants at the favourable end | 848 | **1238** | 1200+ |
 
-**3. The attack chain is gated too.**
-Dual Wield: `BRD BST MNK RNG ROG WAR`. Double Attack: `BER MNK PAL RNG ROG SHD WAR`.
-Triple Attack: **`BER MNK RNG WAR` only.** The intersection of Dual Wield and Triple
-Attack is **MNK, RNG, WAR** — a dual-wielding triple-attacker must contain one of those three.
+The anchors independently demand ×1.411 / ×1.466 / ×1.416 — a **3.9% spread** — against a
+measured **best-30s/engaged of 1.462**. A shipped Legends parser in the corpus offers a
+`Rolling 30s` readout; **a player quoting the highest number on that display is quoting
+best-30s.** See `DAMAGE-CHAIN.md` §8.
 
-**4. Attack power has exactly one meaningful source.**
-0 of 2,263 items carry ATTACK. The best attack-power *spell* among 2,006 is +15. The
-Ranger's `Hunter's Attack Power` is **+104, free, permanent**, and `Force of Nature`
-(L50) adds **+20** more. Nothing else in the game comes close.
+---
 
-**Monk's five special skills collapse into two logged verbs** (`strike` and `kick`) across
-the whole corpus — so Monk is worth two autoskill lanes, not six. Recorded because the
-class page reads as though it were six.
+## 1. The five structural facts that sort all 560 trios
+
+**1. Offensive Stance is ×2.00 damage, and only the nine martial classes have it.**
+Measured off a bash lane that floors at exactly 1 damage: it reads **1** under
+balanced/defensive/mage-hunter/berserker/evasive, **2** under offensive. Non-crit damage is
+100.00% even under Offensive (760/760 once killing blows are excluded). It does **not**
+touch procs or spells.
+
+**2. The haste cap is 75% — 85% with a Monk.** Not the 175 the previous model carried. Worn
+haste does not stack; only the highest item counts. Every trio reaches the cap with a
+support partner, so **haste sets the level but does not differentiate builds.**
+
+**3. Weapon access is single-class locked, and slot legality binds.**
+
+| Weapon | +10 | Class | Slot |
+|---|---|---|---|
+| `Cudgel of the Fool` | 90/52 | BER | 2H |
+| `Khyldorn the Blood Drinker` | 72/43 | SHD | 2H |
+| **`Aldryn` / `Thelvorn`** | **40/26** | **PAL** | **PRIMARY only** |
+| **`Wu's Fist of Mastery`** | **32/22** | **MNK** | either hand |
+| `Windstriker` | 90/60 | RNG | bow |
+
+**Aldryn and Thelvorn cannot be paired — both are PRIMARY-only.** The best dual-wield set in
+the game is `Aldryn`/`Thelvorn` main + `Wu's Fist` off, which **requires PAL + MNK**, and
+**dual-wield beats every two-hander**. Legends is Classic-era only: loading all 223 in-era
+weapons the catalogue is missing changes the top trio by **+0.0 DPS**.
+
+**4. Paladin has a damage lane nothing else has.** `Smiting Strike` carries a **flat +417
+rider on 658 of 658 landed smites** — not a proc, never crits, not stance-doubled. Worth
+**~80 DPS to every Paladin trio**, and the previous model had no smite lane at all.
+
+**5. Attack power still has exactly one source.** 2 of 11,534 items carry ATK and both are
+era-gated behind unshipped expansions. Ranger's `Hunter's Attack Power` is **+104, free,
+permanent** — and now provably has no substitute *until Kunark ships*.
 
 ---
 
 ## LIST 1 — TOP 10 RAID-BOSS DPS
 
-Raid-boss mitigation (measured MitFactor 0.73, the Nagafen band), attacking from behind
-so Rogue backstab is at full value, Offensive stance, haste capped.
+Raid mitigation · attacking from behind (full Backstab) · nothing charmable on a single
+boss · abilities on cooldown · **Enchanter excluded**.
 
-| # | Trio | DPS | Wrath | Weapons | Why it is here |
-|---|---|---|---|---|---|
-| **1** | **PAL+RNG+ROG** | **567** | 464 | Aldryn + Thelvorn | The only trio that pairs the two Paladin-only blades with Backstab, the highest-damage lane measured (178.7/hit) |
-| 2 | NEC+PAL+RNG | 556 | 464 | Aldryn + Thelvorn | Trades Backstab for 120 DPS of Necromancer DoT, which never stops during a long boss fight |
-| 3 | MNK+RNG+WAR | 549 | 449 | Wu's Fist ×2 | Four lanes (kick/bash/strike/slam), Triple Attack, and Monk's +10% haste-cap break |
-| 4 | PAL+RNG+WIZ | 543 | 464 | Aldryn + Thelvorn | Same melee core, Wizard nukes instead of a third martial |
-| 5 | BER+PAL+RNG | 542 | 464 | Aldryn + Thelvorn | Berserker's free +6% crit rate on the best 1H pair |
-| 6 | MNK+PAL+RNG | 542 | 464 | Aldryn + Thelvorn | The classic pick. Dual Wield + haste break + the best blades |
-| 7 | PAL+RNG+WAR | 537 | 464 | Aldryn + Thelvorn | Warrior's free +30% **critical damage** and the Slam lane |
-| 8 | MNK+RNG+ROG | 536 | 449 | Wu's Fist ×2 | Backstab plus Monk's lanes, without needing Paladin |
-| 9 | RNG+ROG+WAR | 535 | 449 | Arydryidriyorn + Yannikil | Four lanes and the widest AA spread; held back by weak weapon access |
-| 10 | MNK+RNG+SHD | 531 | 464 | Wu's Fist + Bloodmoon | Shadow Knight lifetaps ride along for 61 DPS |
+| # | Trio | sustained | peak (×1.46) | Weapons |
+|---|---|---|---|---|
+| **1** | **PAL+RNG+ROG** | **535** | **781** | Aldryn 40/26 + Efreeti Standard |
+| 2 | NEC+PAL+RNG | 518 | 756 | Aldryn + Efreeti Standard |
+| 3 | PAL+RNG+WIZ | 507 | 740 | Aldryn + Efreeti Standard |
+| 4 | BER+PAL+RNG | 500 | 730 | Aldryn + Efreeti Standard |
+| 5 | NEC+PAL+ROG | 495 | 722 | Aldryn + Efreeti Standard |
+| 6 | PAL+RNG+SHM | 491 | 717 | Aldryn + Efreeti Standard |
+| 7 | MNK+PAL+ROG | 491 | 717 | **Aldryn + Wu's Fist** |
+| 8 | MNK+PAL+RNG | 488 | 712 | **Aldryn + Wu's Fist** |
+| 9 | MNK+NEC+PAL | 486 | 709 | Aldryn + Wu's Fist |
+| 10 | PAL+ROG+WIZ | 484 | 706 | Aldryn + Efreeti Standard |
 
-**Ranger is in 10 of 10 — and that was not assumed.** It falls out of the ATK elasticity
-being steepest exactly at raid-boss mitigation. At *average* mitigation Ranger appears in
-8 of 10 instead. The best non-Ranger trio in the game is `MNK+NEC+WAR` at 509, so
-**Ranger is worth +11.4%** over the best build that omits it.
+**`PAL+RNG+ROG` is #1, and it is the one build that is robust to every open question below.**
+It stacks the three highest-value classes in the game: Paladin's blades *and* smite rider,
+Ranger's +104 ATK, Rogue's Backstab (178.7 mean, the highest per-hit lane measured).
 
-> **Archery does not compete.** `Windstriker +10` (90/60) with `Weapon Mastery of the
-> Scout` (+100% base damage) and the free double shot computes to **~204 DPS**, because
-> Ranged stance forfeits Offensive's x2.00 on everything else. Archery is a mobility and
-> pulling tool here, not a damage rotation. **Take Ranger for the +124 ATK, not the bow.**
+> **Sensitivity, stated because it is decisive.** Paladin appears in **10 of 10** — but that
+> rests entirely on the `+417` smite rider, measured in **one file, one character**. Set it
+> to zero and Paladin falls to **2 of 10** while Ranger rises to **9 of 10**:
+>
+> | | PAL in top 10 | RNG in top 10 | #1 |
+> |---|---|---|---|
+> | rider = 417 (measured) | **10/10** | 6/10 | PAL+RNG+ROG |
+> | rider = 0 (conservative) | 2/10 | **9/10** | NEC+RNG+ROG |
+>
+> **`PAL+RNG+ROG` is #1 or #3 either way.** Everything else in the list moves.
+> The five-minute test: cast Smite twenty times and see whether every landed one carries a
+> flat ~417 on top.
+
+> The `Efreeti Standard` offhand (13/10) runs at 2.30 attempts/s, beyond anything measured
+> (max 1.42). Capping it at the measured maximum leaves the **top three identical and 9 of
+> 10 of the set unchanged** — so the ranking survives, but that one number is an
+> extrapolation.
+
+### Ranger: the safest pick, not the single best
+
+Over all 120 class pairs, asking "what is the best third class?":
+
+| | wins the slot | mean trio DPS | **median regret when it is not optimal** |
+|---|---|---|---|
+| PAL | 53% | 410.9 | 0.0 |
+| **RNG** | 42% | **415.7 — highest** | **3.0** |
+| ROG | 0% | 411.1 | 22.3 |
+| MNK | 0% | 405.2 | 25.9 |
+
+**Ranger has the highest mean marginal value of any of the sixteen classes and a median
+regret of 3 DPS.** That is exactly the signature of a universally-stacked class: highest
+expected value, near-zero cost when it is wrong, rarely the single peak. It is a
+*safest-pick* result — which is how communities actually behave.
+
+### Archery: a Ranger should melee
+
+Under the corrected chain the bow lane is **370–454 DPS against 506–564 meleeing — 0.72 to
+0.90×.** Ranged stance carries no damage multiplier; its real effect (per a Legends patch
+note) is granting double and triple attack to the bow, which only brings archery up to the
+baseline melee already has. **The bow's proc socket is real but small: the best pure-RANGE
+Exaltation is `Lightning Strike` 184 → 9.2 DPS**, about 1.5% of the build.
+
+> **But it flips on one sentence.** If bows use the melee base law `U = 2·DMG+1` rather than
+> `bow+arrow`, archery rises ×1.58 and **breaks even**. The only source is a page tagged
+> `{{Classic Era}}` whose own damage section reads *"Needs Confirmed/Updated for EQ
+> Legends"*. **Test: shoot 200 arrows at one target and read the maximum — `bow+arrow`
+> predicts ~228, the melee law ~362.**
 
 ---
 
 ## LIST 2 — TOP 10 TANK + CHARM PET + DAMAGE
 
-Gates: must have **Defensive stance** (`WAR PAL SHD` — the only three classes with it) and
-must have a **charm** class. With Enchanter excluded the charmers are:
+Gates: **Defensive stance** (WAR/PAL/SHD — the only three that have it) **and** a charm
+class. Fighting from the front, so Backstab degrades to `Chaotic Stab`. **Enchanter
+included.**
 
-| Class | Spell | Charms up to |
+| Class | Charms to | Against |
 |---|---|---|
-| **NEC** | `Cajole Undead` (L47) | **level 51** — equal to Enchanter's own ceiling |
-| DRU | `Beguile Animals` (L33) | level 43, animals only |
-| SHM | `Charm Animals` (L23) | level 33, animals only |
+| **ENC** | 51 | **any** |
+| **BRD** | 51 | **any** — but on an 18-second song |
+| NEC | 51 | undead only |
+| DRU | 49 | animals only |
+| SHM | 33 | animals only |
 
-Fighting from the front, so Rogue backstab is degraded to `Chaotic Stab`.
-
-| # | Trio | DPS | Tank | Charm | Note |
+| # | Trio | sustained | peak | tank | charm |
 |---|---|---|---|---|---|
-| **1** | **NEC+PAL+RNG** | **556** | 80 | NEC → L51 | Best damage that satisfies both gates. Paladin tanks, Necro charms to the cap, Ranger carries the ATK |
-| 2 | NEC+PAL+WAR | 501 | **110** | NEC → L51 | The *durable* pick — Warrior's free 5% permanent melee mitigation plus Lay on Hands |
-| 3 | PAL+RNG+SHM | 527 | 80 | SHM → L33 | Only worth it if you are farming animals |
-| 4 | MNK+NEC+WAR | 509 | 88 | NEC → L51 | No Ranger; Monk's haste break and evasion instead |
-| 5 | NEC+RNG+WAR | 521 | 80 | NEC → L51 | |
-| 6 | PAL+SHM+WAR | 471 | **110** | SHM → L33 | Toughest body in the list |
-| 7 | MNK+NEC+PAL | 505 | 88 | NEC → L51 | |
-| 8 | MNK+SHM+WAR | 480 | 98 | SHM → L33 | |
-| 9 | RNG+SHM+WAR | 491 | 90 | SHM → L33 | |
-| 10 | BER+NEC+WAR | 500 | 80 | NEC → L51 | The `Cudgel of the Fool` entry |
+| **1** | **NEC+PAL+RNG** | **562** | **821** | 80 | NEC → 51, undead |
+| 2 | MNK+NEC+PAL | 530 | 774 | 88 | NEC → 51, undead |
+| 3 | BRD+PAL+RNG | 507 | 740 | 80 | **BRD → 51, any** |
+| 4 | **ENC+PAL+RNG** | 507 | 740 | 80 | **ENC → 51, any** |
+| 5 | **NEC+PAL+WAR** | 504 | 737 | **110** | NEC → 51, undead |
+| 6 | PAL+RNG+SHM | 491 | 717 | 80 | SHM → 33, animal |
+| 7 | BST+NEC+PAL | 485 | 708 | 80 | NEC → 51, undead |
+| 8 | NEC+PAL+ROG | 475 | 694 | 80 | NEC → 51, undead |
+| 9 | BRD+MNK+PAL | 475 | 693 | 88 | BRD → 51, any |
+| 10 | ENC+MNK+PAL | 475 | 693 | 88 | ENC → 51, any |
 
-**Necromancer is the answer to "charm without Enchanter."** `Cajole Undead` charms to
-level **51**, matching Enchanter's `Allure` exactly — and Fear, Hate and Guk are undead
-content. Druid's animal charm caps eleven levels lower.
+**NEC+PAL+RNG is the damage answer; NEC+PAL+WAR is the durable one** (tank 110 — Warrior's
+free permanent 5% melee mitigation plus Lay on Hands). **ENC and BRD tie at #3–4 and are the
+only charmers that work on any target** — take one of those if your content is not undead.
 
-> **If you meant your partner's Enchanter supplies the pet**, the charm gate disappears and
-> this list becomes "highest-DPS trio that can tank": **PAL+RNG+ROG (567)**, then
-> **MNK+RNG+WAR (549)**, then **PAL+RNG+WAR (537)**. Note all three still want Ranger.
+Two facts that change how this build actually plays:
 
-> **Stance caveat.** These numbers are in Offensive. Actually holding a raid boss means
-> Defensive, which forfeits the x2.00 — roughly halving them. A tank flexes between the
-> two; the ranking does not change, the absolute numbers do.
+- **A charm pet is worth ~67 DPS sustained, and ~9× a summoned pet.** Measured
+  coefficient-free: pet damage falling inside the owner's own engaged segments.
+- **You tank, not the pet.** Across every named and raid boss in the corpus, bosses aimed
+  **1,318 melee attempts at the player and 59 at anything else** — 4.3%. On the Nagafen kill
+  it was **186 to 1**. The pet is a damage source, not an off-tank, and any plan that has it
+  holding the boss is wrong.
 
 ---
 
 ## LIST 3 — TOP 10 DAMAGE PER UNIT OF WRIST
 
-The mechanic that makes this list possible: **combat skills have no global cooldown and
-fire automatically during auto-attack.** Kick, Bash, Slam, Frenzy, Strike and Backstab
-all cost **zero input**. So do auto-attack, weapon procs, and stances (set once). The
-entire wrist load is spell and song upkeep.
+**Combat skills have no global cooldown and fire automatically during auto-attack.** Kick,
+Bash, Slam, Frenzy, Strike, Backstab and Smite all cost **zero input**, as do auto-attack,
+weapon procs and stances. The entire wrist load is spell and song upkeep.
 
-Sustaining actions per minute, derived from measured spell durations:
+Derived from measured durations: **61 of 76 Bard songs last exactly 18.0 s**, so twisting
+four is **13.3 recasts per minute, forever** — Bard is the worst class in the game for this
+by a factor of about twenty-five. Shaman's three DoTs at 42 s median → 4.2/min.
 
-- **Bard: 61 of 76 songs last exactly 18.0 seconds.** Twisting four is **13.3 recasts per
-  minute, forever.** Bard is the single worst class in the game for this purpose, by a
-  factor of about twenty-five.
-- Shaman: 3 DoTs at median 42 s → 4.2/min. Beastlord: 4 DoTs at 57 s → 1.1 each.
-- Pure melee: **0.5–1.0/min** — a stance and the occasional Mend.
-
-| # | Trio | DPS | Actions/min | DPS per action |
+| # | Trio | DPS | actions/min | DPS per action |
 |---|---|---|---|---|
-| **1** | **BER+MNK+WAR** | **667** | **2.0** | **222** |
-| 2 | BER+RNG+WAR | 652 | 2.5 | 186 |
-| 3 | **MNK+RNG+WAR** | **694** | 3.0 | 174 |
-| 4 | BER+MNK+RNG | 645 | 3.0 | 161 |
-| 5 | BER+PAL+WAR | 651 | 4.0 | 130 |
-| 6 | BER+MNK+PAL | 639 | 4.5 | 116 |
-| 7 | MNK+PAL+WAR | 634 | 4.5 | 115 |
-| 8 | BER+PAL+RNG | 682 | 5.0 | 114 |
-| 9 | PAL+RNG+WAR | 675 | 5.0 | 113 |
-| 10 | MNK+PAL+RNG | 681 | 5.5 | 105 |
+| **1** | **BER+MNK+WAR** | 499 | **2.0** | **166.5** |
+| 2 | BER+RNG+WAR | 502 | 2.5 | 143.5 |
+| 3 | MNK+RNG+WAR | 495 | 3.0 | 123.6 |
+| 4 | BER+MNK+RNG | 490 | 3.0 | 122.5 |
+| 5 | BER+PAL+WAR | 552 | 4.0 | 110.4 |
+| 6 | **BER+MNK+PAL** | **574** | 4.5 | 104.4 |
+| 7 | **BER+PAL+RNG** | **602** | 5.0 | 100.4 |
+| 8 | MNK+PAL+WAR | 526 | 4.5 | 95.6 |
+| 9 | PAL+RNG+WAR | 548 | 5.0 | 91.3 |
+| 10 | MNK+PAL+RNG | 584 | 5.5 | 89.9 |
 
-**`BER+MNK+WAR` is the rest-your-hands build.** Three classes with no damage spells at
-all: every point of its 667 DPS comes from auto-attack and autoskills. It carries five
-lanes (kick, bash, strike, frenzy, slam), every stance in the game including Berserker
-and Striker, Triple Attack, Berserker's free **+6% crit rate**, Warrior's free **+30% crit
-damage**, and Monk's **+10% haste-cap break**. You set a stance and hold your auto-attack.
+**`BER+MNK+WAR` is the rest-your-hands build**: three classes with no damage spells at all,
+so all 499 DPS comes from auto-attack and autoskills. Five lanes, every stance in the game,
+Triple Attack, Berserker's free +6% crit rate, Warrior's free +30% crit damage, Monk's +10%
+haste-cap break. Set a stance and hold auto-attack.
 
-**If you want the highest raw output on this list, `MNK+RNG+WAR` at 694 DPS for 3.0
-actions/min** is the better pick — 4% more DPS for one extra action per minute.
+**If you will accept five actions a minute, `BER+PAL+RNG` at 602 DPS is 21% more damage** —
+the extra input is Paladin's heals and stuns, and the Smite lane fires on its own.
 
-For contrast: `BRD+DRU+SHD` produces 386 DPS at **26.3 actions/min** — 43% less damage
-for thirteen times the wrist load.
+For contrast: `PAL+RNG+ROG` — the List 1 winner — costs **12.5 actions/min**, because
+Backstab requires standing behind the target continuously. `BRD+DRU+SHD` is 330 DPS at
+**26.3**.
 
 ---
 
-## THE AOE FARMING TRIO — and a verdict on `SHD+DRU+BRD`
+## THE AOE FARMING TRIO — and the verdict on `SHD+DRU+BRD`
 
-### First, the finding that reframes the question
+### The finding that reframes it
 
-Modelled as a real pull cycle (dump the mana pool, med back), against N mobs:
+Holding a pull means **Defensive stance**, which forfeits Offensive's ×2.00 and costs 5%
+accuracy. What is left scales with the number of mobs:
 
-| N | damage shield | AE spells | melee |
+| pull | damage shield | AE spells | melee |
 |---|---|---|---|
-| 8 | 38% | 9% | 53% |
-| 16 | 52% | 12% | 36% |
-| **32** | **64%** | **15%** | 22% |
+| 8 | 43% | 10% | 47% |
+| 24 | **45%** | **36%** | 19% |
 
-**The damage shield is the AOE engine, not the nukes.** It is measured at exactly 1.00
-tick per landed incoming hit — ~17.5 DPS *per attacker*, for ~0.13 mana/s. Area-effect
-spells cost 0.6–1.0 damage per mana and are mana-starved within seconds: `Upheaval` is
-618 damage for **625 mana**, and no class regenerates fast enough to sustain it.
+**The damage shield is the engine.** It is measured at exactly 1.00 tick per landed incoming
+hit — ~17.5 DPS *per attacker* for ~0.13 mana/s — while every AE spell costs 0.6–1.0 damage
+per mana and starves within seconds. `Upheaval` is 618 damage for **625 mana**.
 
-So AOE farming is decided by three things, in order: **how many mobs you can hold**, **whether
-you survive them**, and **how much mana you can manufacture** — not by which nuke you own.
+So AOE is decided by: **how many mobs you can hold**, **whether you survive them**, and
+**how much mana you can manufacture.** The engines that exist:
 
-The mana engines that exist, read off the spell database:
-
-| Class | Engine | Rate |
+| | | |
 |---|---|---|
-| **SHM** | `Cannibalize` / `McMerin's Feast` — 0 mana, converts HP to mana, spammable | **~8/s** with a healer |
-| NEC | `Lich` — +20 mana/tick, costs HP | 3.3/s |
-| WIZ | `Harvest` — +251 mana for 1 mana | ~4/s |
-| BRD | `Chorus of Clarity` — 0 mana, **group-wide** | 1.17/s |
+| **SHM** `Cannibalize` | 0 mana, converts HP→mana, spammable | **~8/s** with a healer |
+| WIZ `Harvest` | +251 mana for 1 mana | ~4/s |
+| NEC `Lich` | +20/tick, costs HP | 3.3/s |
+| BRD `Chorus of Clarity` | 0 mana, **group-wide** | 1.17/s |
 
-### The verdict on your pick
+### Your pick, measured
 
-`SHD+DRU+BRD` computes to **364 / 536 / 881 DPS** at N = 8 / 16 / 32 — rank **~190 of the
-210 trios that can hold a pull at all**, about **71% of the leader**. Three specific reasons:
+`SHD+DRU+BRD` computes to **325 / 670 DPS** at pulls of 8 / 24 — rank ~**206–236 of 249**,
+about **72% of the leader**. Three specific reasons: **no mana engine** (4.2/s against 15),
+Druid's `Upheaval` is the most expensive AE at its damage tier, and a weak melee floor.
 
-1. **No mana engine.** 4.2 mana/s against 15 for a Shaman+Wizard core. Druid has the
-   second-best AE in the game and no way to pay for it.
-2. **Druid's `Upheaval` is the wrong buy** — 625 mana is the most expensive AE at its
-   damage tier.
-3. **Weak melee floor** (191 vs 300): no Triple Attack, no Dual Wield worth having, poor
-   weapon access.
+### But you are right about the variable that matters
 
-### But your instinct is right about the variable that matters
-
-The Bard's contribution to AOE is **not damage — it is pull size**, and pull size is the
-one term everything else scales on linearly. If a Bard lets you hold twice what any other
-trio can:
-
-```
-BRD+SHM+WAR at N=64  =  1761 DPS      vs   best non-Bard at N=32  =  1236 DPS
-BRD+DRU+SHD at N=64  =  1571 DPS
-```
-
-**Bard wins outright the moment it doubles N.** I cannot measure whether it does — swarm
-pulling is not in the log corpus — so that is stated as the conditional it is.
+**Bard's AOE contribution is pull size, not damage** — and pull size is the one term
+everything scales on linearly. If a Bard holds twice what anything else can, it wins
+outright. I cannot measure that; swarm pulling is not in the corpus.
 
 ### Top 3
 
 | # | Trio | Case |
 |---|---|---|
-| **1** | **BRD+SHM+WAR** | **Your build, corrected.** Keep the Bard for pull size; swap Druid → **Shaman** for `Cannibalize` (0 → 8 mana/s, the single largest AOE upgrade available) and Shadow Knight → **Warrior** for `Area Taunt` (the actual gathering tool), the free 5% permanent mitigation, and real weapons. **995 at N=32, 1761 at N=64.** 18% ahead of `SHD+DRU+BRD` at every pull size, before counting Warrior holding more. |
-| **2** | **SHM+WAR+WIZ** | **The best at a fixed pull.** 15 mana/s (Cannibalize + Harvest), a 12,000 pool, and `Supernova` at 854 PBAE. **1236 at N=32** — the highest number any trio reaches without assuming Bard pull mechanics. |
-| **3** | **CLR+SHM+WAR** | **The one that never dies.** Tank score 105, `Divine Aura` (18 s of invulnerability on a 10-minute timer) as an emergency button, 11 mana/s, 12,000 pool, `Upheaval`. **1131 at N=32** — 8% behind the Wizard build for a large margin of safety on a big pull. |
-
-If you keep `SHD+DRU+BRD` as-is you are giving up about 30% for the Shadow Knight's
-lifetap self-sustain, which the Warrior's mitigation and your partner's heals already cover.
+| **1** | **BRD+SHM+WAR** | **Your build, corrected.** Keep the Bard for pull size; swap Druid → **Shaman** for `Cannibalize` (0 → 8 mana/s, the single biggest AOE upgrade in the game) and Shadow Knight → **Warrior** for `Area Taunt`, the free permanent mitigation, and real weapons. |
+| **2** | **SHM+WAR+WIZ** | **The best at a fixed pull.** 15 mana/s, a 12,000 pool, `Supernova` at 854 PBAE. **933 DPS at a pull of 24** — the highest any trio reaches without assuming Bard pull mechanics. |
+| **3** | **CLR+SHM+WAR** | **The one that never dies.** Tank 105, `Divine Aura` as an 18-second panic button, 11 mana/s, 12,000 pool. **849 at 24** — 9% behind for a large margin of safety. |
 
 ---
 
-## What would change these answers
+## What would change these answers, ranked
 
-| Unknown | Which list it moves |
-|---|---|
-| ~~Do armour Proc Exaltation sockets fire?~~ **ANSWERED: no.** Only primary + secondary, plus ranged for a Ranger. So 1 proc on a two-hander, 2 dual-wielding, +1 on a Ranger's bow | Lists 1-3. Dual wield gains a proc lane over two-handers; Ranger may gain a third from the bow. **Every list needs re-running.** |
-| Whether a Bard really holds a bigger pull | The AOE top 3, decisively |
-| Multi-attack (DA/TA) law — the last classic-sourced constant | ±1.5–2x on every melee lane in lists 1–3 |
-| Defensive stance's damage multiplier (assumed 1.0) | The absolute numbers in list 2 and the AOE lists |
-| PAL/SHD/BST Offense caps at level 50 (unpublished) | ±15 Wrath ≈ ±2% — does not reorder anything |
-| Archery damage bonus on bows | Would have to roughly triple to make Ranged stance competitive |
+| # | Open question | What it moves | Cheapest test |
+|---|---|---|---|
+| **1** | **Is the `+417` Smiting Strike rider real and general?** Measured 658/658 but in one file, one character. | **Decides List 1 outright.** PAL goes 10/10 → 2/10, RNG 6/10 → 9/10. | Smite twenty times; check every landed one carries a flat ~417. |
+| **2** | **Archery base-damage law:** `bow+arrow` or `2·DMG+1`? Only source is `{{Classic Era}}`-tagged and self-flagged unconfirmed. | Decides whether a Ranger melees or shoots. ×1.58 on the bow lane. | **200 arrows at one target, read the maximum.** ~228 vs ~362. |
+| **3** | **Which window is your meter reporting?** Four shipped Legends meters, four different denominators. | ×2.0 across the readings. Under a fight-average reading the residual reopens. | **One sentence: which meter, and was it the Rolling-30s field or the average?** |
+| **4** | **Does the 255 STR cap bind?** T2 says yes but cites Project 1999. Your own client panel reads **INT 295**. | ×1.04 to ×1.25 on everything. | Read STR on the panel, have your partner cast Strength, read it again. |
+| **5** | **Striker stance's real law.** T2 says 3×/5×; its own crit test refutes a flat multiplier. | ±20% on BER/MNK/ROG/WAR ability-heavy trios. | Kick a mob 20× under Balanced, 20× under Striker. Compare maxima. |
+| **6** | **Weapon upgrade scalar: +10%/tier or +5%?** A T2 page says weapons get 5% where every other stat gets 10%. | **×0.87 on the whole model.** | **One tooltip screenshot of any weapon above +2.** |
+| **7** | Endurance pool and regen at 50 — completely unpublished, zero endurance lines in 141 logs. | Decides whether 900–1200 is sustainable or a burn. | Read End/End Regen on the panel; time the drain on a dummy. |
+| **8** | Whether a Bard genuinely holds a bigger pull. | The AOE top 3, decisively. | Pull until it breaks, with and without. |
 
 *Fan analysis. Not affiliated with Daybreak Game Company, Game Jawn or Darkpaw Studios.*
