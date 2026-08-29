@@ -11,6 +11,24 @@ were material; the largest changed every number by 28%.
 **Constraint:** Enchanter excluded from **List 1** only. List 2 is explicitly about a charm
 pet, so ENC competes there and wins a slot.
 
+> ### CEILING NOTICE — added 29 August 2026, after the model was checked against measured raid data
+>
+> **Every DPS figure in this file is a ceiling, not an estimate, and the file did not say
+> so.** The rankings run at `rates='max'` — every ability fired the instant it leaves
+> cooldown. Against the one fully-pinned character we can check, that setting over-predicts
+> measured melee by **+23.6%** (`validate_jos437.py`). Against 213 logged raid fights, the
+> model's *worst of 560 trios* still exceeds the measured median output per character by
+> **1.51x**, and **162 of those 213 fights fall below it** (`residual.py`).
+>
+> Three further assumptions inflate every number here and none was stated: best legal
+> weapon in the corpus for every trio; Offensive stance permanently on; and a Shaman proc
+> buff granted to **every** trio whether or not one is in it, which is an assumption about
+> one particular player's duo partner and not a property of the game.
+>
+> **The ORDER of these lists is more trustworthy than the VALUES**, because the inflating
+> assumptions apply to every trio. Read the ranks. Do not quote the DPS.
+> Full working in `HANDOFF.md` §1.
+
 ---
 
 ## 0. Does the model describe a real character?

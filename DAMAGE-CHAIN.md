@@ -261,10 +261,29 @@ is fitted to its damage.**
 | strike | 32.9 | 21.3 | +54% ← the one bad lane |
 | **total melee** | **404.9** | **381.0** | **+6.3%** |
 
-Re-run from the repo's own `model4.py`, that character's melee comes out at **381 against a
-measured 381.0**. Both swing rates predict from constants alone to within 3%
-(slash 1.082 vs 1.111 measured; punch 1.103 vs 1.132). **A chain this tight cannot be
-1.84x low.**
+~~Re-run from the repo's own `model4.py`, that character's melee comes out at **381 against a
+measured 381.0**.~~ **Struck 29 Aug 2026. That sentence was typed beside a generated table and
+did not survive being re-run.** The claim is true only at one of the model's two lane-rate
+settings, the document named neither, and the table immediately above it says +6.3% — three
+different numbers for one validation. Reproduce with `python3 validate_jos437.py`:
+
+| lane rates | predicted melee | measured | err |
+|---|---|---|---|
+| `rates='max'` — abilities on cooldown | **471.0** | 381.0 | **+23.6%** |
+| `rates='med'` — corpus median | **381.3** | 381.0 | **+0.1%** |
+| the hand-built per-lane table above | 404.9 | 381.0 | +6.3% |
+
+**And the +0.1% is worse than it looks, because it is cancellation, not agreement.** At
+`med` the lanes miss individually by strike **−41.2%**, bash **−19.2%**, smite **−10.4%**,
+kick **+8.7%**. A total that lands on the nose while its parts are 40% out is not a
+validated model; it is four errors that happened to sum to zero on one character. **Any
+build that shifts the lane mix — a trio without Smite, a Rogue instead of a Paladin —
+loses the cancellation and keeps the errors.**
+
+What genuinely holds up, and is not affected by any of the above, is the swing rate: both
+predict from constants alone to within 3% (slash 1.082 vs 1.111 measured; punch 1.103 vs
+1.132). **The chain's per-swing half is tight. Its ability-lane half is not, and the
+headline number concealed that.**
 
 ### The haste correction — the single largest change in this revision
 
