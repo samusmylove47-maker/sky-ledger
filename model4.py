@@ -33,7 +33,19 @@ MH_CHAIN=1.520; OH_CHAIN=1.4911; DW_SUCCESS=0.88
 OH_RATE_CAP=1.42
 
 # ---- haste ---------------------------------------------------------------
+# TIER M, 29 Aug 2026 -- the player's own character panel: everyone starts at 100%,
+# a sheet at the haste cap reads 175%, a Monk trio reads 185%. So the cap is 75 and
+# the Monk Unbound Alacrity adjustment is +10 percentage points, not 10% of 75.
+# These were the values already in use; what changed is that they now have a source.
+# The 395s jos437 parse gives 1.900 against the panel's 1.85 -- the PARSE is 2.7%
+# high, not the model 2.7% low, which is how DAMAGE-CHAIN.md had it until today.
 HASTE_CAP=75.0; MNK_ALACRITY_ADD=10.0
+# NOT MODELLED: Berserker Stance halves ability cooldowns and doubles the current
+# haste value ignoring the cap (player, tier M). The cooldown half would double every
+# BER ability lane; it is left out because the corpus lane rates may already have been
+# measured under that stance, and doubling a rate that contains the doubling is a 4x
+# error. See DAMAGE-CHAIN.md "Berserker Stance" for the two haste readings and the
+# one screenshot that settles them.
 
 DUAL_WIELD={'BRD','BST','MNK','RNG','ROG','WAR'}
 DOUBLE_ATTACK={'BER','MNK','PAL','RNG','ROG','SHD','WAR'}

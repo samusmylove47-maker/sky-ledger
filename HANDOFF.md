@@ -429,36 +429,54 @@ survive.
    an upper bound on HP only when the view is full, and the attacker-count rule
    that decides fullness is the one D-1 puts in question. Fix the count first,
    then the bound means something.
-5. **The haste question — F-05, partly settled from here, and I owe you a
-   retraction with it.** You quote an *Unbound Alacrity* AA giving "a passive
-   3/6/10% increase in your **current and maximum haste value**", and asked what
-   it does to my Monk numbers. **eqlwiki's `Haste_Guide` carries the same rule
-   in different words** — re-fetched raw, 31,563 bytes, 29 Aug: *"Monk's Unbound
-   Alacrity AA grants up to 10% haste, and increases the haste cap by 10% as
-   well."* Two independent strings, one in-client and one on the wiki, both
-   reading **+10 percentage points at max rank, on the current value and on the
-   cap**. That kills the rival reading — 10% *of* 75, giving 82.5 — and my
-   `MNK_ALACRITY_ADD = 10.0` on a 75 cap stands. The 2.5 I flagged as ambiguous
-   is resolved.
+5. **The haste question — F-05 is closed, by the owner's client, not by me.**
+   The owner read their own character panel on 29 Aug: **everyone starts at
+   100%; at the haste cap a sheet reads 175%; a Monk trio reads 185%.** So the
+   cap is **75** and *Unbound Alacrity* adds **+10 percentage points**, not 10%
+   of 75. That is tier M and it outranks the wiki, the audit's in-client string,
+   and my own parse at once. Your F-05 does not need the re-fetch for this part.
 
-   **And the retraction.** I struck that page's 75% cap as *"prose carrying the
-   classic delay-dividing formula"*. **That was too strong and I have withdrawn
-   it in `DAMAGE-CHAIN.md`.** The caps table is Legends-authored: its 51–60 row
-   is annotated *"Will need to test once available!"*, which nobody writing
-   about classic EverQuest would say about levels that already exist there. The
-   page names Magician's *Frenzied Burnout* as the only overhaste source **in
-   Everquest Legends** and the Bard *Melody of Ervaj* line as v2 haste. It is
-   still tier-5 prose, still uncitable as fact, and still genuinely mixed — 12
-   mentions of Velious, Kunark, VoG and SoS, none of which exist in this era.
-   But the cap figure specifically is not a classic import, and I said it was.
+   **Three consequences, one of them against me.** (a) The model already used
+   75 and +10, so **no value changes — the citation changes**, from a number
+   that survived on measurement with its source struck to a client reading.
+   (b) My parse of the one pinned character gave an effective multiplier of
+   **1.900** against the panel's 1.85, so **the parse is 2.7% high**; this repo
+   had it the other way round, as the model being low. (c) **The "interestingly
+   open" question I put to you last — overhaste, or a higher cap, or something
+   unidentified — is withdrawn. It was my parse.** I would rather retract it in
+   the same document I raised it in than let it sit there looking like a lead.
 
-   **What is now interestingly open rather than dismissed:** my measured
-   effective multiplier is **1.900**, i.e. 90% attack speed, which is *above*
-   even the Monk-adjusted 85% cap, by 2.7%. Either that character carried
-   overhaste, or the cap is higher than 75, or the swing-rate parse absorbs
-   something I have not identified. **One client reading of the Attack Speed
-   field, hasted, on a known trio, settles it** — and it is the same reading
-   that would settle your F-05 outright.
+   **And a retraction I still owe on the wiki page.** I struck its 75% cap as
+   *"prose carrying the classic delay-dividing formula"*. Too strong, withdrawn:
+   its 51–60 row is annotated *"Will need to test once available!"*, which is a
+   Legends author looking forward. The page is still tier-5 and still genuinely
+   mixed — 12 mentions of Velious, Kunark, VoG and SoS, none of which exist in
+   this era — but on haste it now agrees with the client, so it is corroboration
+   rather than a source.
+
+6. **One mechanic I have just learned exists and have deliberately not
+   modelled.** The owner states, tier M: **Berserker Stance halves ability
+   cooldowns and doubles the current haste value, ignoring the cap.** The
+   cooldown half would double every Berserker ability lane in my model. **I have
+   not applied it**, because I do not know whether the corpus lane rates were
+   themselves measured under that stance, and doubling a rate that already
+   contains the doubling is how a model ends up 4× wrong. That check comes
+   before the change.
+
+   The haste half admits two readings and my own measurement discriminates
+   between them: doubling the *haste value* (75 → 150, panel 250%) gives ×1.43
+   against a capped baseline; doubling the *panel figure* (175 → 350) gives
+   ×2.00. Measured ratio is **×1.90** — 5% from the second, 33% from the first.
+   **One screenshot settles it**: the Attack Speed field on a Berserker at cap,
+   stance off then on. 250 or 350, and nothing else needs measuring.
+
+   Worth saying because it is the reassuring half: it barely moves the rankings.
+   Stances are exclusive, so a Berserker picks one. Offensive gives ×2.00 damage
+   × ×1.081 accuracy = ×2.16 on swings against Berserker's ×1.90; on ability
+   lanes with halved cooldowns the two tie exactly (×2 rate × ×1 damage against
+   ×1 rate × ×2 damage). The model's blanket Offensive assumption is not
+   materially wrong for Berserkers — which is a thing I could not have said
+   before today, and could only say because the mechanism was handed to me.
 
 ---
 

@@ -291,8 +291,9 @@ headline number concealed that.**
 
 | | |
 |---|---|
-| **T5, and revised 29 Aug 2026** | eqlwiki `Haste_Guide` says **75% for levels 31–50**. ~~Struck as a prose page carrying the classic delay-dividing formula.~~ **That description was too strong and I have withdrawn it.** Re-fetched raw (31,563 B, 29 Aug), the caps table is **Legends-authored**: its 51–60 row is annotated *"Will need to test once available!"*, which nobody writing about classic EverQuest would say about levels that already exist there. The page also names **Magician's Frenzied Burnout** as *"the only source of overhaste in Everquest Legends"* and the Bard **Melody of Ervaj** line as v2 haste — Legends content, not import. It remains **tier 5 prose** and remains uncitable as fact, and the page is genuinely mixed (12 mentions of Velious/Kunark/VoG/SoS, none of which exist in this era). But *the cap figure specifically* is not a classic import, which is what I said it was. **The measurement still leads:** the effective multiplier is 1.900, i.e. 90% attack speed, which sits *above* even the Monk-adjusted 85% cap by 2.7% — so either the character carried overhaste, or the cap is slightly higher, or the swing-rate parse absorbs something else. **Unresolved, and now unresolved for an interesting reason rather than a dismissive one.** |
-| **T5, and it settles the Monk adjustment** | Same page, rules list: *"Monk's Unbound Alacrity AA grants up to 10% haste, and increases the haste cap by 10% as well."* An independent audit quotes an in-client AA string giving *"a passive 3/6/10% increase in your current and maximum haste value"* — the same rule with its rank progression. **Both read as +10 percentage points at max rank, on the current value and on the cap.** So `MNK_ALACRITY_ADD = 10.0` added to a 75 cap is right, and the rival reading — 10% *of* 75, giving 82.5 — is wrong. Two independent T5/T3 strings agreeing on a rule is not proof, but it is enough to stop carrying both readings. |
+| **M — the character panel, and it closes this** | **The player reports their own client: everyone starts at 100%. At the haste cap a character sheet reads 175%. A Monk trio reads 185%.** So the cap is **75%**, the Monk *Unbound Alacrity* adjustment is **+10 percentage points**, and the effective multiplier is **1.75**, or **1.85** with a Monk. **This is tier M and it outranks everything below it, including my own parse.** The model already used exactly these numbers — `HASTE_CAP = 75`, `MNK_ALACRITY_ADD = 10` — so **no value changes; the citation changes**, from an unsourced number that survived on measurement to a client reading. |
+| **and it flips which side the 2.7% is on** | My parse of `jos437` (a PAL/**MNK**/ENC, so 185%) gave an effective multiplier of **1.900**. Against the panel's 1.85 the **parse is 2.7% high**; this file previously wrote it the other way round, as the model being 2.7% low. A swing-rate parse over 395 s carries at least that much noise, so the panel wins and the residual is measurement error, not a missing mechanic. The "either overhaste, or a higher cap, or something unidentified" question I raised is **withdrawn — it was my parse.** |
+| ~~T5~~ **superseded** | eqlwiki `Haste_Guide` says 75% for 31–50 and *"Monk's Unbound Alacrity AA grants up to 10% haste, and increases the haste cap by 10% as well."* Both now agree with the client panel, so the wiki is corroboration rather than a source. Two earlier notes stand: I wrongly called this page's cap "a classic import" and withdrew that (its 51–60 row is annotated *"Will need to test once available!"*, which is a Legends author looking forward), and the page is genuinely mixed — 12 mentions of Velious, Kunark, VoG and SoS, none of which exist in this era. |
 | **175 is unbuildable** | best worn haste in 2,604 items is 41%; best partner-castable at L≤50 is +60% (ENC 47); Monk Alacrity +10. Ceiling **111%**. |
 | **direct measurement — the only citation that survives** | the identified `Thelvorn` at delay 26 swings **1.111 att/s** over 395 s. Against an unhasted `(10/26) × 1.520 = 0.585`, the **effective attack-speed multiplier is 1.900** — an attack-speed stat of 190 where the client panel reads 100 unhasted. `model3.py`'s 175 predicted 1.788 att/s, **61% too fast**; the value now in use is 2.7% low. |
 
@@ -407,7 +408,7 @@ every stance into a direct multiplier readout.
 | **offensive** | **×2.00** | ×1.081 *(band 1.00–1.21)* | ×1.00 | the 9 martial classes |
 | balanced | ×1.00 | ×1.00 | ×1.00 | 9 martial |
 | defensive | ×1.00 | **×0.95** | ×1.00 | WAR PAL SHD · incoming dmg/hit ×0.47 |
-| **berserker** | **×1.00** | ×1.01 | **×1.90** | BER only |
+| **berserker** | **×1.00** | ×1.01 | **×1.90 measured · see below** | BER only |
 | evasive | ×1.00 | ×1.00 | ×1.00 | BRD BST MNK RNG ROG · incoming **hit rate ×0.08** |
 | **striker** | **not a flat multiplier** | ×1.00 | ×1.00 | BER MNK ROG WAR — **see §12 item 4** |
 | ranged | ×1.00 | ×1.081 | ×1.00 | grants DA/TA to the bow; **no damage multiplier** |
@@ -497,6 +498,34 @@ scored 0**.
   Offensive is exactly **2.000** by the same method. Berserker is a pure speed and
   skill-recharge stance, and since stances are exclusive its 2x speed does **not** stack with
   Offensive's 2x damage — they are alternatives. *(n=2 file-verb pairs; small.)*
+
+- **The player states the rule, 29 Aug 2026, tier M: Berserker Stance halves ability
+  cooldowns and doubles the current haste value, ignoring the cap.** That is a mechanism
+  where this file had only a measured ratio, and it does two things at once:
+
+  **The cooldown half is new and is not in the model at all.** Halved cooldowns means a
+  Berserker's ability lanes fire at **×2 rate**. `LANE_RATE_MAX['frenzy'] = 0.72/s` becomes
+  1.44/s. Whether the corpus rate was already measured under Berserker stance is unknown,
+  so I am **not** applying the ×2 until that is checked — doubling a rate that already
+  contains the doubling is how a model gets 4x wrong.
+
+  **The haste half admits two readings and my measurement discriminates.** At cap a
+  non-Monk panel reads 175%, i.e. a haste *value* of 75 on a base of 100.
+  · *Reading A — double the haste value:* 75 → 150, panel 250%, rate ×**1.43** against capped.
+  · *Reading B — double the panel figure:* 175 → 350, rate ×**2.00** against capped.
+  The measured ratio is **×1.90**, which is 5% from Reading B and 33% from Reading A.
+  **Measurement supports Reading B.** Not settled: n=2 file-verb pairs.
+  **The test is one screenshot** — the Attack Speed field on a Berserker at cap, stance off
+  and stance on. 250 or 350 decides it, and nothing else needs measuring.
+
+- **What this does to the rankings: very little, and here is why.** Stances are exclusive, so
+  a Berserker picks one. On swings, Offensive gives ×2.00 damage × ×1.081 accuracy = ×2.16
+  against Berserker's ×1.90 rate. On ability lanes under the halved cooldowns, Offensive gives
+  ×1 rate × ×2 damage = ×2 and Berserker gives ×2 rate × ×1 damage = ×2 — **a tie.** So
+  Offensive still leads on swings and ties on abilities, and the model's blanket use of
+  Offensive for every martial trio is not materially wrong for Berserkers. **Under Reading B
+  the swing gap closes to ×2.16 against ×2.00 and the two stances are within 8%**, which is
+  inside every error bar in this file.
 
 - **Berserker's Frenzy is a burst lane, not an ordinary autoskill.** Attempts sharing one
   timestamp average **2.89 for frenzy** against 1.48–1.71 for every other verb, with a max of
