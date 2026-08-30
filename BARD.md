@@ -120,8 +120,7 @@ reading the log's actor names instead of the builds.** Withdrawn.
 | | Shara | Avenrae (incl. pet) |
 |---|---|---|
 | engagements ≥ 20 s | 25 | 44 |
-| **engaged seconds** | **861** | **4,401** |
-| damage over those | 1,182,027 | 3,408,223 |
+| ~~engaged seconds~~ | *withheld — see below* | *withheld* |
 | **aggregate DPS** | **1,372.9** | **774.4** |
 | median engagement DPS | 1,163.7 | 794.4 |
 | best engagement | 8,944.7 over 26 s | 2,416.9 over 110 s |
@@ -130,10 +129,20 @@ reading the log's actor names instead of the builds.** Withdrawn.
 five times as long.** That is not a tie dressed up — it is a structural difference
 and it is the finding:
 
-> **DDD is mana-limited burst. The charm pet is a rate.** Shara was engaged 861 s
-> out of an 18.4-hour session; Avenrae's build 4,401 s. The song produces more
+> **DDD is mana-limited burst. The charm pet is a rate.** The song produces more
 > damage per second of combat and can only be run for a fraction of the time; the
-> pet produces less per second and never stops.
+> pet produces less per second and never stops. **One build was engaged several
+> times longer than the other, and that is why it wins on total while losing on
+> rate.**
+>
+> **The per-character engaged seconds are withheld, and the ratio between them is
+> too.** Ruled by the Director 30 Aug 2026: *"Never publish a comparison of
+> engaged time between characters."* Two named characters compared on how hard
+> they played is a privacy problem as well as a voice one, and this file published
+> exactly that until it was struck. **The finding survives whole in the form that
+> matters** — engaged time dominates, and a tool built on this must be willing to
+> tell a reader their problem is not their gear. The figures remain in the parse
+> for modelling; they do not appear in anything a person reads.
 
 ### The charm pet, and a constant of mine that is an order of magnitude wrong
 

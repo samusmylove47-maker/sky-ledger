@@ -1,0 +1,97 @@
+{
+  "id": "trio-dps-ceiling",
+  "claim": "The best of 560 trios, best legal weapon, Offensive stance, abilities on cooldown, reaches 634.0 DPS at average mitigation.",
+  "model": {
+    "file": "model4.py",
+    "commit": "72b2844",
+    "entry": "run()"
+  },
+  "inputs": [
+    {
+      "name": "damage chain",
+      "value": "U = 2*DMG+1; B = HandMod*max(50,DMG)*(min(dly,50)/40)*(L/100)",
+      "tier": "M",
+      "source": "DAMAGE-CHAIN.md, validated to +1.6% on the slash lane of a fully-pinned character"
+    },
+    {
+      "name": "HandMod 1H",
+      "value": 0.8,
+      "tier": "T5",
+      "from_log": false,
+      "source": "eqlwiki Game_Mechanics observation table, re-fetched raw 43,724 B on 29 Aug; corroborated by an Efreeti Standard statblock (T2)"
+    },
+    {
+      "name": "item corpus",
+      "value": 2604,
+      "unit": "items",
+      "tier": "T2",
+      "source": "18 slot files scraped from eqlwiki item pages"
+    }
+  ],
+  "assumptions": [
+    {
+      "text": "best legal weapon in an 18-file corpus for every trio",
+      "direction": "inflates"
+    },
+    {
+      "text": "Offensive stance permanently on for every martial trio",
+      "direction": "inflates"
+    },
+    {
+      "text": "every ability fired the instant it leaves cooldown",
+      "direction": "inflates"
+    },
+    {
+      "text": "three classes' spell lanes sustained at once by one pair of hands",
+      "direction": "inflates"
+    },
+    {
+      "text": "a Shaman proc buff granted to every trio whether or not one is in it -- worth 8.4% of the median trio and 17.8% of the worst, so it compresses the ranking as well as raising it",
+      "direction": "inflates"
+    }
+  ],
+  "kind": "ceiling",
+  "never_display_as_target": true,
+  "decomposes": true,
+  "residual": {
+    "value": 1.51,
+    "unit": "ratio of model floor to measured median",
+    "n": 213,
+    "direction": "over",
+    "components": [
+      {
+        "lane": "per-swing arithmetic",
+        "value": 1.6,
+        "unit": "percent",
+        "direction": "over"
+      },
+      {
+        "lane": "ability lanes",
+        "value": -41.2,
+        "unit": "percent worst lane",
+        "direction": "under"
+      },
+      {
+        "lane": "whole model vs measured median",
+        "value": 359,
+        "unit": "percent",
+        "direction": "over"
+      }
+    ],
+    "note": "162 of 213 measured fights fall BELOW this model's own worst trio"
+  },
+  "stops": [
+    "level 50 only",
+    "one target",
+    "front unless stated",
+    "no movement",
+    "no deaths",
+    "buffs assumed",
+    "not claimed as an achievable output for any player"
+  ],
+  "falsifier": "Any logged fight whose per-character DPS exceeds 634.0, or any set of fights with gear recorded whose median lands within 20% of the model floor.",
+  "requires_log": false,
+  "badge": "D",
+  "internal_only": true,
+  "internal_only_reason": "A DENOMINATOR, not a finding. It is computable from an item catalogue and a damage chain with no log at all, so as a shipping claim it fails the catalogue test and belongs to eqlegendstools.com. Its only use here is as the reference against which a player's OBSERVED output is differenced. The gap is ours; the ceiling is not, and it is never shown to a reader in any form."
+}
