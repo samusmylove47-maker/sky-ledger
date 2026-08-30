@@ -12,9 +12,9 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §28 — TWO REAL DELTAS end to end from a real log, and resist
-                 rates with denominators. The denominator changes the headline
-                 3x, and reading the output caught a fail-open 100% resist rate.
+LAST CHANGE      §29 — ANSWERED D: my 194 killing blows were 38% OVER-MARKED.
+                 Joined on timestamp with no target. Fixed to (t, target) = 120.
+                 No published finding moves. Encoding hazard found in our log.
 CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  task 2 NOT STARTED (per-character modelling)
@@ -2125,3 +2125,85 @@ Balanced and 6.3 from Offensive; it stays a refusal because it is correct.
 `corpus/everquest-companion` is on disk and the four-denominator finding came out
 of it. Reading their calculation to check ours against it is next, and I have not
 done it tonight.
+
+---
+
+### 29. D asked how my 194 were decided. The answer is a bug in mine.
+
+**D refused to assert a method and asked me to compare — *"If they came from a
+windowed join, we already agree. If they came from a per-line judgement, that is
+the exact error that produced my false 0.474 h bracket."*** I read my own code
+rather than recalling it.
+
+**Neither. A third thing, and worse than both.** `gapengine.py` built a set of
+**timestamps** on which something died, and marked any hit landing in one of
+those seconds as a killing blow. **No target.**
+
+| join | hits marked as killing blows |
+|---|---|
+| timestamp only — what I shipped | **194** |
+| `(timestamp, target)` — what D's interface enables | **120** |
+| | **74 over-marked, 38% of them** |
+
+**And in AE combat it is systematic rather than rare**, because that is exactly
+when many mobs die in one second:
+
+```
+hit 'a deathly usher'   marked as a killing blow — 'a glyphed sentry' died that second
+hit 'a watchful guard'  marked — 'a crystaline cloud' died
+hit 'a gust of wind'    marked — 'a crystaline cloud' died
+```
+
+**D's design is what made this findable.** The damage row and the kill row are
+separate events that both carry the target, *precisely so the join is the
+consumer's to make.* **It was mine to make and I made it wrong.** Fixed:
+`gapengine.py` now keys on `(timestamp, target)` and reports 120.
+
+#### What it moves: nothing published, and I checked rather than assumed
+
+| figure | timestamp join | `(t, target)` join |
+|---|---|---|
+| DDD non-crit median | 2,659 | **2,659** |
+| crit ÷ non-crit | 3.0004 | **3.0004** |
+| double-hit share on named bosses | 80.5% | **80.2%** |
+| usable non-crit sample | 598 | **666** |
+
+**Every headline holds and the sample grows.** Medians are robust to dropping 74
+extra points from the middle — which is *luck, not method*, and is the third time
+this week something of mine has been right for a reason I had not checked. The
+one figure that moves is the crit rate, 7.36% → **7.31%**.
+
+#### D's encoding finding, and it is not hypothetical here
+
+D measured that Node does not throw on invalid bytes and yields U+FFFD, warning
+that *"a cp1252 byte in a player name corrupts a key we match on while the line
+still starts with `[`, the stamp still parses, and `dropped.unstamped` stays at
+zero"* — and said explicitly they had **not** measured whether our logs contain
+one. **Ours do.**
+
+The full log **decodes as strict UTF-8 — and contains six U+FFFD characters.**
+That is the worst version of D's hazard: the corruption is **already baked into
+the file as validly-encoded replacement characters**, so no decoder check can
+find it. `errors="strict"` passes. A round-trip test passes.
+
+```
+[Sat Aug 29 17:26:10 2026] Casimar tells General1:1, 'Hey all, I<U+FFFD>m looking for a guild…
+```
+
+**Here it is benign** — a curly apostrophe in guild chat, six occurrences, one
+line, no name and no key. **But it establishes that the byte class reaches our
+logs**, so the same mangling in a player or mob name would silently corrupt a
+join key, and my `(timestamp, target)` fix has just made me *more* dependent on
+target strings matching exactly. **D's warning arrived one commit before I made
+myself vulnerable to it.**
+
+Not a defect claim, per D's own framing. A measured precondition for one.
+
+#### And the order's premise was wrong, which D flagged in a commit subject
+
+The Director's order to D required *"the encoding path, strict UTF-8 with the
+windows-1252 fallback."* **D measured that no such fallback exists** — no `1252`,
+`latin1`, `iso-8859` or `TextDecoder` anywhere in the module — and put it in the
+commit subject so it could not be missed. **I have written nothing against the
+assumption that it exists**, and the fixture and engine are unaffected. Checked
+rather than assumed.

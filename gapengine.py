@@ -27,7 +27,7 @@ MISS = re.compile(r"^You try to (\w+) .+?, but ")
 
 SPELL = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")
 MELEE = re.compile(r"^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
-SLAIN = re.compile(r"^You have slain ")
+SLAIN = re.compile(r"^You have slain (.+?)!$")
 RESIST= re.compile(r"^(.+?) resisted your (.+?)!$")
 MARKER= re.compile(r"ATTN CLAUDE:\s*(.+)$")
 
@@ -41,15 +41,31 @@ STANCE_EVEN_SHARE_BALANCED  = 0.50
 
 
 def _parse(lines):
+    """Kills are keyed on (timestamp, TARGET), not timestamp alone.
+
+    Corrected 30 Aug 2026 after Session D published its parser interface and
+    asked, without asserting an answer, whether my killing-blow exclusions came
+    from a windowed join or a per-line judgement. Reading my own code: neither.
+    They came from a same-second join with no target, so ANY hit landing in a
+    second when ANYTHING died was marked a killing blow. On the log this was
+    built against that marked 194 hits where the target-aware join marks 120 --
+    **38% over-marked**, and in AE combat it is systematic rather than rare:
+    'a deathly usher' was marked because 'a glyphed sentry' died that second.
+
+    D's interface is what makes the fix possible: the damage row and the kill
+    row are separate events that both carry the target, precisely so the join
+    is the consumer's to make. It was mine to make and I had made it wrong."""
     ev, kills = [], set()
     for raw in lines:
         m = TS.match(raw.rstrip("\n"))
         if not m:
             continue
         t = int(m.group(1))*86400 + int(m.group(2))*3600 + int(m.group(3))*60 + int(m.group(4))
-        ev.append((t, m.group(5)))
-        if SLAIN.match(m.group(5)):
-            kills.add(t)
+        body = m.group(5)
+        ev.append((t, body))
+        k = SLAIN.match(body)
+        if k:
+            kills.add((t, k.group(1)))
     return ev, kills
 
 
@@ -62,12 +78,14 @@ def _hits(ev, kills):
             # output. It was 3.7% of a character's apparent total until excluded.
             if m.group(1).lower() != "yourself":
                 out.append(dict(t=t, tgt=m.group(1), amt=int(m.group(2)), kind="spell",
-                                verb=m.group(4), crit=bool(m.group(5)), kill=t in kills))
+                                verb=m.group(4), crit=bool(m.group(5)),
+                                kill=(t, m.group(1)) in kills))
             continue
         m = MELEE.match(b)
         if m:
             out.append(dict(t=t, tgt=m.group(2), amt=int(m.group(3)), kind="melee",
-                            verb=m.group(1), crit=bool(m.group(4)), kill=t in kills))
+                            verb=m.group(1), crit=bool(m.group(4)),
+                            kill=(t, m.group(2)) in kills))
             continue
         m = RESIST.match(b)
         if m:
