@@ -95,28 +95,81 @@ Nineteen single hits on surviving targets remain unexplained.
   characters, AAs and focus items, so this **bounds** the rank step rather than
   isolating it.
 
-## 5. The verdict on "Bard is THE AoE class"
+## 5. RE-ATTRIBUTED — and the verdict moves against what I first said
 
-**Confirmed on this evidence, and the data says something stronger and more
-specific than the claim.**
+**The owner supplied two facts the log cannot infer, and both change the answer.**
+`Heart harpie` is Avenrae's **charm pet** and the primary output of the PAL/ENC/BRD
+build under test — corroborated in the log by `heart harpie has been charmed` ×47.
+`Puma Maw` is a proc from a **Shaman buff cast by Shara's trio**, so by this
+project's standing rule that classes are not credited for buffs, it belongs to
+neither build's kit. `attribute.py` reruns everything on that basis.
 
-The finding is not *"Bard out-damages other classes"*. Both characters in this
-log run DDD, and the one running it at a higher rank, on a support build with no
-damage gear, produces **4.27× the damage per engaged second** of the one built
-for damage. DDD is 99.7% of the winner's output and 55.4% of the loser's.
+| build | kit only |
+|---|---|
+| **Avenrae PAL/ENC/BRD** — own lines 1,125,536 + charm pet on enemies 2,381,463 | **3,506,999** |
+| **Shara SHM/BRD/CLR** — own lines | **2,392,636** |
+| buff-granted (Puma Maw), credited to neither | 187,369 |
+| pet damage that landed on *us* across charm breaks, excluded | 17,615 |
 
-> **So it is not "build around the Bard". It is: DDD is the damage, and a
-> character's output is very close to how much DDD it is running.** Avenrae's
-> melee, Smiting Strike and Puma Maw together — the entire damage build — come
-> to 542,000 against Shara's 2,384,545 from the song alone.
+**Avenrae's build out-totals Shara's by 1.47×.** My earlier headline — that the
+support Bard was the largest source of damage in the log — **was an artefact of
+reading the log's actor names instead of the builds.** Withdrawn.
 
-**Three limits, stated because they matter:**
+### What survives, and it is the more interesting result
 
-1. **There is no counterfactual here.** Both characters run DDD, so this log
-   cannot say what a Bard-less trio would do in the same content. It measures the
-   song's dominance, not the alternative's weakness.
-2. **One player-pair, one zone, one day.** Plane of Sky, level 50. It is a large
-   sample of casts and a sample of one group.
-3. **The claim it supports is about AE, and every figure here is AE.** Nothing in
-   this log speaks to single-target raid damage, where a cast that lands twice on
-   one boss is a different and much narrower advantage.
+| | Shara | Avenrae (incl. pet) |
+|---|---|---|
+| engagements ≥ 20 s | 25 | 44 |
+| **engaged seconds** | **861** | **4,401** |
+| damage over those | 1,182,027 | 3,408,223 |
+| **aggregate DPS** | **1,372.9** | **774.4** |
+| median engagement DPS | 1,163.7 | 794.4 |
+| best engagement | 8,944.7 over 26 s | 2,416.9 over 110 s |
+
+**Shara wins the rate by 1.77×. Avenrae wins the total by 1.47×, by being engaged
+five times as long.** That is not a tie dressed up — it is a structural difference
+and it is the finding:
+
+> **DDD is mana-limited burst. The charm pet is a rate.** Shara was engaged 861 s
+> out of an 18.4-hour session; Avenrae's build 4,401 s. The song produces more
+> damage per second of combat and can only be run for a fraction of the time; the
+> pet produces less per second and never stops.
+
+### The charm pet, and a constant of mine that is an order of magnitude wrong
+
+10,281 hits, 2,381,463 damage, 3,237 s engaged: **729.8 DPS aggregate, 763.6
+median engagement, best 1,004.7.**
+
+**`model4.py` carries `CHARM_PET = 66.8`. Measured here it is 10.9× that.** That
+constant was established from a much lower-geared window and I propagated it into
+every ranking that scores a charmer. **List 2 — tank + charm pet + damage — is
+built on a pet worth a tenth of the real one and cannot stand.** Not silently
+patched: 66.8 was measured too, and I want to know which conditions separate them
+before I move it. The 47 charm events and the 17,615 damage taken across breaks
+are the cost side that no single number captures.
+
+## 6. The verdict on "Bard is THE AoE class"
+
+**Half confirmed, and the half that fails is the half I got wrong first time.**
+
+**Confirmed:** DDD is the highest-rate damage in this log by a wide margin, and it
+is nearly rate-independent of gear. Shara's 1,372.9 DPS comes 99.6% from a song,
+0.2% from melee, on a build with no damage itemisation at all. Nothing else here
+approaches its per-second output, and its best 30 s window is 7,752 DPS.
+
+**Not confirmed:** *"everything else needs to be built to fit around it."* The
+build that produced the most damage in this log is PAL/ENC/BRD, and the largest
+single component of it is **the charm pet, not the song** — 2,381,463 against
+672,456 from its own DDD. A build that fits around DDD and drops the pet would
+have lost this day badly.
+
+**What the data actually supports** is narrower and more useful than either
+version: **DDD is the best burst and AE lane in the game, the charm pet is the
+best sustained lane, and the winning build ran both.** The Bard slot earns its
+place in nearly every trio — my own ranking already put it in all eleven of the
+top AOE trios — but it earns it as one of two engines, not as the thing the
+others orbit.
+
+**Three limits, unchanged:** there is no Bard-less counterfactual in this log;
+it is one player-pair, one zone, one day; and every figure is AE, so nothing here
+speaks to single-target raid damage.
