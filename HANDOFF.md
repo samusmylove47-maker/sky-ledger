@@ -706,3 +706,78 @@ page can be classic in its surroundings and Legends-authored in the field you ar
 reading, and this is one.** That is the site's own doctrine — a tier-5 sentence
 inside a tier-2 container — running in the opposite direction, and the page has
 not applied it to itself.
+
+---
+
+### 11. My lane, proposed properly — the measured-mechanics layer
+
+**I have proposed pieces (§2, §5, §6, §7) but never the lane itself, and that was
+the gap in my onboarding. Here it is, scoped, with what I would not touch.**
+
+#### The lane
+
+**Everything the game only tells you through a combat log.** Not what an item is
+— that is a scrape, and Session B owns the planner that consumes it. Not what a
+page says — that is Session A. **What a swing, a song or a proc is actually
+worth, established from logs, with the residual attached.**
+
+The case for it being a lane at all is that the site has no source for this
+class of fact. `docs/SOURCES.md` grades sources for *published* claims — patch
+notes, infoboxes, guides. A mechanic derived from 181,345 log lines fits nowhere
+on that ladder, which is exactly the problem you set me on day one. Meanwhile
+`assets/measured.json` and `assets/raids-measured.json` already exist, already
+parse logs, and already stop at *what happened* rather than *what the rule is*.
+**The gap between those two is my lane.**
+
+Nine days of it, as evidence rather than assertion: the per-swing damage chain;
+Offensive stance ×2.00 by parity test; the one-handed damage bonus corrected
+0.69 → 0.80 against nine observations; haste closed on a client panel; crit on
+song damage established at exactly ×3.000 across 65 crits on two characters;
+Amplification measured at ×1.68; the charm pet found to be 10.9× the constant I
+had. **Four of those seven corrected me, which is the point — a lane that only
+produces confirmations is not measuring anything.**
+
+#### Scope: five things, in the order I would build them
+
+1. **`derived.json` and a `check.py` gate** (§5). A derived claim carries the
+   seven fields or the build fails. Cheapest, and it gates everything else I
+   would ship. Nothing of mine should reach a reader before this exists.
+2. **Log-parsing hazards, as a document and as assertions in the parser.** Four
+   found so far, each of which silently corrupts a dataset: killing blows report
+   damage *applied*, not rolled; `You hit yourself … by Cannibalize` is a mana
+   trade, not output; generic mob names collapse, so a distinct-name count is a
+   floor and never a target count; and a song's *pulse* line (`Your voice booms.`)
+   reads its uptime where the cast line cannot. **This one protects Session D and
+   `raidstats.py` as much as me**, and it is the cheapest thing on the list.
+3. **Three fields in `raidstats.py`** (§2) — `our_hits`, `our_max_hit`,
+   `our_lane_split`. Retroactive across all 213 fights, no new play, and they
+   turn a dataset that cannot test a model into one that can.
+4. **`mechanics.v1.json`, in the `publicdata.py` contract shape.** One row per
+   measured constant, each carrying its derived-claim envelope. This is the
+   artefact the lane exists to produce: a stranger can read the number, the model,
+   the residual and the conditions under which it stops being true.
+5. **The parse-convention converter.** Four shipped Legends meters use four
+   denominators; the spread is ×2.03 between best-10s and engaged. Every DPS
+   number anyone quotes is uninterpretable without it, and today's log is a
+   worked example — 1,372.9 engaged, 7,752 best-30s, 14,656 best-10s, one
+   character, one session.
+
+#### What I would not touch, and why
+
+- **Item selection and the gear planner** — Session B's, and §6 proposes the seam
+  at the equipped set rather than at the items.
+- **Pages, prose and design** — Session A's.
+- **Lockouts** — Session D's, and their `- Group` finding already improved my data.
+- **EQLS Auras** — an outside developer's, complete control, not ours.
+- **Publishing anything.** The Director owns whether a claim reaches a reader. I
+  propose; I do not publish. That has not changed and I do not want it to.
+
+#### What I need from the owner, and it is small
+
+Logs, which are already being offered, plus **one line of context per log that
+the log cannot carry**: the trio, and any pet or buff whose damage would
+otherwise be attributed wrongly. Today proved the cost of not having it — I
+credited a charm pet to a bystander and published a headline that the owner's one
+sentence then reversed. **`corpus/<log>.meta.json` with `{trio, level, pets,
+buffs_from}` alongside each log would have caught it before it was written.**
+That is the format I would like, and I will write the schema if it is wanted.
