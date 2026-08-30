@@ -1,0 +1,85 @@
+{
+  "_fixture": true,
+  "_why": "SYNTHETIC. Every figure below is invented for layout and carries no measurement. It exists so the landing page never renders a real character's log. See HANDOFF.md §24.",
+  "_never": "Do not replace these values with figures from a real log, ours or a reader's. If the page needs to look plausible, change these numbers - they are not claims and cannot be wrong.",
+
+  "context": {
+    "character": "EXAMPLE",
+    "trio": ["WAR", "MNK", "SHM"],
+    "level": 50,
+    "source": "fixture — no log was read"
+  },
+
+  "measured": {
+    "_register": "DISPLAYABLE. In production every field here comes out of the reader's own log, in the reader's own browser, and is never transmitted.",
+    "dps": 214.6,
+    "dps_window": "engaged",
+    "dps_window_note": "Engaged = damage over the union of intervals with no gap above 15s. Four shipped meters use four denominators; a DPS figure without its window is not a measurement.",
+    "engaged_seconds": 412,
+    "swings": {"main_hand_per_second": 1.09, "offhand_per_second": 0.96},
+    "crit_rate": 0.071,
+    "resist_rate": 0.15,
+    "stance_inferred": "Balanced",
+    "stance_evidence": "48.2% even damage across 611 non-crit main-hand hits; Offensive prints ~93% even"
+  },
+
+  "deltas": [
+    {
+      "lane": "stance",
+      "statement": "Offensive stance instead of Balanced",
+      "value": 98.4,
+      "unit": "dps_delta_vs_observed",
+      "kind": "estimate",
+      "requires": {"cost": "none — one keypress"},
+      "envelope_ref": "derived/stance-offensive.json",
+      "falsifier": "A following log at the same gear showing under +40% on the melee lanes."
+    },
+    {
+      "lane": "weapon.primary",
+      "statement": "a PRIMARY 1H at DMG >= 30, delay <= 22",
+      "value": 41.7,
+      "unit": "dps_delta_vs_observed",
+      "kind": "estimate",
+      "requires": {"slot": "PRIMARY", "hands": 1, "class_any": ["WAR", "MNK", "SHM"]},
+      "envelope_ref": "derived/chain-swing-rate.json",
+      "falsifier": "Equipping a weapon meeting the stated floor and measuring under +20 DPS on the main-hand lane."
+    },
+    {
+      "lane": "lane.kick",
+      "statement": "kick fired at its cooldown rather than at the observed 0.31/s",
+      "value": 18.2,
+      "unit": "dps_delta_vs_observed",
+      "kind": "floor",
+      "requires": {"cost": "none — rotation only"},
+      "envelope_ref": "derived/lane-rates.json",
+      "falsifier": "A log at a measured kick rate above 0.50/s showing no corresponding lane gain."
+    }
+  ],
+
+  "refusals": [
+    {
+      "lane": "item.selection",
+      "reason": "computable_from_catalogue",
+      "detail": "Which obtainable item meets the stated stat floor is a catalogue question.",
+      "what_would_settle_it": "eqlegendstools.com holds this and does it well. Link, do not clone."
+    },
+    {
+      "lane": "worn.stats",
+      "reason": "no_log_evidence",
+      "detail": "A log does not show worn stats. Haste was inferred from swing rate; AC, resists and worn ATK were not seen at all.",
+      "what_would_settle_it": "The 50 Upgrades gear input, or a character-panel reading."
+    },
+    {
+      "lane": "engaged_time.comparison",
+      "reason": "privacy",
+      "detail": "Comparing how long two named characters were engaged is refused in all cases and has no override.",
+      "what_would_settle_it": "Nothing. This is a hard refusal, ruled 30 August 2026."
+    }
+  ],
+
+  "coverage": {
+    "inputs_observed": ["weapon delay", "swing rates", "crit rate", "resist rate", "stance", "lane rates", "engaged time"],
+    "inputs_assumed": ["haste at cap", "target mitigation", "buff uptime"],
+    "note": "Every delta above is a difference against this character's own observed baseline. No absolute modelled figure appears anywhere in this document, by design — see HANDOFF.md §21.3."
+  }
+}
