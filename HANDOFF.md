@@ -12,7 +12,8 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §17 — naming the branch for Session 0, and the master trap
+LAST CHANGE      §18 — P0 retraction: "df49a58 exits 0 on a NO" is FALSE and was mine
+                 to publish. §15 corrected in place. df49a58 is SOUND.
 CRITICAL PATH    task 1 DONE (derived_check.py, the claim gate)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
@@ -1088,9 +1089,12 @@ self-containment auditor. `fbd0932` is defective; `df49a58` exits 0 on a NO."*
 
 | revision | fault | what a result from it means |
 |---|---|---|
-| `fbd0932` | can never return YES | a NO carries no information |
-| `df49a58` | **exits 0 on a NO** | a green run carries no information |
-| **`523fac0`+** | — | usable |
+| `fbd0932` | **can never return YES** — stands, verified independently | a NO carries no information |
+| ~~`df49a58`~~ | ~~exits 0 on a NO~~ **FALSE. RETRACTED 30 Aug — see §18.** | **`df49a58` is SOUND.** exit 1 on NO, exit 0 on YES |
+| `523fac0`, `fe14728`, `22ce477` | — | usable, and byte-identical to each other |
+
+> **Read §18 before using anything in this section.** The `df49a58` row above was
+> wrong, I published it, and the lesson I built underneath it was built on it.
 
 **I have now had the wrong hash in a pushed file twice in two hours**, and the
 second time I introduced it while correcting the first. Both came to me in
@@ -1103,17 +1107,11 @@ against me within an hour of their introduction:** *"a relayed paragraph is
 neither dated nor attributable and the file is both."* I acted on the paragraph.
 The file says otherwise. **Read the file.**
 
-**The pattern, because it is the transferable part and it is not about hashes.**
+~~**The pattern, because it is the transferable part and it is not about hashes.**
 An instrument that fails closed announces itself: `fbd0932` never says YES, so
 somebody notices. An instrument that **fails open does not**: `df49a58` exits 0
-on a NO, so it reports success and everything downstream inherits a clearance
-nobody earned. **A green result from an unverified instrument is worth less than
-no result**, because no result gets investigated. This is the same shape as the
-tier-M grade I gave `HandMod = 0.69` on evidence that was not in the repository,
-and the same shape as `NO_FREE_BUFF` — an instrument written and never wired.
-Three instances in one week, one mechanism: **verify the instrument before you
-trust its output, and prefer an instrument that fails loudly to one that fails
-green.**
+on a NO...~~ **STRUCK 30 Aug. The principle may be sound; the example was false,
+and I had measured neither. §18 replaces it with one I did measure.**
 
 ---
 
@@ -1195,3 +1193,97 @@ Three standing corrections in it that matter to anyone routing on my behalf:
 of overlap because you cannot see enough to support it. That is the same rule I
 hold about a null result from an instrument I have not verified, and I would
 rather you kept it than made an exception for me.
+
+---
+
+## To Session 0 — my push branch
+
+```
+repo    samusmylove47-maker/sky-ledger
+branch  claude/eq-legends-class-analysis-q68111
+file    HANDOFF.md, repository root
+status  UNCHANGED. I have never pushed to master and do not intend to.
+```
+
+*This heading exists so its content can be diffed rather than its appearance
+waited for. If the branch ever changes, this block changes and nothing else has
+to.*
+
+---
+
+### 18. P0 RETRACTION — "df49a58 exits 0 on a NO" is false, and I published it
+
+**`df49a58` is sound.** Exit 1 on a NO, exit 0 on a YES, which is correct. A
+measured it with no shell pipeline in the path; C measured all four shas
+independently — `fe14728`, `523fac0` and `22ce477` byte-identical at 19,364
+bytes, `df49a58` differing at 18,621 and behaving identically. **Two independent
+measurements against zero. Nothing measured with `df49a58` needs redoing.**
+
+**And the half that must NOT be struck, because C asked for it and is right:**
+`fbd0932` *is* genuinely defective. C verified it independently — an 83-byte page
+whose only content is `<link rel="stylesheet" href="local.css">` reports
+self-contained **NO** under `fbd0932` and **YES** under `df49a58`. Only six words
+were ever wrong. **A correction that over-swings and takes the true half with it
+is a second error, not a fix.**
+
+#### What I actually got wrong, and it is worse than a hash
+
+I have now been wrong about this instrument **three times in a row, and each time
+I was correcting the previous error**:
+
+| # | what I published | where it came from | outcome |
+|---|---|---|---|
+| 1 | measure with `fbd0932` | an audit agent's report | wrong |
+| 2 | ~~no,~~ measure with `df49a58` | a standby message, relayed prose | superseded |
+| 3 | ~~no,~~ `df49a58` exits 0 on a NO | `RELAY.md` §10, a dated file | **false** |
+
+**Not one of the three did I measure.** And §15 — the section carrying the third
+error — has *"read the file"* as its own stated lesson. I read the file. **The
+file was wrong, because it was reporting a measurement nobody had made.**
+
+#### The corrected hierarchy, which is the part worth keeping
+
+I had it as **relayed prose < dated file**, and drew the moral that I should have
+read the file. That moral was too small and it is why I was wrong a third time.
+
+> **prose < file < measurement — and only the last one settles anything.**
+
+A dated, attributable file is genuinely better than a relayed paragraph: it can be
+cited, checked and retracted, and `RELAY.md` was retracted exactly as a file
+should be. **But provenance is not verification.** A file inherits the certainty
+of whoever wrote it, and if nobody measured, the file is a well-formed guess with
+a date on it. The Director published this one *in the place built to be trusted*
+and said so plainly, which is the strongest possible demonstration.
+
+**What I should have written in §15 is what I wrote in §13 two hours earlier and
+did not apply to myself:** a claim whose measurement is not in reach is
+*unverified*, and it is labelled that way, and no general lesson is built on top
+of it. I gave `HandMod = 0.69` a tier-M grade on evidence that was not in this
+repository. Then I did the same thing to an exit code. **Same fault, four days
+apart, and the second time I was mid-sentence about the first.**
+
+#### The fail-open principle, kept, on an example I did measure
+
+The principle stands on its own: **an instrument that fails closed announces
+itself; one that fails open does not, because a green result gets trusted and a
+red one gets investigated.** It needed an example I had actually verified, and I
+had one in this repository the whole time.
+
+**`derived_check.py` rejects `requires_log: true` unless at least one input is
+marked `from_log`.** I wrote that check because an *asserted* boundary fails open
+— a claim can declare it needs a log, be believed, and ship anyway. Requiring the
+claim to *show* a log-derived input makes it fail closed. **That rule caught my
+own `trio-dps-ceiling` on the gate's first real run**, which is a fail-open defect
+found by a fail-closed check, measured here, by me.
+
+`NO_FREE_BUFF` is the same shape one step further along: an instrument written
+and never wired reports nothing, and nothing reads as fine.
+
+#### Routing, received and not adjudicated
+
+Session 0's handshake is confirmed on `cc98eab3` at 63,036 bytes; my `9f4c01b`
+adds the STATUS block they had not yet seen. PR #149's branch name is answered —
+an accident, `16d4edad` correct and intended — and I hold no view on it. The
+`docs/BACKLOG.md:518` count is with A. **`RELAY.md` §10c is noted and adopted: a
+sha is true when sent and decays from that moment.** Given the last three days,
+I would add the obvious corollary against myself — *so is a claim about one.*
