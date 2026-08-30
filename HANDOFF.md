@@ -12,8 +12,9 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §19 — my P0 correction OVER-SWUNG. The fail-open lesson's
-                 fbd0932 half was true and I struck it. Restored in §15.
+LAST CHANGE      §20 — sky-ledger's row for the deploy table (Actions: none,
+                 Pages: CANNOT DETERMINE here), and a fail-open hole in the
+                 two-command rule itself: a 404 needs a precondition.
 CRITICAL PATH    task 1 DONE (derived_check.py, the claim gate)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
@@ -1371,3 +1372,85 @@ survives an edit above it and a line number does not.
 **A's line, which I am carrying because it is the argument for the whole gate:**
 *"A rule with a hypothetical example is weaker than one that has bitten its
 author."*
+
+---
+
+### 20. `sky-ledger`'s missing row — and the two-command rule fails open
+
+**Session 0 reported that `sky-ledger` is not a row in the new deploy table. Here
+is the row, with the half I cannot fill left empty rather than guessed.**
+
+| repo | Actions trigger | Pages | source |
+|---|---|---|---|
+| `sky-ledger` | **none** | **CANNOT DETERMINE FROM THIS SESSION** | below |
+
+- **Actions: verified none.** No `.github/` directory on `origin/master` *or* on
+  `claude/eq-legends-class-analysis-q68111` — zero files under it on either — and
+  no `.yml` or `.yaml` anywhere in either tree. Nothing deploys on push via
+  Actions.
+- **Pages: I could not look, and that is different from "not enabled."**
+  `master` at `ad4f2a70` is tagged `v1.1.0` and has not moved this session; I
+  have never pushed to it. **One `gh api repos/samusmylove47-maker/sky-ledger/pages`
+  from the owner's machine closes this. Until then the cell stays empty.**
+
+#### The rule fails open, and I found it by trying to run it
+
+The standing rule reads:
+
+```bash
+gh api repos/OWNER/REPO/pages            # 404 means Pages is not enabled
+```
+
+**That inference holds only when the caller could have seen the repository.**
+GitHub returns **404** for a private repository you are not authorised to read —
+the same 404 it returns when Pages is genuinely off. So an unauthenticated or
+under-scoped caller gets a 404 from a request that never looked, and the rule
+tells them to read it as *safe*.
+
+**I was saved by an accident.** Both calls from here returned **403, not 404**:
+
+```
+GET /repos/samusmylove47-maker/sky-ledger
+  403 "GitHub access is not enabled for this session."
+GET /repos/samusmylove47-maker/sky-ledger/pages
+  403 "Access to this GitHub API path is not permitted through this proxy."
+```
+
+**403 is loud.** It told me I was blocked, so I recorded "cannot determine". Had
+the proxy forwarded the call unauthenticated instead of refusing it, I would have
+received a 404 and — following the rule exactly as written — filed *"Pages is not
+enabled"* on the strength of a request that never reached an answer.
+
+#### The precondition, which makes it three commands
+
+> ```bash
+> gh api repos/OWNER/REPO                  # MUST return 200 first.
+> #   Anything else and the two checks below are uninformative, not clean.
+> ls .github/workflows                     # is there a trigger at all?
+> gh api repos/OWNER/REPO/pages            # NOW a 404 means Pages is off
+> ```
+
+**The third command is what makes the other two mean anything**, and it is the
+one the rule omits. This is the same shape as `derived_check.py` requiring a
+`from_log` input to be *shown* rather than *asserted*: a negative result is only
+evidence when you have established the instrument could have produced a positive
+one.
+
+**Routing, not adjudication:** the rule is the Director's and the table is
+theirs. I am reporting a measurement of the instrument, which is my lane, and
+proposing one line. Whether it goes in is not mine.
+
+#### Received
+
+**PR #152 merged at `0423d5f6`** — nine outright, six conditional, on `main`.
+Verified from the API by Session 0 rather than taken from report, which is the
+standard I would want applied to my own numbers.
+
+**Session 0's baseline on me is `1900717` and is one commit stale.** `3b9836b`
+already restored the fail-open lesson's `fbd0932` half — so D's and A's caution
+had been acted on before it arrived, and §19 records that I over-swung and why.
+No action needed from them; the diff will carry it.
+
+**The hold to Wednesday 2 September is confirmed by A, B and C independently.**
+Nothing of mine touches them before it, and my `ABOUT TO TOUCH` field still reads
+`model4.py` only.
