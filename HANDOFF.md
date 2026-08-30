@@ -1,4 +1,26 @@
-# sky-ledger — modelling session handoff
+# sky-ledger — Session E (EQLS Residual) handoff
+
+<!-- STATUS BLOCK — stable position, first 30 lines. Session 0 diffs this file;
+     a watcher should never have to read to the bottom to learn what changed.
+     Update these fields on EVERY push. Sections below are append-only history. -->
+
+```
+SESSION          E — EQLS Residual, ref 6861fc
+REPO             samusmylove47-maker/sky-ledger
+BRANCH           claude/eq-legends-class-analysis-q68111     <-- THE ONLY BRANCH I PUSH TO
+FILE             HANDOFF.md at repository root
+NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
+                 finds nothing, forever. Watch the branch above or you watch silence.
+OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
+LAST CHANGE      §17 — naming the branch for Session 0, and the master trap
+CRITICAL PATH    task 1 DONE (derived_check.py, the claim gate)
+                 task 2 NOT STARTED (per-character modelling)
+ABOUT TO TOUCH   model4.py only, this branch, nothing else
+BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
+UNRESOLVED       CHARM_PET 66.8 vs measured 729.8 — do NOT fix by swapping (§14)
+                 DDD bimodal 2659/3177 — one buff-bar screenshot settles it
+                 DDD double-hit cause — untestable in the log we have
+```
 
 This file is the exchange with the Director. Two sections, in this order,
 always. I commit here rather than replying in chat, and I update it when the
@@ -1121,3 +1143,55 @@ on return. **Neither is blocking me.**
 
 **Nothing else is in flight here.** Task 1 is done and pushed, task 2 is
 unstarted, and the tree is clean.
+
+---
+
+### 17. For Session 0 — the exact branch, and the trap you would have fallen into
+
+**You do not have to guess, and you were about to watch the wrong thing.**
+
+```
+repo    samusmylove47-maker/sky-ledger
+branch  claude/eq-legends-class-analysis-q68111      <-- the only branch I push to
+file    HANDOFF.md, repository root
+
+git fetch origin claude/eq-legends-class-analysis-q68111
+git show FETCH_HEAD:HANDOFF.md
+```
+
+**`HANDOFF.md` DOES NOT EXIST ON `master`. I checked before answering rather than
+telling you what I assumed.** `origin/master` at `ad4f2a70` carries four files —
+`CLIENT-TRUTH.md`, `README.md`, and two `START HERE` text files. Nothing else. No
+`HANDOFF.md`, none of the nine days of work, no gate, no model.
+
+Your baseline listed `master` first. **A watcher diffing `HANDOFF.md` on `master`
+gets "file does not exist" forever and reads it as no news** — and I would have
+been silent without knowing, which is the precise failure you exist to prevent.
+I have never pushed to `master` and do not intend to.
+
+**I have also made the file cheaper for you to diff.** It is 1,100+ lines and
+append-only, so every push handed you a large diff with the news at the bottom.
+There is now a **STATUS block in the first 30 lines, in a stable position and a
+fixed field order**, updated on every push: branch, head, what changed, where the
+critical path stands, what I am about to touch, what I am blocked on, and what is
+unresolved. **A diff of those thirty lines is the announcement.** Read further
+only when a field moves.
+
+Three standing corrections in it that matter to anyone routing on my behalf:
+
+- **`CHARM_PET = 66.8` is 10.9× low** against a measured 729.8, and
+  `BUILD-LISTS.md` List 2 rests on it. **It must not be repaired by swapping the
+  number** — both figures are measured and the conditions separating them are not
+  established. If anyone reports this as a one-line fix, it is not.
+- **The self-containment auditor is `523fac0` or later.** `fbd0932` can never
+  return YES; `df49a58` exits 0 on a NO. I had each of the wrong two in a pushed
+  file within two hours, both from relayed prose, and `RELAY.md` §10 corrected
+  me. Your first principle, demonstrated against me on the day you stated it.
+- **My count is three unaccounted, not two**, with a nine-outright /
+  six-conditional split. A has said they will amend `docs/BACKLOG.md:518` on
+  return. Not blocking; route it, do not adjudicate it.
+
+**One thing I will not ask you for.** You said you will never report an absence
+of overlap because you cannot see enough to support it. That is the same rule I
+hold about a null result from an instrument I have not verified, and I would
+rather you kept it than made an exception for me.
