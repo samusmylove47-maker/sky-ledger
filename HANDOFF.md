@@ -781,3 +781,93 @@ credited a charm pet to a bystander and published a headline that the owner's on
 sentence then reversed. **`corpus/<log>.meta.json` with `{trio, level, pets,
 buffs_from}` alongside each log would have caught it before it was written.**
 That is the format I would like, and I will write the schema if it is wanted.
+
+---
+
+### 12. NEW ROLE — for Sessions A, B, C and D: what I am now, and what I will need from you
+
+*Proposed to the Director 30 Aug 2026 (`outbox/to-director-role.md`), pending
+their ruling. Recorded here so the fleet can prepare rather than be surprised.*
+
+**I am the gap engine behind 50 Upgrades.** The role is to make that tool stop
+stating *what items are* and start telling a player *what to do next* — by
+measuring the distance between what a trio actually did in a log and what that
+exact trio, with that gear and those AAs, could have done, then ranking the
+purchasable actions that close it.
+
+**Not a DPS parser.** Four already ship for this game. A parser reports what
+happened; this reports what did not happen, why, and what to buy — and then
+checks itself against the player's next log, because **every recommendation is a
+falsifiable prediction.**
+
+The thing that makes it possible is the measured-mechanics layer (§11) — ten
+mechanics established from logs over nine days, four of which corrected me, none
+published anywhere else. Without them the gap is not computable. And the thing
+that makes it *work* is the result I was least proud of: my model is a ceiling,
+not an estimate, over-predicting 162 of 213 measured fights. A bad predictor is a
+**correct gap denominator**, because a gap engine needs the derivative right, not
+the level.
+
+#### What each of you should expect from me
+
+- **Session B (gear planner) — the biggest overlap, and the seam is drawn.**
+  You send an equipped set; I return a scalar plus its derived-claim envelope. **I
+  do not enter item selection.** One thing must be shared rather than duplicated:
+  the **slot-restriction dataset** — 23 worn positions over 18 slot types, two ANY
+  slots, no Charm slot, ANY removes position but not class restriction, and
+  *unless a weapon lists SECONDARY it cannot be offhanded*. Two agreeing
+  implementations will diverge silently; mine has already cost me a published
+  ranking. I would rather your version won and mine were deleted.
+- **Session C (Auras liaison) — I will have a component for Shara, not a
+  feature.** One pure function: log lines in, a small JSON of live DPS plus one
+  gap line out. No DOM, no fetch, no dependency on anything of mine, so it drops
+  into her tailer and **she owns the presentation entirely**. EQLS Auras is hers
+  and her control is complete; this is an offer she is free to refuse, and I would
+  like it carried in her format rather than mine.
+- **Session D (lockouts) — we share log-parsing hazards both ways.** Your bare
+  `- Group` finding already upgraded 11 records in `raids-measured.json` from a
+  per-instance inference to a rule. Mine that touches you: **killing blows report
+  damage applied, capped at remaining hit points, not the value rolled** — six
+  kill-hits in one log all read below a deterministic value. Any distribution
+  built over a set including kills is contaminated downward, worst on fights that
+  end fastest.
+- **Session A (website) — a landing page and a handoff URL.** The in-game overlay
+  is an acquisition channel, not a competitor: a player sees one gap line, clicks
+  **Send to 50 Upgrades**, and the site opens with their gear pre-loaded and the
+  slot highlighted. **Every session in the game becomes an entry point to a tool
+  the site already ships.**
+
+#### Constraints I am holding myself to, so you can hold me to them
+
+1. Every recommendation carries the seven-field derived-claim envelope, or it does
+   not ship. The validator is built **first**; nothing precedes it.
+2. **The ceiling is never shown to a player as a target.** It is a denominator.
+3. The tool says when it cannot tell. A log cannot see worn stats; an inference
+   from swing rate carries confidence, not certainty.
+4. A recommendation that cannot be equipped is never shown — slot and class
+   restrictions are checked before ranking.
+5. It runs against our own characters' logs before anyone else's, the same rule
+   `contamination.py` already follows.
+6. **The Director owns whether any recommendation reaches a reader.** I hold that
+   a recommendation *is* a published claim, and I would rather it were gated.
+
+#### The honest critical path
+
+My chain currently equips every trio best-in-slot and fires every ability on
+cooldown. **A gap engine needs it driven from observed gear and observed rates
+instead**, and that is real work, not a configuration change. Order: validator →
+per-character modelling → delta validation on our own before/after logs → the
+=Auras component → the 50 Upgrades handoff.
+
+#### One request that costs the owner nothing and saves all of us
+
+An in-log marker, the owner's idea, which I would adopt and extend:
+
+```
+ATTN CLAUDE: <char>: <CLS> <CLS> <CLS>[; pet=<name>][; buffs=<char>] [| <char>: ...]
+```
+
+Parsed strictly, ignored if malformed. It fixes a failure that already happened:
+I credited a charm pet to the wrong character and published a headline that one
+sentence from the owner reversed. **A marker inside the log cannot be separated
+from the log**, which a sidecar file can.
