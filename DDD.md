@@ -222,3 +222,37 @@ claim holds.
 | The guide's 1.43× residual | Jam Fest and casting levels, unquantified |
 
 *Fan analysis. Not affiliated with Daybreak Game Company, Game Jawn or Darkpaw Studios.*
+
+
+---
+
+## OPEN — Denon's Desperate Dirge deals one of TWO values to the same mob type
+
+**Found 30 Aug 2026 while checking Session D's killing-blow detector against this
+corpus.** `bard.py`, Shara, rank IX, non-crit, killing blows excluded.
+
+**Fourteen of twenty target-name groups are bimodal, and the pair is almost always
+2659 / 3177.** `a spiroc vanquisher` 2659×21 and 3177×21; `a watchful guard`
+2659×26 / 3177×16; `a crystaline cloud`, `a gust of wind`, `The Spiroc Lord`,
+seven more spiroc types, and `heart harpie` all the same pair. `a rock golem`
+carries 1583 / 2659 instead, and `Protector of Sky` 2161 / 3177.
+
+**3177 / 2659 = 1.1948.** Not a clean +20% (that would give 3190).
+
+**It is a state that toggles, not a per-hit roll.** Sorting the 455 hits at those
+two values by time gives **22 alternating runs, the longest 70 hits**: 43, 24, 70,
+10, 56, 8, 32, 10, 26, 42, 4, 56, 24, 9… A random per-cast effect cannot produce
+runs of seventy.
+
+**Not explained by:** mob level or zone — both values land on the same named mob
+types. Not rank — the log sings `Denon's Desperate Dirge IX` throughout. Not
+Amplification — it was up for the whole measured stretch.
+
+**Candidates, unseparated:** a long-uptime buff lapsing and being recast; a song
+entering and leaving the twist rotation; an exaltation click state (`Djarn's
+Amethyst Ring (Exaltation) shimmers briefly` precedes every cast).
+
+**The test is one screenshot of the buff bar during a 3177 run and one during a
+2659 run.** Until then this is recorded and not guessed at — and note that it
+makes every single-value DDD figure in this file a figure for *one of two states*,
+including the 2,659 the Amplification measurement rests on.
