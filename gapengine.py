@@ -148,6 +148,18 @@ def _engagements(hits):
     return [(a, b) for a, b in runs if b - a >= MIN_ENGAGEMENT]
 
 
+def _materiality(share):
+    """A delta without a sense of its own scale sends readers chasing rounding
+    errors. Every delta carries this, not just the small ones."""
+    if share is None:
+        return "unknown — no observed baseline to compare against"
+    if share < 0.02:
+        return "negligible — under 2% of this character's output"
+    if share < 0.10:
+        return "modest — a few percent of this character's output"
+    return "material"
+
+
 def _stance(hits):
     """Offensive doubles damage, so it prints ~93% even values; Balanced ~50%.
     Killing blows truncate to remaining hit points and are excluded."""
@@ -237,13 +249,25 @@ def gap_engine(lines, context=None):
     # --- deltas: modelled, always a difference against the observed baseline ---
     if stance == "Balanced" and melee:
         melee_dps = sum(h["amt"] for h in melee) / engaged if engaged else 0
+        val = melee_dps * (STANCE_OFFENSIVE_MULT - 1)
+        share = val / m["dps"] if m["dps"] else None
         report["deltas"].append({
             "lane": "stance",
             "statement": "Offensive stance instead of Balanced",
-            "value": round(melee_dps * (STANCE_OFFENSIVE_MULT - 1), 1),
+            "value": round(val, 1),
             "unit": "dps_delta_vs_observed",
+            # Every delta carries the same keys. The stance delta lacked `share`
+            # and `materiality` until 30 Aug -- so the LARGEST delta was the one
+            # with no sense of scale attached, which is the reader most likely to
+            # be sent chasing. Found by generating the fixture from the engine and
+            # diffing its keys against a real run.
+            "share_of_observed_dps": round(share, 4) if share else None,
+            "materiality": _materiality(share),
             "kind": "estimate",
             "requires": {"cost": "none — one keypress", "class_any": "the 9 martial classes"},
+            "basis": {"melee_dps_observed": round(melee_dps, 1),
+                      "stance_multiplier": STANCE_OFFENSIVE_MULT,
+                      "denominator": f"{engaged}s engaged"},
             "envelope_ref": "derived/stance-offensive.json",
             "falsifier": ("A following log at the same gear whose non-crit melee endpoint "
                           "does not approximately double."),
@@ -278,10 +302,10 @@ def gap_engine(lines, context=None):
                 "value": round(value, 1),
                 "unit": "dps_delta_vs_observed",
                 "share_of_observed_dps": round(share, 4) if share else None,
-                "materiality": ("negligible — under 2% of this character's output"
-                                if share and share < 0.02 else "material"),
+                "materiality": _materiality(share),
                 "kind": "floor",
                 "requires": {"cost": "none — rotation only"},
+                "envelope_ref": "derived/lane-rates.json",
                 "basis": {"observed_per_melee_second": round(rate, 4),
                           "ceiling_per_second": ceil,
                           "denominator": f"{melee_s}s in melee, NOT {engaged}s engaged",

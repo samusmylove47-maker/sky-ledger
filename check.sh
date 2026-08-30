@@ -27,6 +27,22 @@ for f in handmod.py validate_jos437.py; do
   printf '  %-24s ' "$f"
   if python3 "$f" >/dev/null 2>&1; then echo ok; else echo FAILED; fail=1; fi
 done
+echo "== the fixture must not drift from what the engine emits =="
+python3 - <<'DRIFT' || fail=1
+import json, subprocess, sys
+subprocess.run([sys.executable, "fixtures/make_fixture.py"], check=True, capture_output=True)
+fx = json.load(open("fixtures/sample-report.json"))
+rp = json.load(open("fixtures/real-report-shara.json"))
+fk = set().union(*[set(d) for d in fx["deltas"]]) if fx["deltas"] else set()
+rk = set().union(*[set(d) for d in rp["deltas"]]) if rp["deltas"] else set()
+bad = False
+if fk != rk:
+    print(f"  DRIFT in delta keys: {fk ^ rk}"); bad = True
+if set(fx["measured"]) - {"_register"} != set(rp["measured"]):
+    print(f"  DRIFT in measured keys: {set(fx['measured']) ^ set(rp['measured'])}"); bad = True
+print("  fixture shape matches engine output" if not bad else "  A PAGE BUILT ON THIS FIXTURE WOULD RENDER THE WRONG FIELDS")
+sys.exit(1 if bad else 0)
+DRIFT
 echo
 if [ "$fail" -ne 0 ]; then
   echo "FAILED. Nothing ships."

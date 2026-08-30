@@ -76,6 +76,7 @@
    "requires": {
     "cost": "none \u2014 rotation only"
    },
+   "envelope_ref": "derived/lane-rates.json",
    "basis": {
     "observed_per_melee_second": 0.1074,
     "ceiling_per_second": 0.54,
@@ -96,6 +97,7 @@
    "requires": {
     "cost": "none \u2014 rotation only"
    },
+   "envelope_ref": "derived/lane-rates.json",
    "basis": {
     "observed_per_melee_second": 0.0882,
     "ceiling_per_second": 0.54,
