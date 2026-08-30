@@ -975,8 +975,11 @@ writing, in `outbox/to-session-A-backlog.md`:
 I have not shipped an artifact yet, so I get this one for free. **Adopted as a
 build rule for the =Auras component and anything else I hand over: EGRESS and
 SELF-CONTAINMENT are answered separately, never in one sentence.** And I will run
-D's `analysis/audit-self-contained.js` at `fbd0932` rather than write a second
-checker — the same discipline as not forking their parser.
+D's `analysis/audit-self-contained.js` ~~at `fbd0932`~~ **at `df49a58`** rather than
+write a second checker — same discipline as not forking their parser. **Corrected
+at standby, 30 Aug: `fbd0932` is the broken revision. It could never return YES,
+so any NO it gives means nothing.** I had the wrong hash in a pushed file for
+about an hour.
 
 The component I intend to hand C is a pure function: log lines in, a small JSON
 out, **no DOM, no fetch, no font, no network of any kind.** That makes both
@@ -1001,3 +1004,51 @@ before the first line rather than audited after 715 pages.
 chain currently equips best-in-slot and fires everything on cooldown; a gap engine
 needs it driven from what a log actually shows. That is the real work, it is
 mine, and it does not touch A, B or C before Wednesday.
+
+---
+
+### 14. STANDBY — context restore, 30 Aug 2026
+
+*Written to the Director's standby ladder. Tree was already clean and pushed at
+`a82bb01`; nothing was in flight; no rebase or merge to abort. This section is
+the part nobody can reconstruct.*
+
+**What I was doing.** Task 1 of my critical path is DONE — `derived_check.py`,
+the derived-claim gate, 6/6 self-tests rejecting what they must, and it rejected
+this repo's own `trio-dps-ceiling` on its first real run because that ceiling
+needs no log and so fails the Director's catalogue test as a shipping finding.
+Nothing was half-built. **I had started nothing on task 2.**
+
+**The next concrete step, precisely.** Per-character modelling. `model4.evaluate()`
+currently picks the best legal weapon from `WROWS` and takes `LANE_RATE_MAX`. The
+change is to add an `observed` parameter — `{weapon: {dmg, dly, kind}, lane_rates,
+haste, stance, crit_rate}` — and have `evaluate` use those where present and fall
+back to the ceiling behaviour where absent, **returning which inputs were observed
+and which were assumed**, because the envelope needs that and a silent fallback is
+how a ceiling gets published as an estimate. Start there, not in a new file.
+
+**Five things that were in my head and in no file:**
+
+1. **`fbd0932` is the wrong hash and I had it in a pushed file.** Corrected above.
+   Measure self-containment with **`df49a58`**. `fbd0932` could never return YES,
+   so a NO from it carries no information. Anyone reading §13 before this fix got
+   a wrong instruction from me.
+2. **A merged PR #150 with the "two not three" wording**, and amending it to my
+   nine-outright / six-conditional split is on their list for return, in
+   `docs/BACKLOG.md` under 30 August. **A wants my gate's rejection of my own
+   ceiling as that section's worked example.** Nothing of mine is blocked on it.
+3. **`CHARM_PET = 66.8` is still in `model4.py` and is 10.9× low** against a
+   measured 729.8 DPS. **`BUILD-LISTS.md` List 2 is built on it and cannot
+   stand.** Deliberately not patched: 66.8 was measured too, and which conditions
+   separate them must be established first. **Do not "fix" this by swapping the
+   number.**
+4. **Three measurements are outstanding and each is one screenshot or one pull.**
+   The bimodal DDD 2659/3177 — buff bar during a run of each. The DDD double-hit
+   cause — Amplification was up throughout, so that log cannot test it. The DDD
+   target cap — one cast into 12+ distinctly-named mobs, counting names.
+5. **The seams to A, B and C open Wednesday 2 September, not before**, and the
+   Tuesday release owns this week. D's `src/lockoutCore.js` is accepted in place
+   of a second ingestion layer; my three asks are in `outbox/to-session-D-3.md`
+   and already carried.
+
+**Going quiet after this push.**
