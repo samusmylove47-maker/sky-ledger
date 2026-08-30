@@ -11,6 +11,10 @@
 # inside gapEngine(), where HANDOFF.md §21.6 puts it. There, a claim that fails
 # cannot reach a caller, because the engine will not emit it.
 set -e
+# set -o pipefail is not POSIX sh; emulate its effect by never piping a check.
+# D measured this defect on 30 Aug: `cmd | head -3; echo $?` reports head's status,
+# not cmd's, and `set -e` does not stop a failing pipeline. This script contains no
+# pipelines for exactly that reason. If you add one, capture the status explicitly.
 fail=0
 echo "== derived-claim validator: self-test (must reject all bad claims) =="
 python3 derived_check.py --selftest || fail=1

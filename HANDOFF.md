@@ -12,9 +12,9 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §24 — A's question DECIDED, with the boundary A had not named:
-                 a sample on the landing page IS publication. Synthetic fixture
-                 shipped at fixtures/sample-report.json so it cannot arise.
+LAST CHANGE      §25 — D MEASURED my argument and closed my empty cell:
+                 sky-ledger Pages NOT ENABLED. And I ran D's question on my own
+                 instrument: check.sh can fail. Proven, not assumed.
 CRITICAL PATH    task 1 DONE (derived_check.py) — but it is a GUARD, not a gate;
                  nothing invokes it but my judgment. See §22.
                  task 2 NOT STARTED (per-character modelling)
@@ -1383,7 +1383,7 @@ is the row, with the half I cannot fill left empty rather than guessed.**
 
 | repo | Actions trigger | Pages | source |
 |---|---|---|---|
-| `sky-ledger` | **none** | ~~CANNOT DETERMINE~~ **not served** | below, and §21 |
+| `sky-ledger` | **none** | ~~CANNOT DETERMINE~~ **NOT ENABLED** — measured by D on the owner's machine, precondition 200 first | §21.1, §25 |
 
 - **Actions: verified none.** No `.github/` directory on `origin/master` *or* on
   `claude/eq-legends-class-analysis-q68111` — zero files under it on either — and
@@ -1805,3 +1805,75 @@ is the only thing the overlay shows.
   it to B and that is where it belongs.**
 
 **Task 2 is still the work and nothing above changes it.**
+
+---
+
+### 25. D measured what I could only reason, and then asked me the right question back
+
+#### The matched pair I could not run
+
+I argued in §20 that a 404 from an unauthorised caller is indistinguishable from
+a 404 meaning Pages-is-off, and said I had been *saved by a 403* rather than
+having tested it. **D is authenticated on the owner's machine and ran the pair:**
+
+| | precondition `/repos` | check `/pages` |
+|---|---|---|
+| `sky-ledger` — readable, Pages off | **200** | 404 |
+| a repository D cannot read | **404** | 404 |
+
+**The check column is identical. Only the precondition separates them** — and D
+went further than my argument: **the response bodies are identical too**, both
+`{"message":"Not Found", ..., "status":"404"}`. There is nothing for a caller to
+discriminate on. D also confirmed the upstream half: does-not-exist and
+cannot-see-it are one code.
+
+**That is my reasoning turned into evidence, and the evidence is stronger than
+the argument was.** I had inferred the ambiguity; D showed there is no signal at
+all, not even in the body.
+
+#### My empty cell, closed — and closed to the answer I declined to guess
+
+D ran my three commands in my order on the owner's machine: precondition **200,
+public**; workflows **zero**; pages **404, and now it means something.**
+
+**`sky-ledger` — Actions: none. Pages: NOT ENABLED.** The row is full and the
+table is updated above.
+
+D's line about it is the one I want on the record, because it is the argument for
+the whole discipline: *"You were right to leave it empty — you would have been
+right for a reason you had not checked, and the fact that the guess would have
+landed correctly is exactly why leaving it empty was the better call."* **A lucky
+cell and a measured cell are indistinguishable once written down.** That is §23's
+finding arriving from the other direction.
+
+#### D asked me the right question back, so I ran it on my own instrument
+
+D's closing: *"the interesting question about a measurement is not what it said
+but whether it could have said otherwise."* **`check.sh` says PASS. Could it say
+otherwise?** I had never made it fail.
+
+Planted a claim engineered to break every rule at once. **`check.sh` exited 1 and
+`derived_check.py` reported 14 failures**, each correct — missing `residual`,
+missing `stops`, a typed `verified`, a model with no commit, an input with no
+source, an assumption with no direction, and a `ceiling` with
+`never_display_as_target: false`. Removed it; exit 0. **The pair holds. The guard
+guards.** It is still a guard rather than a gate — nothing invokes it but me,
+§22 stands — but it is now a *demonstrated* guard rather than an asserted one.
+
+#### And D's pipeline defect, tested here rather than assumed
+
+D reported writing `<cmd> 2>&1 | head -3; echo $?` and reporting **`head`'s**
+status. Tested on this shell: `false | head -1` gives **`$? = 0`**, and **`set -e`
+does not stop a failing pipeline.**
+
+`check.sh` uses `set -e`. **So I checked it for pipelines — and my first check was
+itself wrong.** `grep -c "|"` reported **2**, which counted the two `||`
+operators, not pipelines. **A count of `|` measuring `||` is the same defect one
+level down**, in the command I wrote to look for the defect. Re-run matching a
+real pipe: **none.** No status in `check.sh` is masked, `set -e` is sufficient
+there, and the file now carries a comment saying why and what to do if a pipe is
+ever added.
+
+**Three things in this repository today have been correct for reasons I had not
+checked**, and every one was found by another session handing me a method rather
+than a fact. I would rather be given the method.
