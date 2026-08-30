@@ -1,0 +1,5879 @@
+{
+ "_for": "Session B \u2014 the two Delta.requires fields B measured as unresolvable in its payload.",
+ "_source": "sky-ledger, 18 slot files scraped from eqlwiki item pages. B reports 0 of 560 items carrying a weapon skill; this carries it on 750 of 788.",
+ "_read_the_grades": "The two fields do NOT have the same standing. Read `fields` before using either.",
+ "fields": {
+  "hands": {
+   "status": "RESOLVED \u2014 hand this over",
+   "tier": "T2",
+   "rule": "1H = {1H Blunt, 1H Slashing, 1H Piercing, Piercing, Hand to Hand}; 2H = {2H Blunt, 2H Slashing, 2H Piercing}",
+   "coverage": "648 of 788 weapon items resolve. The 140 that do not are Archery (78), Throwing (24) and items with no skill (38) \u2014 none of which has a hands question.",
+   "note": "Derived from the skill string, which is a structured wiki field, not prose."
+  },
+  "must_list_secondary": {
+   "status": "SPLIT \u2014 the contract conflated two rules and only one of them is sound",
+   "item_side": {
+    "status": "RESOLVED",
+    "tier": "M",
+    "rule": "Unless a weapon lists SECONDARY in its slot list it cannot be held in the offhand.",
+    "source": "the owner, directly, 28 Aug 2026 \u2014 it invalidated a published ranking of mine that paired two PRIMARY-only swords",
+    "b_already_has_this": "B reports `slot` as resolvable, so B can apply this without me. 424 of 788 weapon items are SECONDARY-capable; 224 are PRIMARY-only.",
+    "b_query_rerun": "B ran 'items with a 2H skill that also list SECONDARY' and got 0, correctly calling it vacuous because no item carries a skill. Re-run here where skill IS present: still 0, and NOT vacuous \u2014 124 two-handers exist in this corpus to have been caught. The reassuring fact B wanted is real."
+   },
+   "class_side": {
+    "status": "DO NOT SHIP AS A GATE",
+    "tier": "T5 / unmeasured",
+    "asserted_value": [
+     "BRD",
+     "BST",
+     "MNK",
+     "RNG",
+     "ROG",
+     "WAR"
+    ],
+    "why_not": "This session's own audit (BRIEF-eqlsource.md) concluded: 'the rule is inherited from classic EverQuest and is unmeasured on Legends... Do not add a dual-wield class gate; the geometric rule is safe and the class rule is genuinely unsettled.' No log in 138 shows a two-handed primary, and eqlwiki's Dual Wield section presumes the rule without stating it.",
+    "and_against_me": "model4.py line 50 uses this set as a hard gate anyway, which is my own brief's advice ignored in my own model. Recorded, not quietly fixed.",
+    "what_to_do_instead": "A dismissible banner, not a hard block, saying the class restriction is inherited from classic EverQuest and unmeasured on Legends.",
+    "what_would_settle_it": "One log, or one client screenshot, of a non-dual-wield class attempting to equip a SECONDARY weapon."
+   }
+  },
+  "mote_curves": {
+   "status": "NEITHER OF US HOLDS IT",
+   "note": "B reports upgrade.ts models a display denominator, not a cost curve. I hold a +10%/tier scalar with an open T2 conflict (5% vs 10%) recorded in BUILD-LISTS.md. Future scope, not seam-blocking."
+  },
+  "aa_ladder": {
+   "status": "NEITHER OF US HOLDS IT",
+   "note": "docs/BACKLOG.md names AA Planner as eqlegendstools'. Ranks a player HOLDS are inferable from an observed crit rate; the ladder and its costs are not ours."
+  }
+ },
+ "items": {
+  "Arrow of Acknowledgment": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Bravery": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Contagion": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "Arrow of Defiance": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Fire": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "Arrow of Fortitude": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Gallantry": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Lightning": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "Arrow of Poison": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "Arrow of Recognition": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "Arrow of Stunning": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "Balanced Rat Tooth": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 36
+  },
+  "CLASS 1 Bone Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "CLASS 1 Bone Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 1 Ceramic Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "CLASS 1 Wood Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 1 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "CLASS 1 Wood Silver Tip Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "CLASS 2 Bone Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "CLASS 2 Bone Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 2 Ceramic Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "CLASS 2 Ceramic Silver Tip Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": null
+  },
+  "CLASS 2 Steel Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 0
+  },
+  "CLASS 2 Wood Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 2 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": null
+  },
+  "CLASS 3 Bone Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "CLASS 3 Bone Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "CLASS 3 Ceramic Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": null
+  },
+  "CLASS 3 Ceramic Silver Tip Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": null
+  },
+  "CLASS 3 Steel Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 0
+  },
+  "CLASS 3 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 4 Bone Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": null
+  },
+  "CLASS 4 Ceramic Hooked Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": null
+  },
+  "CLASS 4 Ceramic Silver Tip Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": null
+  },
+  "CLASS 4 Steel Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 0
+  },
+  "CLASS 4 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 5 Ceramic Silver Tip Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": null
+  },
+  "CLASS 5 Steel Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 0
+  },
+  "CLASS 5 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": null
+  },
+  "CLASS 6 Ceramic Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 0
+  },
+  "CLASS 6 Steel Silver Tip Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 0
+  },
+  "CLASS 6 Wood Point Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "Crude Arrow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": null
+  },
+  "Forged Javelin": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 33
+  },
+  "Forged Shuriken": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 25
+  },
+  "Forged Throwing Axe": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 29
+  },
+  "Forged Throwing Knife": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 35
+  },
+  "Gloomwater Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": null
+  },
+  "Halfling Knife": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 42
+  },
+  "Larktwitter Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": null
+  },
+  "Shardwing Arrow": {
+   "skill": null,
+   "hands": null,
+   "slots": [
+    "AMMO"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": null
+  },
+  "Shuriken": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 26
+  },
+  "Shuriken of the Tranquil": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 20
+  },
+  "Throwing Axe": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Throwing Boulder": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 36,
+   "dly": 35
+  },
+  "Throwing Knife": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "AMMO",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 36
+  },
+  "Fang of the Wolf": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "EAR",
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 26
+  },
+  "A Dark Reaver": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 42
+  },
+  "A shadowed knife": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": 20
+  },
+  "Abandoned Orc Shovel": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Aldryn, Blade of the Ocean": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 26
+  },
+  "Amygdalan Tendril": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 25
+  },
+  "An Executioners Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 25,
+   "dly": 50
+  },
+  "Animated Sword2": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Animated Sword3": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Arydryidriyorn": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 12,
+   "dly": 21
+  },
+  "Ashenbone Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 24,
+   "dly": 42
+  },
+  "Ashenwood Short Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 22
+  },
+  "Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 31
+  },
+  "Axe of the Slayers": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 48
+  },
+  "Barbarian Hunting Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 33
+  },
+  "Barbarian Spiritist`s Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 43
+  },
+  "Barbed Leather Whip": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 28
+  },
+  "Bastard Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 39
+  },
+  "Baton of the Sky": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 33,
+   "dly": 40
+  },
+  "Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 35
+  },
+  "Battle Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Battle Worn Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 41
+  },
+  "Bixie Stinger (Bixie God's Stinger)": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 22
+  },
+  "Bixie Sword Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 2,
+   "dly": 16
+  },
+  "Blackened Alloy Bastard Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 39
+  },
+  "Blackened Alloy Longsword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 29
+  },
+  "Blackened Iron Bastard Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 47
+  },
+  "Blade of Abrogation": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 39
+  },
+  "Bladed Thulian Claws": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 19
+  },
+  "BladeStorm, Katana of Steel Sleet": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 30,
+   "dly": 45
+  },
+  "Blazing Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Blessed Silver Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Blood Fire": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 24
+  },
+  "Bloodclaw Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 31
+  },
+  "Bloodclaw Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 32
+  },
+  "Bloodforge Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 50
+  },
+  "Bloodmoon": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 28
+  },
+  "Bloody Dirk": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 22
+  },
+  "Blue Crystal Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 35
+  },
+  "Blued Two-Handed Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 44
+  },
+  "Bone Bladed Claymore": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 45
+  },
+  "Bone Handled Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Bone Razor": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 22
+  },
+  "Bone Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 29
+  },
+  "Brass Knuckles": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 25
+  },
+  "Brilliant Sword of Faith": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 44
+  },
+  "Bronze Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 33
+  },
+  "Bronze Bastard Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 42
+  },
+  "Bronze Broad Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 32
+  },
+  "Bronze Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 22
+  },
+  "Bronze Flail": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 37
+  },
+  "Bronze Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 52
+  },
+  "Bronze Knuckles": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": 22
+  },
+  "Bronze Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 43
+  },
+  "Bronze Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 28
+  },
+  "Bronze Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 32
+  },
+  "Bronze Short Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Bronze Shortened Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 34
+  },
+  "Bronze Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 32
+  },
+  "Bronze Two Handed Battle Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 46
+  },
+  "Bronze Two Handed Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 45
+  },
+  "Bronze Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 33
+  },
+  "Broom of Trilon": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Bull Smasher": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 20
+  },
+  "Burning Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 20
+  },
+  "Burnt Sheer Blade": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 40
+  },
+  "Butcher Knife": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 24
+  },
+  "Carved Walking Stick": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Cast-Iron Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 32
+  },
+  "Cast-Iron Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 38
+  },
+  "Cat o' Nine Tails": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Charred Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 21
+  },
+  "Club": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Cold Iron Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 35
+  },
+  "Combine Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 19
+  },
+  "Combine Great Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Combine Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 38
+  },
+  "Combine Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 24
+  },
+  "Combine Short Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 23
+  },
+  "Combine Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 27
+  },
+  "Combine Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Coral Trident": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 38
+  },
+  "Crookstinger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 21
+  },
+  "Cros Treewind's Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 32
+  },
+  "Crysknife": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 21
+  },
+  "Crystalline Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 38
+  },
+  "Crystalline Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 30
+  },
+  "Cudgel of the Fool": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 45,
+   "dly": 52
+  },
+  "Dabner's Staff of Recall": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 22
+  },
+  "Dagas": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 21
+  },
+  "Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 20
+  },
+  "Dagger of Dropping": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 22
+  },
+  "Dagger of Marnek": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": 30
+  },
+  "Darksea Harpoon": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 28
+  },
+  "Darkwood Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Dawnchaser": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 25
+  },
+  "Deep Six Cutlass": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 36
+  },
+  "Diamond Rod": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Djinni Stave": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 19
+  },
+  "Djinni War Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 24
+  },
+  "Double-Bladed Bone Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 48
+  },
+  "Dull Wooden Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 33
+  },
+  "Dwarven Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 26
+  },
+  "Dwarven Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 35
+  },
+  "Dwarven Two-Handed Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 43
+  },
+  "Earthen Blade": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 26,
+   "dly": 50
+  },
+  "Earthshaker": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 37,
+   "dly": 70
+  },
+  "Ebon Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 20
+  },
+  "Ebon Scythe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 45
+  },
+  "Ebon War Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 31
+  },
+  "Ebonsting": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 20
+  },
+  "Ebony Bladed Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 24
+  },
+  "Efreeti Battle Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 28
+  },
+  "Efreeti Great Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 42
+  },
+  "Efreeti Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 28
+  },
+  "Efreeti Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Efreeti Magi Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 36
+  },
+  "Efreeti Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 29
+  },
+  "Efreeti War Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 28
+  },
+  "Efreeti War Club": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 26
+  },
+  "Efreeti War Maul": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 35
+  },
+  "Efreeti War Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 40
+  },
+  "Efreeti War Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Efreeti Wind Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 36
+  },
+  "Efreeti Zweihander": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 24,
+   "dly": 45
+  },
+  "Enameled Black Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 28
+  },
+  "Enchanted Fine Steel Bastard Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 42
+  },
+  "Enchanted Fine Steel Great Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 42
+  },
+  "Enchanted Fine Steel Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 28
+  },
+  "Enchanted Fine Steel Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 30
+  },
+  "Enchanted Fine Steel Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 19
+  },
+  "Espri": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 23
+  },
+  "Fanged Skull Stiletto": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 12,
+   "dly": 22
+  },
+  "Fangol": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 29,
+   "dly": 35
+  },
+  "Feir'Dal Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Fiery Avenger": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 33,
+   "dly": 44
+  },
+  "Fine Steel Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 19
+  },
+  "Fine Steel Great Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Fine Steel Jutte": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 21
+  },
+  "Fine Steel Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 24
+  },
+  "Fine Steel Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 27
+  },
+  "Fire Crystal Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Fishing Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 32
+  },
+  "Flaming Fist": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 18
+  },
+  "Fleshripper": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 42
+  },
+  "Fluxbladed Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 22
+  },
+  "Fool's Gold Stein": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 30
+  },
+  "Forged Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 34
+  },
+  "Forged Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 48
+  },
+  "Forged Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Forged Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 36
+  },
+  "Forged Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 38
+  },
+  "Forged Pick": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 35
+  },
+  "Forged Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 26
+  },
+  "Forged Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 24
+  },
+  "Forged Short Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 24
+  },
+  "Forged Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Forged Two Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 44
+  },
+  "Forged Velium Battlehammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 23
+  },
+  "Forged Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Fractured Femur": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 25
+  },
+  "Garduk": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 40
+  },
+  "Gavel of Justice": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 34
+  },
+  "Gem-Encrusted Scepter": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 28
+  },
+  "Geologist's Hammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 30
+  },
+  "Ghoulbane": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 34
+  },
+  "Giant Rat Tail": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 27
+  },
+  "Giant Snake Fang": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 27
+  },
+  "Gigantic Zweihander": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 39
+  },
+  "Gladius": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 29
+  },
+  "Gloomwater Harpoon": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 31
+  },
+  "Glowing Iron Pike": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Glowing Silver Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Glowing Wooden Crook": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 35
+  },
+  "Gnoll Hide Lariat": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 20
+  },
+  "Gnoll Slayer": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Gnoll Slayer (final)": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 15,
+   "dly": 40
+  },
+  "Goblin Shin Splinter": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Goblin Sticker": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Gold Plated Koshigatana": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 25
+  },
+  "Golden Rod": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Gorgon Head Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 41
+  },
+  "Great Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 38
+  },
+  "Grimy Lance": {
+   "skill": "2H Piercing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 41
+  },
+  "Harmonic Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 21
+  },
+  "Headsplitter": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 43
+  },
+  "Hierophant`s Crook": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 44
+  },
+  "Holy Partisan of Underfoot": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 46
+  },
+  "Howling Werewolf Claws": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 21
+  },
+  "Hulking Spiked Club": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 26
+  },
+  "Humerus Handled Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 29
+  },
+  "Ice Crystal Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Imbued Northman Long Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 24
+  },
+  "Incandescent Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Ivory Handled Falchion": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 40
+  },
+  "Jambiya": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 26
+  },
+  "Keg Mallet": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 30
+  },
+  "Kejekan Smithy Hammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 42
+  },
+  "Kerran Fishing Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Kerran War Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 34
+  },
+  "Khyldorn the Blood Drinker": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 36,
+   "dly": 43
+  },
+  "Kicsh Der Pavz": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 13,
+   "dly": 38
+  },
+  "Lamentation Blade": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 25,
+   "dly": 54
+  },
+  "Leather Whip": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 37
+  },
+  "Man-o-War": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 41
+  },
+  "McMannus Clan Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 20
+  },
+  "Micah": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 40
+  },
+  "Midnight Mallet": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 44
+  },
+  "Minotaur Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 37
+  },
+  "Mithril Quill": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 19
+  },
+  "Mithril Two-Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 40
+  },
+  "Monsoon, Sword of the Swiftwind": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 30,
+   "dly": 45
+  },
+  "Mortificator Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 44
+  },
+  "Mroons Toy": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 70
+  },
+  "Mudman Enforcer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 20
+  },
+  "Nargon's Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 48
+  },
+  "Noclin's Femur": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 35
+  },
+  "Northman Long Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 24
+  },
+  "Obsidian Flamberge": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 50
+  },
+  "Obsidian Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 27
+  },
+  "Obsidian Shard": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Obtenebrate Claymore": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 33
+  },
+  "Ogre War Maul": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 50
+  },
+  "One Hand Pick": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 38
+  },
+  "Orb of Tishan": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 25
+  },
+  "Orc Hatchet": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 36
+  },
+  "Orc Pawn Pick": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 40
+  },
+  "Orcish Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 39
+  },
+  "Orcish Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 43
+  },
+  "Ornate Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 20
+  },
+  "Painbringer": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 23
+  },
+  "Pestilence Scythe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 48
+  },
+  "Polished Granite Tomahawk": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 26
+  },
+  "Polished Steel Dirk": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 23
+  },
+  "Pugius": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 21
+  },
+  "Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Raw Short Sword 4": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 40
+  },
+  "Razing Sword of Skarlon": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 25,
+   "dly": 40
+  },
+  "Reaper of the Dead": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 40
+  },
+  "Revultant Whip": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 14
+  },
+  "Rheumguls": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 35,
+   "dly": 43
+  },
+  "Rib-bone Stiletto": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 18
+  },
+  "Riptide Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 33
+  },
+  "Rod of Drones": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Rod of Health": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Rod of Infinite Thought": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Rod of Insidious Glamour": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Rod of Malisement": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 30
+  },
+  "Rod of the Protecting Winds": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 35,
+   "dly": 45
+  },
+  "Rod of Warding Winds": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 45
+  },
+  "Ruined Heretic Longsword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 30
+  },
+  "Runed Bone Fork": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 29
+  },
+  "Runed Falchion": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 34
+  },
+  "Runed Totem Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 37
+  },
+  "Rusted Throneblade": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 27,
+   "dly": 52
+  },
+  "Rusty Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 36
+  },
+  "Rusty Bastard Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 42
+  },
+  "Rusty Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 42
+  },
+  "Rusty Broad Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 36
+  },
+  "Rusty Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 24
+  },
+  "Rusty Flail": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 37
+  },
+  "Rusty Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 56
+  },
+  "Rusty Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 35
+  },
+  "Rusty Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 38
+  },
+  "Rusty Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 44
+  },
+  "Rusty Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 31
+  },
+  "Rusty Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 35
+  },
+  "Rusty Shortened Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 32
+  },
+  "Rusty Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 38
+  },
+  "Rusty Two Handed Battle Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 49
+  },
+  "Rusty Two Handed Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 45
+  },
+  "Rusty Two Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 50
+  },
+  "Rusty Ulak": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 44
+  },
+  "Rusty Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 30
+  },
+  "Sacrificial Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 21
+  },
+  "Scepter of Flame": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 29
+  },
+  "Scepter of Rahotep": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 38
+  },
+  "Scimitar of the Mistwalker": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 25
+  },
+  "Scouts Blade": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 24
+  },
+  "Scrounge's Claw": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Seax": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 21
+  },
+  "Serpent's Tooth": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 13,
+   "dly": 27
+  },
+  "Serrated Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Serrated Bone Dirk": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 27
+  },
+  "Shadowed Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 35
+  },
+  "Shadowed Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 50
+  },
+  "Shadowed Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 29
+  },
+  "Shadowed Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 37
+  },
+  "Shadowed Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 40
+  },
+  "Shadowed Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Shadowed Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Shadowed Scythe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 45
+  },
+  "Shadowed Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 29
+  },
+  "Shadowed Two Handed Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 51
+  },
+  "Shadowed Two Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 45
+  },
+  "Shark Tooth": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 18
+  },
+  "Sharkbone Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 26
+  },
+  "Sharkjaw Cutlass": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 32
+  },
+  "Sharp Claws": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 24
+  },
+  "Shillelagh": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 25
+  },
+  "Shimmering Ruby Stiletto": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Shining Star of Light": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 28
+  },
+  "Shiny Brass Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 48
+  },
+  "Short Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 24
+  },
+  "Short Sword of the Ykesha": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 24
+  },
+  "Short Sword*": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 29
+  },
+  "Shovel of Ponz": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Shrieking Ahlspiess": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 27
+  },
+  "Silver Plated War Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 38
+  },
+  "Silver Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Silverish Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 22
+  },
+  "Silvery Two Handed Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 48
+  },
+  "Silvery War Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 22
+  },
+  "Singed Armature Rod": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 30
+  },
+  "Six Note Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 11,
+   "dly": 25
+  },
+  "Skeletal Rod": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 27
+  },
+  "Skinning Knife": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 25
+  },
+  "Slaver's Lash": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 40
+  },
+  "Slime Crystal Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Smoldering Brand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 22
+  },
+  "Soul Leech, Dark Sword of Blood": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 30,
+   "dly": 45
+  },
+  "Soulfiend Lance": {
+   "skill": "2H Piercing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 41
+  },
+  "SoulFire": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 45
+  },
+  "Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 29
+  },
+  "Spear of Harmony": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 21
+  },
+  "Sphinx Claw": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 20
+  },
+  "Spined Dragon Claws": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 21
+  },
+  "Spiroc Battle Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 30
+  },
+  "Spiroc Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 28
+  },
+  "Spiroc Wingblade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 15,
+   "dly": 38
+  },
+  "Splintering Club": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 28
+  },
+  "Sporali Defender's Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 37
+  },
+  "Staff of Elemental Mastery: Air": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 30
+  },
+  "Staff of Elemental Mastery: Earth": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 30
+  },
+  "Staff of Elemental Mastery: Fire": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 30
+  },
+  "Staff of Elemental Mastery: Water": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 30
+  },
+  "Staff of Fire": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Staff of Forbidden Rites": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 25,
+   "dly": 50
+  },
+  "Staff of Temperate Flux": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Staff of the Abattoir Initiate": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 32
+  },
+  "Staff of the Earthcrafter": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 48
+  },
+  "Staff of The Magister": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 48
+  },
+  "Staff of the Moribund Spirits": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 22
+  },
+  "Staff of the Observers": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 35
+  },
+  "Staff of Undead Legions": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 47
+  },
+  "Staff of Writhing": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 33
+  },
+  "Stein of Ulissa": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Stiletto of the Bloodclaw": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 23
+  },
+  "Stormguard Battle Hammer of Brell": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "RANGE",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Summoned: Modulating Rod": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 8,
+   "dly": 26
+  },
+  "Summoned: Snake Fang": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 26
+  },
+  "Summoned: Spear of Warding": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 27
+  },
+  "Summoned: Staff of Runes": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 36
+  },
+  "Summoned: Staff of Symbols": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 34
+  },
+  "Summoned: Staff of Warding": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 38
+  },
+  "Summoned: Sword of Runes": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 27
+  },
+  "Sword of the Lost": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 40
+  },
+  "Tailor-made Whip": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 7,
+   "dly": 33
+  },
+  "Tainted Darksteel Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Tarnished Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 34
+  },
+  "Tarnished Battle Axe": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 40
+  },
+  "Tarnished Broad Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 34
+  },
+  "Tarnished Dagger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 22
+  },
+  "Tarnished Flail": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 35
+  },
+  "Tarnished Halberd": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 55
+  },
+  "Tarnished Mace": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 36
+  },
+  "Tarnished Morning Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 42
+  },
+  "Tarnished Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 29
+  },
+  "Tarnished Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 33
+  },
+  "Tarnished Scythe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 49
+  },
+  "Tarnished Short Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 26
+  },
+  "Tarnished Shortened Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 30
+  },
+  "Tarnished Spear": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 36
+  },
+  "Tarnished Two Handed Battle Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 47
+  },
+  "Tarnished Two Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 48
+  },
+  "Tarnished Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 28
+  },
+  "Tentacle Whip": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 25
+  },
+  "Tesch Val Sinisch": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 33
+  },
+  "The Baron's Blade": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 30
+  },
+  "The Tenderizer (Weapon)": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 19
+  },
+  "Thelvorn, Blade of Light": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 26
+  },
+  "Theurgist": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 30
+  },
+  "Theurgist's Star": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 25
+  },
+  "Thornstinger": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 19
+  },
+  "Titan Blessed Bokken": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 32
+  },
+  "Titan Blessed Tachi": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 24
+  },
+  "Titan Blessed Tanto": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 4,
+   "dly": 19
+  },
+  "Torch of Alna": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 25
+  },
+  "TornEar Thumper": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 30
+  },
+  "Torrid Corruptor": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 33,
+   "dly": 44
+  },
+  "Treant Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 35
+  },
+  "Trident of the Seven Seas": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 30
+  },
+  "Truesight Hammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 35
+  },
+  "Truvinan": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 32,
+   "dly": 40
+  },
+  "Truwian Baton": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 1,
+   "dly": 40
+  },
+  "Two Handed Hammer": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 51
+  },
+  "Two Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 45
+  },
+  "Verishe Mal Greataxe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 26,
+   "dly": 52
+  },
+  "Vexthorne": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 9,
+   "dly": 19
+  },
+  "Wakizashi of the Frozen Skies": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 22
+  },
+  "Wand of Ice": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Wand of Mana Tapping": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Wand of Shadow": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 30
+  },
+  "Warclub": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 32
+  },
+  "Warhammer": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 32
+  },
+  "Warhammer of Divine Grace": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 39
+  },
+  "Warhammer of the Wind": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 24
+  },
+  "Water Crystal Staff": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 28
+  },
+  "Wee Harvester": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 45
+  },
+  "Weeping Wand": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 5,
+   "dly": 25
+  },
+  "Well-Balanced Long Sword": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Well-Balanced Rapier": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 6,
+   "dly": 25
+  },
+  "Well-Balanced Scimitar": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 5,
+   "dly": 21
+  },
+  "Well-Balanced Two-Handed Axe": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 48
+  },
+  "Well-Balanced Two-Handed Sword": {
+   "skill": "2H Slashing",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 42
+  },
+  "Whitened Treant Fists": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 14,
+   "dly": 28
+  },
+  "Windhowl": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 22
+  },
+  "Winex's Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 7,
+   "dly": 40
+  },
+  "Withered Root Staff": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 40
+  },
+  "Withered Totem of Widdershins": {
+   "skill": "2H Blunt",
+   "hands": 2,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 42
+  },
+  "Wu's Fist of Mastery": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 16,
+   "dly": 22
+  },
+  "Wu's Tranquil Fist": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 16,
+   "dly": 27
+  },
+  "Yannikil": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY",
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 12,
+   "dly": 22
+  },
+  "Zephyrwind": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "PRIMARY"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 26
+  },
+  "A Vile Substance": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 3,
+   "dly": 25
+  },
+  "Bow of the Underfoot": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 33,
+   "dly": 60
+  },
+  "Carved Ashwood Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 54
+  },
+  "Carved Ashwood Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 50
+  },
+  "Carved Ashwood Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 46
+  },
+  "Carved Darkwood 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 59
+  },
+  "Carved Darkwood 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 55
+  },
+  "Carved Darkwood 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 51
+  },
+  "Carved Darkwood Compound Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 54
+  },
+  "Carved Darkwood Compound Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 50
+  },
+  "Carved Darkwood Compound Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 46
+  },
+  "Carved Darkwood Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 24,
+   "dly": 64
+  },
+  "Carved Darkwood Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 60
+  },
+  "Carved Darkwood Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 56
+  },
+  "Carved Elm Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 47
+  },
+  "Carved Elm Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 43
+  },
+  "Carved Elm Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 39
+  },
+  "Carved Oak 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 56
+  },
+  "Carved Oak 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 52
+  },
+  "Carved Oak 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 48
+  },
+  "Carved Oak Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 61
+  },
+  "Carved Oak Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 57
+  },
+  "Carved Oak Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 53
+  },
+  "Deteriorated Ancient Faydark Longbow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 55
+  },
+  "Efreeti War Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 40,
+   "dly": 100
+  },
+  "LarkTwitter Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 42
+  },
+  "Leatherfoot Short Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 4,
+   "dly": 41
+  },
+  "Longbow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 51
+  },
+  "Northman Throwing Axe": {
+   "skill": "Throwing",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 30
+  },
+  "Rough Ashwood Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 58
+  },
+  "Rough Ashwood Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 15,
+   "dly": 54
+  },
+  "Rough Ashwood Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 14,
+   "dly": 50
+  },
+  "Rough Darkwood 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 24,
+   "dly": 63
+  },
+  "Rough Darkwood 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 59
+  },
+  "Rough Darkwood 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 55
+  },
+  "Rough Darkwood Compound Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 58
+  },
+  "Rough Darkwood Compound Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 54
+  },
+  "Rough Darkwood Compound Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 50
+  },
+  "Rough Darkwood Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 25,
+   "dly": 68
+  },
+  "Rough Darkwood Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 24,
+   "dly": 64
+  },
+  "Rough Darkwood Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 60
+  },
+  "Rough Elm Recurve Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 51
+  },
+  "Rough Elm Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 13,
+   "dly": 51
+  },
+  "Rough Elm Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 12,
+   "dly": 47
+  },
+  "Rough Elm Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 11,
+   "dly": 43
+  },
+  "Rough Hickory Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 10,
+   "dly": 50
+  },
+  "Rough Hickory Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 9,
+   "dly": 46
+  },
+  "Rough Hickory Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 8,
+   "dly": 42
+  },
+  "Rough Oak 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 60
+  },
+  "Rough Oak 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 56
+  },
+  "Rough Oak 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 52
+  },
+  "Rough Oak Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 65
+  },
+  "Rough Oak Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 61
+  },
+  "Rough Oak Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 57
+  },
+  "Runed Oak Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 43
+  },
+  "Sabertooth Short Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 30
+  },
+  "Shaped Darkwood 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 54
+  },
+  "Shaped Darkwood 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 50
+  },
+  "Shaped Darkwood 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 46
+  },
+  "Shaped Darkwood Compound Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 49
+  },
+  "Shaped Darkwood Compound Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 20,
+   "dly": 45
+  },
+  "Shaped Darkwood Compound Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 41
+  },
+  "Shaped Darkwood Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 23,
+   "dly": 59
+  },
+  "Shaped Darkwood Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 22,
+   "dly": 55
+  },
+  "Shaped Darkwood Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 21,
+   "dly": 51
+  },
+  "Shaped Oak 1-Cam Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 51
+  },
+  "Shaped Oak 1-Cam Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 47
+  },
+  "Shaped Oak 1-Cam Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 16,
+   "dly": 43
+  },
+  "Shaped Oak Recurve Bow (Hemp)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 19,
+   "dly": 56
+  },
+  "Shaped Oak Recurve Bow (Linen)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 18,
+   "dly": 52
+  },
+  "Shaped Oak Recurve Bow (Silk)": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 17,
+   "dly": 48
+  },
+  "Short Bow": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 6,
+   "dly": 40
+  },
+  "Windstriker": {
+   "skill": "Archery",
+   "hands": null,
+   "slots": [
+    "RANGE"
+   ],
+   "secondary_capable": false,
+   "dmg": 45,
+   "dly": 60
+  },
+  "Efreeti Dirk": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 12,
+   "dly": 35
+  },
+  "Efreeti Standard": {
+   "skill": "1H Blunt",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 3,
+   "dly": 10
+  },
+  "Parrying Pick": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 2,
+   "dly": 38
+  },
+  "Shield of the Slain Unicorn": {
+   "skill": "Piercing",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 40
+  },
+  "Spirit Render": {
+   "skill": "Hand to Hand",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 23
+  },
+  "Vacra Av Svim": {
+   "skill": "1H Slashing",
+   "hands": 1,
+   "slots": [
+    "SECONDARY"
+   ],
+   "secondary_capable": true,
+   "dmg": 10,
+   "dly": 31
+  }
+ }
+}

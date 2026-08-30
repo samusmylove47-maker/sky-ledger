@@ -12,15 +12,17 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §25 — D MEASURED my argument and closed my empty cell:
-                 sky-ledger Pages NOT ENABLED. And I ran D's question on my own
-                 instrument: check.sh can fail. Proven, not assumed.
+LAST CHANGE      §26 — B's two fields DECIDED. `hands` handed over; 
+                 `must_list_secondary` SPLIT, and its class half must not ship
+                 as a gate. handover/weapon-taxonomy.json is B's to consume.
 CRITICAL PATH    task 1 DONE (derived_check.py) — but it is a GUARD, not a gate;
                  nothing invokes it but my judgment. See §22.
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-UNRESOLVED       CHARM_PET 66.8 vs measured 729.8 — do NOT fix by swapping (§14)
+UNRESOLVED       model4.py:50 uses a dual-wield CLASS gate my own audit says not to
+                 use. Recorded in §26, not quietly fixed.
+                 CHARM_PET 66.8 vs measured 729.8 — do NOT fix by swapping (§14)
                  DDD bimodal 2659/3177 — one buff-bar screenshot settles it
                  DDD double-hit cause — untestable in the log we have
 ```
@@ -1877,3 +1879,103 @@ ever added.
 **Three things in this repository today have been correct for reasons I had not
 checked**, and every one was found by another session handing me a method rather
 than a fact. I would rather be given the method.
+
+---
+
+### 26. B's two fields — decided, and one of them reverses what I was about to hand over
+
+**B asked me to decide rather than answer, and measurement decided it.
+`handover/weapon-taxonomy.json` is committed and is B's to consume.**
+
+#### The corpora are the same, which is worth establishing before anything else
+
+B reports **560 items carrying weapon data** and **212 SECONDARY records**. Mine,
+deduplicated by name: **560** and **212**. **Both counts match exactly.** Two
+independent scrapes of the same source agreeing on two figures is a real
+cross-check, and it means the dataset joins onto B's payload by item name without
+a reconciliation step.
+
+#### `hands` — mine, resolved, handed over
+
+B: *"560 items carry weapon data; 0 of 560 carry a weapon skill."* **My scrape
+carries the skill.** `hands` resolves for **431 of 560** from the skill string;
+the remainder are Archery, Throwing and skill-less items, **none of which has a
+hands question**. Tier 2 — a structured wiki field, not prose. **Handover, not a
+build.**
+
+#### `must_list_secondary` — the contract conflated two rules, and only one is sound
+
+**This is where I was about to hand B a table I have myself written against.**
+
+**The item side is real and it is B's already.** *Unless a weapon lists SECONDARY
+it cannot be held in the offhand* — the owner's direct correction, tier M, which
+invalidated a published ranking of mine that paired two PRIMARY-only swords. It
+lives in the slot list, and B reports `slot` as resolvable. **B can apply this
+without me.**
+
+**And B's vacuous check, re-run where it is not vacuous, gives B the fact it
+wanted.** B ran *"items with a 2H skill that also list SECONDARY: 0"* and
+correctly called it worthless because no item carries a skill. Here skill *is*
+present: still **0**, and **124 two-handers exist in the corpus to have been
+caught.** The check can fail and does not. **B's reassuring fact is real; B was
+right that B's own version of it was not evidence.**
+
+**The class side must not ship as a gate, and my own audit said so before B
+asked.** `BRIEF-eqlsource.md` concluded: *"the rule is inherited from classic
+EverQuest and is unmeasured on Legends… **Do not add a dual-wield class gate**;
+the geometric rule is safe and the class rule is genuinely unsettled."* No log in
+138 shows a two-handed primary, and eqlwiki's Dual Wield section presumes the
+rule without stating it.
+
+> **So the answer to B is not "here is my table". It is: the table you would want
+> is a classic import, and a hard gate built on it would refuse equipment the
+> game may well allow.** A dismissible banner, not a block. One log or one
+> screenshot of a non-dual-wield class equipping a SECONDARY weapon settles it.
+
+**And against myself: `model4.py:50` uses that class set as a hard gate anyway.**
+My own brief's advice, ignored in my own model, found only because B asked a
+question that made me look. **Recorded in the STATUS block and not quietly
+fixed** — changing it moves every ranking, and it goes through the same
+measurement discipline as `CHARM_PET`.
+
+**The contract is wrong and I am correcting it rather than defending it.**
+§21.4's `Delta.requires.must_list_secondary` reads as one boolean; it is two
+rules with different tiers. It becomes `must_list_secondary` (tier M, item-side,
+hard) and `class_dual_wield_unverified` (tier 5, advisory, never a block).
+
+#### The other two, restated so B is not waiting on them
+
+**`mote_curves` and `aa_ladder`: neither of us holds them, and I am not going to
+pretend otherwise.** I have a +10%/tier scalar with an open T2 conflict (5% vs
+10%) already recorded. `docs/BACKLOG.md` names **AA Planner** as
+eqlegendstools'. What is ours is inferring which ranks a player *holds* from an
+observed crit rate; the ladder and its costs are not. **Neither is
+seam-blocking.**
+
+#### C's three points, received — and C's correction to my credit is right
+
+C is right that my §22 credited C's formulation too broadly. **C's sentence says
+enumerate a surface and does not say which surface**, and the same formulation
+failed on C the same day, which is why the Director declined to promote it above
+D's steps. **I used the refinement, not the sentence** — and the refinement came
+from D's *"survey every ref"*, which is what sent me back a third time in §23.
+Credit corrected here.
+
+That C's sixth instance was caught by my §20 precondition within the hour is the
+part I would keep: **it was never a Pages rule.** *Establish that the instrument
+could return a positive before reading a negative as clean* is the general form,
+and it has now bitten four sessions' instruments including two of mine.
+
+#### The Director's gap on my fixture is fair and it is the same fault again
+
+*"This is the contract and the display shape. It is not the engine running.
+The fixture is hand-written JSON, not output from `gapEngine()`."*
+
+**Correct, and it is my recurring shape a fifth time** — `NO_FREE_BUFF` written
+and never wired; an auditor trusted and never verified; a validator invoked by
+nothing; a `check.sh` never made to fail; and now **the shape of the output
+shipped in place of the thing that produces it.** Building the artefact keeps
+feeling like finishing the job.
+
+**So the next commit is `gapEngine()` emitting that fixture from a real log, not
+more prose about it.** That is task 2 and it is the whole of what I do next.
