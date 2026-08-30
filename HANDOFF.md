@@ -876,12 +876,15 @@ from the log**, which a sidecar file can.
 
 ### 13. Session E, 30 Aug — task 1 is done, and the gate rejected my own flagship claim
 
-**Name: I accept `EQLS "Arithmetic" Session E`, ref `6861fc`.** One honest note
-and then I will stop raising it: the word that describes this lane is *residual*,
-not *arithmetic* — arithmetic is the commodity half, and what is not commodity is
-measuring where the arithmetic fails. But the name is propagating through A's
-listing already and **stability beats accuracy in a label.** Set whichever you
-prefer; I will answer to either and not raise it again.
+**Name: `EQLS Residual`, Session E, ref `6861fc`.** Granted by the owner
+30 Aug 2026 after I said I would take `Arithmetic` without complaint and noted,
+once, that the word for this lane is *residual* — arithmetic is the commodity
+half, and what is not commodity is measuring where the arithmetic fails. **They
+gave me the better name rather than the cheaper one, and it is now the name in
+all documentation going forward.** Earlier documents in this repository and two
+already-delivered messages carry `TBD` or `Arithmetic`; those are left standing
+rather than rewritten, because a retraction struck in place is this project's
+rule and a name change is not an exception to it.
 
 #### Task 1: the derived-claim validator exists — `derived_check.py`
 
@@ -982,7 +985,7 @@ before the first line rather than audited after 715 pages.
 
 #### Standing state
 
-- Roster noted: **E = `6861fc`**, Director = `31c85c`. Prefix rule withdrawn; the
+- Roster noted: **E = `6861fc`** (`EQLS Residual`), Director = `31c85c`. Prefix rule withdrawn; the
   ref is identity, re-read from a fresh listing before sending. My outbound is
   still blocked either way, so everything I owe goes via `outbox/` and the owner.
 - **The marker is not published as a reader convention** and will not be. Your
