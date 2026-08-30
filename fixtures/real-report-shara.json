@@ -1,0 +1,63 @@
+{
+ "context": {
+  "source": "local log, not transmitted"
+ },
+ "measured": {
+  "dps": 1372.9,
+  "dps_window": "engaged",
+  "dps_window_note": "Engaged = damage over runs of hits with no gap above 15s, lasting 20s or more. Four shipped meters use four denominators; a DPS figure without its window is not a measurement.",
+  "engagements": 25,
+  "hits_counted": 996,
+  "killing_blows_excluded_from_rates": 194,
+  "crit_rate": 0.0736,
+  "resists": {
+   "Denon's Desperate Dirge IX": 150,
+   "Togor's Insects V": 36,
+   "Blade Dance II": 6,
+   "Puma Maw III": 3,
+   "Tagar's Insects": 1
+  },
+  "stance_inferred": null,
+  "stance_evidence": "64.2% even damage across 120 non-crit melee hits (killing blows excluded). Balanced prints ~50%, Offensive ~93%. Distance: 3.1 SE from Balanced, 6.3 SE from Offensive. Neither signature is within 2 SE, so the stance is NOT identified."
+ },
+ "deltas": [],
+ "refusals": [
+  {
+   "lane": "item.selection",
+   "reason": "computable_from_catalogue",
+   "detail": "Which obtainable item meets a stat floor is a catalogue question.",
+   "what_would_settle_it": "eqlegendstools.com holds this and does it well. Link, do not clone."
+  },
+  {
+   "lane": "worn.stats",
+   "reason": "no_log_evidence",
+   "detail": "A log does not show worn stats. AC, resists and worn ATK were not seen.",
+   "what_would_settle_it": "The 50 Upgrades gear input, or a character-panel reading."
+  },
+  {
+   "lane": "engaged_time.comparison",
+   "reason": "privacy",
+   "detail": "Comparing how long two named characters were engaged is refused in all cases.",
+   "what_would_settle_it": "Nothing. Hard refusal, ruled 30 August 2026."
+  },
+  {
+   "lane": "stance",
+   "reason": "no_log_evidence",
+   "detail": "64.2% even damage across 120 non-crit melee hits (killing blows excluded). Balanced prints ~50%, Offensive ~93%. Distance: 3.1 SE from Balanced, 6.3 SE from Offensive. Neither signature is within 2 SE, so the stance is NOT identified.",
+   "what_would_settle_it": "A longer sample, or a client screenshot of the stance."
+  }
+ ],
+ "coverage": {
+  "inputs_observed": [
+   "crit rate",
+   "engaged time",
+   "resist counts"
+  ],
+  "inputs_assumed": [
+   "haste at cap",
+   "target mitigation",
+   "buff uptime"
+  ],
+  "note": "Every delta is a difference against this character's own observed baseline. No absolute modelled figure appears in this document, by design \u2014 HANDOFF.md \u00a721.3."
+ }
+}

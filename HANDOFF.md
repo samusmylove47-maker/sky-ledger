@@ -12,11 +12,11 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §26 — B's two fields DECIDED. `hands` handed over; 
-                 `must_list_secondary` SPLIT, and its class half must not ship
-                 as a gate. handover/weapon-taxonomy.json is B's to consume.
-CRITICAL PATH    task 1 DONE (derived_check.py) — but it is a GUARD, not a gate;
-                 nothing invokes it but my judgment. See §22.
+LAST CHANGE      §27 — gapEngine() RUNS. The Director's gap is closed: a real
+                 Report from a real log, not hand-written JSON. And HandMod's
+                 fitted justification is retracted; 0.80 is the PUBLISHED value.
+CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
+                 task 2 STARTED — gapengine.py runs on a real log (§27)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
@@ -1979,3 +1979,74 @@ feeling like finishing the job.
 
 **So the next commit is `gapEngine()` emitting that fixture from a real log, not
 more prose about it.** That is task 2 and it is the whole of what I do next.
+
+---
+
+### 27. The engine runs, and running it caught two things prose could not
+
+#### `gapengine.py` — the Director's gap is closed
+
+*"This is the contract and the display shape. It is not the engine running."*
+Correct then. **`gap_engine(lines, context) -> Report` now produces the §21.3
+structure from a real log.** Pure: no DOM, no fetch, no network, no filesystem,
+no clock. Egress none, self-containment total, answered separately.
+
+**It agrees with an independent implementation.** On the same log it reports
+`dps: 1372.9`, which is what `bard.py` computed by a different route days ago.
+Two implementations built at different times from the same contract landing on
+the same figure is a cross-check I did not design and would not have got from
+hand-written JSON.
+
+#### It labelled a stance the data does not support, and I only saw it by running
+
+First run: `stance_inferred: "Balanced"`, on a `even <= 0.65 → Balanced`
+threshold, from **64.2% even damage**.
+
+**64.2% over n=120 is 3.1 standard errors from Balanced's 50% signature — and 6.3
+from Offensive's 93%.** It is not Balanced. It is not Offensive. **My classifier
+had no way to say so, because every input produced a label.** That is the
+fail-open shape again, in code I wrote this hour while writing about it.
+
+Fixed: the classifier now measures distance to each signature in standard errors
+and **returns `None` when neither is within 2 SE**, with the distances in the
+evidence string. On this log it now says *"Neither signature is within 2 SE, so
+the stance is NOT identified"* — and the stance delta becomes a **refusal**
+rather than a recommendation.
+
+**That is the engine declining to sell something, on its first real input.** A
+delta of `+5.1 DPS` was the alternative — small, because this character's damage
+is 99.6% song and doubling her melee is worth almost nothing. **The engine would
+have been nearly harmless and still wrong, which is the version that survives
+review.**
+
+#### And HandMod's justification is retracted, though the correction it made stands
+
+Session D separated *a right measurement from a wrong explanation attached to
+it*. Applied here, it found both halves of my own sentence wrong:
+
+- **The criterion.** I wrote *"0.80 is the largest modifier that never
+  over-predicts."* **Applied literally it selects 0.83.** 0.82 and 0.83 each fit
+  6 of 9 against 0.80's 5, and neither over-predicts.
+- **The explanation.** I said the four +1 misses were *"the direction an
+  unrecorded DMG above character level produces through `max(Level, Damage)`."*
+  **`handmod.py` line 24 states that DMG was not recorded for any of those rows.**
+  The story is untestable with the data I have, and it was doing real work —
+  making the misses look *explained* rather than like **evidence for a higher
+  modifier.**
+
+**What survives, undamaged: 0.69 is refuted.** 0 of 9 exact, every miss low by 1
+to 3. That was and remains the finding.
+
+**What is now open: where in [0.80, 0.83].** 0.80 is retained as **the wiki's
+published value** and the smallest the `Efreeti Standard` bound admits — **not as
+the fitted one, which is what I claimed.** The spread is 3.75% on the 1H
+damage-bonus term. One client `Dmg Bon` reading on a known one-hander at a known
+level and DMG settles it.
+
+#### D's scoring of the day, which I think is right
+
+*"The count that matters is not who was right; it is that four instruments got
+tested today that nobody had tested before, and none of the four was tested by
+the session that built it."* **Five now** — the stance classifier makes it five,
+and that one I did test myself, by running it. **Running it was the test.** Which
+is the whole argument for shipping the engine rather than its shape.
