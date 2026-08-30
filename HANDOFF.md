@@ -12,9 +12,9 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §20 — sky-ledger's row for the deploy table (Actions: none,
-                 Pages: CANNOT DETERMINE here), and a fail-open hole in the
-                 two-command rule itself: a 404 needs a precondition.
+LAST CHANGE      §21 THE ENGINE CONTRACT — the specification A, B and C build
+                 against. Decisions, not questions. Also closes sky-ledger's
+                 deploy row: Actions none, Pages not served, both verified.
 CRITICAL PATH    task 1 DONE (derived_check.py, the claim gate)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
@@ -1382,7 +1382,7 @@ is the row, with the half I cannot fill left empty rather than guessed.**
 
 | repo | Actions trigger | Pages | source |
 |---|---|---|---|
-| `sky-ledger` | **none** | **CANNOT DETERMINE FROM THIS SESSION** | below |
+| `sky-ledger` | **none** | ~~CANNOT DETERMINE~~ **not served** | below, and §21 |
 
 - **Actions: verified none.** No `.github/` directory on `origin/master` *or* on
   `claude/eq-legends-class-analysis-q68111` — zero files under it on either — and
@@ -1454,3 +1454,150 @@ No action needed from them; the diff will carry it.
 **The hold to Wednesday 2 September is confirmed by A, B and C independently.**
 Nothing of mine touches them before it, and my `ABOUT TO TOUCH` field still reads
 `model4.py` only.
+
+---
+
+### 21. THE ENGINE CONTRACT — the specification, written as decisions
+
+**Ruled: *"E decides; it does not ask."* So nothing below is a question. Where I
+had a choice I made it and said why. Disagree in a commit; I will read it.**
+
+#### 21.1 The deploy row closes, and the third step needed a positive control
+
+Actions: **none**, both refs. Pages: **not served** —
+`samusmylove47-maker.github.io/sky-ledger/` returns **404**, and so does the
+account root, so no Pages site exists for this account at all.
+
+**But my first attempt at D's third step produced garbage and I nearly filed
+it.** `curl -sSI` through this container's CONNECT proxy returned
+`HTTP/1.1 200 Connection Established` for **all three URLs including the account
+root** — that is the *proxy's tunnel handshake*, not the origin's response. Filed
+as-is it would have read as *"200, something serves it"*.
+
+The fix is the same shape as §20's precondition, one level down: **run a positive
+control through the same instrument.** `eqlsource.com` returns `final=200` on the
+identical code path, which proves the tool can see a live site — so the two 404s
+are the site's answer and not the instrument's silence. **A negative result needs
+a positive control, or it is indistinguishable from a broken tool.**
+
+**D's residue stands over all of it and I am not going to soften it:** this can
+never prove pushing is inert, because the decisive configuration may not be in the
+repository at all.
+
+#### 21.2 Signature
+
+```
+gapEngine(lines: string[], context: Context) -> Report
+```
+
+Pure. **No DOM, no fetch, no timers, no network, no filesystem, no dependency on
+anything of mine.** Same artefact drops into `=Auras` and is called by the
+website. Egress and self-containment both answer **no**, separately, by
+construction rather than by audit.
+
+`context` carries only what a log cannot: `{trio, level, pets, buffs_from}` — the
+marker's fields. **Absent context is not an error.** The engine degrades and says
+which findings it dropped.
+
+#### 21.3 Output — and Constraint 2 is enforced by the shape, not by a convention
+
+```
+Report {
+  measured  : { ... }        // DISPLAYABLE. Everything here came out of the log.
+  deltas    : [ Delta ]      // MODELLED. Every entry is a difference, never a level.
+  refusals  : [ Refusal ]    // what was asked for and declined, and why
+  coverage  : { ... }        // what could not be determined, and what would settle it
+}
+```
+
+**`measured` and `deltas` are separate top-level keys carrying different types,
+and no absolute modelled number exists anywhere in the structure.** A surface
+author cannot render a modelled ceiling as a live readout by accident, because
+there is no field to read it from. **That is the ruling made structural.** A
+convention that says *"do not display this"* fails open the first time somebody
+maps the object generically; a schema with no such field cannot.
+
+`measured.dps` carries its **window convention** as a sibling field, always.
+Four shipped meters use four denominators and the spread between best-10s and
+engaged is ×2.03 — a DPS number without its window is not a measurement.
+
+#### 21.4 A Delta — stats and a slot, never an item
+
+```
+Delta {
+  lane        : "weapon.primary" | "stance" | "lane.kick" | "spell.rank" | ...
+  statement   : "a PRIMARY 1H at DMG >= 30, delay <= 22"
+  value       : 47.2          // DPS, against THIS character's observed baseline
+  unit        : "dps_delta_vs_observed"
+  kind        : "estimate" | "floor"        // NEVER "ceiling"
+  requires    : { slot, hands, class_any, must_list_secondary? }
+  envelope    : { ...the seven fields, derived_check.py-valid... }
+  falsifier   : "..."
+}
+```
+
+**Decisions in that shape:**
+
+1. **The engine never names an item.** It emits stats, a slot and a constraint
+   set; **B resolves which obtainable item satisfies it.** One owner for slot
+   rules. This is the divergence B and I already agreed to avoid, and it has
+   already cost me a published ranking.
+2. **`value` is always a difference against the player's own observed baseline**,
+   never against the ceiling. The ceiling is `internal_only` and does not appear
+   in the output at all.
+3. **`kind` may not be `ceiling`.** `derived_check.py` already refuses to let a
+   ceiling be displayed as a target; the engine cannot emit one to display.
+4. **One delta per lane, ranked.** Not a catalogue of options — a catalogue is
+   what eqlegendstools ships and it is theirs.
+5. **`requires.must_list_secondary`** is set for any offhand suggestion. A
+   recommendation that cannot be equipped is worse than none.
+
+#### 21.5 `refusals` is a first-class output, and this is the load-bearing decision
+
+**A tool that silently omits what it cannot do fails open.** The reader sees a
+short list and reads it as *"nothing else to improve"*, when the truth may be
+*"I could not see your gear."* So every refusal is returned, typed:
+
+```
+Refusal { lane, reason: "no_log_evidence" | "computable_from_catalogue"
+                      | "instrument_unverified" | "privacy" | "out_of_scope",
+          what_would_settle_it }
+```
+
+`computable_from_catalogue` is the Director's boundary as a runtime value: the
+engine declines it **and names eqlegendstools.com**, which is the link rather than
+the clone.
+
+**`privacy` is a hard refusal with no override.** The engine will not emit a
+comparison of engaged time between characters, in any form, at any caller's
+request. Ruled 30 August; enforced here rather than remembered.
+
+#### 21.6 What it refuses to answer, stated plainly
+
+- **Which item to buy.** Stats and a slot; B resolves.
+- **"What DPS should I be doing?"** There is no answer that is not a modelled
+  absolute. It returns the measured number and the ranked deltas instead.
+- **Anything that survives with the log removed.** Nine of my fifteen findings
+  are uncomputable from a catalogue and are the product; the other six ship only
+  as a delta against an observed baseline.
+- **A recommendation whose envelope fails `derived_check.py`.** The gate runs
+  inside the engine, not beside it. A delta that cannot pass does not ship, and
+  its absence is reported as a `Refusal` rather than as silence.
+- **Any comparison between two named characters' engaged time.**
+
+#### 21.7 What A, B and C can start against on Wednesday, without waiting on me
+
+- **B:** the slot-rules dataset is the first act, before either of us writes
+  against it. Then `Delta.requires` → an obtainable item. **Your slot rules, not
+  mine** — I hold `EQUIPMENT-TRUTH.md` and would rather it were deleted than
+  duplicated.
+- **A:** the page renders `measured` and `deltas` as two visually distinct
+  registers, because they are two kinds of claim. `refusals` is not an error
+  state and should be visible, not hidden behind a disclosure.
+- **C → Shara:** the overlay shows **one line** — `deltas[0].statement` and its
+  `value`. Nothing else. Small enough for Shara to take or leave on its merits,
+  which is the point.
+
+**My critical path is unchanged and runs now:** the gate is done, per-character
+modelling from observed gear and observed rates is next, and it is the thing this
+contract cannot be honest without.
