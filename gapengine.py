@@ -17,6 +17,14 @@ silence, because a short list reads as "nothing to improve".
 import re, collections, statistics as st
 
 TS    = re.compile(r"^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
+LANE_VERBS = {"kick", "bash", "strike", "backstab"}
+AUTO_VERBS = {"crush", "slash", "pierce", "hit", "punch"}
+# Cooldown ceilings, attempts per second, measured across 138 committed logs
+# (model4.py LANE_RATE_MAX). These are the MAXIMUM observed, so a gap to them is
+# a floor on what is available, not a promise.
+LANE_CEILING = {"kick": 0.54, "bash": 0.54, "strike": 0.50, "backstab": 0.47}
+MISS = re.compile(r"^You try to (\w+) .+?, but ")
+
 SPELL = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")
 MELEE = re.compile(r"^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
 SLAIN = re.compile(r"^You have slain ")
@@ -65,6 +73,48 @@ def _hits(ev, kills):
         if m:
             resists[m.group(2)] += 1
     return out, resists
+
+
+def _runs(ts, gap=GAP):
+    ts = sorted(set(ts))
+    if not ts:
+        return []
+    out, start, prev = [], ts[0], ts[0]
+    for t in ts[1:]:
+        if t - prev > gap:
+            out.append((start, prev)); start = t
+        prev = t
+    out.append((start, prev))
+    return [(a, b) for a, b in out if b > a]
+
+
+def _lanes(ev, hits):
+    """Attempts per lane, INCLUDING MISSES -- a kick that misses still consumed
+    its cooldown, so hits alone understate the rate and overstate the gap.
+
+    The denominator is TIME IN MELEE, not engaged time. On the log this was built
+    against the two differ by 2.3x and the reported gap by 3x: 5x under ceiling
+    against 14x. A caster who never closes has no lane gap to close, and engaged
+    time would tell them they had an enormous one."""
+    lane_t = collections.defaultdict(list)
+    lane_dmg = collections.defaultdict(list)
+    auto_t = []
+    for t, b in ev:
+        m = MELEE.match(b)
+        if m:
+            v = m.group(1)
+            if v in LANE_VERBS:
+                lane_t[v].append(t); lane_dmg[v].append(int(m.group(3)))
+            elif v in AUTO_VERBS:
+                auto_t.append(t)
+            continue
+        m = MISS.match(b)
+        if m:
+            v = m.group(1)
+            if v in LANE_VERBS: lane_t[v].append(t)
+            elif v in AUTO_VERBS: auto_t.append(t)
+    melee_s = sum(b - a for a, b in _runs(auto_t))
+    return lane_t, lane_dmg, melee_s, len(auto_t)
 
 
 def _engagements(hits):
@@ -140,7 +190,29 @@ def gap_engine(lines, context=None):
     m["hits_counted"] = len(hits)
     m["killing_blows_excluded_from_rates"] = sum(1 for h in hits if h["kill"])
     m["crit_rate"] = round(len(crits) / len(nk), 4) if nk else None
-    m["resists"] = dict(resists.most_common(5))
+    # A resist count with no denominator is not a rate. Landings and resists are
+    # both per-target, so they share one.
+    landed = collections.Counter()
+    for h in hits:
+        if h["kind"] == "spell":
+            landed[h["verb"]] += 1
+    m["resists"] = []
+    for name, n in resists.most_common(6):
+        base = re.sub(r" [IVX]+$", "", name)
+        hit_n = landed.get(base, 0)
+        m["resists"].append({
+            "spell": name, "resisted": n, "landed": hit_n,
+            # The guard is on hit_n, NOT on (n + hit_n). Caught 30 Aug by reading
+            # the output: with hit_n == 0 the sum is still truthy, so a DoT whose
+            # landings are not "You hit" lines reported a 100% RESIST RATE. That is
+            # a fail-open default -- it would tell a reader their spell never lands
+            # when the truth is that this parser cannot see it land.
+            "rate": round(n / (n + hit_n), 4) if hit_n else None,
+            "note": "landed and resisted are both per-target, so they share a denominator"
+                    if hit_n else ("no landings of this spell appear as direct-damage lines "
+                                   "(a damage-over-time effect reports differently), so the "
+                                   "denominator is unknown and NO RATE IS CLAIMED"),
+        })
     m["stance_inferred"] = stance
     m["stance_evidence"] = evidence
 
@@ -162,6 +234,48 @@ def gap_engine(lines, context=None):
         report["coverage"].setdefault("no_delta_because", []).append(
             "stance: already Offensive, which is the largest free gain and it is taken")
 
+    # --- ability lanes: the delta that needs no catalogue and no worn stats ---
+    lane_t, lane_dmg, melee_s, auto_n = _lanes(ev, hits)
+    m["time_in_melee_s"] = melee_s
+    m["auto_attack_attempts"] = auto_n
+    m["lanes"] = {v: {"attempts": len(ts), "landed": len(lane_dmg[v]),
+                      "per_melee_second": round(len(ts) / melee_s, 4) if melee_s else None}
+                  for v, ts in sorted(lane_t.items())}
+    if melee_s >= 60:
+        for v, ts in sorted(lane_t.items()):
+            ceil = LANE_CEILING.get(v)
+            if not ceil or not lane_dmg[v]:
+                continue
+            rate = len(ts) / melee_s
+            gap = ceil - rate
+            if gap <= 0:
+                continue
+            land = len(lane_dmg[v]) / len(ts)
+            value = gap * st.mean(lane_dmg[v]) * land
+            share = value / m["dps"] if m["dps"] else None
+            report["deltas"].append({
+                "lane": f"lane.{v}",
+                "statement": f"fire {v} at its cooldown rather than the observed "
+                             f"{rate:.2f}/s while in melee",
+                "value": round(value, 1),
+                "unit": "dps_delta_vs_observed",
+                "share_of_observed_dps": round(share, 4) if share else None,
+                "materiality": ("negligible — under 2% of this character's output"
+                                if share and share < 0.02 else "material"),
+                "kind": "floor",
+                "requires": {"cost": "none — rotation only"},
+                "basis": {"observed_per_melee_second": round(rate, 4),
+                          "ceiling_per_second": ceil,
+                          "denominator": f"{melee_s}s in melee, NOT {engaged}s engaged",
+                          "attempts_include_misses": True,
+                          "landed_share": round(land, 3)},
+                "falsifier": f"A following log at a measured {v} rate above "
+                             f"{ceil * 0.8:.2f}/s in melee showing no lane gain.",
+            })
+    elif melee_s:
+        report["coverage"].setdefault("no_delta_because", []).append(
+            f"ability lanes: only {melee_s}s in melee, below the 60s floor for a rate")
+
     # --- refusals: output, never silence ---
     report["refusals"] = [
         {"lane": "item.selection", "reason": "computable_from_catalogue",
@@ -174,6 +288,11 @@ def gap_engine(lines, context=None):
          "detail": "Comparing how long two named characters were engaged is refused in all cases.",
          "what_would_settle_it": "Nothing. Hard refusal, ruled 30 August 2026."},
     ]
+    if not melee_s:
+        report["refusals"].append(
+            {"lane": "ability.uptime", "reason": "no_log_evidence",
+             "detail": "no auto-attack lines, so there is no time-in-melee denominator",
+             "what_would_settle_it": "a log with melee engagement"})
     if stance is None:
         report["refusals"].append(
             {"lane": "stance", "reason": "no_log_evidence", "detail": evidence,

@@ -10,17 +10,102 @@
   "hits_counted": 996,
   "killing_blows_excluded_from_rates": 194,
   "crit_rate": 0.0736,
-  "resists": {
-   "Denon's Desperate Dirge IX": 150,
-   "Togor's Insects V": 36,
-   "Blade Dance II": 6,
-   "Puma Maw III": 3,
-   "Tagar's Insects": 1
-  },
+  "resists": [
+   {
+    "spell": "Denon's Desperate Dirge IX",
+    "resisted": 150,
+    "landed": 836,
+    "rate": 0.1521,
+    "note": "landed and resisted are both per-target, so they share a denominator"
+   },
+   {
+    "spell": "Togor's Insects V",
+    "resisted": 36,
+    "landed": 0,
+    "rate": null,
+    "note": "no landings of this spell appear as direct-damage lines (a damage-over-time effect reports differently), so the denominator is unknown and NO RATE IS CLAIMED"
+   },
+   {
+    "spell": "Blade Dance II",
+    "resisted": 6,
+    "landed": 0,
+    "rate": null,
+    "note": "no landings of this spell appear as direct-damage lines (a damage-over-time effect reports differently), so the denominator is unknown and NO RATE IS CLAIMED"
+   },
+   {
+    "spell": "Puma Maw III",
+    "resisted": 3,
+    "landed": 5,
+    "rate": 0.375,
+    "note": "landed and resisted are both per-target, so they share a denominator"
+   },
+   {
+    "spell": "Tagar's Insects",
+    "resisted": 1,
+    "landed": 0,
+    "rate": null,
+    "note": "no landings of this spell appear as direct-damage lines (a damage-over-time effect reports differently), so the denominator is unknown and NO RATE IS CLAIMED"
+   }
+  ],
   "stance_inferred": null,
-  "stance_evidence": "64.2% even damage across 120 non-crit melee hits (killing blows excluded). Balanced prints ~50%, Offensive ~93%. Distance: 3.1 SE from Balanced, 6.3 SE from Offensive. Neither signature is within 2 SE, so the stance is NOT identified."
+  "stance_evidence": "64.2% even damage across 120 non-crit melee hits (killing blows excluded). Balanced prints ~50%, Offensive ~93%. Distance: 3.1 SE from Balanced, 6.3 SE from Offensive. Neither signature is within 2 SE, so the stance is NOT identified.",
+  "time_in_melee_s": 363,
+  "auto_attack_attempts": 211,
+  "lanes": {
+   "bash": {
+    "attempts": 39,
+    "landed": 20,
+    "per_melee_second": 0.1074
+   },
+   "kick": {
+    "attempts": 32,
+    "landed": 20,
+    "per_melee_second": 0.0882
+   }
+  }
  },
- "deltas": [],
+ "deltas": [
+  {
+   "lane": "lane.bash",
+   "statement": "fire bash at its cooldown rather than the observed 0.11/s while in melee",
+   "value": 5.3,
+   "unit": "dps_delta_vs_observed",
+   "share_of_observed_dps": 0.0039,
+   "materiality": "negligible \u2014 under 2% of this character's output",
+   "kind": "floor",
+   "requires": {
+    "cost": "none \u2014 rotation only"
+   },
+   "basis": {
+    "observed_per_melee_second": 0.1074,
+    "ceiling_per_second": 0.54,
+    "denominator": "363s in melee, NOT 861s engaged",
+    "attempts_include_misses": true,
+    "landed_share": 0.513
+   },
+   "falsifier": "A following log at a measured bash rate above 0.43/s in melee showing no lane gain."
+  },
+  {
+   "lane": "lane.kick",
+   "statement": "fire kick at its cooldown rather than the observed 0.09/s while in melee",
+   "value": 5.7,
+   "unit": "dps_delta_vs_observed",
+   "share_of_observed_dps": 0.0042,
+   "materiality": "negligible \u2014 under 2% of this character's output",
+   "kind": "floor",
+   "requires": {
+    "cost": "none \u2014 rotation only"
+   },
+   "basis": {
+    "observed_per_melee_second": 0.0882,
+    "ceiling_per_second": 0.54,
+    "denominator": "363s in melee, NOT 861s engaged",
+    "attempts_include_misses": true,
+    "landed_share": 0.625
+   },
+   "falsifier": "A following log at a measured kick rate above 0.43/s in melee showing no lane gain."
+  }
+ ],
  "refusals": [
   {
    "lane": "item.selection",

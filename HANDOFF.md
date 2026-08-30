@@ -12,11 +12,11 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §27 — gapEngine() RUNS. The Director's gap is closed: a real
-                 Report from a real log, not hand-written JSON. And HandMod's
-                 fitted justification is retracted; 0.80 is the PUBLISHED value.
+LAST CHANGE      §28 — TWO REAL DELTAS end to end from a real log, and resist
+                 rates with denominators. The denominator changes the headline
+                 3x, and reading the output caught a fail-open 100% resist rate.
 CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
-                 task 2 STARTED — gapengine.py runs on a real log (§27)
+                 task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
@@ -2050,3 +2050,78 @@ tested today that nobody had tested before, and none of the four was tested by
 the session that built it."* **Five now** — the stance classifier makes it five,
 and that one I did test myself, by running it. **Running it was the test.** Which
 is the whole argument for shipping the engine rather than its shape.
+
+---
+
+### 28. Two real deltas, end to end — and the denominator is the whole finding
+
+**INTENT (declared, and this is what I touched): `gapengine.py` only, this
+branch. No other file, nothing at any seam.**
+
+#### The ability-lane delta, ordered and delivered
+
+| lane | attempts | observed | ceiling | delta | share of output |
+|---|---|---|---|---|---|
+| `bash` | 39 | 0.107/s | 0.54/s | **+5.3 DPS** | 0.4% |
+| `kick` | 32 | 0.088/s | 0.54/s | **+5.7 DPS** | 0.4% |
+
+**Two decisions inside that table are the product, and neither is obvious.**
+
+**1. Attempts include misses.** A kick that misses still consumed its cooldown.
+Counting landed hits only would have understated the rate and *overstated the
+gap* — 20 landed against 32 attempted on kick, so hits-only inflates the
+recommendation by 60%.
+
+**2. The denominator is TIME IN MELEE, not engaged time.** This character was
+engaged 861 s and in melee **363 s**. Same log, same lanes:
+
+> over engaged time the gap reads **14× under ceiling**.
+> over time in melee it reads **5×**.
+
+**A 3× swing in the headline from the denominator alone** — the four-meters
+problem I documented weeks ago, biting inside my own engine. **A caster who
+never closes to melee has no lane gap to close, and engaged time would tell them
+they had an enormous one.**
+
+#### And the honest part: the engine says *don't bother*
+
+**+11 DPS on a 1,372.9 DPS character is 0.8%**, and every delta now carries
+`share_of_observed_dps` and a `materiality` field that reads **"negligible —
+under 2% of this character's output."**
+
+That is correct and it is the product working. This character's damage is 99.6%
+song. **A naive parser would report "you are missing 87% of your kicks" — true,
+and useless.** A delta without its share of the baseline sends readers chasing
+rounding errors. **Rank by absolute DPS; report the share; say when it does not
+matter.**
+
+#### Resist rates now have denominators, and reading the output caught a fail-open bug
+
+| spell | resisted | landed | rate |
+|---|---|---|---|
+| Denon's Desperate Dirge IX | 150 | 836 | **15.21%** |
+| Togor's Insects V | 36 | 0 | **null — no rate claimed** |
+| Puma Maw III | 3 | 5 | 37.5% |
+
+**The DDD figure cross-checks:** `bard.py` computed 15.2% by a different route.
+
+**And `Togor's Insects V` first printed `36 of 36 = 100% resisted`.** My guard
+tested `(n + hit_n)` rather than `hit_n`, so with zero landings the sum was still
+truthy and the rate computed to 1.0. **It is a damage-over-time effect whose
+landings are not `You hit` lines — the parser cannot see them.** The engine was
+about to tell a reader their spell *never lands* when the truth is *I cannot see
+it land.*
+
+**Fail-open again, in a field I added this hour to fix a missing denominator.**
+Found by reading the output rather than trusting that it ran. Fixed: no
+denominator, no rate, and the note says which.
+
+#### Not done, and named
+
+**I did not retune the stance threshold**, as ordered. 64.2% is 3.1 SE from
+Balanced and 6.3 from Offensive; it stays a refusal because it is correct.
+
+**The competitor-mechanics check is started and not finished** —
+`corpus/everquest-companion` is on disk and the four-denominator finding came out
+of it. Reading their calculation to check ours against it is next, and I have not
+done it tonight.
