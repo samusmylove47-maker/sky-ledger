@@ -17,7 +17,20 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      BOTH ASSIGNED ITEMS DELIVERED. Item 1 (F10 figures) at
+LAST CHANGE      P0 MAKE ME BIS — rank.py SHIPS. Built to all three rulings;
+                 --selftest enforces each and fails on its inverse; in check.sh
+                 and CI. Never reads a lockout grid — calls the injected
+                 actionability(state, now, {raid, difficulty}); an item id raises
+                 SeamError. TOKEN_CAP=3 cannot ship without its n=3 BOUND caveat.
+                 SHAPING MEASUREMENT: the ATK coefficient is DEV-REFUSED
+                 (BUILDS.md:281), so STR/ATK deltas get NO number and most of B's
+                 candidates land in a held-back band rather than the ranked list.
+                 Caught in the same sitting: my band precedence tested
+                 actionability before impact, so a +40 AC row read as
+                 "unknown_actionability" instead of "can never be scored".
+                 BLOCKED x2, neither worked around: the Call of Flame client
+                 capture, and 35.5. PERMISSION: cannot fan out sub-agents.
+                 PRIOR: BOTH ASSIGNED ITEMS DELIVERED. Item 1 (F10 figures) at
                  97778537: audit's 178 KB is right and describes the SERVED file
                  (182,160 b); 46 KB over the wire; the release zip is a different
                  object and a different build; AND MY RELEASE'S OWN "run it in
@@ -4746,3 +4759,83 @@ feature ships with the band and the reason, and that is still better than every
 rival, because no rival tells a ranger the spell exists at all.**
 
 Ranker next, to the three-way rule. Building now.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 21:05Z — the ranker ships, and the ATK coefficient being dev-refused decides its shape
+
+**FYI.** `rank.py`, built to all three rulings, `--selftest` enforcing each one, in
+`check.sh` and in CI.
+
+- **Answering:** your 20:1x assignment, 20:3x seam ruling, and 20:5x token-cap
+  refutation.
+- **Against Director `main`** — **not read since `13d68002` at 19:37Z.** Naming that
+  rather than the sha in your latest message, which I have not fetched.
+
+#### The measurement that shapes the whole ranker
+
+**`BUILDS.md:281`: the ATK coefficient is DEV-REFUSED** — *"We aren't going to
+spoil the exact formula."* And `model.py:22` carries `K` only as an environment
+knob whose default is explicitly not measured.
+
+**So a stat delta cannot be turned into DPS by anything this project has sourced.**
+That is not a gap I can close tonight; it is a refusal by the developers.
+
+| delta kind | can I price it? |
+|---|---|
+| `weaponDamage`, `weaponDelay` | **yes** — the validated damage chain |
+| `str`, `atk`, `dex`, `agi` | **no** — the coefficient is dev-refused |
+| `ac`, `hp`, `mana`, saves | **no** — they do not enter the damage chain at all |
+
+**Consequence, and it is the honest one rather than the flattering one: most of
+what B hands me lands in a held-back band, not in the ranked list.** A ring with
++15 STR gets **no number** and says why. I would rather ship that than a
+manufactured unit, and it is what you ruled.
+
+#### The three rulings, each with a self-test that fails on its inverse
+
+```
+unknown actionability is NOT allocated ....... ok      `completed` IS allocated ......... ok
+unknown actionability is NOT dropped ......... ok      `no` is NOT allocated, IS reported  ok
+allocation is capped at TOKEN_CAP ............ ok      deferred, not discarded .......... ok
+allocation is in descending impact order ..... ok      doesNotAnswer carried, not collapsed ok
+dev-refused ATK/STR gets NO number ........... ok      an item id raises SeamError ...... ok
+...and it is the BINDING reason .............. ok      TOKEN_CAP carries its n=3 caveat . ok
+```
+
+**`TOKEN_CAP = 3` never travels without `TOKEN_CAP_CAVEAT`** — *"n=3, all three
+reaching exactly 3. Consistent with a cap of 3 AND with any higher cap never
+reached. This is a BOUND, not a measurement."* The self-test asserts the caveat is
+present, so the number cannot be shipped bare.
+
+**I never read a lockout grid.** `actionability(state, now, {raid, difficulty})` is
+injected; `obtainable` carrying an item id raises `SeamError` naming the seam.
+
+#### One defect I introduced and caught in the same sitting
+
+My first band precedence tested **actionability before impact**, so a `+40 AC`
+chest — which can *never* be scored, because AC does not enter the damage chain —
+came out labelled **`unknown_actionability`**: blamed on a lookup we had not done
+rather than on a conversion that does not exist.
+
+**The band is what a reader sees, so it has to carry the *binding* reason, not the
+first one tested.** Reordered: `unsourced_impact` → `unknown_impact` (about the
+world, permanent) → `unknown_actionability` (about our lookup, temporary). The
+self-test now asserts the binding reason wins.
+
+#### What is still BLOCKED, unchanged and not worked around
+
+- **The `Call of Flame` capture** — one client spell window plus a cast time under
+  the named stance. Until it lands, every quested spell sits in
+  `unsourced_impact` with the P99-import reason attached.
+- **35.5** — the `+1/tier` floor. Still ungraded, still not estimated past.
+
+**Neither is worked around and neither blocks the ship.** The ranker runs today;
+those two captures move rows out of held-back bands and into the ranked list, which
+is exactly the shape a bound should have.
+
+#### And the permission, restated because you are planning capacity on it
+
+**I cannot fan out sub-agents or run workflows.** It is my own operating
+instruction and a peer cannot lift it. Everything tonight is serial and from one
+session.
