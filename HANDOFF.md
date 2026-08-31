@@ -17,7 +17,18 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      TICK 12, 18:37Z — check.sh PASS. THE LOOP IS CLOSED: "the
+LAST CHANGE      BOTH ASSIGNED ITEMS DELIVERED. Item 1 (F10 figures) at
+                 97778537: audit's 178 KB is right and describes the SERVED file
+                 (182,160 b); 46 KB over the wire; the release zip is a different
+                 object and a different build; AND MY RELEASE'S OWN "run it in
+                 the browser" LINK 404s (precondition established).
+                 Item 2 at this push: CONCORDANCE-INVESTIGATION.md, 232 lines.
+                 FINDING — we cannot compute our own error rate, so by the
+                 audit's own guardrail the Concordance is a hit piece by
+                 construction. Said so and stopped, as instructed. Recommend
+                 publishing ADJUDICATIONS, not a rate. Falsifier stated.
+                 Settler ruling CONFIRMED IMPLEMENTED at 1cc25330.
+                 PRIOR: TICK 12, 18:37Z — check.sh PASS. THE LOOP IS CLOSED: "the
                  engine reads NOTHING from context" is now corrected in ALL
                  THREE trees — mine since 22121999, the Director adopting my
                  sentence verbatim, and B at 6c1c4ee0 ("Correct ab89bdf: the
@@ -224,7 +235,7 @@ CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
-                 input path (§44.4 is a shape, not a start; ruling not made).
+                 input path, NOT building the Concordance (recommended against).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
 WATCH            refs I track, SHAs as of clock tick 12 (2026-08-31 18:37Z).
                  Branch named beside every sha on purpose: a default-branch head
@@ -4539,3 +4550,96 @@ build. If A wants a byte-level pin it needs its own recorded digest, the way
   file the reader runs.
 - **Item 2, the Concordance investigation, is not in this push.** You said do not
   batch; it is the next one.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 19:47Z — the Concordance fails its own second guardrail; recommend not building it
+
+**RULING NEEDED** — not on the analysis, which is done, but on whether the
+recommendation goes to the owner.
+
+- **Against Director `main` `a126a39`** as you named it; **read since** — it is
+  `13d68002` at 19:37Z, so your sha has moved and I am naming both.
+- **Assigned:** Item 2, bounded investigation, 31 Aug 19:5xZ.
+- **Deliverable:** **`CONCORDANCE-INVESTIGATION.md`**, own repository, 232 lines.
+
+#### The finding, in one line
+
+**We cannot compute our own error rate, the audit says the thing backfires without
+it, so the Concordance as specified is a hit piece by construction — today, and not
+for want of effort.**
+
+You told me to say so and stop if that was the answer. It is, and I have.
+
+#### Why, in three measurements rather than a judgement
+
+1. **The one historical instance of our own error is a count, not a rate.**
+   `contamination.py:10–13` — *"six classic haste figures sitting inside our own
+   verified tier."* **Six of how many?** No denominator exists. Our own rule
+   applies to us verbatim: a count without a denominator is not a rate.
+2. **Ground truth costs owner-hours, and I measured the rate from my own blocked
+   item.** `35.5` needs **one** client window of **one** weapon. Raised ~04:00Z,
+   still blocked at 19:45Z — **~16 hours for one reading**, and it is the cheapest
+   open question I have. A self-error denominator in the hundreds is not months
+   away; it is not on the roadmap.
+3. **The instrument we do have cannot return one of its two answers.** Session 0's
+   ledger finding applies unchanged: a self-error rate built from retraction
+   history has a rich numerator — I supplied several today alone — and **no
+   denominator**, because claims that were right and never disputed leave no
+   record.
+
+#### Two things I found that were not in the brief
+
+**Your `contamination.py` citation is verbatim — I fetched and read it rather than
+accept it — and there is a third sentence nobody carried forward that governs the
+whole method:**
+
+> *"A hit is **not** proof of an error. Legends kept a great deal of classic
+> EverQuest intact, and several of these patterns are perfectly current."*
+
+**A disagreement is not an error by either party until something outside both of us
+adjudicates it.** Any rate that counts disagreements as rival errors is measuring
+the wrong thing before it measures it badly.
+
+**And the ethics are decided by the small-sample case, not the large one.** Our own
+dry-streak rule pointed at a rival:
+
+```
+   0/9   ->  "under 30%", never "0%"
+  0/50   ->  "under 7%",  never "0%"
+```
+
+**We could never publish "0% — they are clean" on a sample we can afford. We would
+have to publish "under 30%", which reads as an accusation.** A small honest sample
+is worse for a rival than a large one and worse than silence. That is an argument
+against, and it has nothing to do with malice.
+
+#### What I recommend instead, with its falsifier
+
+**Publish the adjudications, not the rate.** `README.md` already carries two
+contradictory-source items marked ⚑ and three marked ✧ resolved, naming
+`eqlsource` and `eqlegendstools` on each side. **That is the Concordance at n = 5,
+without a rate, and it is already shipping.** A per-entry adjudication is refutable
+on its own; a rate is refutable only with its denominator, its interval and its
+unadjudicated count — three things a reader will not check and we cannot supply.
+
+And it keeps the thing the auditor actually praised: **`<28% · 0/9` is a per-claim
+honesty property, not a rate.** Publishing a rate we cannot bound abandons exactly
+what earned the compliment.
+
+**Falsifier:** if an adjudication path exists that does not cost owner-hours per
+entry — a Legends-authored export, a patch-note corpus, anything outside us that
+settles entries in bulk — **§2 collapses and the Concordance becomes buildable.**
+That is a question about the world, not about our effort, and it is the one thing
+that reverses this.
+
+#### Bounds honoured, stated so you can check rather than trust
+
+No competitor sampled — **no rival page was fetched for this**. Nobody contacted.
+Nothing published. No pipeline built. `35.5` untouched and still BLOCKED; it
+appears in the analysis only as *evidence about capture cost*, which is the one use
+that does not require its answer.
+
+**What needs you:** whether this goes to the owner as a recommendation, or whether
+you want the counter-case argued first. The decision on the Concordance itself is
+the owner's and I have not assumed otherwise.
