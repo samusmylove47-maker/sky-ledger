@@ -12,16 +12,16 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §32 — the competitor check CANNOT BE DONE as ordered: I hold
-                 their DATA, not their code, so they are an UPSTREAM DEPENDENCY
-                 and not a witness. 53 weapon procs in my model come from it.
+LAST CHANGE      §33 — §32 IS RETRACTED IN FULL. I fixed my instrument and kept
+                 the WRONG PATH; my own positive control contradicted me and I
+                 quoted the result anyway. Melee-primary log delivered.
 CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-UNRESOLVED       spells.json is a third-party file with NO LICENCE, load-bearing
-                 in the model (53 weapon proc values). See §32.
+UNRESOLVED       STANCE_EVEN_SHARE_OFFENSIVE = 0.93 is mine and a careful re-read
+                 of the same log gives 99.3%. FLAGGED, NOT CHANGED (§33).
                  model4.py:50 uses a dual-wield CLASS gate my own audit says not to
                  use. Recorded in §26, not quietly fixed.
                  CHARM_PET 66.8 vs measured 729.8 — do NOT fix by swapping (§14)
@@ -2414,3 +2414,99 @@ because their figure would come from their implementation rather than from a fil
 I already read. **One screenshot of any meter's summary panel with the matching
 log is the whole test**, and it is the same shape as every other capture request
 on this list.
+
+---
+
+### 33. §32 IS RETRACTED IN FULL. I fixed the instrument and kept the wrong path.
+
+**Every one of §32's three findings is false.** Pushed an hour ago; retracted
+now, in place.
+
+| §32 claimed | the truth |
+|---|---|
+| the corpus holds **one file**, `spells.json` | **5,910 files** |
+| it holds **no code**, so it cannot be a witness | full source, **four separate projects** |
+| it is **unlicensed** | `LICENSE` present in **all four** |
+| `jos437-finishing-blow.log` — my flagship validation — is **not present** | **present**, 3,862 lines, 852 melee lines |
+
+The path is `corpus/**corpus**/everquest-companion` — doubled. I looked at
+`corpus/everquest-companion`, which contains only the one symlink target.
+
+#### And the way I got there is the worst part
+
+I caught the symlink-traversal fault, ran the positive control, and **the control
+told me the answer**:
+
+```
+find    corpus -type f  ->      2 files
+find -L corpus -type f  ->  10,092 files      <-- MY OWN CONTROL
+find -L corpus/everquest-companion -type f -> 1 file    <-- what I reported
+```
+
+**My positive control returned a number ten thousand times larger than my
+conclusion, in the same output block, and I quoted the conclusion.** I was
+pleased enough with catching the traversal bug that I never asked whether the
+path I had fixed was the right path.
+
+> **A fixed instrument aimed at the wrong target is not a fixed measurement.**
+> Fourth-order version of tonight's shape, and the first where the evidence
+> against me was already printed on my own screen.
+
+**And it makes the licence claim an accusation I had no basis for.** I wrote that
+a third-party dependency was unlicensed. `LICENSE` files exist in EQBuddy,
+everquest-companion, eql-log-reader and eql-meter. **That is the one I most
+regret, because it was the kind of claim that damages someone else.**
+
+**What survives §32: nothing.** The symlink-traversal lesson stands on its own
+and is already in §20's family; the rest is withdrawn.
+
+#### The competitor check is now possible, and it is better than expected
+
+**`corpus/corpus/eql-meter/` is a shipped meter with source** — `petMeter.ts`,
+`useLiveDuration.ts`, `Overlay.css` — plus two sample logs. **That is the
+independent implementation the assignment wanted**, and there are three more
+projects beside it. Licence read before anything is lifted; nothing lifted
+tonight.
+
+---
+
+### Part 3, item 2: the melee-primary log, delivered
+
+**`jos437-finishing-blow.log` — PAL/MNK/ENC, 852 melee lines, three ability
+lanes.** Run through the engine unmodified:
+
+| | Shara (bard) | **jos437 (melee)** |
+|---|---|---|
+| observed DPS | 1,372.9 | **363.6** |
+| time in melee | 363 s | **412 s** |
+| lanes present | bash, kick | **bash, kick, strike** |
+| `lane.bash` | +5.3 (0.4%, negligible) | **+14.0 (3.9%, modest)** |
+| `lane.kick` | +5.7 (0.4%, negligible) | **+18.0 (5.0%, modest)** |
+
+**The Director's diagnosis was exactly right and needed no retuning: a correct
+measurement of a marginal lane is a marginal number.** Same engine, same
+constants, same code path — **the deltas are 2.6× and 3.2× larger and cross from
+`negligible` into `modest` purely because the character melees.** That is the
+selection question answered by selection.
+
+#### One thing I am flagging and NOT fixing, because it is the forbidden shape
+
+**The stance classifier refuses on this log too — and here it is refusing an
+obvious answer.** 99.3% even damage across 732 non-crit hits: **26.7 SE from
+Balanced, 3.4 SE from Offensive.** Outside my 2 SE tolerance, so: no verdict.
+
+**The tolerance is not the problem. My signature constant is.**
+`STANCE_EVEN_SHARE_OFFENSIVE = 0.93` is my own figure, and `DAMAGE-CHAIN.md`
+cites *"93.6% even damage"* **for this same character**. A careful re-read —
+excluding crits, and excluding killing blows on the corrected `(timestamp,
+target)` join — gives **99.3%**. **My own two measurements of one file disagree
+by 5.7 points**, and the classifier is correctly reporting that it cannot place a
+sample against a constant that is probably wrong.
+
+**I am not touching it tonight.** The order says *do not retune the stance
+threshold to force a result*, and while correcting a signature constant is not
+the same act, **it is indistinguishable from it from outside** — and it would be
+me changing a number so that my classifier answers. **What settles it:** an
+even-damage share measured on a log where the stance is known from a client
+screenshot rather than from my own inference. That is one capture request, and it
+is the same shape as every other on the list.
