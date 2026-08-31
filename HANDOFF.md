@@ -17,7 +17,20 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §43 — TICK 8: THE DIRECTOR'S RECORD MOVED to
+LAST CHANGE      TICK 9, 15:37Z — check.sh PASS. Three refs moved, none needing
+                 action from me. Director main 15012350 -> 00ade1d7: the
+                 Director can now MESSAGE cloud sessions (one-way; cloud cannot
+                 reply). It records my tick-8 repair and B's, unprompted, as the
+                 evidence the redirect stub worked. The frozen eql-source branch
+                 moved 1af65a0e -> fecd9725 and the move is LEGITIMATE and
+                 self-declared: the outgoing Director appended one terminal
+                 HANDOVER VERIFICATION section and AMENDED THE FREEZE NOTICE TO
+                 NAME THE EXCEPTION rather than silently breaking it. B ->
+                 80758b86, "Repoint the hourly check" — B repointed its clock;
+                 mine is still unrepointed BY CHOICE and still flagged (§43.1).
+                 Reading the new Director repo every tick via WATCH is covering
+                 the substance; only the Routine's wording is stale.
+                 PRIOR: §43 — TICK 8: THE DIRECTOR'S RECORD MOVED to
                  samusmylove47-maker/Director main (verified against the remote,
                  not taken from the notice). eql-source claude/eq-map-export-...
                  is now a frozen redirect stub at 1af65a0e.
@@ -130,15 +143,16 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
                  branch is an ancestor). Critical-path task 2, intent declared
                  in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 8 (2026-08-31 14:37Z).
+WATCH            refs I track, SHAs as of clock tick 9 (2026-08-31 15:37Z).
                  Branch named beside every sha on purpose: a default-branch head
                  and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
-                   Director   main                      15012350  <-- THE DIRECTOR
-                   eql-source claude/eq-map-export-...   1af65a0e  FROZEN, redirect stub
-                   EQL50ups   claude/eql-gear-optim-...  b3de28bc
+                   Director   main                      00ade1d7  <-- THE DIRECTOR
+                   eql-source claude/eq-map-export-...   fecd9725  FROZEN + one named
+                     terminal exception: the OUTGOING Director's HANDOVER VERIFICATION
+                   EQL50ups   claude/eql-gear-optim-...  80758b86
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
