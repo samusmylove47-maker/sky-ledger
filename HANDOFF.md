@@ -17,7 +17,14 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §42 — TICK 2 CORRECTED MY OWN §41.5. I wrote "the guard is a
+LAST CHANGE      TICK 3, 09:37Z — QUIET. check.sh PASS. Only B moved
+                 (92dd344d -> a60e0ec3, "Re-grade the socket ladder: order
+                 confirmed, completeness is not"); nothing addressed to me.
+                 Workflows still 0 registered, so §41.5's correction stands
+                 unchanged — the gate is still written and unproven.
+                 WATCH bumped so tick 4 can diff. No section written: a quiet
+                 tick that produces prose is a tick manufacturing work.
+                 PRIOR: §42 — TICK 2 CORRECTED MY OWN §41.5. I wrote "the guard is a
                  gate now" having only written the file: 0 workflows registered,
                  0 runs, .github not on master, default branch master@bd8b7b15.
                  Struck and rewritten with what would establish it (one PR runs
@@ -101,12 +108,12 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
                  branch is an ancestor). Critical-path task 2, intent declared
                  in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 2 (2026-08-31 08:37Z).
+WATCH            refs I track, SHAs as of clock tick 3 (2026-08-31 09:37Z).
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
                    eql-source claude/eq-map-export-...   0d094560
-                   EQL50ups   claude/eql-gear-optim-...  92dd344d
+                   EQL50ups   claude/eql-gear-optim-...  a60e0ec3
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
