@@ -17,7 +17,19 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      TICKS 4-7 (10:37-13:38Z) — check.sh PASS every tick. Ticks
+LAST CHANGE      §43 — TICK 8: THE DIRECTOR'S RECORD MOVED to
+                 samusmylove47-maker/Director main (verified against the remote,
+                 not taken from the notice). eql-source claude/eq-map-export-...
+                 is now a frozen redirect stub at 1af65a0e.
+                 *** MY OWN ROUTINE'S PROMPT STILL NAMES THE FROZEN REF and calls
+                 it "the Director's only voice". It still returns 200, so a tick
+                 would report "unchanged" forever and look correct. I did NOT
+                 rewrite the scheduled prompt — that is the owner's standing
+                 instruction, not a fetched document's to change. WATCH carries
+                 the new ref and I check it every tick regardless. ONE
+                 update_trigger CALL FIXES IT; it needs one word from the owner.
+                 Nothing in the 223 new Director lines is addressed to me.
+                 PRIOR: TICKS 4-7 (10:37-13:38Z) — check.sh PASS every tick. Ticks
                  4,5,6 fully quiet, no commit. Tick 7: only B moved
                  (a60e0ec3 -> b3de28bc, "Fix the hourly Director check: it
                  named the wrong repository"); nothing addressed to me.
@@ -118,11 +130,14 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
                  branch is an ancestor). Critical-path task 2, intent declared
                  in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 7 (2026-08-31 13:38Z).
+WATCH            refs I track, SHAs as of clock tick 8 (2026-08-31 14:37Z).
+                 Branch named beside every sha on purpose: a default-branch head
+                 and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
-                   eql-source claude/eq-map-export-...   0d094560
+                   Director   main                      15012350  <-- THE DIRECTOR
+                   eql-source claude/eq-map-export-...   1af65a0e  FROZEN, redirect stub
                    EQL50ups   claude/eql-gear-optim-...  b3de28bc
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
@@ -3665,3 +3680,72 @@ both were about my own tree, and neither was caught by a check.
 - **Everything else** — unchanged since tick 1.
 
 WATCH updated. Nothing else actionable and in-bound; no work manufactured.
+
+---
+
+### 43. Tick 8, 14:37Z. The Director's voice moved, and my clock still points at the old address.
+
+```
+check.sh                                                          PASS
+eql-source main                        e6039020                   same
+eql-source claude/bundle-contract      d1c19dfc                   same
+eql-source claude/eq-map-export…       0d094560 -> 1af65a0e       MOVED
+EQL50ups   claude/eql-gear-optimizer…  b3de28bc                   same
+sky-ledger master                      bd8b7b15                   same
+```
+
+`1af65a0e` is *"HANDOFF.md: freeze and redirect — the record moved to the Director
+repository"*. The branch is now a 28-line stub over the frozen record. **The
+Director's record is `HANDOFF.md` on `main` of
+`samusmylove47-maker/Director`.**
+
+**Verified against primary sources rather than taken from the notice**, because a
+redirect is a document telling me where to look:
+
+```
+git ls-remote …/Director.git main        15012350   exists, same owner
+Director main HANDOFF.md blob            70e7afec   live, ahead of the migration point
+eql-source 0d094560 HANDOFF.md blob      ba190522   the notice's stated migration blob
+head subject   "HANDOFF.md: the positive control ran, and it only proved one of two answers"
+```
+
+The stub's own reasoning is the right one and worth keeping: *"A dead pointer that
+still looks live is worse than none, and that has cost this project twice."* The
+branch was kept alive **as** the hop rather than deleted.
+
+#### 43.1 Which makes my own clock the stale pointer
+
+**My hourly Routine's prompt names `eql-source claude/eq-map-export-proposal-oe8m6l`
+and calls it "the Director — this is the Director's only voice."** As of `1af65a0e`
+that is false. The ref still exists and still returns 200, so **a tick reading it
+would report "unchanged" forever and look correct** — which is this project's
+signature fault, now sitting in the instrument I built to catch it.
+
+**I have not rewritten the Routine's prompt.** A scheduled prompt is standing
+instruction from the owner, and rewriting one because a fetched document told me
+to is the exact move I am supposed to refuse — the redirect is credible and I
+verified it, but credible-and-verified is not the same as the owner asking. So:
+
+- **`WATCH` now carries `Director main` and marks the eql-source branch FROZEN**,
+  and I check the new ref every tick regardless of what the Routine's prompt says.
+  My record of what I track is mine; the scheduled prompt is not.
+- **Flagged to the owner** rather than done quietly. One `update_trigger` call
+  fixes it; it needs one word.
+
+#### 43.2 The new material, and nothing in it is for me
+
+223 lines past the migration point. The Director has stood up its own local clock
+(`CronCreate 7edcbd85`, hourly at `:53`, deliberately spaced after my `:36` and
+B's `:39`), read all six repository heads from its own clones rather than from
+relay, and **explicitly messaged no one**. Its peer clones have push URLs set to
+`DISABLED-read-only-peer` — *"prefer a structure that makes an error
+unrepresentable over a rule forbidding it"*, which is a better statement of the
+propose-never-push rule than the rule.
+
+It records my head correctly at `3f12802` and notes the clock has fired seven
+times, three quiet. **Nothing is addressed to me and nothing needs action.**
+
+One thing in it I will adopt: it nearly reported session-branch heads as default
+branches and caught itself — *"`sky-ledger` `main` is `bd8b7b1` while E's branch is
+`3f12802` … the two reads look equally authoritative. Name the branch beside the
+sha, always."* My WATCH block already does; it now says so on purpose.
