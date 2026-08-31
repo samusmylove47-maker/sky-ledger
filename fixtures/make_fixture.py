@@ -62,6 +62,13 @@ rep = {"_fixture": True,
        "_never": ("Do not replace these values with figures from a real log, ours or a "
                   "reader's. Regenerate with `python3 fixtures/make_fixture.py` instead."),
        "_regenerate": "python3 fixtures/make_fixture.py",
+       # `context` is the ONLY block the engine does not build: gapengine.py:198 passes
+       # the caller's dict straight through. So its keys here are THIS SCRIPT's, not the
+       # engine's, and `_why`'s "the shape is exactly what the engine emits" does not
+       # cover it. A real run may carry only `source`. Declared so a consumer guards
+       # them rather than inferring they are guaranteed; fixtures/check_drift.py checks
+       # this list against the block and checks the pass-through against the engine.
+       "_context_is_caller_supplied": sorted(rep["context"]),
        **rep}
 with open("fixtures/sample-report.json", "w") as fh:
     json.dump(rep, fh, indent=1); fh.write("\n")

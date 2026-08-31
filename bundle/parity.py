@@ -19,9 +19,12 @@ const fs=require('fs');
 const lines=fs.readFileSync(process.argv[3],'utf8').split(/\\r?\\n/);
 process.stdout.write(JSON.stringify(globalThis.EQLSGapEngine.gapEngine(lines,{source:'parity'})));
 """
-open("/tmp/_drv.js", "w").write(driver)
-js = json.loads(subprocess.run(["node", "/tmp/_drv.js", "bundle/eqls-gap-engine.js", log],
+import tempfile
+with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as fh:
+    fh.write(driver); drv = fh.name
+js = json.loads(subprocess.run(["node", drv, "bundle/eqls-gap-engine.js", log],
                                capture_output=True, text=True, check=True).stdout)
+os.unlink(drv)
 
 def walk(a, b, path=""):
     out = []
@@ -39,7 +42,28 @@ def walk(a, b, path=""):
     return out
 
 d = walk(py, js)
+
+# POSITIVE CONTROL, added 31 Aug. walk() returns [] for two empty dicts, so a
+# vacuous report on both sides passes as "agree field for field" -- a negative with
+# nothing establishing the instrument could have returned a positive. That is the
+# §20 fault, in the harness that is supposed to catch it. Two halves:
+#   1. the report is non-trivial, so there is something to disagree about;
+#   2. walk() demonstrably reports a difference on this exact input.
+import copy
+trivial = []
+if not py.get("measured", {}).get("dps"): trivial.append("no dps")
+if not (py.get("deltas") or py.get("refusals")): trivial.append("no deltas and no refusals")
+probe = copy.deepcopy(js)
+probe.setdefault("measured", {})["dps"] = "PARITY_CONTROL_SENTINEL"
+control = walk(py, probe)
 print(f"  log: {os.path.basename(log)}")
+if trivial:
+    print(f"  CONTROL FAILED: report is vacuous ({', '.join(trivial)}) -- agreement means nothing")
+    sys.exit(1)
+if not control:
+    print("  CONTROL FAILED: walk() cannot report a difference on this input")
+    sys.exit(1)
+print(f"  positive control: walk() reports {len(control)} difference(s) on a perturbed copy")
 print(f"  PY dps={py['measured']['dps']} deltas={len(py['deltas'])} refusals={len(py['refusals'])}")
 print(f"  JS dps={js['measured']['dps']} deltas={len(js['deltas'])} refusals={len(js['refusals'])}")
 if d:

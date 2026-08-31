@@ -52,21 +52,15 @@ echo "== the JS bundle and the Python engine must agree field for field =="
 python3 bundle/parity.py corpus/corpus/everquest-companion/tests/fixtures/jos437-finishing-blow.log || fail=1
 echo
 echo "== the fixture must not drift from what the engine emits =="
-python3 - <<'DRIFT' || fail=1
-import json, subprocess, sys
-subprocess.run([sys.executable, "fixtures/make_fixture.py"], check=True, capture_output=True)
-fx = json.load(open("fixtures/sample-report.json"))
-rp = json.load(open("fixtures/real-report-shara.json"))
-fk = set().union(*[set(d) for d in fx["deltas"]]) if fx["deltas"] else set()
-rk = set().union(*[set(d) for d in rp["deltas"]]) if rp["deltas"] else set()
-bad = False
-if fk != rk:
-    print(f"  DRIFT in delta keys: {fk ^ rk}"); bad = True
-if set(fx["measured"]) - {"_register"} != set(rp["measured"]):
-    print(f"  DRIFT in measured keys: {set(fx['measured']) ^ set(rp['measured'])}"); bad = True
-print("  fixture shape matches engine output" if not bad else "  A PAGE BUILT ON THIS FIXTURE WOULD RENDER THE WRONG FIELDS")
-sys.exit(1 if bad else 0)
-DRIFT
+# WIDENED 31 Aug. The version here until tonight compared DELTA KEYS and MEASURED
+# KEYS -- two of the five structures a consumer renders -- and then printed
+# "fixture shape matches engine output". Refusals, coverage and the top-level key
+# set went unchecked, and refusals are exactly the fields A renders and exactly
+# where A found a false count the same night. Matched-pair proven: adding a
+# `severity` key to every refusal in the engine left the old gate saying "matches".
+# A's shape, in my tree -- the right answer in the wrong words, read for the verdict.
+python3 fixtures/check_drift.py --selftest || fail=1
+python3 fixtures/check_drift.py || fail=1
 echo
 if [ "$fail" -ne 0 ]; then
   echo "FAILED. Nothing ships."
