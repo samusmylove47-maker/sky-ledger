@@ -29,6 +29,10 @@
   // Report that previously carried `refusals: []` on a log with no outgoing damage
   // now carries the three unconditional ones. Strictly additive -- fields the page
   // already renders, in a case where it previously rendered none.
+  // NOT the repository's version. sky-ledger also carries a git tag v1.1.0
+  // (ad4f2a70, the Sky Ledger Windows release, 100,482,932 bytes, and the site's
+  // published download link is pinned to it). This field is EQLSGapEngine's, per
+  // BUNDLE-CONTRACT section 2. Say "EQLSGapEngine 1.1.0", never "sky-ledger 1.1.0".
   var VERSION = "1.1.0";
 
   var TS = /^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
