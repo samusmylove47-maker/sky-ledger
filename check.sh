@@ -23,10 +23,24 @@ echo "== derived-claim validator: the committed claims =="
 python3 derived_check.py derived || fail=1
 echo
 echo "== reproducers must still run =="
-for f in handmod.py validate_jos437.py verify_upgrade.py; do
+# A reported the inverse fault on 31 Aug: a check branch that FIRED AND REPORTED
+# NOTHING, so the session that tripped it debugged the wrong repository. This loop
+# had a milder form of it -- it discarded stdout and stderr, so a failing reproducer
+# printed the word FAILED and no reason. On failure the output is now shown.
+# verify_upgrade.py takes --fast here (56 of 560 trios, ~12s vs ~2min). Stated, not
+# silent: the script prints which mode it ran and the full proof is one flag away.
+for f in "handmod.py" "validate_jos437.py" "verify_upgrade.py --fast"; do
   printf '  %-24s ' "$f"
-  if python3 "$f" >/dev/null 2>&1; then echo ok; else echo FAILED; fail=1; fi
+  out=$(python3 $f 2>&1) && echo ok || {
+    echo "FAILED -- its output follows, so you debug YOUR file and not this script:"
+    echo "$out" | sed 's/^/      /'
+    fail=1
+  }
 done
+echo
+echo "== the bundle's bytes must be what this tree says they are =="
+python3 bundle/check-integrity.py --selftest || fail=1
+python3 bundle/check-integrity.py || fail=1
 echo "== the shipped bundle must obey BUNDLE-CONTRACT section 3 =="
 node bundle/check-bundle.js || fail=1
 echo

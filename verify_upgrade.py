@@ -123,10 +123,22 @@ def build(rule, cap):
     m = {'__name__': 'x'}
     exec(compile(s, f'model4[{rule},cap={cap}]', 'exec'), m)
     return m
+# Full run = 4 x 560 trios x ~429 mains x ~200 offhands, about 2 minutes. check.sh
+# calls --fast, which evaluates every 10th trio (56 of 560) on the same deterministic
+# stride sensitivity.py uses. NOT A SILENT CAP: the mode prints which it ran, and the
+# comparison narrows with it, so a --fast pass proves less than a full one.
+FAST = '--fast' in sys.argv
+STRIDE = 10 if FAST else 1
+print("  mode: " + (f"--fast, every {STRIDE}th trio (56 of 560)"
+                    "  -- run without --fast for the whole ranking"
+                    if FAST else "FULL, all 560 trios"))
 grid = {}
+import itertools as _it
 for rule in ('PCT', 'FLOOR'):
     for cap in (True, False):
-        res = build(rule, cap)['run']('raid')
+        m = build(rule, cap)
+        trios = list(_it.combinations(m['CLASSES'], 3))[::STRIDE]
+        res = sorted((m['evaluate'](t, 'raid') for t in trios), key=lambda r: -r['total'])
         grid[(rule, cap)] = (round(res[0]['total'], 1),
                              res[0]['oh']['n'] if res[0]['oh'] else '-',
                              tuple('+'.join(r['trio']) for r in res[:12]))
