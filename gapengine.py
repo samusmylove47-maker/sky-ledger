@@ -55,18 +55,23 @@ def _parse(lines):
     D's interface is what makes the fix possible: the damage row and the kill
     row are separate events that both carry the target, precisely so the join
     is the consumer's to make. It was mine to make and I had made it wrong."""
-    ev, kills = [], set()
+    ev, kills, months = [], set(), set()
     for raw in lines:
-        m = TS.match(raw.rstrip("\n"))
+        raw = raw.rstrip("\n")
+        m = TS.match(raw)
         if not m:
             continue
+        # TS anchors on ^\[\w{3} \w{3} , so for any line it matched, raw[5:8] IS
+        # the month token. Sliced rather than captured: adding a group to TS would
+        # shift every numeric group below, and the bound tonight is no new regex.
+        months.add(raw[5:8])
         t = int(m.group(1))*86400 + int(m.group(2))*3600 + int(m.group(3))*60 + int(m.group(4))
         body = m.group(5)
         ev.append((t, body))
         k = SLAIN.match(body)
         if k:
             kills.add((t, k.group(1)))
-    return ev, kills
+    return ev, kills, months
 
 
 def _hits(ev, kills):
@@ -227,7 +232,7 @@ def gap_engine(lines, context=None):
     # "The engine reads nothing from context" is close but too strong; "the engine
     # consumes no context value" is the sentence that survives reading the lines.
     context = dict(context or {})
-    ev, kills = _parse(lines)
+    ev, kills, months = _parse(lines)
     for _, b in ev:
         m = MARKER.search(b)
         if m:
@@ -267,6 +272,12 @@ def gap_engine(lines, context=None):
     m["dps_window_note"] = ("Engaged = damage over runs of hits with no gap above "
                             f"{GAP}s, lasting {MIN_ENGAGEMENT}s or more. Four shipped meters use "
                             "four denominators; a DPS figure without its window is not a measurement.")
+    # E2. These were all computed and thrown away. `melee_seconds` in particular
+    # survived only as ENGLISH inside basis.denominator, and a consumer cannot
+    # compute against a sentence.
+    m["engaged_seconds"] = engaged
+    m["damage_dealt"] = dealt
+    m["months_seen"] = sorted(months)
     m["engagements"] = len(runs)
     m["hits_counted"] = len(hits)
     m["killing_blows_excluded_from_rates"] = sum(1 for h in hits if h["kill"])
@@ -277,6 +288,23 @@ def gap_engine(lines, context=None):
     for h in hits:
         if h["kind"] == "spell":
             landed[h["verb"]] += 1
+    # E1. Raw key AND normalised_key, NEVER merged. Measured on the corpus:
+    # `Cannibalize` lands 156 times at damage 41-51 while `Cannibalization I`
+    # lands 46 times at 1864-1924 -- FORTY TIMES APART. Merging them yields a
+    # median that describes neither. `landings` counts LANDING LINES, one per
+    # target, and is NOT a cast count.
+    by_raw = collections.defaultdict(list)
+    for h in hits:
+        if h["kind"] == "spell":
+            by_raw[h["verb"]].append(h["amt"])
+    m["spells_landed"] = {
+        name: {"landings": len(v),                      # landing lines, one per target; NOT casts
+               "normalised_key": re.sub(r" [IVX]+$", "", name),
+               "damage_total": sum(v),
+               "damage_median": round(st.median(v), 1),
+               "damage_max": max(v)}
+        for name, v in sorted(by_raw.items())}
+
     m["resists"] = []
     for name, n in resists.most_common(6):
         base = re.sub(r" [IVX]+$", "", name)
@@ -319,7 +347,6 @@ def gap_engine(lines, context=None):
             "basis": {"melee_dps_observed": round(melee_dps, 1),
                       "stance_multiplier": STANCE_OFFENSIVE_MULT,
                       "denominator": f"{engaged}s engaged"},
-            "envelope_ref": "derived/stance-offensive.json",
             "falsifier": ("A following log at the same gear whose non-crit melee endpoint "
                           "does not approximately double."),
         })
@@ -330,6 +357,7 @@ def gap_engine(lines, context=None):
     # --- ability lanes: the delta that needs no catalogue and no worn stats ---
     lane_t, lane_dmg, melee_s, auto_n = _lanes(ev, hits)
     m["time_in_melee_s"] = melee_s
+    m["melee_seconds"] = melee_s   # E2: the same number under the contract name
     m["auto_attack_attempts"] = auto_n
     m["lanes"] = {v: {"attempts": len(ts), "landed": len(lane_dmg[v]),
                       "per_melee_second": round(len(ts) / melee_s, 4) if melee_s else None}
@@ -342,10 +370,29 @@ def gap_engine(lines, context=None):
             rate = len(ts) / melee_s
             gap = ceil - rate
             if gap <= 0:
+                # E-record. This was `continue` -- a silent skip. A player who
+                # EXCEEDS a ceiling is the only evidence that the ceiling is wrong,
+                # and the ceilings come from a corpus BRIEF-eqlsource.md:589 calls
+                # "essentially one player across class swaps". Discarding the one
+                # signal that could ever correct them is the expensive silence.
+                report["coverage"].setdefault("ceiling_exceeded", []).append(
+                    {"lane": v, "observed_rate": round(rate, 4),
+                     "ceiling": ceil, "melee_s": melee_s})
                 continue
             land = len(lane_dmg[v]) / len(ts)
             value = gap * st.mean(lane_dmg[v]) * land
-            share = value / m["dps"] if m["dps"] else None
+            # UNIT BUG, FIXED 31 Aug 2026. This read `value / m["dps"]`, which
+            # divided a per-MELEE-second quantity by a per-ENGAGED-second one and
+            # produced a number that was a share of nothing. The `basis` field one
+            # line below has said `"{melee_s}s in melee, NOT {engaged}s engaged"`
+            # the whole time -- the code documented the mismatch directly beneath
+            # the line that committed it.
+            #
+            # The delta yields `value` extra damage for each MELEE second, over
+            # melee_s of them. Observed output is dps * engaged. So the share is
+            # total-extra over total-observed, which is dimensionless:
+            share = ((value * melee_s) / (m["dps"] * engaged)
+                     if m["dps"] and engaged else None)
             report["deltas"].append({
                 "lane": f"lane.{v}",
                 "statement": f"fire {v} at its cooldown rather than the observed "
@@ -356,8 +403,7 @@ def gap_engine(lines, context=None):
                 "materiality": _materiality(share),
                 "kind": "floor",
                 "requires": {"cost": "none - rotation only"},
-                "envelope_ref": "derived/lane-rates.json",
-                "basis": {"observed_per_melee_second": round(rate, 4),
+                    "basis": {"observed_per_melee_second": round(rate, 4),
                           "ceiling_per_second": ceil,
                           "denominator": f"{melee_s}s in melee, NOT {engaged}s engaged",
                           "attempts_include_misses": True,

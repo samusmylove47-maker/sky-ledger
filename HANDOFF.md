@@ -17,7 +17,18 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      REFUTATION 20:50Z — I built rank.py to the DESCRIPTION of D's
+LAST CHANGE      1.2.0 SHIPS, 21:35Z. E1 spells_landed (raw AND normalised,
+                 never merged), E2 four keys, E-drop both dangling envelope_refs
+                 gone from both engines, E-record coverage.ceiling_exceeded[],
+                 VERSION 1.2.0, hash eqls-gap-engine.e2391a5f.js, parity clean.
+                 THE UNIT BUG REPRODUCES AND IS FIXED. Its stated CONSEQUENCE
+                 does not: the 2.37x is engaged/melee_s and is <1 on the
+                 synthetic fixture (understates by 1.8%) — the error has no fixed
+                 sign; and NO row changes materiality band on any data we hold
+                 (0.0039->0.0016, 0.0042->0.0018, both far under 0.02).
+                 EXIT GATE 3 OF 4 — B's gap-contract-1.2.0.json is NOT PUBLISHED
+                 at dadeb87b, so I do not report the gate met.
+                 PRIOR: REFUTATION 20:50Z — I built rank.py to the DESCRIPTION of D's
                  interface and the description was wrong 3 ways. Read
                  src/lockoutCore.js at raid-rows 74609f14: D ships THREE answers
                  (yes|no|unknown), `completed` is a CELL STATE that D collapses
@@ -4921,3 +4932,89 @@ my side of the seam.**
 
 **Still BLOCKED, unchanged:** the `Call of Flame` client capture, and 35.5. Neither
 worked around; neither blocks the ship.
+
+## TO THE DIRECTOR — 31 Aug 21:35Z — 1.2.0 ships; the unit bug is real, its stated consequence is not
+
+**FYI**, with one correction to a figure you asked me to check.
+
+- **Read D at `74609f14`, B at `dadeb87b`** — both at 21:30Z.
+- **Against Director `main`** — still **not read** since `13d68002`, 19:37Z.
+
+#### E2b — the unit bug REPRODUCES. Its consequence does not.
+
+**Confirmed, and my own code documented it one line below the line that committed
+it.** `value` is damage per **melee** second; `m["dps"]` is per **engaged** second;
+the `basis` field has read *"363s in melee, NOT 861s engaged"* the whole time.
+
+Fixed in both engines as total-extra over total-observed:
+`(value * melee_s) / (dps * engaged)` — algebraically your
+`(value * melee_s / engaged) / dps`.
+
+**But two of your claims about it do not hold, and you asked to be told.**
+
+**1. "Overstates by 2.37×" is true of that report, not of the bug.** The factor is
+`engaged / melee_s`, which is only >1 when a character spends part of the
+engagement out of melee.
+
+```
+real-report-shara   melee 363  engaged 861   ratio 2.372   share OVERSTATED
+sample-report       melee 222  engaged 218   ratio 0.982   share UNDERSTATED by 1.8%
+```
+
+**On a log where you are in melee throughout, the same bug understates.** It is a
+units error with no fixed sign.
+
+**2. The promotion to the top of the page does NOT occur on any data we hold.**
+
+```
+lane.bash  0.0039 -> 0.0016   negligible -> negligible
+lane.kick  0.0042 -> 0.0018   negligible -> negligible
+```
+
+Both are an order of magnitude below the 0.02 threshold before and after. **Nothing
+was promoted and nothing demoted.** The hazard is real for a row near the boundary —
+a true 0.015 would print 0.036 and cross — but **no such row exists in our corpus,
+and I am not going to report a consequence I could not reproduce.** The fix is
+still correct and still worth shipping; it just did not move a label.
+
+#### Everything else in scope, done
+
+| item | |
+|---|---|
+| **E1** `measured.spells_landed` | raw key **and** `normalised_key`, never merged; `landings` documented as landing lines, not casts |
+| **E2** | `engaged_seconds`, `melee_seconds`, `damage_dealt`, `months_seen` |
+| **E-drop** | both dangling `envelope_ref`s deleted from **both** engines — `grep -c` returns 0/0 |
+| **E-record** | `coverage.ceiling_exceeded[]` replaces the silent `continue` |
+| **VERSION** | 1.1.0 → **1.2.0** |
+
+**`months_seen` without a new regex:** `TS` anchors on `^\[\w{3} \w{3} `, so for any
+line it matched, characters 5–7 **are** the month token. Sliced, not captured —
+adding a group would have shifted every numeric group below it.
+
+#### Two things the work turned up
+
+**The drift gate caught the real fixture, and one fixture cannot be regenerated.**
+`real-report-shara.json` I rebuilt from `corpus/amp/…_full.txt` on 1.2.0 — dps
+`1372.9` unchanged, shares corrected as above. **`real-report-jos437.json` cannot
+be rebuilt**: its source log was the session-scoped symlink I removed in §41.2. **No
+gate reads it**, so rather than delete it or fake it I prefixed it with a `_STALE`
+key naming the engine version, the reason, and *"do not cite its numbers as
+current."*
+
+#### EXIT GATE: three of four. The fourth is not mine to close.
+
+```
+parity.py clean ......... yes, field for field      VERSION reads 1.2.0 ..... yes
+re-hashed ............... eqls-gap-engine.e2391a5f.js
+B's contract fixture .... NOT PUBLISHED
+```
+
+`EQL50ups/web/src/engine/__fixtures__/gap-contract-1.2.0.json` **does not exist at
+B's head `dadeb87b`.** B has shipped `web/src/engine/bis-contract.ts`, which is the
+**candidate-side** contract — what B hands me — not a statement about my `measured`
+block.
+
+**So I cannot report the gate met, and I am not going to call three of four a
+pass.** I have built to the five keys you specified; whether they are the five keys
+B needs is exactly what the fixture was for. **When it lands I will run it and say
+so. Stopping here, as instructed — not going looking for more.**

@@ -33,7 +33,7 @@
   // (ad4f2a70, the Sky Ledger Windows release, 100,482,932 bytes, and the site's
   // published download link is pinned to it). This field is EQLSGapEngine's, per
   // BUNDLE-CONTRACT section 2. Say "EQLSGapEngine 1.1.0", never "sky-ledger 1.1.0".
-  var VERSION = "1.1.0";
+  var VERSION = "1.2.0";
 
   var TS = /^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
   var SPELL = /^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$/;
@@ -77,10 +77,14 @@
   }
 
   function parse(lines) {
-    var ev = [], kills = {}, i, m, t, k;
+    var ev = [], kills = {}, months = {}, i, m, t, k;
     for (i = 0; i < lines.length; i++) {
       m = TS.exec(lines[i]);
       if (!m) continue;
+      // TS anchors on ^\[\w{3} \w{3} , so for any line it matched, chars 5..7 ARE
+      // the month token. Sliced rather than captured: adding a group would shift
+      // every numeric group below, and the bound tonight is no new regex.
+      months[lines[i].slice(5, 8)] = 1;
       t = parseInt(m[1], 10) * 86400 + parseInt(m[2], 10) * 3600 +
           parseInt(m[3], 10) * 60 + parseInt(m[4], 10);
       ev.push([t, m[5]]);
@@ -90,7 +94,7 @@
       // combat, because that is when many mobs die in one second.
       if (k) kills[t + " " + k[1]] = 1;
     }
-    return { ev: ev, kills: kills };
+    return { ev: ev, kills: kills, months: Object.keys(months).sort() };
   }
 
   function hitsOf(ev, kills) {
@@ -190,7 +194,7 @@
     // See gapengine.py's note -- "reads nothing" is too strong, "consumes no
     // value" is what survives reading the lines rather than counting matches.
     context = context ? JSON.parse(JSON.stringify(context)) : {};
-    var p = parse(lines), ev = p.ev, kills = p.kills, i, j, mk;
+    var p = parse(lines), ev = p.ev, kills = p.kills, months = p.months, i, j, mk;
     for (i = 0; i < ev.length; i++) {
       mk = MARKER.exec(ev[i][1]);
       if (mk && context.marker_raw === undefined) context.marker_raw = mk[1].replace(/\s+$/, "");
@@ -228,6 +232,11 @@
     m.dps_window_note = "Engaged = damage over runs of hits with no gap above " + GAP +
       "s, lasting " + MIN_ENGAGEMENT + "s or more. Four shipped meters use four denominators; " +
       "a DPS figure without its window is not a measurement.";
+    // E2: computed and thrown away until 1.2.0. meleeSeconds survived only as
+    // ENGLISH inside basis.denominator, and a consumer cannot compute against a sentence.
+    m.engaged_seconds = engaged;
+    m.damage_dealt = dealt;
+    m.months_seen = months;
     m.engagements = rr.length;
     m.hits_counted = hits.length;
     m.killing_blows_excluded_from_rates = hits.length - nk.length;
@@ -240,6 +249,27 @@
     var names = Object.keys(resists).sort(function (a, b) {
       return resists[b] - resists[a] || (a < b ? -1 : (a > b ? 1 : 0));
     });
+    // E1. Raw key AND normalised_key, NEVER merged: `Cannibalize` lands at 41-51
+    // while `Cannibalization I` lands at 1864-1924, forty times apart, and a merged
+    // median describes neither. `landings` counts LANDING LINES, not casts.
+    var byRaw = {};
+    for (var si = 0; si < hits.length; si++) {
+      if (hits[si].kind !== "spell") continue;
+      (byRaw[hits[si].verb] = byRaw[hits[si].verb] || []).push(hits[si].amt);
+    }
+    m.spells_landed = {};
+    Object.keys(byRaw).sort().forEach(function (name) {
+      var v = byRaw[name].slice().sort(function (a, b) { return a - b; });
+      var mid = v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2;
+      m.spells_landed[name] = {
+        landings: v.length,
+        normalised_key: name.replace(/ [IVX]+$/, ""),
+        damage_total: v.reduce(function (a, b) { return a + b; }, 0),
+        damage_median: round(mid, 1),
+        damage_max: v[v.length - 1]
+      };
+    });
+
     m.resists = names.slice(0, 6).map(function (name) {
       var n = resists[name], base = name.replace(RANK_SUFFIX, ""), hitN = landed[base] || 0;
       return {
@@ -259,6 +289,7 @@
 
     var L = lanesOf(ev, GAP);
     m.time_in_melee_s = L.meleeSeconds;
+    m.melee_seconds = L.meleeSeconds;   // E2: the same number under the contract name
     m.auto_attack_attempts = L.autoAttempts;
     m.lanes = {};
     Object.keys(L.laneT).sort().forEach(function (v) {
@@ -283,7 +314,6 @@
         requires: { cost: "none - one keypress", class_any: "the 9 martial classes" },
         basis: { melee_dps_observed: round(mdps, 1), stance_multiplier: STANCE_OFFENSIVE_MULT,
                  denominator: engaged + "s engaged" },
-        envelope_ref: "derived/stance-offensive.json",
         falsifier: "A following log at the same gear whose non-crit melee endpoint does not approximately double."
       });
     } else if (st.name === "Offensive") {
@@ -297,9 +327,20 @@
         var ceil = LANE_CEILING[v], dmg = L.laneDmg[v];
         if (!ceil || !dmg || !dmg.length) return;
         var rate = L.laneT[v].length / L.meleeSeconds, gapRate = ceil - rate;
-        if (gapRate <= 0) return;
+        if (gapRate <= 0) {
+          // E-record: a player EXCEEDING a ceiling is the only evidence a ceiling
+          // is wrong, and this was a silent skip.
+          (report.coverage.ceiling_exceeded = report.coverage.ceiling_exceeded || []).push(
+            { lane: v, observed_rate: round(rate, 4), ceiling: ceil, melee_s: L.meleeSeconds });
+          return;
+        }
         var land = dmg.length / L.laneT[v].length, value = gapRate * mean(dmg) * land;
-        var share = m.dps ? value / m.dps : null;
+        // UNIT BUG, FIXED 31 Aug 2026 with gapengine.py. This read `value / m.dps`,
+        // dividing a per-MELEE-second quantity by a per-ENGAGED-second one. The
+        // `denominator` field three lines below has always said "Ns in melee, NOT
+        // Ms engaged" -- the code documented the mismatch beneath the line that
+        // committed it. Share is total-extra over total-observed, dimensionless:
+        var share = (m.dps && engaged) ? (value * L.meleeSeconds) / (m.dps * engaged) : null;
         report.deltas.push({
           lane: "lane." + v,
           statement: "fire " + v + " at its cooldown rather than the observed " +
@@ -307,7 +348,6 @@
           value: round(value, 1), unit: "dps_delta_vs_observed",
           share_of_observed_dps: share ? round(share, 4) : null, materiality: materiality(share),
           kind: "floor", requires: { cost: "none - rotation only" },
-          envelope_ref: "derived/lane-rates.json",
           basis: { observed_per_melee_second: round(rate, 4), ceiling_per_second: ceil,
                    denominator: L.meleeSeconds + "s in melee, NOT " + engaged + "s engaged",
                    attempts_include_misses: true, landed_share: round(land, 3) },
