@@ -127,24 +127,41 @@ def _actionable(cand, character, actionability, now):
                 "doesNotAnswer": None}
     r = actionability(character.get("state"), now,
                       {"raid": obt["boss"], "difficulty": obt["difficulty"]})
-    ans = r.get("answer") if isinstance(r, dict) else r
-    if ans not in ("yes", "no", "unknown", "not_looked", "completed"):
-        return {"answer": "unknown", "why": f"oracle returned an unrecognised state {ans!r}",
-                "doesNotAnswer": None}
+    if not isinstance(r, dict):
+        return {"answer": "unknown", "why": f"oracle returned {type(r).__name__}, not a result object",
+                "unknownKind": None, "doesNotAnswer": None, "gates": None}
+    ans = r.get("answer")
+    # READ FROM D'S SHIPPED SOURCE, NOT FROM ITS DESCRIPTION. src/lockoutCore.js
+    # at raid-rows 74609f14 returns THREE answers only -- yes | no | unknown --
+    # and its own test asserts `three-way only`. `completed` and `not_looked` are
+    # CELL STATES, never answers: D collapses a completed cell to `yes` itself,
+    # citing the 28 Jul 2026 patch note. So the ruling that `completed` is
+    # actionable is honoured on D's side and there is nothing for me to special-case.
+    if ans not in ("yes", "no", "unknown"):
+        return {"answer": "unknown",
+                "why": f"oracle returned an answer outside D's three-way contract: {ans!r}",
+                "unknownKind": "oracle-contract", "doesNotAnswer": r.get("doesNotAnswer"),
+                "gates": r.get("gates")}
     return {"answer": ans,
-            "why": (r.get("why") if isinstance(r, dict) else None),
-            # RULING 2, BOUND 1: `yes` means "may run it and spend a token" and NEVER
-            # "the item will drop". The loot lockout is not observable from a log,
-            # ever. This field is carried through verbatim and never collapsed.
-            "doesNotAnswer": (r.get("doesNotAnswer") if isinstance(r, dict) else None)}
+            # D'S FIELD IS `because`. Reading `why` returned None on every row and
+            # silently discarded D's entire explanation -- see HANDOFF section 51.
+            "why": r.get("because", r.get("why")),
+            # `coverage` means MORE LOG WOULD FIX THIS. `reset-hour` means a
+            # measurement nobody has taken. `raid-not-in-roster` means unmeasured,
+            # not absent. Three different things to tell a player; do not flatten them.
+            "unknownKind": r.get("unknownKind"),
+            # BOUND 1: `yes` means "may run it and spend a token" and NEVER "the item
+            # will drop". The loot lockout is not observable from a log, ever.
+            "doesNotAnswer": r.get("doesNotAnswer"),
+            "gates": r.get("gates")}
 
 
-# `completed` is ACTIONABLE, deliberately: a locked-out kill still pays a
-# guaranteed drop per the 28 Jul 2026 patch note. Filtering it out deletes real
-# upgrades -- the opposite error to the one the three-way rule guards against,
-# and just as costly.
-ACTIONABLE = {"yes", "completed"}
-UNKNOWN = {"unknown", "not_looked"}
+# D's contract is three-way. `completed` is actionable -- a locked-out kill still
+# pays a guaranteed drop per the 28 Jul 2026 patch note -- but D applies that rule
+# ITSELF and returns `yes`. I checked the shipped source rather than trusting the
+# description I was given, which said `completed` would arrive as an answer.
+ACTIONABLE = {"yes"}
+UNKNOWN = {"unknown"}
 
 
 def rank(candidates, character, actionability=None, now=None):
@@ -192,13 +209,24 @@ def rank(candidates, character, actionability=None, now=None):
     banded = {b: [r for r in rows if r["band"] == b] for b in BANDS}
     banded["modelled"].sort(key=lambda r: -r["dps_delta"])
 
+    # PREFER D'S OWN CAP over my copy of it. Duplicating a constant across a seam
+    # is how the two drift; D reports it in gates.tokenCap.cap on every answer.
+    cap, cap_src = TOKEN_CAP, "E's recorded bound (D reported none)"
+    for r in rows:
+        g = (r["actionability"] or {}).get("gates") or {}
+        c = (g.get("tokenCap") or {}).get("cap")
+        if isinstance(c, int) and c > 0:
+            cap, cap_src = c, "read from D's gates.tokenCap.cap"
+            break
+
     spendable = [r for r in banded["modelled"] if r["actionability"]["answer"] in ACTIONABLE]
-    allocate, deferred = spendable[:TOKEN_CAP], spendable[TOKEN_CAP:]
+    allocate, deferred = spendable[:cap], spendable[cap:]
     blocked = [r for r in banded["modelled"] if r["actionability"]["answer"] == "no"]
 
     return {
         "spend": {
-            "cap": TOKEN_CAP, "cap_basis": TOKEN_CAP_BASIS, "cap_caveat": TOKEN_CAP_CAVEAT,
+            "cap": cap, "cap_source": cap_src,
+            "cap_basis": TOKEN_CAP_BASIS, "cap_caveat": TOKEN_CAP_CAVEAT,
             "allocate": allocate,
             "deferred_cap_reached": deferred,
             "blocked_this_week": blocked,
@@ -239,13 +267,26 @@ if __name__ == "__main__":
     def oracle(state, now, key):
         assert set(key) == {"raid", "difficulty"}, "the seam passes raid+difficulty only"
         if key["raid"] == "Vox":
-            return {"answer": "no", "why": "token cap spent this week",
-                    "doesNotAnswer": "may-run, never will-drop"}
+            return {"answer": "no",
+                    "because": "3 weekly grants observed against a cap of 3. The cap is "
+                               "spent, so no raid is actionable for a token this week "
+                               "regardless of the grid.",
+                    "doesNotAnswer": "answers the RAID lockout, never the LOOT lockout",
+                    "gates": {"tokenCap": {"cap": 3, "grantsObserved": 3}}}
         if key["raid"] == "Trak":
-            return {"answer": "completed", "why": "locked out, still pays a guaranteed drop",
-                    "doesNotAnswer": "may-run, never will-drop"}
-        return {"answer": "yes", "why": "open and cap available",
-                "doesNotAnswer": "may-run, never will-drop"}
+            # D collapses a COMPLETED cell to `yes` itself. This mirrors its wording.
+            return {"answer": "yes",
+                    "because": "A completed cell is still actionable: a locked-out kill "
+                               "pays a guaranteed drop (28 Jul 2026).",
+                    "doesNotAnswer": "answers the RAID lockout, never the LOOT lockout",
+                    "gates": {"tokenCap": {"cap": 3, "grantsObserved": 1}}}
+        if key["raid"] == "Fog":
+            return {"answer": "unknown", "unknownKind": "coverage",
+                    "because": "coverage does not span the current period. MORE LOG WOULD FIX THIS.",
+                    "doesNotAnswer": "answers the RAID lockout, never the LOOT lockout"}
+        return {"answer": "yes", "because": "tokens remain and the raid is reachable",
+                "doesNotAnswer": "answers the RAID lockout, never the LOOT lockout",
+                "gates": {"tokenCap": {"cap": 3, "grantsObserved": 0}}}
 
     def W(name, dmg, dly, boss, tier=None):
         return {"slot": "PRIMARY", "candidateName": name, "replacesItemId": "cur",
@@ -263,6 +304,13 @@ if __name__ == "__main__":
             print(f"  {label:<56} {'ok' if cond else 'FAILED'}   {detail}")
             if not cond: ok = False
 
+        # unknownKind survives -- coverage and reset-hour are different answers
+        p = rank([W("Fog Blade", 20, -10, "Fog")], CHAR, oracle, "now")
+        u = (p["bands"]["unknown_actionability"] or [{}])[0]
+        check("unknownKind is carried, not flattened",
+              (u.get("actionability") or {}).get("unknownKind") == "coverage",
+              "coverage means MORE LOG WOULD FIX THIS")
+
         # RULING 1 -- unknown is neither ranked as actionable nor dropped
         c = W("Unknown Source", 20, -10, "x"); c["obtainable"] = "not recorded"
         p = rank([c], CHAR, oracle, "now")
@@ -273,7 +321,11 @@ if __name__ == "__main__":
 
         # RULING 2 -- `completed` is actionable, deliberately
         p = rank([W("Trak Blade", 20, -10, "Trak")], CHAR, oracle, "now")
-        check("`completed` IS allocated (guaranteed drop)", len(p["spend"]["allocate"]) == 1)
+        check("a COMPLETED cell (D returns yes) IS allocated", len(p["spend"]["allocate"]) == 1)
+        check("D's `because` survives; it is not read as `why`",
+              "guaranteed drop" in (p["spend"]["allocate"][0]["actionability"]["why"] or ""))
+        check("the cap is READ FROM D, not duplicated",
+              p["spend"]["cap_source"].startswith("read from D"))
 
         # ...and its inverse: `no` is not
         p = rank([W("Vox Blade", 20, -10, "Vox")], CHAR, oracle, "now")

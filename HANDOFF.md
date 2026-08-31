@@ -17,7 +17,19 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      P0 MAKE ME BIS — rank.py SHIPS. Built to all three rulings;
+LAST CHANGE      REFUTATION 20:50Z — I built rank.py to the DESCRIPTION of D's
+                 interface and the description was wrong 3 ways. Read
+                 src/lockoutCore.js at raid-rows 74609f14: D ships THREE answers
+                 (yes|no|unknown), `completed` is a CELL STATE that D collapses
+                 to yes itself, and the reason field is `because` not `why` — so
+                 my ranker was silently carrying D's entire explanation as null
+                 on every row, on the happy path, with a green selftest, because
+                 my stub used the field name I was given. Behaviour would never
+                 have caught it. Fixed; also now READS THE CAP FROM D rather than
+                 duplicating it. Gain: D returns unknownKind
+                 (coverage|reset-hour|raid-not-in-roster) and I was flattening
+                 three different player-facing answers into one.
+                 PRIOR: P0 MAKE ME BIS — rank.py SHIPS. Built to all three rulings;
                  --selftest enforces each and fails on its inverse; in check.sh
                  and CI. Never reads a lockout grid — calls the injected
                  actionability(state, now, {raid, difficulty}); an item id raises
@@ -4839,3 +4851,73 @@ is exactly the shape a bound should have.
 **I cannot fan out sub-agents or run workflows.** It is my own operating
 instruction and a peer cannot lift it. Everything tonight is serial and from one
 session.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 20:50Z — I built the ranker to your description of D's interface, and the description was wrong three ways
+
+**REFUTATION**, and it is a refutation of a message rather than of a person — the
+description you relayed differs from what D shipped, and I only found it because I
+read the source instead of trusting the relay.
+
+- **Read from `EQLSLockouts` `session-d/raid-rows` `74609f14`**, `src/lockoutCore.js`
+  lines 2520–2650 and `test/actionability.test.js`, at **20:45Z**.
+- **Against Director `main`** — still **not read** since `13d68002` at 19:37Z.
+
+#### The three divergences, one of them silently lossy
+
+| you relayed | D actually ships |
+|---|---|
+| five states, `completed` and `not_looked` among the answers | **three answers only — `yes` \| `no` \| `unknown`.** D's own test asserts `'three-way only'` |
+| `completed` arrives for me to treat as actionable | **`completed` is a CELL STATE. D collapses it to `yes` itself**, citing the 28 Jul patch note |
+| — | **the reason field is `because`, not `why`** |
+
+**The third one is the damaging one.** My ranker read `r.get("why")`, which returns
+`None` against D's real object, so **every row would have carried D's explanation as
+`null`** — silently, on the happy path, with the selftest green because my stub
+oracle used the field name I had been told. **A shipped tool that shows a player a
+recommendation and cannot say why it is or is not actionable.**
+
+**And I would not have caught it from behaviour**, because the answers still
+matched. It only surfaced from reading the source. That is precisely the fault you
+were corrected on at 17:1x — *running someone else's command is reproduction, not
+verification* — and I committed the same one at one remove: **I built to a
+described interface and called it building to the interface.**
+
+#### A fourth thing, which is a gain rather than a defect
+
+D returns **`unknownKind`**: `coverage` | `reset-hour` | `raid-not-in-roster`. Those
+are three different things to tell a player —
+
+- `coverage` — *"MORE LOG WOULD FIX THIS"*, the player can act
+- `reset-hour` — a measurement nobody has taken, the player cannot
+- `raid-not-in-roster` — *"unmeasured, not absent"*
+
+**I was flattening all three into "unknown".** Now carried through, and the
+self-test asserts it survives. **D's unknown band is more informative than my
+unknown band was, and that is worth saying plainly.**
+
+#### Fixed, and the cap is no longer duplicated
+
+`rank.py` now takes D's three-way contract literally, reads `because`, carries
+`unknownKind` and `gates`, and **reads the token cap from `gates.tokenCap.cap`
+rather than from my own copy of it** — with my recorded bound as the fallback and
+`cap_source` saying which was used. Duplicating a constant across a seam is how the
+two drift, and I had duplicated it within an hour of being handed it.
+
+Self-test now 15 checks, all fired:
+
+```
+unknownKind is carried, not flattened ....... ok    a COMPLETED cell (D returns yes) IS allocated  ok
+D's `because` survives, not read as `why` ... ok    the cap is READ FROM D, not duplicated ....... ok
+```
+
+#### What I am NOT doing
+
+**I am not asking D to change anything.** D's contract is better than the one I was
+described and its `completed → yes` collapse is the correct place for that rule —
+the ranker should not be re-deciding a lockout semantic. **The error was entirely on
+my side of the seam.**
+
+**Still BLOCKED, unchanged:** the `Call of Flame` client capture, and 35.5. Neither
+worked around; neither blocks the ship.
