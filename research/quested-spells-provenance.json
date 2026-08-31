@@ -1,0 +1,31 @@
+{
+  "_what": "Provenance test on the eqlwiki pages supplied for the MAKE ME BIS non-gear axis.",
+  "_measured_by": "Session E (EQLS Residual)",
+  "_measured_at": "2026-08-31T20:20Z",
+  "_method": "eqlwiki.com/api.php action=query prop=revisions, oldest and newest. Two disqualifying tests from CLAUDE.md: oldest revision predates the EQ Legends launch of 2026-07-28, or the oldest editor carries an `imported>` / `P99Wiki>` prefix.",
+  "_launch": "2026-07-28",
+  "pages": [
+    {"title": "Class_Race_Quest_List", "oldest_revid": 15, "oldest_ts": "2023-09-02T19:55:28Z", "oldest_user": "P99Wiki>Greblhad", "revisions": 5, "newest_ts": "2026-06-15T23:10:36Z", "post_launch_edits": 0, "tier": 5, "note": "THE INDEX. No post-launch edit at all. One revision replaced its content with {{Delete}} on 2026-05-24, reverted the same day."},
+    {"title": "Call_of_Flame_Quest", "oldest_revid": 30502, "oldest_ts": "2021-10-13T03:53:39Z", "oldest_user": "P99Wiki>Passenger", "revisions": 5, "newest_ts": "2026-08-24T18:27:42Z", "post_launch_edits": 3, "tier": 5, "note": "Carries NO damage figure and NO cast time. Grants Spell: Call of Flame. Post-launch edits are formatting and a note that requesting Lily's letter is not required."},
+    {"title": "Call of Flame", "oldest_revid": 103967, "oldest_ts": "2020-08-23T18:51:21Z", "oldest_user": "imported>Doujou", "revisions": null, "newest_ts": "2026-07-27T16:05:34Z", "post_launch_edits": 0, "tier": 5, "note": "THE SPELL PAGE, and the one that carries every figure. Self-labelled {{Classic Era}}. Newest revision is 2026-07-27, ONE DAY BEFORE LAUNCH. No post-launch edit exists."},
+    {"title": "Coin_of_Tash_(Tashania)", "oldest_revid": 30678, "oldest_ts": "2025-08-11T07:54:37Z", "oldest_user": "P99Wiki>Maaaaadlax", "revisions": 14, "newest_ts": "2026-08-31T14:43:54Z", "post_launch_edits": 3, "tier": 5},
+    {"title": "The_Bones_of_Darak_Lightforge", "oldest_revid": 30422, "oldest_ts": "2024-11-14T20:09:33Z", "oldest_user": "P99Wiki>FrugalRacer", "revisions": 22, "newest_ts": "2026-08-24T00:36:12Z", "post_launch_edits": 3, "tier": 5},
+    {"title": "The_Etched_Stone", "oldest_revid": 30720, "oldest_ts": "2025-06-18T16:29:20Z", "oldest_user": "P99Wiki>RibbonRMX", "revisions": 6, "newest_ts": "2026-08-31T16:42:31Z", "post_launch_edits": 1, "tier": 5},
+    {"title": "Tarton's_Wheel", "oldest_revid": 30692, "oldest_ts": "2024-10-27T08:22:25Z", "oldest_user": "P99Wiki>Olddirty", "revisions": 8, "newest_ts": "2026-08-15T21:15:56Z", "post_launch_edits": 2, "tier": 5}
+  ],
+  "call_of_flame_figures_verbatim": {
+    "_source": "eqlwiki Call of Flame, wikitext at 2026-08-31T20:20Z, page tier 5, no post-launch revision",
+    "description": "Hurls a magically burning arrow at your target, causing 300 damage.",
+    "slot_1": "Decrease Hitpoints by 300",
+    "casting_time": "0.50",
+    "recast_time": "10.00",
+    "fizzle_time": "2.50",
+    "mana": "106",
+    "range": "200",
+    "classes": "Ranger - Level 49",
+    "resist": "Fire (0)",
+    "era_template": "{{Classic Era}}"
+  },
+  "finding": "The owner's recalled figures and the wiki's figures are THE SAME FIGURES. 300 damage and 0.50 cast appear verbatim on a page whose oldest editor is `imported>Doujou` (2020) and whose newest revision predates launch by one day. They are one source, not two, so the page cannot corroborate the recollection. The second half of the recollection -- ~0.125s under an empowering or inversion stance -- appears NOWHERE: the page has no stance interaction of any kind.",
+  "what_would_settle_it": "A client spell-description window for Call of Flame on a level-49 Ranger in EverQuest Legends, and a measured cast time under the named stance."
+}
