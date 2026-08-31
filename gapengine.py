@@ -203,6 +203,17 @@ ALWAYS_REFUSED = (
 
 
 def gap_engine(lines, context=None):
+    # WHAT THIS ENGINE DOES WITH `context`, stated precisely because two sessions
+    # got it wrong in opposite directions on 31 Aug 2026:
+    #   - it CONSUMES NO VALUE from it. No branch, rate, denominator or refusal
+    #     depends on anything a caller supplies. `slot`, `equip`, `weapon`,
+    #     `armor` appear zero times in this file and in the bundle.
+    #   - it does READ the object, to copy it. This line. The caller's dict is
+    #     never mutated -- the same aliasing property the refusals now have.
+    #   - it reads ONE field's PRESENCE, `marker_raw`, to guard a write below.
+    #     A presence test is not a consumed value.
+    # "The engine reads nothing from context" is close but too strong; "the engine
+    # consumes no context value" is the sentence that survives reading the lines.
     context = dict(context or {})
     ev, kills = _parse(lines)
     for _, b in ev:

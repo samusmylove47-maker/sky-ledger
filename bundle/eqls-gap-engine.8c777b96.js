@@ -184,6 +184,11 @@
   }
 
   function gapEngine(lines, context) {
+    // Consumes no VALUE from `context`. It deep-copies the object (this line, so
+    // the caller's object is never mutated) and reads one field's PRESENCE below
+    // to guard a write. slot/equip/weapon/armor: zero occurrences in this file.
+    // See gapengine.py's note -- "reads nothing" is too strong, "consumes no
+    // value" is what survives reading the lines rather than counting matches.
     context = context ? JSON.parse(JSON.stringify(context)) : {};
     var p = parse(lines), ev = p.ev, kills = p.kills, i, j, mk;
     for (i = 0; i < ev.length; i++) {

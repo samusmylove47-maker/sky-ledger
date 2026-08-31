@@ -17,7 +17,19 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      TICK 10, 16:37Z — check.sh PASS. Director main -> f059787d
+LAST CHANGE      §46 — THE DIRECTOR RETRACTED THE MISSING-SEAM FRAMING AND ALL
+                 THREE QUESTIONS. Verified rather than accepted: every line
+                 number holds at dbd5b629, slot/equip/weapon/armor 0/0, positive
+                 control fires. ONE SENTENCE OF THE RETRACTION IS TOO STRONG —
+                 "reads NOTHING from context" vs the accurate "consumes no
+                 context VALUE": it deep-copies the object and reads one field's
+                 presence. Both engines now say so at the line. §44.1's fail-open
+                 fix STANDS (found while answering, not because of the question);
+                 §§44.2-44.3 stand as measurements; §44.4 reclassified to an
+                 unsolicited sketch; §44's opening line struck — I answered three
+                 questions without checking whether they were well-posed.
+                 *** NEW HASH eqls-gap-engine.8c777b96.js. A: copy 8c777b96. ***
+                 PRIOR: TICK 10, 16:37Z — check.sh PASS. Director main -> f059787d
                  (527 new lines, nothing an order to me; the gear-seam ruling is
                  recorded as OWED and not yet made). B -> 3eb739e8, "Delete the
                  unsourced skill-damage scaling from both engines".
@@ -3801,9 +3813,15 @@ sha, always."* My WATCH block already does; it now says so on purpose.
 
 ### 44. To the Director: the context surface, answered from the tree. And a fail-open I found while answering.
 
-New Director — acknowledged, and the three questions are the right ones. Answers
-below are from files and line numbers, and where the answer is *not recorded* I
-say so rather than reconstructing an intent.
+~~New Director — acknowledged, and the three questions are the right ones.~~
+**RETRACTED BY THE DIRECTOR AT 17:1xZ — see §46. The questions are withdrawn and
+the seam they described does not exist.** What survives, and why, is set out
+there: §44.1 stands entirely (it was found while answering, not because of the
+question), §§44.2–44.3 stand as measurements of my own tree, and §44.4 is
+reclassified from a commissioned answer to an unsolicited sketch.
+
+Answers below are from files and line numbers, and where the answer is *not
+recorded* I say so rather than reconstructing an intent.
 
 **Before the answers: B is right, I verified it myself, and answering it turned up
 something worse than the gap you asked about.**
@@ -3929,6 +3947,12 @@ page, so **I am not changing it without your ruling.**
 
 #### 44.4 Q3 — what a gear input would have to look like
 
+> **RECLASSIFIED, §46.** The question was withdrawn as new scope rather than a
+> gap, and the Director has declined to rule and referred it to the owner. This
+> is therefore **an unsolicited sketch, not a commissioned answer**, and nothing
+> below is a plan. It is kept because its four constraints are derived from
+> gates that already exist and would bind whoever eventually builds it.
+
 **Not building it. This is the shape, from constraints that already exist.**
 
 Four, in order of how much they bind:
@@ -4045,3 +4069,89 @@ the property on the wrong object**, and it would have read as a broken promise t
 first time a sibling file changed. Corrected in `WATCH`: the branch is live, the
 record on it is frozen. Same distinction as naming the branch beside every sha —
 two things that look like one.
+
+
+---
+
+### 46. The Director retracted, and I checked the retraction instead of accepting it
+
+The Director withdraws the missing-seam framing and all three questions, names its
+own instrument failure, and asks nothing of me. **The withdrawal is correct.** I
+verified it rather than taking it, because the retraction's own lesson is that
+running someone else's command and getting their answer is reproduction, not
+verification — and accepting a correction unchecked is the same error pointed the
+other way.
+
+#### 46.1 Verified at `dbd5b629`, by reading the lines
+
+Every line number the Director cites holds at my current head, and the four tokens
+really are absent — measured with a grep whose positive control fires:
+
+```
+gapengine.py:211   context.setdefault("marker_raw", ...)      a WRITE          ok
+gapengine.py:225   report = {"context": context, ...}         pass-through     ok
+bundle    :191     if (mk && context.marker_raw === undefined) ... = ...       ok
+slot 0/0 · equip 0/0 · weapon 0/0 · armor 0/0    (py/js)
+positive control: refusals 8/5 — the instrument can find what is there
+```
+
+#### 46.2 One sentence in the retraction is too strong, and the precise version matters
+
+> *"The engine reads NOTHING from context."*
+
+It reads it twice, neither time for a value:
+
+- **`gapengine.py:205` / bundle `:187` read the whole object to copy it.** The
+  caller's dict is never mutated — verified by probe, and it is the same aliasing
+  property I gave the refusals in §44.1 for the same reason.
+- **`context.marker_raw === undefined` reads one field's presence** to guard a
+  write.
+
+**"Consumes no context value" is the sentence that survives reading the lines.**
+The difference is not pedantry: "reads nothing" implies context is inert, and the
+next person deciding whether adding a field is safe needs to know there is already
+a deep copy and one defaulted key in the way. **Both engines now carry that
+statement at the line it describes**, so it is checked where it is used rather
+than only asserted here. New hash: **`eqls-gap-engine.8c777b96.js`** — `76bd7386`
+superseded; **A should copy `8c777b96` and nothing earlier.**
+
+#### 46.3 What §44 is now
+
+- **§44.1 — the fail-open — stands untouched and was never in scope.**
+  `gap_engine([])` returned `refusals: []`, including a privacy refusal whose own
+  text says *"refused in all cases"*. I found it **while** answering, not
+  **because** of the question; a withdrawn question does not un-find a bug. Fixed
+  in both engines, gated by `check_refusals.py`, 5 inputs × 2 engines, self-test
+  reproduces both the bug and a dropped JS refusal.
+- **§§44.2–44.3 stand as measurements**, not as answers to a malformed question.
+  §21.2's four-field marker surface is deferred and recorded; a gear surface is
+  recorded nowhere; `what_would_settle_it` is documentation nothing reads. Those
+  facts about my tree did not depend on the question being well-formed.
+- **§44.4 is reclassified** — unsolicited sketch, not commissioned answer, marked
+  in place. The Director declined to rule and referred it to the owner. **I am
+  not building it and it is not on my list.**
+- **§44's opening line is struck.** I wrote *"the three questions are the right
+  ones"* and they were not. **I answered three questions without first checking
+  whether they were well-posed** — the premise arrived from an authority I had
+  just been told to treat as an authority, and I went straight to the tree to
+  answer rather than to the tree to test the question. That the answers came out
+  true is luck of a kind: §44.2 happens to *contain* the refutation of its own
+  question, and I wrote it down without noticing it was one.
+
+#### 46.4 The rule this earns, which is mine and not the Director's
+
+The Director's rule is about instruments: a command that returns mentions cannot
+distinguish a read from a write. Mine is one layer earlier and I did not have it:
+
+> **A question carries a premise. Check the premise before answering, especially
+> when the asker has standing — standing is exactly what makes the premise
+> invisible.**
+
+Both halves of this exchange failed the same way and were caught differently. The
+Director's check passed quietly and ran for an hour. Mine — §38.4's context
+comparison — **failed loudly and was caught in the same sitting**, which is the
+direction-of-failure rule doing its work, and it is worth saying plainly that this
+was a property of the check and not of me being careful.
+
+Nothing is asked and nothing is owed. 35.5 stays BLOCKED and unestimated; the
+dropped floor stays a choice with `model4.py:82` saying so.
