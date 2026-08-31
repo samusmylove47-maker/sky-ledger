@@ -12,7 +12,17 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §38 — A'S FIXTURE CLOSURE VERIFIED MYSELF (byte-identical,
+LAST CHANGE      §39 — THE CLOCK WORKS. trig_01Frv3YVefs94Qd7JndacxbT, hourly
+                 at :36, self-bound to THIS session, next 07:36Z. Verified by
+                 listing it back. Director: your 6-for-6 failures are your
+                 session's approval posture, not the server — the account's
+                 other Routine last ran SUCCEEDED on 30 Aug.
+                 Director's ruling carried to A in handover/TO-SESSION-A.md:
+                 A's CONCLUSION STANDS, only the 4,522 figure is corrected.
+                 35.5 stays BLOCKED — not estimating past it.
+                 NEXT (intent declared): critical-path task 2, per-character
+                 modelling. model4.py + percharacter.py, this branch.
+                 PRIOR: §38 — A'S FIXTURE CLOSURE VERIFIED MYSELF (byte-identical,
                  sha256 0f02af40, 4978 bytes). A's "4,522 chars" is a
                  RE-SERIALISATION length, not the file — A's own 31 Aug fault
                  shape inside the message reporting it. Applied that shape to my
@@ -54,7 +64,8 @@ CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  BUNDLE BUILT — bundle/eqls-gap-engine.e7b0234e.js (§34)
                  task 2 NOT STARTED (per-character modelling)
-ABOUT TO TOUCH   model4.py only, this branch, nothing else
+ABOUT TO TOUCH   model4.py and a NEW percharacter.py, this branch, nothing else
+                 (critical-path task 2 — intent declared in §39.5)
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
 UNRESOLVED       ITEM UPGRADE +1/TIER FLOOR — ungraded in BOTH repositories. Ten
                  client captures, zero decisive (§35). Dropped as the conservative
@@ -3203,3 +3214,124 @@ A's four in two days were all caught *"by reading the words rather than the verd
 and none by a check. Both of mine tonight were caught the same way. That is worth
 saying plainly: **the check suite found none of this.** It is a guard, as its own
 header says, and the reading is what is actually working.
+
+---
+
+### 39. The clock works. It is `trig_01Frv3YVefs94Qd7JndacxbT` and it fires into this session.
+
+Four things: your ruling carried to A, the trigger result, the blocked item I am
+not working around, and what I am taking next off my own list.
+
+#### 39.1 THE CLOCK — it worked, first attempt, no debugging
+
+```
+id                trig_01Frv3YVefs94Qd7JndacxbT
+name              EQLS project clock — hourly branch check-in
+cron              36 * * * *          (server anchored it to the creation minute)
+enabled           true
+next_run_at       2026-08-31T07:36:00Z
+binds to          session_01FG26fN54H8sAkqHK43s7a5  — THIS session, resumed
+created_via       meta_mcp
+```
+
+Verified by listing it back, not by the create call's own success. **Six for six
+failing for you, one for one succeeding for me.**
+
+**The measurement that narrows your problem, and it is free:** the same listing
+returned your account's other Routine — `trig_01D9GfBUx7LH7zc79s69PU4e`, the 9am
+morning briefing, `last_run` **`ROUTINE_RUN_STATUS_SUCCEEDED`** at 2026-08-30
+13:02Z. So the mechanism, the account and the server are all fine, and have been
+firing successfully on a schedule for a month. **Your "requires approval" on six
+calls including read-only ones is a property of your session's approval posture,
+not of the MCP server and not of the account.** I am not debugging it, per your
+instruction; I am telling you where it is not.
+
+**One caveat, from the create call's own warning and not from a test:** the
+Routine *"stores no MCP connectors, so the sessions it fires will run without
+connector (`mcp__<server>__*`) tools."* My tick prompt uses only Bash and git so
+this does not bite it, and because the Routine is **self-bind** rather than
+fresh-session I do not know whether the restriction applies to a resumed session
+at all. I have not tested it and will not guess. **If you want the project clock
+to do anything needing `mcp__github__*`, treat that as unestablished until the
+first tick reports.**
+
+What the tick does: run `check.sh`; fetch A's two refs, your branch, and B's
+branch; act on anything that moved; **and say so in one line and stop if nothing
+did.** The prompt states explicitly that silence is the correct output for a
+quiet tick and that it must not manufacture work — because a clock that has to
+justify itself hourly is worse than no clock. It also carries the bound, so a
+tick that wakes into thin context cannot self-dispatch past it.
+
+If it becomes noise, say so and I will delete it.
+
+#### 39.2 YOUR RULING, CARRIED — `handover/TO-SESSION-A.md`
+
+Applied exactly as narrow as you made it. **A's conclusion stands unqualified;
+the figure is corrected; I did not touch the closure.** The note says in your
+words that this is A's to apply, and it opens by confirming A is right.
+
+It also carries, because A will read it in one sitting: the re-vendor notice
+(4,978 → 5,079 bytes, one additive `_`-prefixed key, nothing a page renders
+moved), the `context` hazard that made me add the key, the `globalThis`-vs-
+`window` spelling, and the round-trip mechanism correction. Cross-boundary as a
+proposal, never a push — it sits in my tree for A to read.
+
+#### 39.3 35.5 IS BLOCKED AND I AM NOT WORKING AROUND IT
+
+Acknowledged and recorded where it will bind. **The item-upgrade `+1/tier` floor
+stays ungraded** until the owner is in game with one client window of a weapon at
+base damage 1–9, at any tier ≥ 1.
+
+I will not estimate it, will not infer it from adjacent items, and will not let a
+downstream number quietly depend on it. `model4.py:82` still says the dropped
+floor is **a choice, not a finding**, and `SOURCING.md` still carries the floor as
+**UNGRADED** against the percentage term's **M**. Both stay as they are.
+
+#### 39.4 THE SIXTH SHAPE HAS A CHEAPER CHECK THAN THE ONE YOU USED — a proposal, not an action
+
+Your survey returned `[]` from four dead agents, and you caught it because the
+completeness critic reported its own tool state. Your rule: *"a workflow whose
+agents cannot use tools returns the same shape as a workflow that found
+nothing."*
+
+That is §20 with a new instrument class, and it has a mechanical form your version
+does not need a critic for. **Make the instrument produce a known-positive in the
+same run as the question.** Concretely: give the survey a fifth agent whose task is
+to find a thing you already know is there — one file you have read, one issue you
+have open. **If the fifth agent returns empty, the other four's empty means
+nothing.** It is one agent, it needs no self-reporting, and it fails in the same
+direction as the fault.
+
+That is what `bundle/parity.py` now does: it perturbs one field and requires
+`walk()` to report the difference **before** it prints agreement. And what
+`derived_check.py --selftest` has done since the start: six bad claims that must
+all be rejected before the real claims are graded.
+
+**I am not building this and it is not mine to build** — it is workflow
+mechanism, and it is yours. Recorded here because you asked for the shapes to be
+routed, and because this one is the same fault I have been fixing all night in a
+place I cannot reach.
+
+#### 39.5 SELF-DISPATCH — declaring intent, and naming the list
+
+Per the two new constraints. **Which list §§36–38 came from:** all three were
+**self-dispatched off my own written list**, none assigned — §36 from A's carried
+item, §37 from Session 0's "check rather than assume", §38 from taking A's shape
+and turning it on my own tree. Two of the three found faults in instruments I had
+written and previously reported to you as sound.
+
+**Declaring intent for what is next, before starting:**
+
+> **`model4.py` and a new `percharacter.py`, on
+> `claude/eq-legends-class-analysis-q68111`.** Critical-path task 2, per-character
+> modelling from observed gear and observed rates. It carries a falsifier — the
+> 213-fight residual, which the current model overshoots as a ceiling by a factor
+> I have already published — so it is inside the standing rule and needs no
+> ruling. If it turns out to need a new mechanism rather than a re-parameterisation
+> of the existing one, I will stop and ask rather than build it.
+
+**Not touching:** `CHARM_PET` (66.8 against a measured 729.8 — deliberately
+unpatched, §14), the dual-wield class gate (`model4.py:50`, recorded in §26 and
+not quietly fixed), and `STANCE_EVEN_SHARE_OFFENSIVE` (0.93 against my own
+re-read's 99.3%, flagged in §33). All three are measurement conflicts I have
+published against myself and none of them is fixed by choosing.
