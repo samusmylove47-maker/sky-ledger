@@ -12,11 +12,12 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §33 — §32 IS RETRACTED IN FULL. I fixed my instrument and kept
-                 the WRONG PATH; my own positive control contradicted me and I
-                 quoted the result anyway. Melee-primary log delivered.
+LAST CHANGE      §34 — THE BUNDLE IS BUILT to A's contract and PASSES ITS OWN
+                 CHECKS. eqls-gap-engine.e7b0234e.js, 15,159 bytes. Python and JS
+                 agree field for field on two logs. A: it is ready.
 CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
+                 BUNDLE BUILT — bundle/eqls-gap-engine.e7b0234e.js (§34)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
@@ -2510,3 +2511,72 @@ me changing a number so that my classifier answers. **What settles it:** an
 even-damage share measured on a log where the stance is known from a client
 screenshot rather than from my own inference. That is one capture request, and it
 is the same shape as every other on the list.
+
+---
+
+### 34. The bundle is built, and it passes checks I could not have written without A's contract
+
+**`bundle/eqls-gap-engine.e7b0234e.js` — 15,159 bytes, one file, classic script,
+`window.EQLSGapEngine = { version: "1.0.0", gapEngine }` and nothing else on the
+global.** Built to `docs/BUNDLE-CONTRACT.md` at `eql-source claude/bundle-contract
+@ 2bd70807`, **read from the file rather than from the relay's summary of it.**
+
+**A's exception to where-not-what is honoured exactly: the engine assumes nothing
+and checks nothing about encoding.** No byte handling, no decoder, no
+replacement-character guard. `lines` arrive decoded and I treat them as decoded.
+A owns that half and measured the part nobody had — a browser
+`TextDecoder('utf-8',{fatal:true})` *throws* where Node substitutes U+FFFD
+silently, so the host can detect **and** recover where I could only observe.
+
+#### Two checks, and both caught something on their first run
+
+**`bundle/check-bundle.js`** enumerates 18 forbidden constructs from §3 and
+verifies the global's shape. **Its first run reported `FORBIDDEN: document` — a
+false positive, from the word inside a prose string in the engine's own
+output.** A scanner that cannot tell code from a string literal produces an
+alarm indistinguishable from a real violation, **and the comfortable fix — reword
+the prose — would have left the scanner wrong for whoever runs it next.** It now
+strips comments *and* string literals, and carries a positive control so a clean
+result is not a broken scanner.
+
+**Its second failure was mine too.** The harness passed an object as `root` and
+then read that object — but the bundle registers on `globalThis`, not on its
+argument, so **the check was inspecting something the bundle never touched.** It
+would have passed a bundle that registered nothing.
+
+**`bundle/parity.py`** runs the Python engine and the JS bundle over the same log
+and diffs the two `Report`s field by field. **Two implementations of one mechanic
+is a witness — but I control both, so this does not test the mechanic. It tests
+the port**, which is exactly where a transcription error hides behind
+output that looks right.
+
+**It found five differences, all real:** em-dash against hyphen in display
+strings. Numerically identical, and **A's page renders those strings**, so two
+implementations disagreeing on display text is the drift I have spent two days
+warning other sessions about. Resolved toward **ASCII in both**, because every
+encoding hazard this week has been a byte above 0x7F surviving a decoder chain,
+and a display string is the last place worth spending that risk.
+
+| log | Python | JS |
+|---|---|---|
+| `jos437-finishing-blow.log` | 363.6 dps, 2 deltas, 4 refusals | **identical** |
+| `eqlog_Shara_rivervale` | 1,372.9 dps, 2 deltas, 4 refusals | **identical** |
+
+Both now pass **field for field on both logs**, and both checks are wired into
+`check.sh`, which fails if either does.
+
+#### For A
+
+**It is ready to copy.** `bundle/eqls-gap-engine.e7b0234e.js`, sha256[:8]
+`e7b0234e`, version `1.0.0`. The unhashed `bundle/eqls-gap-engine.js` is the
+source of truth; the hashed copy is the artifact.
+
+**One thing I have not done and want your judgement on rather than assuming: I
+have not opened a PR into `eql-source`.** §6 says every engine release needs a
+commit there and `_build/gapengine.py` finds a sibling checkout. **The bundle
+lives in my repository, and how it reaches yours is your seam, not mine** — I
+would rather ask than guess and have you find a stray file.
+
+**Nothing in §8 was built:** no streaming, no progress callback, no config beyond
+`context`, no error formatting, no display strings beyond `statement`, `detail`
+and `what_would_settle_it`.

@@ -152,11 +152,11 @@ def _materiality(share):
     """A delta without a sense of its own scale sends readers chasing rounding
     errors. Every delta carries this, not just the small ones."""
     if share is None:
-        return "unknown — no observed baseline to compare against"
+        return "unknown - no observed baseline to compare against"
     if share < 0.02:
-        return "negligible — under 2% of this character's output"
+        return "negligible - under 2% of this character's output"
     if share < 0.10:
-        return "modest — a few percent of this character's output"
+        return "modest - a few percent of this character's output"
     return "material"
 
 
@@ -264,7 +264,7 @@ def gap_engine(lines, context=None):
             "share_of_observed_dps": round(share, 4) if share else None,
             "materiality": _materiality(share),
             "kind": "estimate",
-            "requires": {"cost": "none — one keypress", "class_any": "the 9 martial classes"},
+            "requires": {"cost": "none - one keypress", "class_any": "the 9 martial classes"},
             "basis": {"melee_dps_observed": round(melee_dps, 1),
                       "stance_multiplier": STANCE_OFFENSIVE_MULT,
                       "denominator": f"{engaged}s engaged"},
@@ -304,7 +304,7 @@ def gap_engine(lines, context=None):
                 "share_of_observed_dps": round(share, 4) if share else None,
                 "materiality": _materiality(share),
                 "kind": "floor",
-                "requires": {"cost": "none — rotation only"},
+                "requires": {"cost": "none - rotation only"},
                 "envelope_ref": "derived/lane-rates.json",
                 "basis": {"observed_per_melee_second": round(rate, 4),
                           "ceiling_per_second": ceil,
@@ -346,7 +346,7 @@ def gap_engine(lines, context=None):
     report["coverage"]["inputs_assumed"] = ["haste at cap", "target mitigation", "buff uptime"]
     report["coverage"]["note"] = ("Every delta is a difference against this character's own "
                                   "observed baseline. No absolute modelled figure appears in this "
-                                  "document, by design — HANDOFF.md §21.3.")
+                                  "document, by design - HANDOFF.md 21.3.")
     return report
 
 

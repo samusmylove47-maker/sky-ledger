@@ -58,7 +58,7 @@
    "materiality": "material",
    "kind": "estimate",
    "requires": {
-    "cost": "none \u2014 one keypress",
+    "cost": "none - one keypress",
     "class_any": "the 9 martial classes"
    },
    "basis": {
@@ -75,10 +75,10 @@
    "value": 8.8,
    "unit": "dps_delta_vs_observed",
    "share_of_observed_dps": 0.084,
-   "materiality": "modest \u2014 a few percent of this character's output",
+   "materiality": "modest - a few percent of this character's output",
    "kind": "floor",
    "requires": {
-    "cost": "none \u2014 rotation only"
+    "cost": "none - rotation only"
    },
    "envelope_ref": "derived/lane-rates.json",
    "basis": {
@@ -96,10 +96,10 @@
    "value": 7.2,
    "unit": "dps_delta_vs_observed",
    "share_of_observed_dps": 0.0688,
-   "materiality": "modest \u2014 a few percent of this character's output",
+   "materiality": "modest - a few percent of this character's output",
    "kind": "floor",
    "requires": {
-    "cost": "none \u2014 rotation only"
+    "cost": "none - rotation only"
    },
    "envelope_ref": "derived/lane-rates.json",
    "basis": {
@@ -144,6 +144,6 @@
    "target mitigation",
    "buff uptime"
   ],
-  "note": "Every delta is a difference against this character's own observed baseline. No absolute modelled figure appears in this document, by design \u2014 HANDOFF.md \u00a721.3."
+  "note": "Every delta is a difference against this character's own observed baseline. No absolute modelled figure appears in this document, by design - HANDOFF.md 21.3."
  }
 }

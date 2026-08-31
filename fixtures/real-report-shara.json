@@ -71,10 +71,10 @@
    "value": 5.3,
    "unit": "dps_delta_vs_observed",
    "share_of_observed_dps": 0.0039,
-   "materiality": "negligible \u2014 under 2% of this character's output",
+   "materiality": "negligible - under 2% of this character's output",
    "kind": "floor",
    "requires": {
-    "cost": "none \u2014 rotation only"
+    "cost": "none - rotation only"
    },
    "envelope_ref": "derived/lane-rates.json",
    "basis": {
@@ -92,10 +92,10 @@
    "value": 5.7,
    "unit": "dps_delta_vs_observed",
    "share_of_observed_dps": 0.0042,
-   "materiality": "negligible \u2014 under 2% of this character's output",
+   "materiality": "negligible - under 2% of this character's output",
    "kind": "floor",
    "requires": {
-    "cost": "none \u2014 rotation only"
+    "cost": "none - rotation only"
    },
    "envelope_ref": "derived/lane-rates.json",
    "basis": {
@@ -145,6 +145,6 @@
    "target mitigation",
    "buff uptime"
   ],
-  "note": "Every delta is a difference against this character's own observed baseline. No absolute modelled figure appears in this document, by design \u2014 HANDOFF.md \u00a721.3."
+  "note": "Every delta is a difference against this character's own observed baseline. No absolute modelled figure appears in this document, by design - HANDOFF.md 21.3."
  }
 }

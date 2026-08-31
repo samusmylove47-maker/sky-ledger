@@ -27,6 +27,12 @@ for f in handmod.py validate_jos437.py; do
   printf '  %-24s ' "$f"
   if python3 "$f" >/dev/null 2>&1; then echo ok; else echo FAILED; fail=1; fi
 done
+echo "== the shipped bundle must obey BUNDLE-CONTRACT section 3 =="
+node bundle/check-bundle.js || fail=1
+echo
+echo "== the JS bundle and the Python engine must agree field for field =="
+python3 bundle/parity.py corpus/corpus/everquest-companion/tests/fixtures/jos437-finishing-blow.log || fail=1
+echo
 echo "== the fixture must not drift from what the engine emits =="
 python3 - <<'DRIFT' || fail=1
 import json, subprocess, sys
