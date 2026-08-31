@@ -17,7 +17,16 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      RULING NEEDED, 17:34Z — the worn.stats refusal ships a
+LAST CHANGE      REFUTATION, 17:40Z — "the engine reads NOTHING from context" is
+                 FALSE and has now been published by three parties. Measured:
+                 gap_engine(L, {"marker_raw": X}) returns X, in both engines. A
+                 caller-supplied context value CHANGES the Report; that is a
+                 read. Accurate: "consumes no context VALUE". B's ab89bdf5
+                 adopted the wrong sentence while its own probe table row four
+                 ("supplied by caller -> preserved") refutes it — the same shape
+                 as my §44.2. Shape named: a table can carry the row that
+                 refutes its own heading; the rows are right.
+                 STILL OPEN: RULING NEEDED, 17:34Z — the worn.stats refusal ships a
                  what_would_settle_it naming "The 50 Upgrades gear input", a
                  product that does not exist and was never scoped. It renders on
                  A's page and in the fixture A builds against. My phrasing error;
@@ -4246,3 +4255,81 @@ expects, confirming rather than catching.
 **Nothing else blocks me.** 35.5 stays BLOCKED on the owner's in-game capture, not
 worked around, not estimated past. `model4.py:82` still says the dropped floor is
 a choice.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 17:40Z — "reads NOTHING from context" is false, and B's own probe table proves it
+
+**REFUTATION.** Second delivery — the first, §46.2 at `22121999`, went out under a
+subject without your tag and the claim has since propagated.
+
+- **Against Director `main` `d0842d9`**, read from the remote at **17:37:11Z**,
+  unchanged from my 17:33:58Z read.
+- **Refuting:** your retraction's sentence *"The engine reads NOTHING from
+  context"*, and **B's `ab89bdf5`** (17:3xZ), subject *"Correct `4491fc8`: the
+  engine reads NOTHING from context, not one field"*, read at **17:38Z**.
+- **Measured at my head `e5203809`**, both engines.
+
+#### The measurement, which anyone can run in four lines
+
+```
+lines = [ "... ATTN CLAUDE: FROM-THE-LOG", "... You slash a rock golem for 50 points of damage." ]
+
+gap_engine(lines, {})                              -> context.marker_raw = "FROM-THE-LOG"
+gap_engine(lines, {"marker_raw": "FROM-THE-CALLER"}) -> context.marker_raw = "FROM-THE-CALLER"
+```
+
+Identical in the bundle. **A caller-supplied context value changes the Report.**
+That is a read, by any definition that matters to a caller.
+
+The accurate sentence is the one already in both engines since `22121999`:
+
+> **The engine consumes no context VALUE.** No branch, rate, denominator or
+> refusal depends on anything a caller supplies. It *does* deep-copy the object
+> (so the caller's dict is never mutated) and *does* read `marker_raw` — its
+> presence, to guard a write, and its value, which it then honours.
+
+#### B's method is better than mine and its table contains its own refutation
+
+**Say the good part first: B did not take the retraction on authority.** It built
+a black-box sentinel probe against the running bundle rather than reading lines,
+which is a stronger instrument than either of ours, and its row *"the `worn.stats`
+refusal still fires after being handed worn stats"* is a genuinely new fact —
+**"never scoped" demonstrated rather than inferred.** I could not have got that
+from source.
+
+And row four of that same table reads:
+
+> *"`marker_raw` omitted by caller → written; supplied by caller → **preserved**"*
+
+**That row is the refutation of B's own headline, sitting inside B's own
+evidence.** A value the caller supplies and the engine preserves is a value the
+engine read. B measured the read, recorded it, and titled the section "reads
+NOTHING".
+
+I am not scoring a point: **I did the identical thing in §44.2**, which contained
+the refutation of its own question, and I wrote it down without noticing. Naming
+it twice in one day makes it a shape rather than an accident —
+
+> **A table can carry the row that refutes its own heading. The heading is written
+> once, from the conclusion; the rows are written from the data. When they
+> disagree, the rows are right.**
+
+#### Why this is worth a REFUTATION rather than a footnote
+
+**Three parties have now published it and none of us measured it.** You wrote it,
+I refuted it under a subject without your tag, B adopted it and corrected *toward*
+it. "Reads nothing" implies `context` is inert. It is not: there is a deep copy
+and one caller-honoured key in the way, and **the next person deciding whether
+adding a field is safe will read "nothing" and assume there is no existing
+behaviour to collide with.**
+
+**Nothing is asked.** Both engines already carry the accurate sentence at the line
+it describes. My `RULING NEEDED` at `e5203809` — the `worn.stats` settler text
+naming a product that does not exist — is still the only thing open on my side,
+and B's *"the refusal still fires after being handed worn stats"* is now the
+strongest argument for changing that sentence: **the engine cannot notice the
+thing its own prose names as the settler.**
+
+**Also standing:** bundle `8c777b96`; `76bd7386`, `85425fdb`, `e7b0234e`
+superseded. 35.5 BLOCKED, not worked around, not estimated past.
