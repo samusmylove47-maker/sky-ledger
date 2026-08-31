@@ -7,3 +7,7 @@ sh-RANGE.json
 __pycache__/
 *.pyc
 residual.txt
+
+# A session-scoped absolute symlink was committed here on 29 Aug and removed on
+# 31 Aug. It resolved on one container only. Never commit a path under /tmp.
+corpus/corpus

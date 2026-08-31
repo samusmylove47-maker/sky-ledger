@@ -9,10 +9,27 @@ SESSION          E — EQLS Residual, ref 6861fc
 REPO             samusmylove47-maker/sky-ledger
 BRANCH           claude/eq-legends-class-analysis-q68111     <-- THE ONLY BRANCH I PUSH TO
 FILE             HANDOFF.md at repository root
-NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
-                 finds nothing, forever. Watch the branch above or you watch silence.
+ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
+                 It read "master carries 4 legacy files and NO HANDOFF.md;
+                 diffing master finds nothing, forever." PR #1 MERGED at
+                 bd8b7b15 and master now carries this whole tree, HANDOFF.md
+                 included. My branch is an ancestor of master, 0 commits ahead.
+                 Session 0 and anyone told to watch the branch instead of master
+                 was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §40 — CLOCK TICK 1, 07:37Z. check.sh PASS. main -> e6039020
+LAST CHANGE      §41 — I CLONED MASTER AND IT DID NOT WORK. Three layers of one
+                 fault, all green until measured: (1) check.sh had NEVER run
+                 anywhere but this container — the 3 weapon shards every
+                 published figure rests on are gitignored and only model.py
+                 fetched 2 of 3; (2) the fresh-clone test that "proved"
+                 reproducibility was borrowing a COMMITTED SYMLINK to an
+                 absolute path carrying this session's UUID; (3) a selftest that
+                 ran before the fetch it depended on. Fixed: fetch_shards.py
+                 (sha256-pinned), parity on a synthetic log, symlink removed,
+                 check_readme.py, and .github/workflows/check.yml — THE GUARD IS
+                 A GATE NOW, and it runs all six selftests before check.sh.
+                 Fresh clone: was EXIT 1, now EXIT 0. Fixture byte-identical.
+                 PRIOR: §40 — CLOCK TICK 1, 07:37Z. check.sh PASS. main -> e6039020
                  (#156 merged), Director -> 0d094560 (has read §39, rules the
                  trigger question closed), B -> 9be60509. Nothing actionable and
                  in-bound; no work manufactured. A has NOT re-vendored my fixture
@@ -72,8 +89,9 @@ CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  BUNDLE BUILT — bundle/eqls-gap-engine.e7b0234e.js (§34)
                  task 2 NOT STARTED (per-character modelling)
-ABOUT TO TOUCH   model4.py and a NEW percharacter.py, this branch, nothing else
-                 (critical-path task 2 — intent declared in §39.5)
+ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
+                 branch is an ancestor). Critical-path task 2, intent declared
+                 in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
 WATCH            refs I track, SHAs as of clock tick 1 (2026-08-31 07:37Z).
                  A tick compares against these; without them a tick is a re-read.
@@ -3402,3 +3420,161 @@ every tick. Cheap, and it makes the next tick a diff.
 Recording it here rather than fixing it silently, because an item folded into
 other work and an item not done look identical from outside — Session 0's finding,
 and it applies to my own tick log first.
+
+---
+
+### 41. Master became the front door, so I cloned it. It did not work.
+
+The owner merged PR #1 and said to colonize the repo. **The first thing that
+deserved was not a feature — it was checking whether the thing now sitting behind
+a public front door actually runs for anyone who is not me.** It did not, in three
+separate ways, and each one had been green the whole time.
+
+#### 41.0 First, the sentence I have been broadcasting is now false
+
+Every STATUS block I have pushed for days has said:
+
+> *"NOT ON MASTER — master carries 4 legacy files and NO HANDOFF.md. Diffing
+> master finds nothing, forever. Watch the branch above or you watch silence."*
+
+```
+master  ad4f2a70 -> bd8b7b15   "Merge pull request #1"
+my HEAD is an ancestor of master · 0 commits ahead · HANDOFF.md is on master
+```
+
+**Corrected in place at the top of this file.** Session 0 and everyone else was
+told to watch the branch and ignore master **on my say-so**, and that instruction
+is now wrong. Master is a live front door. It is the fault I keep finding, in the
+one field of mine most people actually read.
+
+#### 41.1 `check.sh` had never run anywhere but here
+
+I cloned the repository fresh and ran it. **It failed.**
+
+```
+FileNotFoundError: sh-PRIMARY.json
+```
+
+`.gitignore` excludes `sh-PRIMARY.json`, `sh-SECONDARY.json` and `sh-RANGE.json`
+— **the three files every weapon number in this repository rests on** — with the
+comment *"fetched on demand by model.py / model2c.py"*. Tested rather than
+believed: `model.py` fetches PRIMARY and SECONDARY only, never RANGE, and
+`model3.py`, `model4.py`, `handmod.py` and `verify_upgrade.py` fetch nothing at
+all.
+
+So every `check.sh PASS` I have reported to you was green because of an untracked
+file sitting on one container's disk. **A container recycle would have turned
+`265 of 429`, `#1 NEC+PAL+RNG 551.9`, `Truwian Baton 11 vs 2` and every weapon row
+in the rankings into unreproducible claims, with the suite still reporting
+green.**
+
+`fetch_shards.py` fetches all three and **pins their sha256**. Measured against
+the live source the same day: byte-identical, `3dd16f76…` 258,942 b, `5ffa23ff…`
+192,781 b, `657882cb…` 42,092 b. If upstream ever changes, it fails and says so
+rather than silently re-deriving — because the published figures are functions of
+exactly those bytes. `--selftest` proves it fails on an appended byte, a
+truncation and an absence: 3 of 3.
+
+#### 41.2 The parity harness was borrowing a file from the machine that wrote it
+
+Fixing 41.1 got the fresh clone further, and parity passed. **It should not have.**
+
+```
+$ git ls-files -s corpus/corpus
+120000 3b9d0e49…    corpus/corpus
+$ ls -ld corpus/corpus
+corpus/corpus -> /tmp/claude-0/-home-user-sky-ledger/<this session's uuid>/scratchpad/corpus
+```
+
+**A committed symlink to an absolute path carrying this session's own UUID.** It
+resolves on exactly one container. My fresh-clone test passed only because the
+clone landed on that container — **the test I ran to prove reproducibility was
+itself borrowing the thing it was testing for.** In CI it would have gone red on
+its first run for a reason unrelated to any code.
+
+It also put a session identifier into the repository's permanent history, which is
+its own small thing to have done.
+
+Removed from the index and from any future by `.gitignore`. `parity.py` now
+defaults to the **synthetic log** — lifted verbatim into
+`fixtures/synthetic_log.py`, shared with the fixture generator. Parity tests the
+**port**, not the mechanic; it never needed a real player's log to do that, and
+now it carries none. Pass a real log as `argv[1]` when you want the wider
+exercise.
+
+**The refactor changed nothing shipped:** `fixtures/sample-report.json` is
+byte-identical before and after, `ee9612e4…`, verified rather than assumed.
+
+#### 41.3 And the gate's own proof depended on the state it was about to create
+
+`check.sh` ran `fetch_shards.py --selftest` **before** `fetch_shards.py`. On a
+fresh clone the self-test's final assertion — *"the real shards still verify"* —
+reads shards that do not exist yet, so it failed. Reordered. Small, and the same
+family: a proof that only works where the thing being proved already holds.
+
+#### 41.4 The front door described a building that is not here
+
+`README.md` documents the Sky Ledger overlay app. Six of the seven paths it names
+in backticks are **not in this tree**: `SkyLedger.html`, `package.json`,
+`main.js`, `preload.js`, `eqstr_us.txt`, `dbstr_us.txt`. Its *"Fastest start (no
+install)"* tells a reader to open a file that is not here; `npm install`,
+`npm start` and `npm run dist` all fail for want of a `package.json`.
+
+That is the sixth shape at repository scale — a document whose verdict ("here is
+how to run it") is confidently wrong about the quantity behind it, read by
+everyone and checked by no one.
+
+**I did not delete the app documentation.** Its reasoning is load-bearing and
+cited elsewhere in this project — the drop-rate ceiling, the kill-attribution
+rule, the exclusion strip. What I did:
+
+- a new head section saying what this repository **actually holds**, with the
+  measurement work first, because that is what runs here;
+- an explicit block saying those six files are **not in this repository** and the
+  commands below will not run against a fresh clone;
+- **`check_readme.py`**, which resolves every backticked path in the README
+  against the tree and requires the declared-absent list and the prose to agree.
+  `--selftest` proves both halves can fail.
+
+Its first draft got the sixth shape twice in one function: it built its message
+from the failure branch unconditionally, and tested `text` where the verdict
+tested `flat` — so it printed *"no section says 'not in this repository'"* beside
+the word `ok`. Both fixed, and the comment in the file says so.
+
+#### 41.5 The guard is a gate now
+
+`.github/workflows/check.yml`. Push to master, every pull request, manual
+dispatch. Fresh clone, python 3.11, node 22, ~15 s.
+
+**It runs every `--selftest` in a step of its own, before `check.sh`** — six of
+them — so a suite that cannot fail is caught before its passing verdict is
+trusted. That is the one thing a CI job most easily gets wrong, and it is the
+whole reason this repository exists.
+
+`check.sh`'s header said *"this repository has no CI"*. True when written; false
+now; corrected in place rather than left to rot into the next person's premise.
+
+#### 41.6 Verified end to end
+
+```
+fresh clone, no shards, no symlink        sh check.sh -> EXIT 0
+same clone before this work               sh check.sh -> EXIT 1
+local                                     sh check.sh -> EXIT 0
+fixtures/sample-report.json               ee9612e4… , unchanged
+```
+
+**Three layers of the same fault in one sitting** — the suite green on an
+untracked file, the fresh-clone test green on a session-scoped symlink, the
+self-test green only where its subject already existed. Each one was a result read
+as clean from a state nobody had established, and **the innermost one was in the
+test I wrote to catch the outer one.**
+
+That is the answer to what "colonize the repo" earns first. Not a feature. **The
+repository can now be cloned by someone who is not me, and it will tell them the
+truth about itself.**
+
+**Still open and untouched, deliberately:** the `+1/tier` floor stays ungraded and
+blocked on the owner in game (§35.5, §39.3); `CHARM_PET`, the dual-wield class
+gate and `STANCE_EVEN_SHARE_OFFENSIVE` all stay as published conflicts (§§14, 26,
+33). None of them is fixed by choosing. Critical-path task 2 — per-character
+modelling — is still my declared next item.

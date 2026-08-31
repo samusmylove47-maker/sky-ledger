@@ -2,20 +2,41 @@
 # check.sh — the single named entry point for this repository's checks.
 #
 # HONEST LABEL, per Session D: "A GUARD IS NOT A GATE UNTIL SOMETHING FAILS
-# BECAUSE OF IT." Until this script is invoked by something other than a human
-# deciding to invoke it, derived_check.py is a GUARD. This repository has no CI
-# — established by listing every root entry on both refs, not by grepping for
-# the configs I could think of (Session C's correction).
+# BECAUSE OF IT."
 #
-# It becomes a GATE in exactly one place, and that place is not built yet:
-# inside gapEngine(), where HANDOFF.md §21.6 puts it. There, a claim that fails
-# cannot reach a caller, because the engine will not emit it.
+# UPDATED 31 Aug 2026. The line above said "this repository has no CI", and that
+# was true when it was written and is not now. PR #1 merged, master became the
+# front door, and .github/workflows/check.yml runs this script on every push and
+# pull request against a FRESH CLONE. So this is a gate for anything arriving by
+# pull request. It is still a guard for a human running it locally.
+#
+# It becomes a gate in one further place, not built yet: inside gapEngine(),
+# where HANDOFF.md §21.6 puts it. There, a claim that fails cannot reach a
+# caller, because the engine will not emit it.
+#
+# The CI job runs every --selftest BEFORE this script, so a suite that cannot
+# fail is caught before its passing verdict is trusted.
 set -e
 # set -o pipefail is not POSIX sh; emulate its effect by never piping a check.
 # D measured this defect on 30 Aug: `cmd | head -3; echo $?` reports head's status,
 # not cmd's, and `set -e` does not stop a failing pipeline. This script contains no
 # pipelines for exactly that reason. If you add one, capture the status explicitly.
 fail=0
+echo "== the three weapon shards must be present and match their pins =="
+# FIRST, because everything below that touches a weapon depends on them and they
+# are NOT COMMITTED. Measured 31 Aug on a fresh clone: check.sh failed here with
+# FileNotFoundError, having passed for days on an untracked file that happened to
+# sit on one container's disk. See fetch_shards.py's header.
+# FETCH FIRST, then self-test. Measured on a fresh clone 31 Aug: running the
+# self-test first fails, because its final assertion reads shards that do not
+# exist yet. A gate whose own proof depends on the state it is about to create.
+python3 fetch_shards.py || fail=1
+python3 fetch_shards.py --selftest || fail=1
+echo
+echo "== every file the README points a reader at must exist =="
+python3 check_readme.py --selftest || fail=1
+python3 check_readme.py || fail=1
+echo
 echo "== derived-claim validator: self-test (must reject all bad claims) =="
 python3 derived_check.py --selftest || fail=1
 echo
@@ -49,7 +70,7 @@ echo "== the shipped bundle must obey BUNDLE-CONTRACT section 3 =="
 node bundle/check-bundle.js || fail=1
 echo
 echo "== the JS bundle and the Python engine must agree field for field =="
-python3 bundle/parity.py corpus/corpus/everquest-companion/tests/fixtures/jos437-finishing-blow.log || fail=1
+python3 bundle/parity.py || fail=1
 echo
 echo "== the fixture must not drift from what the engine emits =="
 # WIDENED 31 Aug. The version here until tonight compared DELTA KEYS and MEASURED

@@ -1,0 +1,52 @@
+# The guard becomes a gate here.
+#
+# check.sh's own header says "A GUARD IS NOT A GATE UNTIL SOMETHING FAILS BECAUSE
+# OF IT", and until master existed there was nothing for it to gate. PR #1 merged
+# on 31 Aug 2026 and made master this repository's front door, so it gates now.
+#
+# It runs on a FRESH CLONE, which is the point: on 31 Aug a fresh clone failed at
+# the first weapon reproducer because the three catalogue shards are not committed,
+# while the same suite had been reporting PASS for days on a container that already
+# had them. A check that only passes where it was written is not a check.
+name: check
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # A gate that cannot fail is the fault this repository exists to catch, so
+      # prove the runner can fail before trusting that it passed. Each of these
+      # self-tests mutates its own input and asserts the check flips; if any of
+      # them reports success on a mutated input, the suite below means nothing.
+      - name: Positive control -- every gate must be able to fail
+        run: |
+          set -e
+          python3 derived_check.py --selftest
+          python3 bundle/check-integrity.py --selftest
+          python3 bundle/check-contract.py --selftest
+          python3 fixtures/check_drift.py --selftest
+          python3 check_readme.py --selftest
+          python3 fetch_shards.py --selftest
+
+      - name: check.sh
+        run: sh check.sh

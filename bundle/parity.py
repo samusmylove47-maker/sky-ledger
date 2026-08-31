@@ -9,8 +9,21 @@ import json, subprocess, sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from gapengine import gap_engine
 
-log = sys.argv[1] if len(sys.argv) > 1 else "corpus/corpus/everquest-companion/tests/fixtures/jos437-finishing-blow.log"
-lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+# DEFAULT IS THE SYNTHETIC LOG, changed 31 Aug. This read
+# corpus/corpus/.../jos437-finishing-blow.log, and `corpus/corpus` was a COMMITTED
+# SYMLINK to an absolute path carrying this session's own UUID -- it resolved on one
+# container and nowhere else. A fresh clone appeared to verify parity while borrowing
+# a file from the machine that wrote it, and CI would have gone red on its first run.
+# Parity tests the PORT, not the mechanic, so it does not need a real player's log;
+# pass one as argv[1] when you have it and want the wider exercise.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fixtures"))
+if len(sys.argv) > 1:
+    log = sys.argv[1]
+    lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+else:
+    from synthetic_log import build
+    log = "fixtures/synthetic_log.py (generated)"
+    lines = build()
 py = gap_engine(lines, {"source": "parity"})
 
 driver = """
@@ -22,9 +35,12 @@ process.stdout.write(JSON.stringify(globalThis.EQLSGapEngine.gapEngine(lines,{so
 import tempfile
 with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as fh:
     fh.write(driver); drv = fh.name
-js = json.loads(subprocess.run(["node", drv, "bundle/eqls-gap-engine.js", log],
+import tempfile as _tf
+with _tf.NamedTemporaryFile("w", suffix=".log", delete=False, encoding="utf-8") as lf:
+    lf.write("\n".join(lines)); logpath = lf.name
+js = json.loads(subprocess.run(["node", drv, "bundle/eqls-gap-engine.js", logpath],
                                capture_output=True, text=True, check=True).stdout)
-os.unlink(drv)
+os.unlink(drv); os.unlink(logpath)
 
 def walk(a, b, path=""):
     out = []
