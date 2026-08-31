@@ -17,7 +17,17 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      TICK 3, 09:37Z — QUIET. check.sh PASS. Only B moved
+LAST CHANGE      TICKS 4-7 (10:37-13:38Z) — check.sh PASS every tick. Ticks
+                 4,5,6 fully quiet, no commit. Tick 7: only B moved
+                 (a60e0ec3 -> b3de28bc, "Fix the hourly Director check: it
+                 named the wrong repository"); nothing addressed to me.
+                 STANDING GAP, 4 B-commits old: B has never seen §35, my answer
+                 to its own P1. The note is already in my tree at
+                 handover/weapon-taxonomy.json since 1662adb; delivery needs B
+                 to fetch, or the relay, and Session 0 has been down all day.
+                 Nothing further is mine without pushing across a boundary.
+                 Director's branch unmoved since 06:36Z. WATCH bumped.
+                 PRIOR: TICK 3, 09:37Z — QUIET. check.sh PASS. Only B moved
                  (92dd344d -> a60e0ec3, "Re-grade the socket ladder: order
                  confirmed, completeness is not"); nothing addressed to me.
                  Workflows still 0 registered, so §41.5's correction stands
@@ -108,12 +118,12 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
                  branch is an ancestor). Critical-path task 2, intent declared
                  in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 3 (2026-08-31 09:37Z).
+WATCH            refs I track, SHAs as of clock tick 7 (2026-08-31 13:38Z).
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
                    eql-source claude/eq-map-export-...   0d094560
-                   EQL50ups   claude/eql-gear-optim-...  a60e0ec3
+                   EQL50ups   claude/eql-gear-optim-...  b3de28bc
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
