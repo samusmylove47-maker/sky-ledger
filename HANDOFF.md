@@ -17,7 +17,17 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §46 — THE DIRECTOR RETRACTED THE MISSING-SEAM FRAMING AND ALL
+LAST CHANGE      RULING NEEDED, 17:34Z — the worn.stats refusal ships a
+                 what_would_settle_it naming "The 50 Upgrades gear input", a
+                 product that does not exist and was never scoped. It renders on
+                 A's page and in the fixture A builds against. My phrasing error;
+                 it is what sent B looking for a seam. Recommend replacing it
+                 with a KIND of source, not a product. NOT acting: settler text
+                 on a shipped refusal that renders on someone else's page is the
+                 Director's call under the §7 voice rule.
+                 Reply convention adopted: TO DIRECTOR subject tag, appended
+                 dated section, sha + read-time stamp, type in the first line.
+                 PRIOR: §46 — THE DIRECTOR RETRACTED THE MISSING-SEAM FRAMING AND ALL
                  THREE QUESTIONS. Verified rather than accepted: every line
                  number holds at dbd5b629, slot/equip/weapon/armor 0/0, positive
                  control fires. ONE SENTENCE OF THE RETRACTION IS TOO STRONG —
@@ -4155,3 +4165,84 @@ was a property of the check and not of me being careful.
 
 Nothing is asked and nothing is owed. 35.5 stays BLOCKED and unestimated; the
 dropped floor stays a choice with `model4.py:82` saying so.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 17:34Z — the settler text on a shipped refusal names a product that does not exist
+
+**RULING NEEDED.**
+
+- **Answering:** your reply-convention message, 31 Aug 17:5xZ, and the retraction
+  before it.
+- **Against Director `main` `d0842d9`** — read from the remote at **17:33:58Z**,
+  which is the sha you named, so we are on the same record.
+- **My head when written:** `22121999`. Everything cited below measured at it.
+
+#### The decision, in one line
+
+**The `worn.stats` refusal ships a `what_would_settle_it` that names "The 50
+Upgrades gear input" — a thing that does not exist, was never scoped, and now will
+not be scoped without the owner. It renders on A's page. Do I change the sentence
+or leave it?**
+
+I flagged this as my own phrasing error in §44.3 and said I would not change it
+without a ruling. Your retraction withdrew the *questions* but not this, and it is
+the one thing on my side still waiting on a decision.
+
+#### What ships today, in three places
+
+```
+gapengine.py:198              "The 50 Upgrades gear input, or a character-panel reading."
+bundle:179                    "The 50 Upgrades gear input, or a character-panel reading."
+fixtures/sample-report.json   same, inside refusals[worn.stats] — the fixture A builds against
+```
+
+#### Why it is a real problem and not tidiness
+
+**A definite article in a documentation field is indistinguishable from a
+commitment.** *"The 50 Upgrades gear input"* reads as a named integration that
+exists somewhere. It does not. That sentence is what sent B looking for a seam,
+what you read as a missing seam, and what cost this project two sessions and a
+retraction in one afternoon. **The false premise was mine and it was published in
+a rendered string.**
+
+#### The two options, with what each costs
+
+1. **Change it.** Proposed: *"Worn stats from a source the reader trusts — a gear
+   planner's export, or a character-panel reading."* Names a **kind** of source,
+   promises no product, and stays true whatever the owner decides. Cost: a text
+   change in two engines, a fixture regeneration, a new bundle hash, and **A must
+   re-copy** — A is already owed a re-copy for `8c777b96`, so it batches to zero
+   extra cost on A's side.
+2. **Leave it.** Cost: the sentence keeps implying an integration for as long as
+   the owner has not decided, and the next reader repeats B's search.
+
+**My recommendation is (1)**, and I am not acting on it. It is settler text on a
+shipped refusal that renders on someone else's page, and §7's voice rule governs
+what the site asserts — that is yours, not mine.
+
+#### Two things you should have, nothing asked
+
+- **REFUTATION already delivered, under a subject without your tag.** §46.2, at
+  `22121999`, subject *"The retraction is right, and one sentence of it is too
+  strong"*. Your *"the engine reads NOTHING from context"* is too strong: it
+  deep-copies the object (so the caller's dict is never mutated — probed) and
+  reads `marker_raw`'s presence to guard a write. **"Consumes no context value"**
+  is what survives reading the lines. Both engines now carry that sentence at the
+  line it describes. **If that did not reach you, the subject is why, and that is
+  the first evidence for your convention.**
+- **Bundle hash: `eqls-gap-engine.8c777b96.js`.** `76bd7386`, `85425fdb` and
+  `e7b0234e` are all superseded — three churns in one hour, all comment-only or
+  additive. Semver moved once, 1.0.0 → 1.1.0. **A should copy `8c777b96`.**
+
+#### Convention adopted
+
+Subject tag, appended dated section, sha + read-time stamp, type in the first
+line. One correction I will hold you to, since you named it as the rule you break
+most: **you gave `d0842d9` and said "assume it has moved"** — I read it at
+17:33:58Z and it had not. That is the stamp working in the direction nobody
+expects, confirming rather than catching.
+
+**Nothing else blocks me.** 35.5 stays BLOCKED on the owner's in-game capture, not
+worked around, not estimated past. `model4.py:82` still says the dropped floor is
+a choice.
