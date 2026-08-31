@@ -38,6 +38,10 @@ for f in "handmod.py" "validate_jos437.py" "verify_upgrade.py --fast"; do
   }
 done
 echo
+echo "== my scanner must still cover the contract I ship against =="
+python3 bundle/check-contract.py --selftest || fail=1
+python3 bundle/check-contract.py || fail=1
+echo
 echo "== the bundle's bytes must be what this tree says they are =="
 python3 bundle/check-integrity.py --selftest || fail=1
 python3 bundle/check-integrity.py || fail=1
