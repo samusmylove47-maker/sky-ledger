@@ -236,7 +236,7 @@
     // ENGLISH inside basis.denominator, and a consumer cannot compute against a sentence.
     m.engaged_seconds = engaged;
     m.damage_dealt = dealt;
-    m.months_seen = months;
+    m.months_seen = months.length;   // a COUNT: a staleness signal, not the tokens
     m.engagements = rr.length;
     m.hits_counted = hits.length;
     m.killing_blows_excluded_from_rates = hits.length - nk.length;

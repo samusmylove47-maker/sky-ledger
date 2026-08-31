@@ -69,6 +69,10 @@ python3 bundle/check-integrity.py || fail=1
 echo "== the shipped bundle must obey BUNDLE-CONTRACT section 3 =="
 node bundle/check-bundle.js || fail=1
 echo
+echo "== B's hand-written contract for the measured block must be satisfied =="
+python3 check_contract.py --selftest || fail=1
+python3 check_contract.py || fail=1
+echo
 echo "== the MAKE ME BIS ranker must enforce every ruling it was built to =="
 python3 rank.py --selftest || fail=1
 echo

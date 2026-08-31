@@ -277,7 +277,11 @@ def gap_engine(lines, context=None):
     # compute against a sentence.
     m["engaged_seconds"] = engaged
     m["damage_dealt"] = dealt
-    m["months_seen"] = sorted(months)
+    # A COUNT, not the tokens. B's contract calls it "int, distinct calendar months
+    # the log covers. Not a duration -- a STALENESS SIGNAL." The Director's spec said
+    # "count of distinct month tokens" and I emitted the set. My error, not a relay
+    # error: I read the word `count` and shipped the thing being counted.
+    m["months_seen"] = len(months)
     m["engagements"] = len(runs)
     m["hits_counted"] = len(hits)
     m["killing_blows_excluded_from_rates"] = sum(1 for h in hits if h["kill"])

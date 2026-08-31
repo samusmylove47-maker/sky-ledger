@@ -17,7 +17,18 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      R37 WIRED, 21:50Z. Verified against B's catalogue at
+LAST CHANGE      EXIT GATE MET 4 OF 4, 21:55Z. B published its contract at
+                 65e2f9e3; vendored and wired as check_contract.py in check.sh
+                 and CI. 8 assertions, all satisfied. Bundle 336f9a65 at 1.2.0.
+                 IT CAUGHT A REAL DEFECT: months_seen must be an INT and I was
+                 emitting a LIST — the spec said "count of distinct month tokens"
+                 and I shipped the thing being counted. A fixture GENERATED from
+                 my output would have recorded the list and called it correct.
+                 TWO THINGS FLAGGED NOT BUILT (bound: no new parse): B expects
+                 'Cannibalization I' -> 'Cannibalize', a LEMMA not a suffix strip;
+                 and a 0-damage spell cannot appear at all, because spells_landed
+                 is built from damage lines — absent where B expects measured-zero.
+                 PRIOR: R37 WIRED, 21:50Z. Verified against B's catalogue at
                  dadeb87b: 3663 records, 3456 non-null src, ZERO occurrences of
                  difficulty or any tier token — every figure matches. Difficulty
                  now comes from character["difficulty"] and an item carrying one
@@ -5098,3 +5109,64 @@ Bundle `e2391a5f` at 1.2.0 unchanged — R37 is ranker-side only and touches not
 in the engine. **B's `gap-contract-1.2.0.json` is still not published**, so the exit
 gate stays three of four. Call of Flame and 35.5 remain BLOCKED; neither blocks the
 ship.
+
+## TO THE DIRECTOR — 31 Aug 21:55Z — EXIT GATE MET, 4 of 4. B's contract passes, and it caught a real defect of mine
+
+**FYI.** All four gate items closed. `check_contract.py` is now in `check.sh` and CI.
+
+- **B's fixture read at `65e2f9e3`**, 21:50Z, vendored at
+  `handover/gap-contract-1.2.0.b-65e2f9e3.json` so this cannot drift silently.
+- **Against Director `main`** — **not read** since `13d68002`, 19:37Z.
+
+```
+parity.py clean ....... yes, field for field     VERSION reads 1.2.0 ..... yes
+re-hashed ............. eqls-gap-engine.336f9a65.js
+B's contract .......... 8 assertions, ALL SATISFIED
+```
+
+#### B's contract caught a defect neither of us would have found otherwise
+
+**`months_seen` must be an `int` — a count. I was emitting a list, `["Aug"]`.**
+
+**This is my error and not a relay error.** Your E2 spec said *"count of distinct
+month tokens"*. I read the word **count** and shipped **the thing being counted**.
+B's fixture states the intent that makes it unmissable — *"not a duration, a
+STALENESS SIGNAL"* — and a consumer doing arithmetic on `["Aug"]` gets a
+`TypeError` at best and a wrong answer at worst.
+
+Fixed in both engines. **This is the value of a hand-written contract over a
+generated one**: a fixture generated from my output would have recorded the list
+and called it correct.
+
+#### Two things in B's fixture my parser cannot satisfy — B should know before it builds
+
+Neither fails the gate, because my check asserts **shape and type, never values**,
+and B's entries are worked examples. But B is plainly expecting these semantics:
+
+**1. `'Cannibalization I'` → `normalised_key: 'Cannibalize'`.** My normalisation is
+the roman-numeral strip your E1 spec named, which yields **`'Cannibalization'`**.
+Turning that into `Cannibalize` is a **lemma**, not a suffix strip, and I have no
+mapping table for it. **I am not going to invent a stemmer** — it would silently
+merge families it should not. B should either accept `Cannibalization` as the
+normalised key, or supply the family table.
+
+**2. A 0-damage spell with 47 landings cannot appear at all.** `spells_landed` is
+built from `SPELL`, which matches *"You hit X for N points of Y damage by Z"*.
+**A spell that deals no damage produces no such line**, so `Cannibalize` — which
+costs health and deals none — is invisible to this parser, not zero in it. B's own
+`_zero_is_not_missing` note draws exactly the right distinction and my engine
+currently lands on the wrong side of it: **absent, when B expects measured-zero.**
+
+**That is a genuine gap and it is mine**, but closing it needs a new parse and your
+21:1x bound was explicit: *no new parse, no new regex*. **Flagging, not building.**
+
+#### Where this leaves the five keys
+
+Four are exact. `spells_landed` satisfies the contract's shape and will be right for
+every damaging spell, and **wrong by omission for the health-cost family** until a
+parse is authorised. **B can ship against it today** — its own version assertion
+plus unknown band means a missing entry routes to unknown rather than to zero, which
+is the behaviour its fixture asks for.
+
+**Bundle `336f9a65` at 1.2.0.** Call of Flame and 35.5 still BLOCKED, neither
+worked around, neither blocking the ship.
