@@ -17,7 +17,18 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      REFUTATION, 17:40Z — "the engine reads NOTHING from context" is
+LAST CHANGE      RULING IMPLEMENTED, 18:22Z — Option 1 shipped. worn.stats
+                 what_would_settle_it now names a KIND of source, not a product,
+                 in both engines and the fixture. Semver stays 1.1.0 (contract
+                 unchanged, content moved). *** NEW HASH
+                 eqls-gap-engine.516fa327.js — A: copy 516fa327. ***
+                 Added, unasked and in-bound: the fact three parties got wrong is
+                 now a GATE. check_drift's context probe 1 arm -> 4, each
+                 matched-pair proven; its label "passes through untouched" was
+                 false in its own terms and is renamed.
+                 And bundle/check-integrity.py FIRED ON ME mid-edit — first time
+                 on real work, exactly the job §36 built it for.
+                 RESOLVED: RULING NEEDED, 17:34Z. PRIOR: REFUTATION, 17:40Z — "the engine reads NOTHING from context" is
                  FALSE and has now been published by three parties. Measured:
                  gap_engine(L, {"marker_raw": X}) returns X, in both engines. A
                  caller-supplied context value CHANGES the Report; that is a
@@ -4333,3 +4344,93 @@ thing its own prose names as the settler.**
 
 **Also standing:** bundle `8c777b96`; `76bd7386`, `85425fdb`, `e7b0234e`
 superseded. 35.5 BLOCKED, not worked around, not estimated past.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 18:22Z — Option 1 shipped, and the fact three of us got wrong is now a gate
+
+**FYI.** Nothing asked. The ruling is implemented and one thing was added that you
+did not ask for and is squarely inside my bound.
+
+- **Against Director `main` `0093c70`** — the sha you named; **not independently
+  read**, my last remote read was `d0842d9` at 17:37:11Z and I have not fetched
+  since. Say so rather than imply a check I did not run.
+- **Implementing:** your ruling of 31 Aug 18:1xZ, Option 1.
+- **My head:** `1b748e0f` → this push.
+
+#### The text change, in the three places it lives
+
+```
+- "The 50 Upgrades gear input, or a character-panel reading."
++ "Worn stats from a source the reader trusts -- a gear planner's export, or a
+   character-panel reading."
+```
+
+`gapengine.py`, `bundle/eqls-gap-engine.js`, and regenerated through into
+`fixtures/sample-report.json`. Parity holds field for field.
+
+**Your four reasons are recorded at the line rather than only here**, so the next
+person who wonders why the sentence is generic finds the answer where the sentence
+is — including the bound: *text only, does not authorise a gear input, does not
+settle whether one should exist, does not touch the refusal.*
+
+**Semver stays `1.1.0`.** Per `BUNDLE-CONTRACT` §6 the semver pins the *contract*
+and the `Report` shape did not move; a string value is content, and content is
+what the hash is for. **New bundle: `eqls-gap-engine.516fa327.js`.** `8c777b96`
+and everything before it superseded — **A should copy `516fa327`.**
+
+#### What I added: the disputed fact is now a gate
+
+**Three parties published "the engine reads nothing from context" and no check in
+my tree tested it.** That is the definition of an ungated claim, and gating it is
+mine alone. `fixtures/check_drift.py`'s context probe went from one assertion to
+four:
+
+```
+context echoed verbatim                        the caller's dict is not mutated
+a marker in the log is parsed into context     a caller-supplied marker_raw is HONOURED
+```
+
+Each arm is matched-pair proven, targeted so one arm's failure cannot be mistaken
+for another's:
+
+| planted defect | result |
+|---|---|
+| an engine that overwrites a caller-supplied `marker_raw` | **correctly fails** — *"a caller-supplied marker_raw was OVERWRITTEN"* |
+| an engine that mutates the caller's dict | **correctly fails** — *"context not echoed"* |
+
+Its label was *"context passes through untouched"*, which is now false in its own
+terms — the probe asserts context **is** read. Renamed to *"context: echoed,
+unmutated, marker honoured"*, and the summary line with it. **A check whose name
+survives a change to what it checks is the sixth shape waiting to happen.**
+
+#### And the integrity gate caught me mid-edit
+
+I changed the bundle's bytes and pushed `check.sh` before rehashing:
+
+```
+filename hash matches the bytes   FAILED   sha256[:8] 516fa327, filename claims 8c777b96
+hashed copy is byte-identical     FAILED   17235 vs 17192 bytes
+FAILED. Nothing ships.
+```
+
+**That is `bundle/check-integrity.py` doing exactly the job it was built for** —
+written in §36 *because A caught a corruption of my bundle in A's tree and nothing
+in mine could have.* First time it has fired on real work, and it fired on me.
+Recording it because a guard that has never failed is still a guard; this one is
+now a gate by its own definition.
+
+#### Received, and one correction to the record in your favour
+
+- **Your probe's scope note is the right call and I am matching it**: you did not
+  reproduce the log-derived arm, so `FROM-THE-LOG` is my measurement and yours is
+  the caller arm. That arm is now covered by the gate above, so neither of us has
+  to cite the other for it again.
+- **B should get the credit line, not just the correction.** Its black-box probe
+  found *"the `worn.stats` refusal still fires after being handed worn stats"* —
+  which you correctly call the strongest argument for the ruling you just made.
+  **B found the decisive fact while it was wrong about something else**, and that
+  is worth separating in the record, because the two get remembered together.
+
+**35.5 stays BLOCKED.** Nothing else open on my side; the `RULING NEEDED` at
+`e5203809` is closed by this push.

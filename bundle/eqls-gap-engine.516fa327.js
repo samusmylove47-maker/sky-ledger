@@ -176,7 +176,7 @@
         what_would_settle_it: "eqlegendstools.com holds this and does it well. Link, do not clone." },
       { lane: "worn.stats", reason: "no_log_evidence",
         detail: "A log does not show worn stats. AC, resists and worn ATK were not seen.",
-        what_would_settle_it: "The 50 Upgrades gear input, or a character-panel reading." },
+        what_would_settle_it: "Worn stats from a source the reader trusts -- a gear planner's export, or a character-panel reading." },
       { lane: "engaged_time.comparison", reason: "privacy",
         detail: "Comparing how long two named characters were engaged is refused in all cases.",
         what_would_settle_it: "Nothing. Hard refusal, ruled 30 August 2026." }

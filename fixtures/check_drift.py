@@ -67,12 +67,37 @@ def compare(fx, rp):
 
 
 def passthrough_holds():
-    """The engine must not touch `context` -- the premise the declaration rests on."""
+    """What the engine actually does with `context` -- BOTH arms.
+
+    On 31 Aug 2026 three parties published "the engine reads NOTHING from context"
+    -- the Director, then B adopting it, and me refuting it under a subject nobody
+    read. It is false, and nothing here tested it. The accurate statement is that
+    the engine consumes no context VALUE, while it DOES deep-copy the object and
+    DOES honour a caller-supplied `marker_raw`.
+
+    A fact three people got wrong and no check covered is exactly what a gate is
+    for. Four probes, and the last two are the ones that were being argued about.
+    """
     sys.path.insert(0, ROOT)
     from gapengine import gap_engine
+    LOG = ["[Sat Aug 30 20:00:00 2026] ATTN CLAUDE: FROM-THE-LOG",
+           "[Sat Aug 30 20:00:01 2026] You slash a rock golem for 50 points of damage."]
     sentinel = {"zz_sentinel": [1, {"deep": True}], "source": "probe"}
-    got = gap_engine([], dict(sentinel))["context"]
-    return got == sentinel, f"engine returned {got!r}"
+
+    caller = dict(sentinel)
+    got = gap_engine([], caller)["context"]
+    if got != sentinel:
+        return False, f"context not echoed: {got!r}"
+    if caller != sentinel:
+        return False, f"the CALLER's dict was mutated: {caller!r}"
+    if gap_engine(LOG, {})["context"].get("marker_raw") != "FROM-THE-LOG":
+        return False, "a marker in the log is not parsed into context"
+    honoured = gap_engine(LOG, {"marker_raw": "FROM-THE-CALLER"})["context"]["marker_raw"]
+    if honoured != "FROM-THE-CALLER":
+        return False, f"a caller-supplied marker_raw was OVERWRITTEN: {honoured!r}"
+    return True, ("echoed verbatim; caller's dict unmutated; log-derived marker parsed; "
+                  "caller-supplied marker honoured -- so context IS read, and no "
+                  "context VALUE is consumed")
 
 
 def load(regenerate=True):
@@ -125,11 +150,11 @@ if __name__ == "__main__":
             print(f"  context pass-through does not hold: {why}"); ok = False
         sys.exit(0 if ok else 1)
 
-    rs = compare(fx, rp) + [("context passes through untouched",) + passthrough_holds()]
+    rs = compare(fx, rp) + [("context: echoed, unmutated, marker honoured",) + passthrough_holds()]
     for n, o, d in rs:
         print(f"  {n:<40} {'ok' if o else 'DRIFT'}   {d}")
     if not all(o for _, o, _ in rs):
         print("  A PAGE BUILT ON THIS FIXTURE WOULD RENDER THE WRONG FIELDS")
         sys.exit(1)
-    print(f"  {len(rs)} checks -- {len(rs)-1} structures a consumer renders, plus the "
-          f"pass-through the context one rests on. The old gate compared 2.")
+    print(f"  {len(rs)} checks -- {len(rs)-1} structures a consumer renders, plus a "
+          f"4-arm probe of what the engine does with `context`. The old gate compared 2.")

@@ -193,9 +193,21 @@ ALWAYS_REFUSED = (
     {"lane": "item.selection", "reason": "computable_from_catalogue",
      "detail": "Which obtainable item meets a stat floor is a catalogue question.",
      "what_would_settle_it": "eqlegendstools.com holds this and does it well. Link, do not clone."},
+    # RULED 31 Aug 2026 by the Director, Option 1, implementation mine. This read
+    # "The 50 Upgrades gear input, or a character-panel reading." That named an
+    # integration which does not exist and was never scoped, and a definite article
+    # in a documentation field is indistinguishable from a commitment: it sent
+    # Session B looking for a seam for ~7 hours and produced a false missing-seam
+    # ruling that had to be retracted to two sessions. It now names a KIND of
+    # source, which stays true whatever the owner decides about a gear path.
+    # The RULING IS TEXT ONLY. It does not authorise a gear input, does not settle
+    # whether one should exist, and does not touch the refusal -- which is correct
+    # and was never in question: a log does not show worn stats. B measured that
+    # this refusal still fires when handed worn stats, because no code path could
+    # notice them.
     {"lane": "worn.stats", "reason": "no_log_evidence",
      "detail": "A log does not show worn stats. AC, resists and worn ATK were not seen.",
-     "what_would_settle_it": "The 50 Upgrades gear input, or a character-panel reading."},
+     "what_would_settle_it": "Worn stats from a source the reader trusts -- a gear planner's export, or a character-panel reading."},
     {"lane": "engaged_time.comparison", "reason": "privacy",
      "detail": "Comparing how long two named characters were engaged is refused in all cases.",
      "what_would_settle_it": "Nothing. Hard refusal, ruled 30 August 2026."},
