@@ -46,6 +46,7 @@ jobs:
           python3 bundle/check-contract.py --selftest
           python3 fixtures/check_drift.py --selftest
           python3 check_readme.py --selftest
+          python3 check_refusals.py --selftest
           python3 fetch_shards.py --selftest
 
       - name: check.sh

@@ -23,7 +23,13 @@
 (function (root) {
   "use strict";
 
-  var VERSION = "1.0.0";
+  // 1.1.0, 31 Aug 2026 -- MINOR, not patch and not major. The `Report` SHAPE is
+  // unchanged, so per BUNDLE-CONTRACT section 6 the page still knows how to render
+  // it and must not refuse. What changed is behaviour a consumer can observe: a
+  // Report that previously carried `refusals: []` on a log with no outgoing damage
+  // now carries the three unconditional ones. Strictly additive -- fields the page
+  // already renders, in a case where it previously rendered none.
+  var VERSION = "1.1.0";
 
   var TS = /^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
   var SPELL = /^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$/;
@@ -156,6 +162,23 @@
     return { name: null, evidence: detail + " Neither signature is within 2 SE, so the stance is NOT identified." };
   }
 
+  // Refusals that hold for ANY input, including no input: each is a fact about
+  // what a log can never show, not a finding about this log. Returned fresh each
+  // call so a caller mutating a Report cannot reach into the next one.
+  function alwaysRefused() {
+    return [
+      { lane: "item.selection", reason: "computable_from_catalogue",
+        detail: "Which obtainable item meets a stat floor is a catalogue question.",
+        what_would_settle_it: "eqlegendstools.com holds this and does it well. Link, do not clone." },
+      { lane: "worn.stats", reason: "no_log_evidence",
+        detail: "A log does not show worn stats. AC, resists and worn ATK were not seen.",
+        what_would_settle_it: "The 50 Upgrades gear input, or a character-panel reading." },
+      { lane: "engaged_time.comparison", reason: "privacy",
+        detail: "Comparing how long two named characters were engaged is refused in all cases.",
+        what_would_settle_it: "Nothing. Hard refusal, ruled 30 August 2026." }
+    ];
+  }
+
   function gapEngine(lines, context) {
     context = context ? JSON.parse(JSON.stringify(context)) : {};
     var p = parse(lines), ev = p.ev, kills = p.kills, i, j, mk;
@@ -164,7 +187,13 @@
       if (mk && context.marker_raw === undefined) context.marker_raw = mk[1].replace(/\s+$/, "");
     }
     var hr = hitsOf(ev, kills), hits = hr.hits, resists = hr.resists;
-    var report = { context: context, measured: {}, deltas: [], refusals: [], coverage: {} };
+    // FIXED 31 Aug 2026, with gapengine.py. These were built at the END of this
+    // function, after the `if (!hits.length) return report` below -- so a log with
+    // no outgoing damage produced `refusals: []` and the engine went silent about
+    // what it refuses exactly when it knew least. engaged_time.comparison says
+    // "refused in all cases" in its own detail and therefore was not.
+    var report = { context: context, measured: {}, deltas: [],
+                   refusals: alwaysRefused(), coverage: {} };
     if (!hits.length) {
       report.coverage = { note: "no outgoing damage lines matched; nothing measured" };
       return report;
@@ -283,17 +312,8 @@
         "ability lanes: only " + L.meleeSeconds + "s in melee, below the 60s floor for a rate");
     }
 
-    report.refusals = [
-      { lane: "item.selection", reason: "computable_from_catalogue",
-        detail: "Which obtainable item meets a stat floor is a catalogue question.",
-        what_would_settle_it: "eqlegendstools.com holds this and does it well. Link, do not clone." },
-      { lane: "worn.stats", reason: "no_log_evidence",
-        detail: "A log does not show worn stats. AC, resists and worn ATK were not seen.",
-        what_would_settle_it: "The 50 Upgrades gear input, or a character-panel reading." },
-      { lane: "engaged_time.comparison", reason: "privacy",
-        detail: "Comparing how long two named characters were engaged is refused in all cases.",
-        what_would_settle_it: "Nothing. Hard refusal, ruled 30 August 2026." }
-    ];
+    // The CONDITIONAL two. The unconditional three are attached at construction,
+    // before any early return -- see alwaysRefused().
     if (!L.meleeSeconds) {
       report.refusals.push({ lane: "ability.uptime", reason: "no_log_evidence",
         detail: "no auto-attack lines, so there is no time-in-melee denominator",

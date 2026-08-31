@@ -186,6 +186,22 @@ def _stance(hits):
     return None, detail + " Neither signature is within 2 SE, so the stance is NOT identified.", even
 
 
+# Refusals that hold for ANY input, including no input. Emitted before the
+# engine looks at a single line, because each is a fact about what a log can
+# never show -- not a finding about this log.
+ALWAYS_REFUSED = (
+    {"lane": "item.selection", "reason": "computable_from_catalogue",
+     "detail": "Which obtainable item meets a stat floor is a catalogue question.",
+     "what_would_settle_it": "eqlegendstools.com holds this and does it well. Link, do not clone."},
+    {"lane": "worn.stats", "reason": "no_log_evidence",
+     "detail": "A log does not show worn stats. AC, resists and worn ATK were not seen.",
+     "what_would_settle_it": "The 50 Upgrades gear input, or a character-panel reading."},
+    {"lane": "engaged_time.comparison", "reason": "privacy",
+     "detail": "Comparing how long two named characters were engaged is refused in all cases.",
+     "what_would_settle_it": "Nothing. Hard refusal, ruled 30 August 2026."},
+)
+
+
 def gap_engine(lines, context=None):
     context = dict(context or {})
     ev, kills = _parse(lines)
@@ -195,7 +211,19 @@ def gap_engine(lines, context=None):
             context.setdefault("marker_raw", m.group(1).strip())
     hits, resists = _hits(ev, kills)
 
-    report = {"context": context, "measured": {}, "deltas": [], "refusals": [], "coverage": {}}
+    # The unconditional refusals are attached HERE, before any early return.
+    # FIXED 31 Aug 2026: they used to be built at the end of the function, after
+    # `if not hits: return report`. So a log with no outgoing damage -- a support
+    # character's log, a log for the wrong character, a file that failed to
+    # decode, an empty file -- produced a Report with `refusals: []`. The engine
+    # went silent about what it refuses exactly when it knew least, and a page
+    # rendering `refusals` would have shown nothing.
+    #
+    # The worst of the three is `engaged_time.comparison`, whose own detail says
+    # "refused in all cases" and which was therefore not. `worn.stats` is the one
+    # the Director asked about. Neither depends on the log at all.
+    report = {"context": context, "measured": {}, "deltas": [],
+              "refusals": [dict(r) for r in ALWAYS_REFUSED], "coverage": {}}
     if not hits:
         report["coverage"] = {"note": "no outgoing damage lines matched; nothing measured"}
         return report
@@ -318,18 +346,8 @@ def gap_engine(lines, context=None):
         report["coverage"].setdefault("no_delta_because", []).append(
             f"ability lanes: only {melee_s}s in melee, below the 60s floor for a rate")
 
-    # --- refusals: output, never silence ---
-    report["refusals"] = [
-        {"lane": "item.selection", "reason": "computable_from_catalogue",
-         "detail": "Which obtainable item meets a stat floor is a catalogue question.",
-         "what_would_settle_it": "eqlegendstools.com holds this and does it well. Link, do not clone."},
-        {"lane": "worn.stats", "reason": "no_log_evidence",
-         "detail": "A log does not show worn stats. AC, resists and worn ATK were not seen.",
-         "what_would_settle_it": "The 50 Upgrades gear input, or a character-panel reading."},
-        {"lane": "engaged_time.comparison", "reason": "privacy",
-         "detail": "Comparing how long two named characters were engaged is refused in all cases.",
-         "what_would_settle_it": "Nothing. Hard refusal, ruled 30 August 2026."},
-    ]
+    # --- refusals: the CONDITIONAL two. The unconditional three are emitted at
+    # construction, above, because they do not depend on the log. See ALWAYS_REFUSED.
     if not melee_s:
         report["refusals"].append(
             {"lane": "ability.uptime", "reason": "no_log_evidence",

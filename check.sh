@@ -69,6 +69,14 @@ python3 bundle/check-integrity.py || fail=1
 echo "== the shipped bundle must obey BUNDLE-CONTRACT section 3 =="
 node bundle/check-bundle.js || fail=1
 echo
+echo "== the unconditional refusals must survive ANY input, in both engines =="
+# Added 31 Aug. gap_engine([]) returned `refusals: []` because both engines built
+# the list AFTER the `if not hits` early return -- so the engine went silent about
+# what it refuses exactly when it knew least, including a privacy refusal whose own
+# text reads "refused in all cases".
+python3 check_refusals.py --selftest || fail=1
+python3 check_refusals.py || fail=1
+echo
 echo "== the JS bundle and the Python engine must agree field for field =="
 python3 bundle/parity.py || fail=1
 echo

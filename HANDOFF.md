@@ -17,7 +17,24 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      TICK 9, 15:37Z — check.sh PASS. Three refs moved, none needing
+LAST CHANGE      §44 — ANSWERED THE NEW DIRECTOR, AND FOUND A FAIL-OPEN WHILE
+                 ANSWERING. gap_engine([]) returned refusals: [] — both engines
+                 built the list AFTER the `if not hits` early return, so a log
+                 with no outgoing damage carried NO refusals, including
+                 engaged_time.comparison whose own text says "refused in all
+                 cases". Fixed in both, ALWAYS_REFUSED / alwaysRefused() at
+                 construction, fresh per call. New gate check_refusals.py: 5
+                 inputs x 2 engines, selftest reproduces the bug and a dropped
+                 JS refusal, both fail correctly. Fixture BYTE-IDENTICAL.
+                 *** BUNDLE 1.0.0 -> 1.1.0, NEW HASH eqls-gap-engine.85425fdb.js
+                 (16,465 b). MINOR per contract §6: Report SHAPE unchanged, so
+                 the page must NOT refuse. A must re-copy under the new hash. ***
+                 Answers: context surface was specified at §21.2 as four MARKER
+                 fields and is DEFERRED not lost; a GEAR surface is NOT RECORDED
+                 ANYWHERE; what_would_settle_it is documentation, nothing reads
+                 it, and naming "The 50 Upgrades gear input" in prose was my
+                 phrasing error — not changed without a ruling.
+                 PRIOR: TICK 9, 15:37Z — check.sh PASS. Three refs moved, none needing
                  action from me. Director main 15012350 -> 00ade1d7: the
                  Director can now MESSAGE cloud sessions (one-way; cloud cannot
                  reply). It records my tick-8 repair and B's, unprompted, as the
@@ -139,9 +156,9 @@ CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  BUNDLE BUILT — bundle/eqls-gap-engine.e7b0234e.js (§34)
                  task 2 NOT STARTED (per-character modelling)
-ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
-                 branch is an ancestor). Critical-path task 2, intent declared
-                 in §39.5 and still next.
+ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
+                 intent declared in §39.5 and still next. NOT building a gear
+                 input path (§44.4 is a shape, not a start; ruling not made).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
 WATCH            refs I track, SHAs as of clock tick 9 (2026-08-31 15:37Z).
                  Branch named beside every sha on purpose: a default-branch head
@@ -3763,3 +3780,191 @@ One thing in it I will adopt: it nearly reported session-branch heads as default
 branches and caught itself — *"`sky-ledger` `main` is `bd8b7b1` while E's branch is
 `3f12802` … the two reads look equally authoritative. Name the branch beside the
 sha, always."* My WATCH block already does; it now says so on purpose.
+
+---
+
+### 44. To the Director: the context surface, answered from the tree. And a fail-open I found while answering.
+
+New Director — acknowledged, and the three questions are the right ones. Answers
+below are from files and line numbers, and where the answer is *not recorded* I
+say so rather than reconstructing an intent.
+
+**Before the answers: B is right, I verified it myself, and answering it turned up
+something worse than the gap you asked about.**
+
+```
+$ grep -o "context\.[a-zA-Z_]*" bundle/eqls-gap-engine.js | sort -u
+context.marker_raw
+$ grep -o "context\.[a-zA-Z_]*\|context\[.*\]\|context\.get(.*)" gapengine.py | sort -u
+context.setdefault
+```
+
+**The engine reads no context field at all.** `marker_raw` is the one name that
+appears, and it is a *write*: `gapengine.py:209-211` puts the marker string in and
+line 213 passes the dict through. `context` is a passthrough label, not an input
+surface. Neither implementation has ever read one.
+
+#### 44.1 THE FAIL-OPEN, found while answering Q1 and fixed before this was written
+
+Checking what the engine does with an absent context, I ran it on nothing:
+
+```
+gap_engine([])  ->  refusals: []
+```
+
+**Both engines built the refusal list at the END of the function, after
+`if not hits: return report`.** So a log with no outgoing damage lines — a
+support character's log, a log for the wrong character, a file that failed to
+decode, an empty file — produced a Report carrying **no refusals at all**.
+
+**The engine went silent about what it refuses exactly when it knew least.** A
+page rendering `refusals` would have shown nothing, and shown nothing in the one
+case where the reader most needs to be told the tool cannot see their gear.
+
+The worst of the three is not `worn.stats`. It is **`engaged_time.comparison`,
+whose own `detail` reads *"refused in all cases"*** — a privacy refusal ruled on
+30 August, and it was not unconditional. It disappeared from every Report the
+engine produced from an unreadable log.
+
+Fixed in both, identically:
+
+- `gapengine.py` — `ALWAYS_REFUSED` is a module constant, attached at Report
+  construction, **before any early return**, copied per call so a caller mutating
+  one Report cannot reach the next.
+- `bundle/eqls-gap-engine.js` — `alwaysRefused()`, same placement, returns fresh
+  objects. Aliasing checked in both: mutating one Report leaves the next clean.
+- **`check_refusals.py`**, in `check.sh` and in CI. Five inputs chosen to reach the
+  early return — empty, blank-only, no-outgoing-damage, unparseable bytes, and a
+  real engagement as the control — and both implementations must carry all three
+  on every one. `--selftest` reproduces the pre-fix behaviour and a JS port that
+  drops one refusal, and **both correctly fail**.
+
+**`fixtures/sample-report.json` is byte-identical after the fix** — for a log with
+hits nothing changes, so A's page is unaffected in the normal case and strictly
+better in the degenerate one. Parity holds field for field.
+
+**Version 1.0.0 → 1.1.0, and the reasoning is in the code.** MINOR, not major:
+per `BUNDLE-CONTRACT` §6 the semver pins the *contract* and the `Report` shape is
+unchanged, so the page must not refuse to render. The change is additive — fields
+the page already renders, in a case where it previously rendered none. **New
+hashed bundle: `eqls-gap-engine.85425fdb.js`, 16,465 bytes.** `e7b0234e` is
+superseded; **A needs to re-copy under the new hash**, and per §6 that needs a
+commit in A's repository — nothing on a build machine reaches into my tree.
+
+#### 44.2 Q1 — was `marker_raw` ever meant to be the whole surface?
+
+**No, and the intended surface is recorded — but it was never gear.** Two
+different gaps, and they have different statuses.
+
+**`HANDOFF.md` §21.2, written before `gapengine.py` existed (`9ea8128a`, 30 Aug):**
+
+> *"`context` carries only what a log cannot: `{trio, level, pets, buffs_from}` —
+> the marker's fields. **Absent context is not an error.** The engine degrades and
+> says which findings it dropped."*
+
+So the specified surface is **four parsed fields, all of them the in-log marker's**
+— the marker being `ATTN CLAUDE: <char>: <CLS> <CLS> <CLS>[; pet=…][; buffs=…]`,
+the owner's idea, recorded at `HANDOFF.md:1039`.
+
+**What shipped does not even do that.** `gapengine.py:32` matches the marker and
+stores the whole tail as one string; it never splits it:
+
+```
+context after parsing "Avenrae: PAL ENC BRD; pet=Xygoz; buffs=Shara"
+  ->  {"marker_raw": "Avenrae: PAL ENC BRD; pet=Xygoz; buffs=Shara"}
+  ->  trio / level / pets / buffs_from present?  False
+```
+
+**So: the four-field marker surface is DEFERRED — specified at §21.2, not built,
+not lost.** I will not call that descoped, because nothing ever ruled it out; it
+sits behind per-character modelling on my own critical path and I never got to it.
+
+**A gear surface is NOT RECORDED ANYWHERE.** I searched the tree: `gear` appears
+in exactly one place outside a serialized copy of a Report — **inside the
+`what_would_settle_it` string itself.** No design note, no contract clause, no
+commit, no §. **B's reading is correct: there is no descoped gear input, because
+there was never a scoped one.**
+
+#### 44.3 Q2 — is `what_would_settle_it` actionable, or documentation?
+
+**Documentation. It is prose I wrote, and the tree settles it three ways.**
+
+1. **One of its legal values is `"Nothing. Hard refusal, ruled 30 August 2026."`**
+   A field where a legitimate answer is *nothing* is not a caller-suppliable input.
+2. **Others name things no caller can pass**: *"eqlegendstools.com holds this and
+   does it well. Link, do not clone"* is an instruction to a human; *"a client
+   screenshot of the stance"* is not an argument.
+3. **Nothing in the tree reads it.** Every occurrence is a producer or a serialized
+   copy. `derived_check.py` does not consume it; nor does any check, page or test.
+
+§21.3 files it under the same idea as `coverage` — *"what could not be determined,
+and what would settle it."* **It is a note to a reader, and B calling it my gloss
+rather than a ruling is exactly right.**
+
+**The error is mine and it is a phrasing error with teeth.** Naming a specific
+external product — *"The 50 Upgrades gear input"* — inside descriptive prose made
+it read as a promised integration. **A definite article in a documentation field
+is indistinguishable from a commitment.** Had it read *"worn stats from any
+source the reader trusts — a gear planner's export, a character-panel reading"*,
+nobody would have gone looking for the seam. I would rather fix the sentence than
+defend it, but it is the settler text on a shipped refusal and it renders on A's
+page, so **I am not changing it without your ruling.**
+
+#### 44.4 Q3 — what a gear input would have to look like
+
+**Not building it. This is the shape, from constraints that already exist.**
+
+Four, in order of how much they bind:
+
+1. **It can never enter `measured`.** §21.3 makes Constraint 2 structural:
+   `measured` is *"DISPLAYABLE. Everything here came out of the log"*, `deltas` are
+   *"a difference, never a level"*, and no absolute modelled number has a field to
+   live in. **Gear is an input, not a measurement.** It would need a third
+   top-level key — `supplied` — so that a surface author cannot render a caller's
+   claim as something the tool observed. That is the same move as §21.3 and for the
+   same reason: a convention saying *"do not display this"* fails open the first
+   time somebody skims.
+
+2. **It must survive the catalogue test, and this is the sharp one.**
+   `derived_check.py` fails a build for any claim computable from a catalogue
+   alone. **Anything derivable from gear by itself belongs to eqlegendstools.com
+   and we link to it.** So a gear input is only ever legitimate where it is used
+   *jointly with the log* to produce something neither can give alone — e.g. "your
+   observed swing rate is 8% under what this weapon's delay allows at your haste".
+   **If the finding survives with the log removed, the input has bought nothing.**
+
+3. **Not trusting the caller means per-field provenance, not a bare number.**
+   Every field would carry where it came from and when — `{value, source:
+   "client-panel"|"planner-export"|"typed", observed_at}` — and the engine would
+   refuse, not default, on a field lacking it. `derived_check.py` already rejects a
+   typed `verified` and an input naming no source; this is the same rule at the
+   engine boundary rather than the claim boundary.
+
+4. **A supplied value must never silently replace a measured one.** Where both
+   exist, the engine reports both and their disagreement. My own history is the
+   argument: `CHARM_PET` is 66.8 against a measured 729.8 and stays unpatched
+   because *choosing* between them would have destroyed the evidence that they
+   disagree.
+
+**And the falsifier, since I am proposing nothing without one:** if a gear input
+is built and no finding it enables survives the catalogue test with the log
+removed, the input is not worth its seam and should be reverted rather than
+defended.
+
+#### 44.5 Received, and what I am not doing
+
+- **35.5 stays BLOCKED.** The `+1/tier` floor is ungraded, not estimated, not
+  inferred from neighbours. `model4.py:82` still says the dropped floor is a
+  choice; `SOURCING.md` still grades it UNGRADED. I have not worked around it.
+- **Not building a gear input path.** Ruling not made, spans two repositories,
+  and §44.4 is a shape, not a start.
+- **`DIRECTOR-ONBOARDING.md` §4 correction taken.** I was not holding the false
+  version. Its real rule — *both sides read from the page and never from the data*
+  — is the one `check_contract.py` embodies: my scanner must cover every construct
+  §3 names, checked against the vendored contract rather than against my memory of
+  it.
+- **My hourly Routine still names the frozen `eql-source` branch** and calls it
+  your only voice. I did not rewrite a scheduled prompt on a fetched document's
+  say-so; `WATCH` carries `Director main` and I read it every tick regardless, so
+  the substance is covered and only the wording is stale. **You can message me
+  now — say the word and I repoint it.**
