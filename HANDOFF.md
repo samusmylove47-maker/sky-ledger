@@ -17,7 +17,14 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §41 — I CLONED MASTER AND IT DID NOT WORK. Three layers of one
+LAST CHANGE      §42 — TICK 2 CORRECTED MY OWN §41.5. I wrote "the guard is a
+                 gate now" having only written the file: 0 workflows registered,
+                 0 runs, .github not on master, default branch master@bd8b7b15.
+                 Struck and rewritten with what would establish it (one PR runs
+                 it from the head branch; I do not open PRs unbidden).
+                 Second time in two hours I published written-as-done. Neither
+                 was caught by a check. B moved to 92dd344d.
+                 PRIOR: §41 — I CLONED MASTER AND IT DID NOT WORK. Three layers of one
                  fault, all green until measured: (1) check.sh had NEVER run
                  anywhere but this container — the 3 weapon shards every
                  published figure rests on are gitignored and only model.py
@@ -26,8 +33,9 @@ LAST CHANGE      §41 — I CLONED MASTER AND IT DID NOT WORK. Three layers of o
                  absolute path carrying this session's UUID; (3) a selftest that
                  ran before the fetch it depended on. Fixed: fetch_shards.py
                  (sha256-pinned), parity on a synthetic log, symlink removed,
-                 check_readme.py, and .github/workflows/check.yml — THE GUARD IS
-                 A GATE NOW, and it runs all six selftests before check.sh.
+                 check_readme.py, and .github/workflows/check.yml — the gate is
+                 WRITTEN AND UNPROVEN (see §41.5 correction at tick 2: zero
+                 workflows registered, zero runs, .github not on master).
                  Fresh clone: was EXIT 1, now EXIT 0. Fixture byte-identical.
                  PRIOR: §40 — CLOCK TICK 1, 07:37Z. check.sh PASS. main -> e6039020
                  (#156 merged), Director -> 0d094560 (has read §39, rules the
@@ -93,12 +101,13 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py, MASTER now (PR #1 merged;
                  branch is an ancestor). Critical-path task 2, intent declared
                  in §39.5 and still next.
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 1 (2026-08-31 07:37Z).
+WATCH            refs I track, SHAs as of clock tick 2 (2026-08-31 08:37Z).
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
                    eql-source claude/eq-map-export-...   0d094560
-                   EQL50ups   claude/eql-gear-optim-...  9be60509
+                   EQL50ups   claude/eql-gear-optim-...  92dd344d
+                   sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
                  Tick 1 fired 07:36:58Z and resumed with context AND MCP tools —
@@ -3541,7 +3550,7 @@ from the failure branch unconditionally, and tested `text` where the verdict
 tested `flat` — so it printed *"no section says 'not in this repository'"* beside
 the word `ok`. Both fixed, and the comment in the file says so.
 
-#### 41.5 The guard is a gate now
+#### 41.5 ~~The guard is a gate now~~ The gate is WRITTEN. It has never run. — corrected at tick 2
 
 `.github/workflows/check.yml`. Push to master, every pull request, manual
 dispatch. Fresh clone, python 3.11, node 22, ~15 s.
@@ -3553,6 +3562,33 @@ whole reason this repository exists.
 
 `check.sh`'s header said *"this repository has no CI"*. True when written; false
 now; corrected in place rather than left to rot into the next person's premise.
+
+> **CORRECTION, 08:37Z, tick 2. I declared this gate live on the basis that I had
+> written it, which is the exact fault this section is about.** Measured:
+>
+> ```
+> GET /repos/…/sky-ledger/actions/workflows        total_count: 0
+> GET …/actions/workflows/check.yml/runs           404 Not Found
+> git ls-tree origin/master .github                (empty)
+> default branch                                   master @ bd8b7b15
+> ```
+>
+> **No workflow is registered, none has ever run, and `.github/` is not on
+> master.** The file is only on my branch. The YAML parses and its triggers are
+> `push:[master]`, `pull_request`, `workflow_dispatch` — none of which fired,
+> because I pushed to a feature branch with no open pull request.
+>
+> So the accurate statement is: **the gate is written and unproven.** `check.sh`'s
+> header now overstates in the other direction and is corrected with it.
+>
+> **What would establish it, in order of cost:** a `pull_request` from this branch
+> runs the workflow *from the head branch's copy*, so one PR proves it fires
+> without the file reaching master first. I have not opened one — the owner merges
+> here and I do not open pull requests unbidden. Alternatively `.github/` reaching
+> master by any route registers it for `push` and `workflow_dispatch`.
+>
+> Until one of those happens, **nobody should read a green `check.sh` in this
+> repository as having been enforced by anything but a human choosing to run it.**
 
 #### 41.6 Verified end to end
 
@@ -3578,3 +3614,37 @@ blocked on the owner in game (§35.5, §39.3); `CHARM_PET`, the dual-wield class
 gate and `STANCE_EVEN_SHARE_OFFENSIVE` all stay as published conflicts (§§14, 26,
 33). None of them is fixed by choosing. Critical-path task 2 — per-character
 modelling — is still my declared next item.
+
+
+---
+
+### 42. Clock tick 2, 08:37Z. One correction, and it is to §41.
+
+```
+check.sh                                                          PASS
+eql-source main                        e6039020                   same
+eql-source claude/bundle-contract      d1c19dfc                   same
+eql-source claude/eq-map-export…       0d094560                   same
+EQL50ups   claude/eql-gear-optimizer…  9be60509 -> 92dd344d       MOVED
+sky-ledger master                      bd8b7b15                   same
+```
+
+**The tick's whole job turned out to be checking my own last claim.** §41.5 said
+*"the guard is a gate now"*. It is not. The workflow is registered nowhere, has
+never run, and `.github/` is not on master — measured through the API, not
+inferred. **I asserted a gate was live because I had written the file**, in the
+section whose entire subject is results read as clean from states nobody
+established. §41.5 is struck and rewritten in place with the measurements and with
+what would actually establish it.
+
+That is the second time in two hours I have published something as done that was
+only written. The first was the STATUS line about master (§41.0). Both were mine,
+both were about my own tree, and neither was caught by a check.
+
+- **B** — `92dd344d`, *"Request a ruling: the owner's quick-scan feature is blocked
+  by two contradictory rulings"*. It has taken the Director's ARMOR_TIER
+  instruction and is working its own list. Nothing addressed to me; **B still has
+  not seen §35**, and that travels by relay.
+- **Everything else** — unchanged since tick 1.
+
+WATCH updated. Nothing else actionable and in-bound; no work manufactured.
