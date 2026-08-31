@@ -1,0 +1,9 @@
+# Catalogue shards fetched on demand by model.py / model2c.py
+sh-PRIMARY.json
+sh-SECONDARY.json
+sh-RANGE.json
+
+# Python build artifacts
+__pycache__/
+*.pyc
+residual.txt

@@ -1,0 +1,26 @@
+{
+  "id": "chain-swing-rate",
+  "claim": "Main-hand swing rate for a level-50 character at the haste cap is hm/(delay/10) x MH_CHAIN attempts per second.",
+  "model": {"file": "model4.py", "commit": "72b2844", "entry": "evaluate()"},
+  "inputs": [
+    {"name": "haste cap", "value": 75, "unit": "percent", "tier": "M",
+     "source": "owner's character panel, 29 Aug 2026: base 100%, at cap 175%, Monk trio 185%"},
+    {"name": "Monk Unbound Alacrity", "value": 10, "unit": "percentage points", "tier": "M",
+     "source": "same panel; corroborated by eqlwiki Game_Mechanics and an in-client AA string"},
+    {"name": "multi-attack chain", "value": 1.52, "tier": "M", "from_log": true,
+     "source": "138 committed Legends client logs, timestamp-burst measurement (tools/multiattack.py)"}
+  ],
+  "assumptions": [
+    {"text": "the character is at the haste cap", "direction": "inflates"},
+    {"text": "no movement or target-swapping inside the measured window", "direction": "inflates"}
+  ],
+  "kind": "estimate",
+  "decomposes": false,
+  "residual": {"value": -2.7, "unit": "percent", "n": 1, "direction": "under",
+               "note": "jos437 slash 1.082/s predicted against 1.111/s measured over 395s engaged; punch -2.5%"},
+  "stops": ["level 50 only", "main hand only", "one target", "no movement",
+            "not claimed for bows or for the offhand"],
+  "falsifier": "Any logged 395s-or-longer engagement at the haste cap whose measured main-hand attempts per second differs from the predicted rate by more than 10%.",
+  "requires_log": true,
+  "badge": null
+}
