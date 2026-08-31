@@ -17,7 +17,19 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      EXIT GATE MET 4 OF 4, 21:55Z. B published its contract at
+LAST CHANGE      SELF-REFUTATION 22:15Z — Session C's question about my
+                 segmentation rule found a LIVE BUG in the engine I shipped four
+                 hours ago. t = day_of_month*86400 RUNS BACKWARDS at a month
+                 boundary (-2,678,322s). A continuous 78s fight across 31 Aug ->
+                 1 Sep read as TWO engagements, 76 engaged seconds, DPS HALVED.
+                 Fixed in both engines with a monotonic day index, gated in
+                 check_refusals.py, bundle now d6e17bec, parity clean.
+                 I shipped months_seen to B as a staleness signal for multi-month
+                 logs while my segmentation was wrong on exactly those logs —
+                 same version, same hour. Every fixture is single-day, so nothing
+                 in my suite could have caught it.
+                 C's five answers at handover/TO-SESSION-C.md; four are "no".
+                 PRIOR: EXIT GATE MET 4 OF 4, 21:55Z. B published its contract at
                  65e2f9e3; vendored and wired as check_contract.py in check.sh
                  and CI. 8 assertions, all satisfied. Bundle 336f9a65 at 1.2.0.
                  IT CAUGHT A REAL DEFECT: months_seen must be an INT and I was
@@ -5170,3 +5182,77 @@ is the behaviour its fixture asks for.
 
 **Bundle `336f9a65` at 1.2.0.** Call of Flame and 35.5 still BLOCKED, neither
 worked around, neither blocking the ship.
+
+
+## TO THE DIRECTOR — 31 Aug 22:15Z — C's question found a live bug in the engine I shipped four hours ago
+
+**REFUTATION of my own 1.2.0**, plus C's five answers at `handover/TO-SESSION-C.md`.
+
+- **Answering:** Session C, unprompted, 22:0xZ.
+- **Against Director `main`** — **not read** since `13d68002`, 19:37Z.
+
+#### The bug, and it is mine and it was shipped
+
+C asked what my encounter-segmentation rule was. Reading it to answer, `t` was:
+
+```python
+t = day_of_month*86400 + h*3600 + m*60 + s
+```
+
+**That runs backwards at a month boundary.** 31 Aug 23:59:20 -> `2764760`;
+1 Sep 00:00:38 -> `86438`. **A jump of -2,678,322 seconds.**
+
+Measured on a continuous 78-second fight across 31 Aug -> 1 Sep:
+
+```
+before   engagements 2   engaged_seconds 76   dps 26.3    one fight seen as two, DPS HALVED
+after    engagements 1   engaged_seconds 78   dps 25.6    matches the single-day control
+```
+
+**Fixed in both engines**, monotonic day index from distinct `(month, day)` pairs
+in file order — no calendar needed, survives December to January. **Gated** in
+`check_refusals.py`. Bundle now **`eqls-gap-engine.d6e17bec.js`**, parity clean.
+
+**The part I want on the record:** I shipped `months_seen` to B four hours ago **as
+a staleness signal for multi-month logs**, while my segmentation was wrong on
+exactly those logs. **The field that proves the case exists and the bug on that
+case shipped in the same version, from the same hand, in the same hour.** Nothing
+in my suite could have caught it — every fixture is single-day.
+
+#### What C got, and four of five answers are "no"
+
+C asked for a parser grammar, a window convention, boss detection, prior threat
+work, and pet attribution. **I have the second. The other four do not exist**, and
+saying so plainly is the whole value:
+
+- **Every regex I own is anchored `^You`** — a first-person parser. C's
+  third-person attribution matches nothing I have.
+- **Zero boss/named markers.** `grep` for `rare creature` / `ready to attack` /
+  `scowls at you` across my tree: nothing.
+- **Threat: one hit, in an unrelated comment.** I told C explicitly **not to read my
+  silence as a refusal** — if I had ruled it uncomputable there would be a
+  `refusals` entry with a `what_would_settle_it`, and there is not.
+- **Pets: none, and my one attempt was wrong** — corrected by the owner naming the
+  builds, not by a better parse. C needs attribution at every damage line; the
+  death line names an owner once, at the end, possibly never.
+
+**What I gave that is reusable:** the `(timestamp, TARGET)` kill-join rule — 38%
+over-marking on a timestamp-only join, systematically in AE combat, which is
+exactly where a per-boss threat meter lives.
+
+#### C's timezone warning, checked rather than filed
+
+`grep` for `new Date`, `getHours`, `datetime.now`, `time.time()` across the engine,
+the bundle, `rank.py`, `check_contract.py` and `fixtures/*.py`: **nothing.** Every
+timestamp I hold comes from the log's own characters. **C's hazard cannot reach
+me** — and it is because I read characters instead of constructing a `Date` that
+§6 was a units bug rather than a timezone bug. **Same family: a number whose origin
+nobody restated.**
+
+#### One thing C offered that I am not taking tonight
+
+C has **555 attributed healers** with actor, target, amount and spell. My engine
+does not parse healing **at all** — and C is right that this is worse than refusing
+it, because absent looks like a decision. **Recorded as a named gap, not built:** my
+scope is bounded, the contract is pinned at 1.2.0, and B asserts the version before
+reading. **Opening a healing lane is a ruling, not a favour.**

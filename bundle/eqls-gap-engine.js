@@ -78,14 +78,24 @@
 
   function parse(lines) {
     var ev = [], kills = {}, months = {}, i, m, t, k;
+    // A MONOTONIC DAY INDEX, not the day-of-month. `t` used day_of_month*86400,
+    // which RUNS BACKWARDS at a month boundary: 31 Aug 23:59 is 2764740 and
+    // 1 Sep 00:00 is 86400. A continuous fight across it split into two
+    // engagements and double-counted engaged seconds, halving dps. Found 31 Aug
+    // 2026 by Session C asking what the segmentation rule was. The log is
+    // append-only and chronological, so counting distinct (month, day) pairs in
+    // file order is monotonic without a calendar, and survives Dec->Jan too.
+    var dayIdx = -1, prevKey = null, key;
     for (i = 0; i < lines.length; i++) {
       m = TS.exec(lines[i]);
       if (!m) continue;
+      key = lines[i].slice(5, 8) + "|" + m[1];
+      if (key !== prevKey) { dayIdx += 1; prevKey = key; }
       // TS anchors on ^\[\w{3} \w{3} , so for any line it matched, chars 5..7 ARE
       // the month token. Sliced rather than captured: adding a group would shift
       // every numeric group below, and the bound tonight is no new regex.
       months[lines[i].slice(5, 8)] = 1;
-      t = parseInt(m[1], 10) * 86400 + parseInt(m[2], 10) * 3600 +
+      t = dayIdx * 86400 + parseInt(m[2], 10) * 3600 +
           parseInt(m[3], 10) * 60 + parseInt(m[4], 10);
       ev.push([t, m[5]]);
       k = SLAIN.exec(m[5]);

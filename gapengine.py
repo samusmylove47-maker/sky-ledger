@@ -56,16 +56,30 @@ def _parse(lines):
     row are separate events that both carry the target, precisely so the join
     is the consumer's to make. It was mine to make and I had made it wrong."""
     ev, kills, months = [], set(), set()
+    # A MONOTONIC DAY INDEX, not the day-of-month. `t` was day_of_month*86400 +
+    # h*3600 + m*60 + s, which RUNS BACKWARDS at a month boundary: 31 Aug 23:59
+    # is t=2764740 and 1 Sep 00:00 is t=86400. Found 31 Aug 2026 by Session C
+    # asking what my segmentation rule was -- a continuous 38s fight across that
+    # boundary reported TWO engagements and 76 engaged seconds, halving DPS.
+    #
+    # The log is append-only and chronological, so counting DISTINCT (month, day)
+    # pairs in file order gives a monotonic index without a calendar, and it
+    # survives the December-January rollover the year field would also need.
+    day_idx, prev_key = -1, None
     for raw in lines:
         raw = raw.rstrip("\n")
         m = TS.match(raw)
         if not m:
             continue
+        key = (raw[5:8], m.group(1))
+        if key != prev_key:
+            day_idx += 1
+            prev_key = key
         # TS anchors on ^\[\w{3} \w{3} , so for any line it matched, raw[5:8] IS
         # the month token. Sliced rather than captured: adding a group to TS would
         # shift every numeric group below, and the bound tonight is no new regex.
         months.add(raw[5:8])
-        t = int(m.group(1))*86400 + int(m.group(2))*3600 + int(m.group(3))*60 + int(m.group(4))
+        t = day_idx*86400 + int(m.group(2))*3600 + int(m.group(3))*60 + int(m.group(4))
         body = m.group(5)
         ev.append((t, body))
         k = SLAIN.match(body)

@@ -40,7 +40,15 @@ CASES = {
         "[Sat Aug 30 20:00:04 2026] Shara begins to cast a spell.",
         "[Sat Aug 30 20:00:09 2026] a sand giant hits YOU for 61 points of damage.",
     ],
-    "unparseable bytes as text": ["���", "not a log line at all"],
+    "unparseable bytes as text": ["\ufffd\ufffd\ufffd", "not a log line at all"],
+    # A continuous fight across a MONTH BOUNDARY. Until 31 Aug 2026 `t` was
+    # day_of_month*86400, which runs backwards at the rollover and split one fight
+    # into two engagements with double the engaged seconds and half the dps.
+    "a fight crossing 31 Aug -> 1 Sep": (
+        [f"[Sun Aug 31 23:59:{s:02d} 2026] You slash a rock golem for 50 points of damage."
+         for s in range(20, 60, 2)] +
+        [f"[Mon Sep 01 00:00:{s:02d} 2026] You slash a rock golem for 50 points of damage."
+         for s in range(0, 40, 2)]),
     "a real engagement (control: must ALSO carry them)": None,   # filled below
 }
 
