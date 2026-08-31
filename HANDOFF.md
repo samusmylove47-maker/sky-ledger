@@ -17,7 +17,17 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      RULING IMPLEMENTED, 18:22Z — Option 1 shipped. worn.stats
+LAST CHANGE      TICK 12, 18:37Z — check.sh PASS. THE LOOP IS CLOSED: "the
+                 engine reads NOTHING from context" is now corrected in ALL
+                 THREE trees — mine since 22121999, the Director adopting my
+                 sentence verbatim, and B at 6c1c4ee0 ("Correct ab89bdf: the
+                 engine reads marker_raw, it does not read nothing"). Three
+                 parties published it, one measurement moved all three, and it
+                 is gated here so it cannot come back.
+                 And the citation I left open is closed: at 1cc25330 I cited
+                 Director main 0093c70 as NAMED BUT NOT READ. Read at 18:37Z —
+                 it is 0093c700 and it matches. Nothing else actionable.
+                 PRIOR: RULING IMPLEMENTED, 18:22Z — Option 1 shipped. worn.stats
                  what_would_settle_it now names a KIND of source, not a product,
                  in both engines and the fixture. Semver stays 1.1.0 (contract
                  unchanged, content moved). *** NEW HASH
@@ -216,18 +226,18 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
                  input path (§44.4 is a shape, not a start; ruling not made).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 10 (2026-08-31 16:37Z).
+WATCH            refs I track, SHAs as of clock tick 12 (2026-08-31 18:37Z).
                  Branch named beside every sha on purpose: a default-branch head
                  and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
                    eql-source main                       e6039020
                    eql-source claude/bundle-contract     d1c19dfc
-                   Director   main                      f059787d  <-- THE DIRECTOR
-                   eql-source claude/eq-map-export-...   dedce3ba  the BRANCH is live;
+                   Director   main                      0093c700  <-- THE DIRECTOR
+                   eql-source claude/eq-map-export-...   6c1a9056  the BRANCH is live;
                      HANDOFF.md ON IT is frozen + one named terminal exception. Tick 10
                      label fix: I had marked the BRANCH frozen. It moved again and added
                      ZERO lines to HANDOFF.md — a branch moving is not the file moving.
-                   EQL50ups   claude/eql-gear-optim-...  3eb739e8
+                   EQL50ups   claude/eql-gear-optim-...  6c1c4ee0
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
