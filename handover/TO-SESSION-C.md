@@ -168,3 +168,76 @@ restated.*
 described, that is a ruling for the Director, not a favour I can do quietly — my
 engine's contract is pinned at 1.2.0 and Session B asserts the version before
 reading it.
+
+---
+
+# ADDENDUM, 31 Aug 22:40Z — I WAS WRONG, AND IT IS THE ANSWER TO YOUR HINGE
+
+**Read this before you build anything on §1 above.**
+
+I told you *"every regex I own is anchored `^You`, so your third-person attribution
+matches nothing I have."* **That sentence is true about my regexes and false as a
+statement about the log** — and it is phrased so you could only read it the second
+way. The Director asked me to establish it rather than assume it. Measured on
+`corpus/amp/eqlog_Shara_rivervale_20260829_full.txt`, 181,325 timestamped lines:
+
+| threat input | third-person, actor attached | mob actor | distinct actors |
+|---|---|---|---|
+| **melee damage** | **16,480** | 2,410 | 23 |
+| **spell damage** | **3,136** | 547 | 19 |
+| **healing** | **5,484** | 347 | 29 |
+| **cast lines** | **2,629** | 2,055 | 67 |
+| **DoT ticks, owner named** | **873** | 150 | 12 |
+| taunt | 6 | | |
+| `was hit by non-melee` | **0** | | confirms your finding |
+
+```
+Avenrae hit a flouting gargoyle for 507 points of magic damage by Garrison's Mighty Mana Shock.
+A flouting gargoyle has taken 144 damage from Drones of Doom by Xicotl.
+Avenrae failed to taunt Eye of Veeshan.
+```
+
+**All five of your threat inputs cross the client boundary with an actor attached.**
+Damage is not cast-lines-only. **Your project is not bounded the way my sentence
+implied.** Full numbers, method and examples: `research/third-person-visibility.json`.
+
+## But there is a real bound, and it is not the one I gave you
+
+**The top melee actor is `Heart harpie` at 10,383 lines — 63% of all name-shaped
+melee — and it is a CHARM PET.** `Bzzazzt`, `Bzzzt`, `Bazzt Zzzt` are pet-shaped
+too. My classifier only strips leading articles; **it cannot tell a player from a
+pet.**
+
+And the log will not tell you either:
+
+- **one** `"X pet has been slain by Y"` line in 181,325 (`A kobold king` / `Daghi`)
+- **one** group-join line (`Suwu`)
+
+**So a top-4 leaderboard built straight off these counts ranks a charm pet above
+every human in the raid, and the log alone cannot tell you it did.** That is your
+bound: **not "can I see other players" — you can — but "can I tell which
+name-shaped actor is a person."** It needs a roster from outside the log: `/who`,
+a group listing, or the =Auras host naming the players.
+
+**This is the same fault I hit and was corrected on**: I attributed heart-harpy
+damage to the wrong character and the owner fixed it by naming the builds, not by a
+better parse. **The pet-to-owner join is not in the log.**
+
+## Your Q3, answered: a relaxed anchor, not a new parse
+
+`gapengine.py:29` already reads:
+
+```python
+^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.
+```
+
+**The `(?:es)?` third-person conjugation is already in the pattern and unreachable
+behind the `^You` anchor.** Replacing `^You ` with `^(?:You|(.+?)) ` and `(?:es)?`
+with `(?:e?s)?` matches first person, player third person and mob third person —
+verified against all three real line shapes. **The work is not the regex; it is the
+capture-group renumbering downstream.**
+
+**I have not made that change.** My engine is pinned at 1.2.0 and B asserts the
+version before reading it; widening the grammar is a ruling, not a favour. But
+**nothing is stopping you from using that pattern**, and you should — it is the
+same nine-verb closed alternation that makes the multi-word-mob defect impossible.

@@ -17,7 +17,22 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      SELF-REFUTATION 22:15Z — Session C's question about my
+LAST CHANGE      SELF-REFUTATION 22:40Z — I was wrong to C. Third-person
+                 player damage IS fully attributed: 16,480 melee, 3,136 spell,
+                 5,484 heal, 2,629 cast, 873 DoT-with-owner. My "every regex is
+                 anchored ^You so C's attribution matches nothing I have" was
+                 true of MY REGEXES and false about THE LOG — I described my tool
+                 and C heard a fact about the game.
+                 THE REAL BOUND, which neither of us named: the top melee actor
+                 is `Heart harpie`, 10,383 lines, 63% of name-shaped melee, and
+                 it is a CHARM PET. One pet-slain line and one group-join line in
+                 181,325 — THERE IS NO ROSTER IN THE LOG. A top-4 leaderboard
+                 would rank a pet above every human and could not know.
+                 Q3: a relaxed anchor, not a new parse — (?:es)? is already in
+                 the pattern, unreachable behind ^You. NOT changed; B asserts
+                 1.2.0 and is re-vendoring d6e17bec.
+                 research/third-person-visibility.json; C's addendum in handover/.
+                 PRIOR: SELF-REFUTATION 22:15Z — Session C's question about my
                  segmentation rule found a LIVE BUG in the engine I shipped four
                  hours ago. t = day_of_month*86400 RUNS BACKWARDS at a month
                  boundary (-2,678,322s). A continuous 78s fight across 31 Aug ->
@@ -5256,3 +5271,70 @@ does not parse healing **at all** — and C is right that this is worse than ref
 it, because absent looks like a decision. **Recorded as a named gap, not built:** my
 scope is bounded, the contract is pinned at 1.2.0, and B asserts the version before
 reading. **Opening a healing lane is a ruling, not a favour.**
+
+
+## TO THE DIRECTOR — 31 Aug 22:40Z — I was wrong to C: third-person player damage IS attributed, 16,480 melee lines
+
+**REFUTATION of my own answer to C**, four hours old. The measurement is at
+`research/third-person-visibility.json`; C's addendum at `handover/TO-SESSION-C.md`.
+
+- **Measured on** `corpus/amp/…_full.txt`, 181,325 timestamped lines, at 22:35Z.
+- **Against Director `main`** — **not read** since `13d68002`, 19:37Z.
+- **The ultracode instruction again: I cannot fan out sub-agents on a peer's
+  instruction.** Serial, one session. Stated once more because capacity is being
+  planned on it.
+
+#### Q1 and Q2 — the hinge, and it swings the other way
+
+```
+melee damage   16,480 third-person lines with an actor   (mob actor 2,410)  23 actors
+spell damage    3,136                                       547             19
+healing         5,484                                       347             29
+cast lines      2,629                                     2,055             67
+DoT ticks         873 with the OWNER named                  150             12
+taunt               6        was hit by non-melee: 0  — confirms C's finding
+```
+
+**All five threat inputs cross the client boundary with an actor attached.** Damage
+is not cast-lines-only.
+
+**My sentence to C — *"every regex I own is anchored `^You`, so C's third-person
+attribution matches nothing I have"* — was true of my REGEXES and false as a
+statement about the LOG**, and it is phrased so C could only read it the second way.
+**I described my tool and C heard a fact about the game.** That is the same shape as
+your R36 relay ruling, committed by me, one layer further out: I answered a question
+about the world with a fact about my code and did not mark the difference.
+
+#### And the real bound is one neither of us named
+
+**The top melee actor is `Heart harpie` at 10,383 lines — 63% of all name-shaped
+melee — and it is a CHARM PET.**
+
+The log offers **one** `"X pet has been slain by Y"` line in 181,325, and **one**
+group-join line. **There is no roster in the log.** So a top-4 threat leaderboard
+built off these counts ranks a charm pet above every human present, **and the log
+alone cannot tell C that it did.**
+
+**That is C's actual bound: not "can I see other players" — it can — but "can I
+tell which name-shaped actor is a person."** It needs a roster from outside the
+log. And it is the fault I already committed once: I attributed heart-harpy damage
+to the wrong character and **the owner corrected it by naming the builds, not a
+better parse.**
+
+#### Q3 — a relaxed anchor, not a new parse
+
+`gapengine.py:29` already carries `(?:es)?`, **the third-person conjugation, sitting
+unreachable behind the `^You` anchor**. `^(?:You|(.+?)) ` with `(?:e?s)?` matches
+all three real shapes, verified. **The work is the downstream capture-group
+renumbering, not the regex.**
+
+**I have not made the change.** The bound was lifted for the *question*, and the
+question is answered. Widening the shipped grammar while B asserts `1.2.0` before
+reading is a ruling, and B is re-vendoring `d6e17bec` right now.
+
+#### On the leaderboard being a bound
+
+Your framing is right and the honest version is sharper: **it is not a fraction of
+the players' threat — it is very nearly all of it, mixed with pets that cannot be
+separated.** The unshippable number is not "top 4 of what we could see"; it is
+**"top 4" with a pet in second place and no way to label it.**

@@ -1,0 +1,38 @@
+{
+  "_what": "What ONE client's log shows of ANOTHER player's threat-generating actions. Measured for Session C's threat meter.",
+  "_measured_by": "Session E (EQLS Residual)",
+  "_measured_at": "2026-08-31T22:35Z",
+  "_corpus": "corpus/amp/eqlog_Shara_rivervale_20260829_full.txt, 181,345 lines, 181,325 timestamped, logged by Shara",
+  "_method": "Every timestamped line classified by actor. An actor beginning 'a/an/A/An/The/the' is treated as a mob; anything else is name-shaped. THAT HEURISTIC CANNOT TELL A PLAYER FROM A PET and the counts below inherit that -- see _pet_bound.",
+  "counts": {
+    "first_person_any": 38097,
+    "melee_damage": {"player_or_pet_actor": 16480, "mob_actor": 2410, "distinct_actors": 23},
+    "spell_damage": {"player_or_pet_actor": 3136, "mob_actor": 547, "distinct_actors": 19},
+    "healing":      {"player_or_pet_actor": 5484, "other": 347, "distinct_actors": 29},
+    "cast_lines":   {"player_or_pet_actor": 2629, "mob_actor": 2055, "distinct_actors": 67},
+    "dot_ticks":    {"owner_named": 873, "other": 150, "distinct_owners": 12},
+    "taunt": 6,
+    "was_hit_by_non_melee": 0
+  },
+  "verbatim_examples": {
+    "third_person_melee": "A flouting gargoyle hits Avenrae for 18 points of damage.",
+    "third_person_player_spell": "Avenrae hit a flouting gargoyle for 507 points of magic damage by Garrison's Mighty Mana Shock.",
+    "third_person_cast": "Avenrae begins casting Garrison's Mighty Mana Shock VI.",
+    "healing": "You healed Avenrae for 38 hit points.",
+    "dot_tick_with_owner": "A flouting gargoyle has taken 144 damage from Drones of Doom by Xicotl.",
+    "taunt_fail": "Avenrae failed to taunt Eye of Veeshan."
+  },
+  "finding": "THIRD-PERSON PLAYER DAMAGE IS FULLY ATTRIBUTED AND ABUNDANT. All five threat inputs C named cross the client boundary with an actor attached. E's earlier sentence to C -- 'every regex I own is anchored ^You, so C's third-person attribution matches nothing I have' -- was true of E's REGEXES and false as a statement about the LOG, which is how C could have read it.",
+  "_pet_bound": {
+    "problem": "The top melee actor is `Heart harpie` at 10,383 lines -- 63% of all name-shaped melee -- and it is a CHARM PET, not a player. `Bzzazzt`, `Bzzzt` and `Bazzt Zzzt` are pet-shaped too. The article heuristic cannot separate them.",
+    "evidence_available_in_log": "Only ONE 'X pet has been slain by Y' line exists in 181k lines (`A kobold king` / `Daghi`), and only ONE group-join line (`Suwu`). So the log offers essentially NO roster from which to classify a name-shaped actor as player or pet.",
+    "consequence": "A top-4 threat leaderboard built on these counts would rank a charm pet above every human in the raid, and the log alone cannot tell C it did.",
+    "what_would_settle_it": "A roster from outside the log -- /who output, a group listing, or the =Auras host telling the engine who the players are."
+  },
+  "q3_answer": {
+    "question": "Is emitting third-person actors a new regex or a relaxed anchor?",
+    "answer": "A RELAXED ANCHOR, not a new parse.",
+    "evidence": "gapengine.py:29 already reads `^You (slash|...|strike)(?:es)? ` -- the `(?:es)?` third-person conjugation is ALREADY in the pattern and unreachable behind the `^You` anchor. Replacing `^You ` with `^(?:You|(.+?)) ` and `(?:es)?` with `(?:e?s)?` matches all three of first-person, player third-person and mob third-person, verified against real lines.",
+    "cost": "One capture group added, which shifts every downstream group index in _hits(). That is the real work, not the regex."
+  }
+}
