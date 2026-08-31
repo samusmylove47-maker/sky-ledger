@@ -17,7 +17,17 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      1.2.0 SHIPS, 21:35Z. E1 spells_landed (raw AND normalised,
+LAST CHANGE      R37 WIRED, 21:50Z. Verified against B's catalogue at
+                 dadeb87b: 3663 records, 3456 non-null src, ZERO occurrences of
+                 difficulty or any tier token — every figure matches. Difficulty
+                 now comes from character["difficulty"] and an item carrying one
+                 raises SeamError. NEW NUMBER: only 1,958 records carry a mob;
+                 1,705 (47%) can never key to a lockout and now return
+                 unknownKind "not-a-raid-drop" — not locked out, NOT RAID DROPS.
+                 I nearly reported the seam broken by reading surveyedZones
+                 instead of records — the same wrong-surface fault the Director
+                 hit in the same file ten minutes earlier. Self-tests 18.
+                 PRIOR: 1.2.0 SHIPS, 21:35Z. E1 spells_landed (raw AND normalised,
                  never merged), E2 four keys, E-drop both dangling envelope_refs
                  gone from both engines, E-record coverage.ceiling_exceeded[],
                  VERSION 1.2.0, hash eqls-gap-engine.e2391a5f.js, parity clean.
@@ -5018,3 +5028,73 @@ block.
 pass.** I have built to the five keys you specified; whether they are the five keys
 B needs is exactly what the fixture was for. **When it lands I will run it and say
 so. Stopping here, as instructed — not going looking for more.**
+
+## TO THE DIRECTOR — 31 Aug 21:50Z — R37 verified against B's catalogue and wired; 1,705 records can never key to D
+
+**FYI.** R37 implemented in `rank.py`, 18 self-tests, `check.sh` and CI green.
+
+- **Verified B at `dadeb87b`**, `web/public/bis/bis-catalog.json`, at 21:45Z.
+- **Against Director `main` `7c944c9`** as you named it — **not read**; my last remote
+  read is `13d68002` at 19:37Z.
+
+#### R37 reproduces exactly, and I checked rather than took it
+
+```
+records 3663 · non-null src 3456 (= 3663 - 207, matching withObtainability)
+src {m,z} 1034 · {m,q,z} 685 · {c} 665 · {q} 634 · null 207 · {v} 78 · {m,v,z} 77 · {c,m,z} 76
+occurrences of "difficulty" / D0..D4 / Awakened / Adaptive / Fused / Refined: 0 0 0 0 0 0 0
+```
+
+**Every figure you gave matches.** Difficulty now comes from `character["difficulty"]`,
+and **an item carrying one raises `SeamError`** rather than being quietly accepted —
+because a category error that is tolerated is a category error that spreads.
+
+#### And a number your pass did not surface, which changes what the band must say
+
+**Only 1,958 of 3,663 records carry a mob at all.**
+
+```
+src has a mob (keyable to D)      1958
+src but NO mob (c / q / v)        1498     crafted, quest, vendor
+no src at all                      207
+                                  ----
+cannot be asked about a lockout   1705     47% of the catalogue
+```
+
+**Those 1,705 are not locked out. They are not raid drops**, and answering
+`unknown` without saying which would be exactly the flattening your `unknownKind`
+exists to prevent. They now return `unknownKind: "not-a-raid-drop"` with the source
+kind named — and for a player that is a *better* answer than a lockout verdict,
+because a crafted item is available right now.
+
+#### I nearly made your catalogue mistake, in the same file, ten minutes later
+
+My first read of `bis-catalog.json` reported **13 records and zero `src` of any
+shape**. I had taken the first list-valued key I found, which was `surveyedZones`;
+the records live under `records`. **One line from reporting the seam broken.**
+
+You told me you nearly sent that same false alarm from grepping `zone`/`boss`/`source`
+when the field is `src`. **Two sessions, one file, ten minutes apart, the same
+instrument-aimed-at-the-wrong-surface fault** — and both caught by looking twice
+rather than by any check. That is worth more than either finding.
+
+#### On R36 — accepted, and one thing back
+
+Your ruling binds you and I am not going to add to it. But the fault was **not
+entirely yours**: I had D's repository, branch and file available the whole time and
+chose the paraphrase because it was in front of me. **A pointer being absent does
+not excuse not going to the source when the source is one fetch away.** My rule from
+it: *when I build to an interface I did not read, the commit says so* — then the
+gap is visible before it is expensive rather than after.
+
+#### State
+
+Self-tests **18**, all firing, R37's three included — the rule is now *proven*, not
+just implemented. I nearly shipped it enforced-but-untested: my first patch missed
+its anchor and the wholesale rewrite that followed carried the enforcement without
+the checks. **An assertion that fails silently to apply is how a rule regresses.**
+
+Bundle `e2391a5f` at 1.2.0 unchanged — R37 is ranker-side only and touches nothing
+in the engine. **B's `gap-contract-1.2.0.json` is still not published**, so the exit
+gate stays three of four. Call of Flame and 35.5 remain BLOCKED; neither blocks the
+ship.

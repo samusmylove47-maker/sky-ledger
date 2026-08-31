@@ -110,33 +110,64 @@ def _damage_delta(cand, character):
 
 # ---------------------------------------------------------------------------
 def _actionable(cand, character, actionability, now):
-    """Ask D. Never read a grid, never infer, never pass an item id."""
+    """Ask D. Never read a grid, never infer, never pass an item id.
+
+    RULING R37, 31 Aug 2026, VERIFIED against B's shipped catalogue rather than
+    accepted: `web/public/bis/bis-catalog.json` at `dadeb87b` holds 3,663 records,
+    3,456 with a non-null `src`, and the strings `difficulty`, `D0`..`D4`,
+    `Awakened`, `Adaptive`, `Fused`, `Refined` occur ZERO times in the file.
+
+    B supplies mob and zone and has no difficulty, correctly: an item drops across
+    a RANGE of difficulties, so difficulty is a property of the ENCOUNTER INSTANCE
+    and not of the item. THE PLAYER'S CONTEXT SUPPLIES IT. An item carrying one is
+    a category error and raises.
+    """
+    def U(why, kind):
+        return {"answer": "unknown", "why": why, "unknownKind": kind,
+                "doesNotAnswer": None, "gates": None}
+
     obt = cand.get("obtainable")
     if obt in (None, "not recorded"):
-        return {"answer": "unknown", "why": "obtainable_not_recorded",
-                "doesNotAnswer": None}
+        return U("obtainable_not_recorded", "coverage")
     if not isinstance(obt, dict):
-        raise SeamError("obtainable must be {boss, zone, difficulty}; "
-                        f"got {type(obt).__name__}. Item ids belong to B, not here.")
-    missing = [k for k in ("boss", "zone", "difficulty") if obt.get(k) in (None, "")]
-    if missing:
-        return {"answer": "unknown", "why": f"obtainable_incomplete: missing {missing}",
-                "doesNotAnswer": None}
+        raise SeamError("obtainable must be a mapping carrying at least a mob; got "
+                        f"{type(obt).__name__}. Item ids belong to B, not here.")
+    if "difficulty" in obt:
+        raise SeamError(
+            "an item may not carry `difficulty` (R37). An item drops across a RANGE of "
+            "difficulties, so difficulty belongs to the encounter the player is running, "
+            "not to the item. Pass it as character['difficulty'].")
+
+    # B's shape: src.m is the mob, src.z the zone. Measured on the shipped catalogue:
+    # 1,958 of 3,663 records carry a mob; 1,498 carry only c/q/v (crafted, quest,
+    # vendor) and 207 carry no src at all. Those 1,705 cannot be keyed to a raid
+    # lockout -- and that IS the answer. They are not locked out; they are not raid
+    # drops. Saying "unknown" without saying which would be the flattening D's own
+    # unknownKind exists to prevent.
+    raid = obt.get("boss") or obt.get("m")
+    if not raid:
+        kinds = sorted(k for k in obt if k in ("c", "q", "v"))
+        return U("no mob in the source, so there is no raid lockout to ask about"
+                 + (f" (source is {kinds}: crafted/quest/vendor)" if kinds else ""),
+                 "not-a-raid-drop")
+
+    difficulty = character.get("difficulty")
+    if difficulty in (None, ""):
+        return U("the player's current difficulty was not supplied, and per R37 it "
+                 "cannot be taken from the item", "coverage")
     if actionability is None:
-        return {"answer": "not_looked", "why": "no actionability oracle was supplied",
-                "doesNotAnswer": None}
+        return U("no actionability oracle was supplied", "coverage")
+
     r = actionability(character.get("state"), now,
-                      {"raid": obt["boss"], "difficulty": obt["difficulty"]})
+                      {"raid": raid, "difficulty": difficulty})
     if not isinstance(r, dict):
-        return {"answer": "unknown", "why": f"oracle returned {type(r).__name__}, not a result object",
-                "unknownKind": None, "doesNotAnswer": None, "gates": None}
+        return U(f"oracle returned {type(r).__name__}, not a result object", "oracle-contract")
     ans = r.get("answer")
-    # READ FROM D'S SHIPPED SOURCE, NOT FROM ITS DESCRIPTION. src/lockoutCore.js
-    # at raid-rows 74609f14 returns THREE answers only -- yes | no | unknown --
-    # and its own test asserts `three-way only`. `completed` and `not_looked` are
-    # CELL STATES, never answers: D collapses a completed cell to `yes` itself,
-    # citing the 28 Jul 2026 patch note. So the ruling that `completed` is
-    # actionable is honoured on D's side and there is nothing for me to special-case.
+    # READ FROM D'S SHIPPED SOURCE, NOT FROM ITS DESCRIPTION. src/lockoutCore.js at
+    # raid-rows 74609f14 returns THREE answers only -- yes | no | unknown -- and its
+    # own test asserts `three-way only`. `completed` and `not_looked` are CELL
+    # STATES, never answers: D collapses a completed cell to `yes` itself, citing
+    # the 28 Jul 2026 patch note. Nothing here to special-case.
     if ans not in ("yes", "no", "unknown"):
         return {"answer": "unknown",
                 "why": f"oracle returned an answer outside D's three-way contract: {ans!r}",
@@ -146,9 +177,9 @@ def _actionable(cand, character, actionability, now):
             # D'S FIELD IS `because`. Reading `why` returned None on every row and
             # silently discarded D's entire explanation -- see HANDOFF section 51.
             "why": r.get("because", r.get("why")),
-            # `coverage` means MORE LOG WOULD FIX THIS. `reset-hour` means a
-            # measurement nobody has taken. `raid-not-in-roster` means unmeasured,
-            # not absent. Three different things to tell a player; do not flatten them.
+            # coverage = MORE LOG WOULD FIX THIS, the player can act. reset-hour = a
+            # measurement nobody has taken. raid-not-in-roster = unmeasured, not
+            # absent. Three different sentences to show someone; do not flatten them.
             "unknownKind": r.get("unknownKind"),
             # BOUND 1: `yes` means "may run it and spend a token" and NEVER "the item
             # will drop". The loot lockout is not observable from a log, ever.
@@ -288,12 +319,16 @@ if __name__ == "__main__":
                 "doesNotAnswer": "answers the RAID lockout, never the LOOT lockout",
                 "gates": {"tokenCap": {"cap": 3, "grantsObserved": 0}}}
 
+    # B's real catalogue shape: src.m is the mob, src.z the zone, and there is NO
+    # difficulty anywhere in the file (R37, verified at dadeb87b).
     def W(name, dmg, dly, boss, tier=None):
         return {"slot": "PRIMARY", "candidateName": name, "replacesItemId": "cur",
                 "statDelta": {"weaponDamage": dmg, "weaponDelay": dly},
                 "currentDamage": 50, "currentDelay": 70, "eligible": True,
                 "impactSourceTier": tier,
-                "obtainable": {"boss": boss, "zone": "z", "difficulty": "normal"}}
+                "obtainable": {"m": boss, "z": "some zone"}}
+
+    PLAYING = dict(CHAR, difficulty="normal")   # the difficulty comes from HERE
 
     if "--selftest" in sys.argv:
         print("== rank self-test: every ruling must be enforced, and each check must FAIL on its inverse ==")
@@ -304,8 +339,34 @@ if __name__ == "__main__":
             print(f"  {label:<56} {'ok' if cond else 'FAILED'}   {detail}")
             if not cond: ok = False
 
+        # R37 -- difficulty comes from the PLAYER, never from the item.
+        c37 = W("Item With Difficulty", 20, -10, "open")
+        c37["obtainable"]["difficulty"] = "hard"
+        try:
+            rank([c37], PLAYING, oracle, "now")
+            check("an item carrying `difficulty` raises SeamError (R37)", False, "did not raise")
+        except SeamError as e:
+            check("an item carrying `difficulty` raises SeamError (R37)", True, str(e)[:38])
+
+        # 1,705 of B's 3,663 records have no mob. They are not locked out -- they
+        # are not raid drops, and saying only "unknown" would flatten the two.
+        cq = {"slot": "EAR", "candidateName": "Crafted Ring", "eligible": True,
+              "currentDamage": 50, "currentDelay": 70,
+              "statDelta": {"weaponDamage": 5, "weaponDelay": 0},
+              "obtainable": {"c": "smithing"}}
+        p = rank([cq], PLAYING, oracle, "now")
+        u = (p["bands"]["unknown_actionability"] or [{}])[0]
+        check("a crafted source is not-a-raid-drop, not locked out",
+              (u.get("actionability") or {}).get("unknownKind") == "not-a-raid-drop",
+              (u.get("actionability") or {}).get("why", "")[:40])
+
+        # and with no player difficulty at all, it must refuse rather than guess one
+        p = rank([W("No Difficulty", 20, -10, "open")], CHAR, oracle, "now")
+        check("no player difficulty -> unknown, never a guessed one",
+              not p["spend"]["allocate"] and len(p["bands"]["unknown_actionability"]) == 1)
+
         # unknownKind survives -- coverage and reset-hour are different answers
-        p = rank([W("Fog Blade", 20, -10, "Fog")], CHAR, oracle, "now")
+        p = rank([W("Fog Blade", 20, -10, "Fog")], PLAYING, oracle, "now")
         u = (p["bands"]["unknown_actionability"] or [{}])[0]
         check("unknownKind is carried, not flattened",
               (u.get("actionability") or {}).get("unknownKind") == "coverage",
@@ -313,14 +374,14 @@ if __name__ == "__main__":
 
         # RULING 1 -- unknown is neither ranked as actionable nor dropped
         c = W("Unknown Source", 20, -10, "x"); c["obtainable"] = "not recorded"
-        p = rank([c], CHAR, oracle, "now")
+        p = rank([c], PLAYING, oracle, "now")
         check("unknown actionability is NOT allocated", not p["spend"]["allocate"])
         check("unknown actionability is NOT dropped",
               len(p["bands"]["unknown_actionability"]) == 1,
               p["bands"]["unknown_actionability"][0]["actionability"]["why"] if p["bands"]["unknown_actionability"] else "MISSING")
 
         # RULING 2 -- `completed` is actionable, deliberately
-        p = rank([W("Trak Blade", 20, -10, "Trak")], CHAR, oracle, "now")
+        p = rank([W("Trak Blade", 20, -10, "Trak")], PLAYING, oracle, "now")
         check("a COMPLETED cell (D returns yes) IS allocated", len(p["spend"]["allocate"]) == 1)
         check("D's `because` survives; it is not read as `why`",
               "guaranteed drop" in (p["spend"]["allocate"][0]["actionability"]["why"] or ""))
@@ -328,13 +389,13 @@ if __name__ == "__main__":
               p["spend"]["cap_source"].startswith("read from D"))
 
         # ...and its inverse: `no` is not
-        p = rank([W("Vox Blade", 20, -10, "Vox")], CHAR, oracle, "now")
+        p = rank([W("Vox Blade", 20, -10, "Vox")], PLAYING, oracle, "now")
         check("`no` is NOT allocated but IS reported",
               not p["spend"]["allocate"] and len(p["spend"]["blocked_this_week"]) == 1)
 
         # RULING 3 -- spendable: the cap bounds the allocation, the rest is deferred not lost
         many = [W(f"Blade {i}", 30 - i, -10, "open") for i in range(6)]
-        p = rank(many, CHAR, oracle, "now")
+        p = rank(many, PLAYING, oracle, "now")
         check("allocation is capped at TOKEN_CAP", len(p["spend"]["allocate"]) == TOKEN_CAP,
               f"{len(p['spend']['allocate'])} of {len(many)}")
         check("the rest are DEFERRED, not discarded",
@@ -345,8 +406,8 @@ if __name__ == "__main__":
 
         # NO MANUFACTURED UNIT -- dev-refused stats never get a number
         c = {"slot": "EAR", "candidateName": "Band", "statDelta": {"str": 20, "atk": 40},
-             "eligible": True, "obtainable": {"boss": "open", "zone": "z", "difficulty": "normal"}}
-        p = rank([c], CHAR, oracle, "now")
+             "eligible": True, "obtainable": {"m": "open", "z": "some zone"}}
+        p = rank([c], PLAYING, oracle, "now")
         r = (p["bands"]["unknown_impact"] or [{}])[0]
         check("dev-refused ATK/STR gets NO number",
               r.get("dps_delta") is None and "DEV-REFUSED" in (r.get("why_no_number") or ""))
@@ -354,7 +415,7 @@ if __name__ == "__main__":
               r.get("band") == "unknown_impact")
 
         # BOUND 1 -- doesNotAnswer survives to the output
-        p = rank([W("Blade", 20, -10, "open")], CHAR, oracle, "now")
+        p = rank([W("Blade", 20, -10, "open")], PLAYING, oracle, "now")
         check("doesNotAnswer is carried, not collapsed",
               "never" in p["spend"]["doesNotAnswer"].lower() and
               p["spend"]["allocate"][0]["actionability"]["doesNotAnswer"] is not None)
@@ -362,18 +423,18 @@ if __name__ == "__main__":
         # THE SEAM -- item ids are another session's job
         try:
             rank([{"candidateName": "x", "eligible": True, "obtainable": "itemid:1234"}],
-                 CHAR, oracle, "now")
+                 PLAYING, oracle, "now")
             check("an item id in `obtainable` raises SeamError", False, "it did not raise")
         except SeamError as e:
             check("an item id in `obtainable` raises SeamError", True, str(e)[:44])
 
         # the cap caveat travels with the cap
         check("TOKEN_CAP carries its n=3 caveat",
-              "BOUND, not a measurement" in rank([], CHAR, oracle, "now")["spend"]["cap_caveat"])
+              "BOUND, not a measurement" in rank([], PLAYING, oracle, "now")["spend"]["cap_caveat"])
 
         sys.exit(0 if ok else 1)
 
     print(json.dumps(rank([W("Earthshaker", 24, -5, "open"),
                            W("Trak Blade", 12, 0, "Trak"),
-                           W("Vox Blade", 30, -20, "Vox")], CHAR, oracle, "now"),
+                           W("Vox Blade", 30, -20, "Vox")], PLAYING, oracle, "now"),
                      indent=1)[:900])
