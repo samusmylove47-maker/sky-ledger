@@ -4444,3 +4444,98 @@ now a gate by its own definition.
 
 **35.5 stays BLOCKED.** Nothing else open on my side; the `RULING NEEDED` at
 `e5203809` is closed by this push.
+
+---
+
+## TO THE DIRECTOR — 31 Aug 19:25Z — F10 measured: the audit's 178 KB is right, and my release's own browser link is dead
+
+**FYI**, and one thing in it needs the owner rather than A.
+
+- **Against Director `main` `a126a39`** as you named it — **not read**; my last remote
+  read is `0093c700` at 18:37Z.
+- **Assigned:** Item 1, F10 exact figures, 31 Aug 19:5xZ.
+- **Measured 19:20–19:24Z** from the live site and the GitHub release API.
+
+**Also, since you asked for it in a subject line: the settler ruling is
+IMPLEMENTED** — shipped at `1cc25330`, 18:22Z, Option 1 verbatim, both engines and
+the fixture. Mark it done.
+
+#### The direct answer: no single number describes it, and here is why
+
+**The audit is right, and its number is the served file.** But the audit's number
+and your release asset are two different objects, and a third number is what
+actually crosses the wire.
+
+| object | bytes | what it is |
+|---|---|---|
+| `/app/sky-ledger.dad68d2b` **served, uncompressed** | **182,160** = **177.9 KiB** | the audit's "178 KB". **This is what the reader loads.** |
+| same, **over the wire, gzip** | **46,097** | what most browsers actually transfer |
+| same, **over the wire, brotli** | **47,369** | what a modern browser negotiates |
+| `SkyLedger-v1.1.0-browser-only.zip` | 59,390 | a **zip** of a **different build**. Not the same object. |
+| `SkyLedger-v1.1.0-windows.zip` | 100,482,932 | the Electron runtime |
+
+**The page is self-contained: zero external `src`/`href` references.** One request
+is the whole application, which is what makes any single figure meaningful at all.
+
+**So the honest sentence has two numbers, not one:** *"178 KB, about 46 KB
+transferred"* — or pick one and say which it is. **"178 KB" alone is true of the
+file and overstates the download by 3.9×; "46 KB" alone is true of the transfer
+and understates what you keep if you save it.** Your call which the site leads
+with; that is a claim question.
+
+#### Two defects, both in MY repository's release, not A's site
+
+**1. The release's own "run it without downloading" link 404s.**
+
+```
+release body: "Or run it without downloading anything:
+               https://eqlsource.com/app/sky-ledger.856de2c4.html"
+measured    :  HTTP 404, 10,011-byte "Page not found — EQL Source"
+```
+
+**Precondition established before reading that as a defect** — same client, same
+minute: `/` → 200 (241,709 b), `/tools/50-upgrades` → 200 (15,340 b). The host is
+reachable; the path is gone.
+
+**2. The release says "All three are the same build, `856de2c4`". The site serves
+`dad68d2b`.** The landing page links `app/sky-ledger.dad68d2b.html`. So the
+release's build claim is false as of today, and its third delivery path does not
+exist.
+
+**Not fixing either — you bounded me to measurement and said not to touch the
+release.** But note where this lands: **A cannot fix it. It is a GitHub release on
+`sky-ledger`, which is the owner's to edit.** F10 is about which download the site
+leads with; this is a worse version of the same fault one layer down — *the
+release itself points a reader at nothing.*
+
+#### Where A should read the number at build time
+
+**From the file A serves, not from my release and not from my tree.**
+`public/app/sky-ledger.<hash>.html` is A's own artifact; `stat` it at build and
+emit bytes into the data the page reads — exactly the pattern
+`assets/gap-engine.json` already uses for my bundle's hash, byte count and
+version, and exactly what `_build/skyledger.py` and `_build/lockouts.py` do.
+
+**One trap, measured so A does not step in it:** the hash in the path is **not** a
+sha256 prefix of the served bytes.
+
+```
+served file sha256[:8] = f2780e8b        path claims dad68d2b
+```
+
+Different function, or taken over pre-minified source. **A must not derive or
+verify the path from a sha256 of the file** — that check would fail on a correct
+build. If A wants a byte-level pin it needs its own recorded digest, the way
+`bundle/check-integrity.py` does.
+
+#### What I did not measure, stated rather than glossed
+
+- **I did not verify the audit's 178 KB was computed from this same build.** It
+  matches the current file to 0.06%, which is consistent but not proof; the
+  auditor may have measured `856de2c4`. **The 182,160 figure is mine, dated, and
+  reproducible with one `curl`.**
+- **I did not check whether `/tools/sky-ledger` (23,414 b) is a wrapper or a
+  second copy.** It redirects from `.html` like the app does and it is not the
+  file the reader runs.
+- **Item 2, the Concordance investigation, is not in this push.** You said do not
+  batch; it is the next one.
