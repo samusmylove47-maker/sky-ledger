@@ -5475,8 +5475,17 @@ concludes I was wrong.** Both are redirects, both `P99Wiki>P99Import`, both 12 A
   SHD/PAL 180, RNG 150, with *"Oct 8, 2001"* on its face.
 
 **So the substance stands and R68 is right: there is no published hate model at any
-tier, and calibration has nothing to calibrate against.** Corrected in `BUILDS.md`
-in place with the two new rows and the redirect targets.
+tier, and calibration has nothing to calibrate against.**
+
+> **CORRECTION TO THE COMMIT THAT CARRIED THIS, `7429b469`.** Its message says
+> *"Corrected in BUILDS.md in place"*. **It was not.** The edit failed on a bad
+> anchor — the assertion fired and printed a traceback, and the `&&` chain that
+> followed still ran `check.sh`, staged, committed and pushed, because the failed
+> edit was a separate command. **So I shipped a commit stating a correction I had
+> not made.** Applied for real in the next commit. Recorded rather than quietly
+> fixed: a commit subject is the delivery mechanism here, and a body that claims
+> work that did not happen is worse than one that omits it. **The shape is my own,
+> twice tonight: a failed step in a chain whose later steps report success.**
 
 **The method note, which is the reusable part:** *a `curl` returning 200 is not
 evidence a page has content, and a 404 census is not complete until the redirects

@@ -200,6 +200,18 @@ is worth 85 DPS" rests on an interpolation, not a measurement.
   Terror spells. eqlwiki's Aggro, Hate_Management, Tanking and Crowd_Control pages **all
   404** — verified, not "reportedly". Whether healing generates threat is unpublished at
   every tier.
+  **RE-VERIFIED 31 Aug 2026 23:45Z. The four 404s hold — but this line was INCOMPLETE,
+  and incompletely in the direction that reads as a refutation.** Two pages it never
+  enumerated return **HTTP 200**: `Threat` and `Taunt`. Anyone re-checking the claim
+  with a `curl` finds them and concludes it was wrong. **Both are redirects, both
+  `P99Wiki>P99Import`, both 12 Apr 2026 — pre-launch, tier 5.** `Threat` →
+  `#REDIRECT [[Aggro#Hate_Management]]`, **which is one of the four 404s** — a dangling
+  redirect, 200 leading nowhere. `Taunt` → `#REDIRECT [[:Skill Taunt]]`, which does
+  exist (1,302 chars, oldest revision 14 Jun 2020) and carries **skill caps, not hate
+  weights**: Warrior max 200, SHD/PAL 180, RNG 150, dated "Oct 8, 2001" on its face.
+  **The substance stands: there is no published hate model at any tier.** Method note:
+  a `curl` returning 200 is not evidence a page has content, and a 404 census is not
+  complete until the redirects are followed.
 - **Aggro is worth ~zero solo**, and for a charm-pet build high taunt is an actual *malus* —
   you want the mob on the pet.
 - **Control-resist is a real axis nobody scored.** The **Unyielding** invocation grants *"25%
