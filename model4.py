@@ -26,10 +26,14 @@ STANCE_DMG=2.00; CRIT_RATE=0.1272; CRIT_MULT=1.70
 
 # ---- multi-attack --------------------------------------------------------
 MH_CHAIN=1.520; OH_CHAIN=1.4911; DW_SUCCESS=0.88
-# Measured ceiling on offhand attempts/s across 138 logs. Without it the model picks
-# Efreeti Standard (3 dmg / 10 delay) and swings it at 2.30/s -- 62% beyond anything ever
-# observed. Capping at the measured maximum is the conservative choice and it makes the
-# model agree with the player's own list of real offhands (Wu's Fist, Arydryidriyorn, Dagas).
+# Measured ceiling on offhand attempts/s across 138 logs.
+# THIS COMMENT USED TO SAY the cap was needed "without it the model picks Efreeti
+# Standard (3 dmg / 10 delay)". That was true, and the reason was our own bug: up10()
+# turned Efreeti Standard's base 3 into 13 rather than 6. With the floor removed the
+# cap is INERT -- verify_upgrade.py section 5 runs the rankings with it and without it
+# and gets identical DPS, identical offhand and an identical top 12. It is retained as
+# a physical constraint on attempt rate, not as a patch. If it ever starts binding
+# again, that is a signal about the catalogue, not a thing to re-tune.
 OH_RATE_CAP=1.42
 
 # ---- haste ---------------------------------------------------------------
@@ -76,7 +80,18 @@ PET_LANE={'MAG':35.0,'BST':30.0,'NEC':22.3,'ENC':31.0,'SHD':8.6}
 CHARM_PET=66.8; CHARMERS={'ENC','NEC','BRD'}
 
 # ---- items ---------------------------------------------------------------
-def up10(v): return v+max(10,int(v*0.1*10))
+# Item upgrade to +10.  PERCENTAGE ONLY -- no +1/tier floor.  See verify_upgrade.py.
+# The floor was in this line until 31 Aug 2026 as max(10, ...), and it was never
+# measured: across the ten client captures this project and Session B hold between
+# them, ZERO sit below base damage 10, which is the only region where the floor term
+# is reachable.  EQUIPMENT-TRUTH.md section 2 graded the floor tier M off a tooltip
+# whose five rows all tie -- a positive-control failure, not a confirmation.
+# Dropping it is the conservative branch (the floor overstated 265 of 429 catalogue
+# weapons, up to 5.50x on Truwian Baton) and it makes this file agree with Session B's
+# upgrade.ts, so one item no longer gets two values across the seam.
+# STILL UNMEASURED IN BOTH DIRECTIONS.  One client window of any sub-10-damage weapon
+# at any tier >= 1 settles it; until then this is a choice, not a finding.
+def up10(v,N=10): return v+(v*N)//10
 ONEH={'1H Blunt','1H Slashing','1H Piercing','Piercing','Hand to Hand'}
 TWOH={'2H Blunt','2H Slashing','2H Piercing'}
 DELETED={'Rheumguls',"Wu's Tranquil Fist",'Beckon'}     # eqlwiki {{Delete}}: not in EQL

@@ -89,7 +89,12 @@ a Wrath gain.
 
 ---
 
-## 2. The upgrade formula is confirmed against a client tooltip
+## 2. The upgrade formula is confirmed against a client tooltip — ~~in full~~ in part
+
+> **CORRECTED 31 Aug 2026.** The heading and the closing sentence of this section
+> were both too strong. The tooltip confirms the **percentage** term. It does not
+> test the **floor** term at all, and this section said it did. See
+> `verify_upgrade.py` and `HANDOFF.md` §35.
 
 The rule in use was `value + max(tier, floor(value × 0.10 × tier))` — ten
 percent of **base** per tier, with a floor of +1 per tier. It had never been
@@ -106,9 +111,35 @@ The client tooltip for the **+6** copy reads:
 | INT | 13 | **20** | 20 | OK |
 | WIS | 13 | **20** | 20 | OK |
 
-**Five for five, including the case where the floor and the percentage
+~~**Five for five, including the case where the floor and the percentage
 disagree** (AC, where 10% × 6 = 6.0 ties the floor, and STR, where 7 beats it).
-The formula is confirmed.
+The formula is confirmed.~~
+
+**Five for five on the percentage term. Zero for five on the floor term.** The
+struck sentence names its own refutation and then draws the opposite conclusion:
+AC *ties*, and a tie is not a disagreement. Work the five rows out both ways —
+`verify_upgrade.py` prints the table — and `max(tier, …)` and plain
+`floor(base × tier / 10)` give **the same answer in every row**. AC 10 → 16 both
+ways, STR/STA/INT/WIS 13 → 20 both ways.
+
+The floor term is strictly larger than the percentage term **only when the base
+value is below 10**, at every tier from 1 to 10 (proved exhaustively over base
+1–399 in `verify_upgrade.py` §3). `Midnight Clad Straps` has no such stat. So
+this tooltip could not have returned a negative for the floor no matter what the
+client did — which is the precondition failure this project keeps finding in
+other people's instruments and had here in its own.
+
+Session B holds five further client captures of the same mechanic on **weapon
+damage** (14 at +0/+1/+2/+3 and 37 at +10). Those refute +5%/tier and refute
+compounding, and they confirm the percentage term a second time — but their
+bases are 14 and 37, so they do not reach the floor either.
+
+**Ten captures across two repositories and not one of them is decisive.** The
+percentage term is Tier M twice over. The floor term is ungraded, and
+`model4.py` no longer carries it: percentage-only is the conservative branch and
+it agrees with Session B's `upgrade.ts`, so one item stops getting two values
+across the seam. **One client window of any sub-10-damage weapon at any tier
+≥ 1 settles it.**
 
 ### The catalogue's saves are incomplete
 

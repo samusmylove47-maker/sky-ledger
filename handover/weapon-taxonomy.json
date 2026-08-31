@@ -1,24 +1,24 @@
 {
- "_for": "Session B \u2014 the two Delta.requires fields B measured as unresolvable in its payload.",
+ "_for": "Session B — the two Delta.requires fields B measured as unresolvable in its payload.",
  "_source": "sky-ledger, 18 slot files scraped from eqlwiki item pages. B reports 0 of 560 items carrying a weapon skill; this carries it on 750 of 788.",
  "_read_the_grades": "The two fields do NOT have the same standing. Read `fields` before using either.",
  "fields": {
   "hands": {
-   "status": "RESOLVED \u2014 hand this over",
+   "status": "RESOLVED — hand this over",
    "tier": "T2",
    "rule": "1H = {1H Blunt, 1H Slashing, 1H Piercing, Piercing, Hand to Hand}; 2H = {2H Blunt, 2H Slashing, 2H Piercing}",
-   "coverage": "648 of 788 weapon items resolve. The 140 that do not are Archery (78), Throwing (24) and items with no skill (38) \u2014 none of which has a hands question.",
+   "coverage": "648 of 788 weapon items resolve. The 140 that do not are Archery (78), Throwing (24) and items with no skill (38) — none of which has a hands question.",
    "note": "Derived from the skill string, which is a structured wiki field, not prose."
   },
   "must_list_secondary": {
-   "status": "SPLIT \u2014 the contract conflated two rules and only one of them is sound",
+   "status": "SPLIT — the contract conflated two rules and only one of them is sound",
    "item_side": {
     "status": "RESOLVED",
     "tier": "M",
     "rule": "Unless a weapon lists SECONDARY in its slot list it cannot be held in the offhand.",
-    "source": "the owner, directly, 28 Aug 2026 \u2014 it invalidated a published ranking of mine that paired two PRIMARY-only swords",
+    "source": "the owner, directly, 28 Aug 2026 — it invalidated a published ranking of mine that paired two PRIMARY-only swords",
     "b_already_has_this": "B reports `slot` as resolvable, so B can apply this without me. 424 of 788 weapon items are SECONDARY-capable; 224 are PRIMARY-only.",
-    "b_query_rerun": "B ran 'items with a 2H skill that also list SECONDARY' and got 0, correctly calling it vacuous because no item carries a skill. Re-run here where skill IS present: still 0, and NOT vacuous \u2014 124 two-handers exist in this corpus to have been caught. The reassuring fact B wanted is real."
+    "b_query_rerun": "B ran 'items with a 2H skill that also list SECONDARY' and got 0, correctly calling it vacuous because no item carries a skill. Re-run here where skill IS present: still 0, and NOT vacuous — 124 two-handers exist in this corpus to have been caught. The reassuring fact B wanted is real."
    },
    "class_side": {
     "status": "DO NOT SHIP AS A GATE",
@@ -39,7 +39,7 @@
   },
   "mote_curves": {
    "status": "NEITHER OF US HOLDS IT",
-   "note": "B reports upgrade.ts models a display denominator, not a cost curve. I hold a +10%/tier scalar with an open T2 conflict (5% vs 10%) recorded in BUILD-LISTS.md. Future scope, not seam-blocking."
+   "note": "RESOLVED 31 Aug 2026. B's five Tier M weapon captures close the 5%-vs-10% conflict in favour of 10%/tier LINEAR (not compounding): 5%/tier cannot reach 14->18 at +3, and compounding gives 95 where the client shows 74 at +10. Both repositories now use value + floor(base*tier/10). Note for B: that integer form and 'linear +10%/tier' are the SAME rule -- but the integer form is the correct implementation, because int(base*(1+0.10*N)) mis-rounds on 70 of 22,000 (base,tier) pairs from binary float error alone. SEPARATELY UNRESOLVED: a +1/tier floor term. Our model4.py carried one until today and B's upgrade.ts never did, but ALL TEN captures across both repositories tie between the two -- the floor is reachable only below base damage 10 and no capture sits there. We dropped it as the conservative branch so the seam produces one value per item, but it is a choice, not a finding. One client window of any sub-10-damage weapon at any tier >= 1 settles it. See E's verify_upgrade.py and HANDOFF.md section 35."
   },
   "aa_ladder": {
    "status": "NEITHER OF US HOLDS IT",

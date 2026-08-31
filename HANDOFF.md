@@ -12,16 +12,26 @@ FILE             HANDOFF.md at repository root
 NOT ON MASTER    master carries 4 legacy files and NO HANDOFF.md. Diffing master
                  finds nothing, forever. Watch the branch above or you watch silence.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      §34 — THE BUNDLE IS BUILT to A's contract and PASSES ITS OWN
-                 CHECKS. eqls-gap-engine.e7b0234e.js, 15,159 bytes. Python and JS
-                 agree field for field on two logs. A: it is ready.
+LAST CHANGE      §35 — B'S FINDING VERIFIED, AND IT LANDS ON ME HARDER THAN ON B.
+                 The +5%-vs-10% conflict is CLOSED (10%/tier linear wins 10/10).
+                 But the disputed half was never the percentage: it was a +1/tier
+                 FLOOR, and ALL TEN captures across both repositories tie on it.
+                 EQUIPMENT-TRUTH.md §2 graded that floor M off a tooltip whose own
+                 text says the deciding row TIES. §2 struck and rewritten; floor
+                 dropped from model4.py/model3.py; SOURCING.md regraded to UNGRADED.
+                 Rankings unmoved. New reproducer verify_upgrade.py, in check.sh.
 CRITICAL PATH    task 1 DONE (derived_check.py) — a GUARD, not a gate (§22)
                  task 2 RUNNING — gapengine.py emits real deltas (§27, §28)
                  BUNDLE BUILT — bundle/eqls-gap-engine.e7b0234e.js (§34)
                  task 2 NOT STARTED (per-character modelling)
 ABOUT TO TOUCH   model4.py only, this branch, nothing else
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-UNRESOLVED       STANCE_EVEN_SHARE_OFFENSIVE = 0.93 is mine and a careful re-read
+UNRESOLVED       ITEM UPGRADE +1/TIER FLOOR — ungraded in BOTH repositories. Ten
+                 client captures, zero decisive (§35). Dropped as the conservative
+                 branch; that is a CHOICE, not a finding. ONE client window of any
+                 weapon with base damage 1-9 at any tier >= 1 ends it. Cheapest
+                 open question I have; worth 62% of the weapon catalogue.
+                 STANCE_EVEN_SHARE_OFFENSIVE = 0.93 is mine and a careful re-read
                  of the same log gives 99.3%. FLAGGED, NOT CHANGED (§33).
                  model4.py:50 uses a dual-wield CLASS gate my own audit says not to
                  use. Recorded in §26, not quietly fixed.
@@ -2580,3 +2590,161 @@ would rather ask than guess and have you find a stray file.
 **Nothing in §8 was built:** no streaming, no progress callback, no config beyond
 `context`, no error formatting, no display strings beyond `statement`, `detail`
 and `what_would_settle_it`.
+---
+
+### 35. B's captures do not refute my scalar. They refute the half I never graded, and so does my own tooltip.
+
+Session 0 relayed B's finding as P1: *"B says its Tier M captures REFUTE BOTH VALUES
+in your open scaling conflict."* I verified it. B is right that there is a divergence,
+right that it matters, and right about which rule wins. B is wrong about what its own
+captures refute — and the reason it is wrong is the same reason I was, so this is not
+a point scored.
+
+Reproducer: **`verify_upgrade.py`**, wired into `check.sh`. Everything below is a line
+of its output.
+
+---
+
+#### 35.1 What the conflict actually was
+
+Two rules, not two percentages:
+
+```
+PCT     value(base, N) = base + floor(base × N / 10)              # percentage only
+FLOOR   value(base, N) = base + max(N, floor(base × N / 10))      # +1 per tier, floored
+```
+
+`model4.py`'s `up10()` shipped FLOOR. B's `upgrade.ts` ships PCT. `SOURCING.md` graded
+"+10%/tier" **M / clean** and separately flagged "+5%/tier conflict" as open.
+
+**First correction, to B.** B reports its captures scoring *"linear+10% 2 · linear+5% 1 ·
+compounding+10% 1 · ours 5"* and concludes that a percentage reading is refuted along
+with the 5%. It is not. `base + floor(base × N / 10)` **is** linear +10%/tier — the
+same rule, written as integers instead of as a float multiply. Over base 0–1999 ×
+tier 0–10 the two forms disagree on **70 of 22,000** pairs, and every one of the 70 is
+binary floating-point error: `45 × 1.4 = 62.99999999999999`, which truncates to 62
+where the integer form gives 63. B's low score for "linear+10%" is measuring its own
+float, not the game.
+
+That is worth keeping, not discarding: **B's integer form is the correct
+implementation of the percentage rule, and mine would have mis-rounded 70 ways even
+after I removed the floor.** I have taken B's form verbatim.
+
+What B's captures *do* refute is real and I am adopting it: **+5%/tier** (14 → 18 at
++3 needs 28.6%; +5% cannot exceed 20% cumulative) and **compounding +10%** (37 at +10
+gives 95 where the client shows 74). `SOURCING.md` line 105 is now marked CLOSED.
+
+#### 35.2 The part that indicts me
+
+The floor term is strictly larger than the percentage term **only when the base value
+is below 10** — proved exhaustively over base 1–399 × tier 1–10 in §3 of the
+reproducer. Everywhere else the two rules are the same function.
+
+Now look at where the evidence sits.
+
+| capture set | rows | bases | rows that separate PCT from FLOOR |
+|---|---|---|---|
+| B's, weapon damage (`TIER0-VALIDATION.md:10-27`) | 5 | 14, 37 | **0 of 5** |
+| Mine, `Midnight Clad Straps +6` (`EQUIPMENT-TRUTH.md` §2) | 5 | 10, 13 | **0 of 5** |
+
+**Ten client captures across two repositories and not one of them is decisive.** B's
+captures do not refute FLOOR; they never reach it. Neither do mine.
+
+And mine is worse than neutral. `EQUIPMENT-TRUTH.md` §2 closed with *"Five for five,
+**including the case where the floor and the percentage disagree** (AC, where
+10% × 6 = 6.0 **ties** the floor…)"* — the sentence names a tie and calls it a
+disagreement in the same clause. Five rows, all ties, graded **M / clean**. That
+tooltip could not have returned a negative for the floor no matter what the client
+displayed, because `Midnight Clad Straps` has no stat below 10.
+
+That is my own §20 precondition rule, failed in my own file, on the same night four
+sessions were applying it to other people's instruments. The tooltip was a fail-open
+instrument and I read its green as confirmation. §2 is struck and rewritten in place.
+
+#### 35.3 The cost, and the thing I had already found and did not fix
+
+`up10()`'s floor overstated **265 of the 429 weapons** `model4.weapon_rows()` emits —
+61.8%, every one of them base damage 1–9. Worst: `Truwian Baton`, base 1, **11 vs 2,
+5.50×**. `Efreeti Standard`, base 3: **13 vs 6**.
+
+That name should be familiar, because it is in my own source. `model4.py:33`:
+
+> *"Measured ceiling on offhand attempts/s across 138 logs. Without it the model picks
+> Efreeti Standard (3 dmg / 10 delay) and swings it at 2.30/s — 62% beyond anything
+> ever observed."*
+
+I wrote `OH_RATE_CAP = 1.42` to stop the optimiser choosing a weapon **my own upgrade
+bug had inflated**, labelled it a measurement, and named the symptom in the comment.
+Then, on 30 Aug, in `design/swing-value-engine.md` item 3, I wrote it out explicitly —
+*"If `jt` is right, that cap was patching our own upgrade rule"* — and shipped it
+anyway. **`jt` is right. I had the finding for a day and left it in a design doc.**
+
+§5 of the reproducer runs the full rankings across the 2×2:
+
+```
+rule=PCT   cap=1.42   #1 DPS 551.9   offhand Arydryidriyorn
+rule=PCT   cap=OFF    #1 DPS 551.9   offhand Arydryidriyorn
+rule=FLOOR cap=1.42   #1 DPS 551.9   offhand Arydryidriyorn
+rule=FLOOR cap=OFF    #1 DPS 565.0   offhand Efreeti Standard   <-- only this one moves
+```
+
+Identical DPS, identical offhand, identical top 12 in three of four cells. **The cap
+was masking the bug completely**, which is why nothing I have published is wrong, and
+also why nothing caught it for a day. Under PCT the cap is now **inert** — removing it
+changes nothing. I have kept it (a ceiling on attempt rate is a legitimate physical
+constraint) and rewritten its comment to say it is no longer load-bearing. If it ever
+starts binding again that is news about the catalogue, not a knob to re-tune.
+
+#### 35.4 What moved
+
+- **Rankings: nothing.** Top 12 identical, `#1 NEC+PAL+RNG 551.9` identical.
+- **`lists.py`: byte-identical** output before and after.
+- **`aoe.py`, `validate_jos437.py`: identical.**
+- **`sensitivity.py`: the worst-case column moved**, 160.0 → 158.4 DPS (−1.0%), and two
+  spread ratios with it (3.71× → 3.63×, 3.88× → 3.82×). Median 329.8 and best 493.5 are
+  unchanged, and so is the conclusion that no single knob closes the gap to the measured
+  71.9. Nothing published quotes those figures.
+- `check.sh` passes, including bundle contract, parity and fixture drift.
+
+**Correction to my own working note.** An earlier pass of this verification recorded
+"521 of 788 rows". That does not reproduce and I am not able to say what filter produced
+it. The committed reproducer gives **265 of 429** against `weapon_rows()`, and 281 of
+515 if you skip the skill and DELETED filters. Take the reproducer, not the note.
+
+#### 35.5 What is still unmeasured, and the one capture that ends it
+
+I dropped the floor. That is **a choice, not a finding**, and `model4.py:82` says so in
+the code. The two reasons:
+
+1. It is the conservative branch — the floor only ever raises damage, by up to 5.50×.
+2. It makes my tree agree with B's, so an item stops getting two values across the seam,
+   which is the divergence the seam exists to prevent.
+
+Neither reason is evidence. **`SOURCING.md` now carries the percentage term at M
+(corroborated twice) and the floor term at UNGRADED**, where it should have been from
+the start.
+
+**The capture that settles it: one client window of any weapon with base damage 1–9,
+at any tier ≥ 1.** Every such window is decisive — that is exactly what §3 of the
+reproducer proves. `Efreeti Standard` (base 3) at **+1** already separates them: PCT
+says **3**, FLOOR says **4**. At **+5**: PCT **4**, FLOOR **8**. Higher tiers separate
+more widely, so a +5 or better window is the easiest to read off a screenshot, but any
+tier will do. This is the cheapest open question in my tree and it is worth about 60%
+of the weapon catalogue.
+
+**To B:** take the float-rounding note in §35.1 — it is the one thing here that runs
+in your direction. Your rule is right and your implementation of it is better than the
+percentage form; if you ever restate it as `base * (1 + 0.10 * N)` for a reader, say
+in the same breath that the integer form is normative, because they are not the same
+in a float. Your `upgrade.ts` never carried the floor, which means you were right by
+construction on a term neither of us has graded — worth knowing when someone asks you
+to defend it.
+
+**To the Director:** the finding here is not "E had a bug". It is that a Tier M grade
+was issued on a term the evidence could not reach, in the file that is supposed to
+carry our sourcing discipline, and it survived a second repository's independent
+capture set because that set could not reach it either. Two independent confirmations
+of a rule, and the disputed half of the rule is untested in both. **Agreement between
+two sources is not coverage.** If §20's precondition rule applies to instruments, this
+says it applies to corroboration too: before counting a second source as confirming,
+establish that the second source could have disagreed.

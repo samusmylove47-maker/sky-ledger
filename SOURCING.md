@@ -89,7 +89,8 @@ is struck.
 | procs are per-minute | exposure test, ΔlogLik +8.19 | **M** | clean |
 | damage shield 17.5/attacker | 1.00 tick per landed incoming hit | **M** | clean |
 | charm pet 66.8 DPS | pet damage inside the owner's engaged segments | **M** | clean |
-| item upgrade +10%/tier | validated 5/5 against a client tooltip | **M** | clean |
+| item upgrade +10%/tier — **percentage term** | 5/5 our tooltip + 5/5 Session B's weapon captures | **M** | clean, and now corroborated across two repositories |
+| item upgrade — **+1/tier floor term** | ~~same tooltip~~ | ~~**M**~~ → **ungraded** | **REGRADED 31 Aug.** All ten captures tie between floor and no-floor; the floor is reachable only below base 10 and no capture sits there. Dropped from `model4.py`. `verify_upgrade.py` |
 | best-30s / engaged = 1.46 | 30 fights | **M** | clean |
 | Exaltation proc sockets fire from weapons only | control test at 20.9% baseline | **M** | clean |
 | **haste** | ~~eqlwiki Haste Guide~~ → re-measured | ~~5~~ → **M** | **fixed above** |
@@ -101,7 +102,7 @@ is struck.
 | Amplification ×2.0 | player report | Report | already flagged |
 | mote rank 10 ×2.0 | back-solved | Derived | already flagged |
 | stance endurance charges | one eqlwiki page transcluded three times | 2, single-source | already flagged |
-| weapon upgrade +5%/tier conflict | eqlwiki Item Upgrade System | 2 vs **M** | already flagged; the measurement wins |
+| weapon upgrade +5%/tier conflict | eqlwiki Item Upgrade System | 2 vs **M** | **CLOSED 31 Aug** — Session B's `14 → 15/16/18 at +1/+2/+3` refutes +5%/tier outright (it cannot exceed +20% cumulative at tier 3; 14 → 18 needs 28.6%) and refutes compounding at +10. 10%/tier linear wins 10/10. `verify_upgrade.py` |
 
 **The audit comes out mostly clean, and not by luck** — the project's method has been to
 measure first and read second. Of roughly thirty load-bearing constants, one was sourced

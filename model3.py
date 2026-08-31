@@ -91,7 +91,9 @@ SPELL_LANE = {'WIZ':167.6*0.40,'NEC':55.6,'SHM':51.2,'RNG':36.3,'SHD':24.7,
 PET_LANE   = {'MAG':35.0,'BST':30.0,'NEC':25.0}   # summoned pets, measured band
 
 # ---- items ---------------------------------------------------------------
-def up10(v): return v + max(10, int(v*0.1*10))
+# superseded rule -- see model4.py and verify_upgrade.py. The +1/tier floor this
+# line used to carry is unmeasured; percentage-only is the conservative branch.
+def up10(v, N=10): return v + (v*N)//10
 ONEH = {'1H Blunt','1H Slashing','1H Piercing','Hand to Hand'}
 TWOH = {'2H Blunt','2H Slashing','2H Piercing'}
 WEAP = {}

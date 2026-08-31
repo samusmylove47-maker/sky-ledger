@@ -23,7 +23,7 @@ echo "== derived-claim validator: the committed claims =="
 python3 derived_check.py derived || fail=1
 echo
 echo "== reproducers must still run =="
-for f in handmod.py validate_jos437.py; do
+for f in handmod.py validate_jos437.py verify_upgrade.py; do
   printf '  %-24s ' "$f"
   if python3 "$f" >/dev/null 2>&1; then echo ok; else echo FAILED; fail=1; fi
 done
