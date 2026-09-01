@@ -8042,3 +8042,84 @@ is a note and not an incident. **This is the first time tonight the hold itself 
 for something** — and the ground on that hold, `SCHEDULED-REBUILD`, is the one I had
 to correct from `B is offline` six hours ago.
 
+
+## TO THE DIRECTOR — 1 Sep 17:55Z — the missing verbs make one character's DPS too LOW and another's too HIGH, and I had been reporting the wrong quantity
+
+### 70. `recovery.py`: what a held patch would do to the numbers a reader sees
+
+D-10 corrected the population behind P-3. This corrects something else about it: **the
+number I have been quoting as "the size of the defect" is not the tool's error.**
+
+I said *19.98% of first-person melee lines*, then *19.66% of first-person melee
+damage*. Both are true. Neither is the error in anything the meter prints, for two
+reasons I should have seen immediately:
+
+1. **`damage_dealt` counts spells.** For a bard, first-person melee is a rounding
+   error against song damage. A share of melee is not a share of the number.
+2. **The missing hits are also in the DENOMINATOR.** `dps` is damage over *engaged*
+   seconds, and engaged runs are built from hits. A hit the parser cannot see is a
+   hit that does not extend the engagement — so recovering it adds to the numerator
+   *and* the denominator, in a ratio that depends on the character.
+
+`recovery.py` measures it directly: the **same** engine, twice over the **same** log,
+differing only in the verb alternation, which makes the two populations identical by
+construction instead of by my reasoning about them. (That is the 202% lesson applied
+before the fact rather than after it.)
+
+```
+                         dps              damage_dealt       hits    engaged_s
+Kenkyo (melee)    101.1 ->  117.9    40,642 ->    47,501    +22.6%    +0.25%
+                        +16.62%             +16.88%
+Shara  (bard)    1372.9 -> 1357.8  1,182,027 -> 1,182,670    +2.0%    +1.16%
+                         -1.10%              +0.05%
+Francis                  no change -- contains none of the three verbs
+Shara (short)            no change -- contains none of the three verbs
+```
+
+**READ THE SIGN.** Kenkyo's published DPS is **16.62% too LOW**. Shara's is **1.10%
+too HIGH** — recovering 841 damage on a 1.18M total raises `damage_dealt` by 0.05%
+while the twenty recovered hits raise `engaged_seconds` by 1.16%. **Shara counts more
+damage and reports less DPS.**
+
+I had been telling Session B "up to 20% more melee damage counted", which reads as a
+one-directional improvement. On the owner's own log this patch makes the headline
+number go **down**. That is not an argument against the patch — the lower figure is
+the more correct one, because those seconds were always engaged — but it is a thing B
+has to know before it tells a user what changed, and I would not have known it from
+any share-of-melee figure.
+
+**Range on `dps`: −1.10% to +16.62%,** across the two client-written logs that contain
+these verbs. It is per-character and it is not signed consistently, so there is no
+single "the meter is X% wrong" to give.
+
+### The tool patches the live engine, so the self-test proves the patch cannot escape
+
+`recovery.py` monkey-patches `gapengine`'s constants for the duration of a run. That
+is the right way to get matched populations and it is a loaded gun in a repository
+whose whole discipline is that nothing ships unmeasured. The self-test therefore
+checks the constants are restored after a normal run, **and after the engine raises
+mid-patch**, and then — because both of those are string tests and a string test that
+can only pass proves nothing — **breaks the leak detector on purpose to show it can
+fail.**
+
+I had to fix two checks in this file before it was worth anything. One contained
+`G.MELEE.pattern == G.MELEE.pattern`, a tautology. The other was `chk("restored even
+when the engine raises", True)` — **a check hard-coded to pass, in a file about
+measurement honesty, written by me, twenty minutes after I committed a gate whose
+entire purpose is that an instrument must be able to return both its answers.** Fault
+shape (1), self-inflicted, same session. Both are gone and the negative control is in.
+
+### And this is what the 90.0% accuracy figure does not cover
+
+`simulate.py` generates `slash`, `kick` and `hit`. Three verbs, all three already in
+the engine's alternation. **The harness cannot emit a line the engine cannot read**,
+so the 90.0% is measured on a corpus assembled out of the engine's own vocabulary and
+is structurally blind to every defect in sections 69 and 70. Fault shape (7).
+
+The 90.0% is not withdrawn — it is a real measurement of the arithmetic, which is what
+it always claimed to be, and `simulate.py`'s own docstring says so. What was wrong is
+the sentence in that docstring saying the grammar question "is answered by the 117
+REAL logs the engine is also run over". **It was not answered by them; 96% of them
+were fixtures.** It is answered by `verbcensus.py` and `recovery.py`, and it is
+answered on 5 logs, not 117.
+

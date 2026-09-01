@@ -200,10 +200,42 @@ worst kind, because it reads as "nothing wrong here".
 counted-but-uncapped; `coverage.ceiling_exceeded` already covers a rate the engine
 cannot bound.
 
-**What it changes for you:** `damage_dealt`, `dps`, `hits_counted`,
-`auto_attack_attempts`, `melee_seconds` and `lanes` all move on any log containing
-these verbs — **about 20% more melee damage counted on an affected log**, and the
-`(?:on )?` widening changes target grouping on every `frenzy` line.
+### What it changes for you — MEASURED on the published numbers, and READ THE SIGN
+
+I told you "up to 20% more melee damage counted". **That is not a statement about any
+number a reader sees**, and I should not have handed you a share of first-person melee
+damage as if it were the tool's error. `damage_dealt` counts spells too, and the
+missing hits also mark *engaged time*, which is the denominator of `dps`.
+
+`recovery.py` runs the same engine twice over each client-written log — as shipped and
+with this patch applied in memory — so the two populations are identical by
+construction rather than by my reasoning about them:
+
+```
+                        dps            damage_dealt      hits    engaged_s
+Kenkyo (melee)   101.1 ->  117.9   40,642 ->    47,501   +22.6%    +0.25%
+                        +16.62%           +16.88%
+Shara  (bard)   1372.9 -> 1357.8  1,182,027 -> 1,182,670  +2.0%    +1.16%
+                         -1.10%            +0.05%
+Francis                 no change -- log contains none of the three verbs
+Shara (short)           no change -- log contains none of the three verbs
+
+RANGE: -1.10% to +16.62% on dps, across the 2 client logs that contain these verbs.
+```
+
+**The sign is not constant, and that is the finding.** For a melee character the
+missing lines are damage, so the published `dps` is **under**-reported by a sixth. For
+a caster the same lines are a rounding error against song damage but they still extend
+the engaged window, so recovering them grows the denominator faster than the numerator
+and the published `dps` **falls**. Shara counts *more* damage and reports *less* DPS.
+
+So: `19.66% of first-person melee damage is invisible` and `the published dps is wrong
+by X` are different quantities with different signs. Only the second is the tool's
+accuracy, and it is per-character. Run `recovery.py` yourself before you decide what to
+tell a user this patch does.
+
+`auto_attack_attempts`, `melee_seconds` and `lanes` move too, and the `(?:on )?`
+widening changes target grouping on every `frenzy` line.
 
 **Evidence:** `verbcensus.py` in this repository — run it yourself, it takes 0.6s and
 prints the count of files it opened. `HANDOFF.md` §67 and §69.

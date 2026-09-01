@@ -13,8 +13,23 @@ without it.
   IT DOES NOT TEST the GRAMMAR. The generator writes lines in the same shape the
              parser reads, so a line the real client writes differently is invisible
              to this file in both directions. That is the rank.py stub-oracle fault
-             and it cannot be designed away here -- it is answered by the 117 REAL
-             logs the engine is also run over, not by a simulation.
+             and it cannot be designed away here.
+             *** THE SENTENCE THAT STOOD HERE SAID THE GRAMMAR QUESTION IS "answered
+             by the 117 REAL logs the engine is also run over". THAT WAS FALSE. ***
+             There were not 117 real logs. There were 416 files, 139 unique after
+             de-duplication, and 5 carrying the name the EverQuest client writes --
+             one of those 5 is itself named `_fixture`. The rest are other projects'
+             generated test files, so the grammar question was not answered by them
+             and this file's blindness was covered by nothing.
+             It is answered now by `verbcensus.py` (which verbs occur, in what
+             population) and `recovery.py` (what the missing ones cost the PUBLISHED
+             numbers: -1.10% to +16.62% on `dps`, and the sign is NOT constant).
+             See HANDOFF.md sections 69 and 70.
+             THE VERBS GENERATED BELOW ARE `slash`, `kick` AND `hit` -- three, all
+             three already in the engine's alternation. THIS HARNESS CANNOT EMIT A
+             LINE THE ENGINE CANNOT READ, so the figure it prints is computed over a
+             corpus assembled out of the engine's own vocabulary. That is a real
+             measurement of the ARITHMETIC and it is not a measurement of the tool.
   IT DOES NOT TEST the MODEL. model4's ceiling is 4.59x the measured median and that
              gap is published in residual.py. Nothing here touches it.
 
@@ -207,9 +222,16 @@ KNOWN_DEFECT = {
     "auto_attempts": (
         "D-6: _lanes counts `You hit yourself` as an auto-attack attempt. `hit` is in "
         "AUTO_VERBS and _lanes reads the raw events, so the self-target guard added to "
-        "_hits on 1 Sep never reached it. FOUND BY THIS FILE on its first run. Zero "
-        "instances in 189,460 lines of real log, so impact today is nil; the fix is "
-        "held because it changes engine behaviour and B is offline."),
+        "_hits on 1 Sep never reached it. FOUND BY THIS FILE on its first run. "
+        "IMPACT TODAY IS NIL, measured on a population I have now actually counted: "
+        "ZERO self-hit MELEE lines across 139 UNIQUE logs (the spell form, "
+        "`... by <spell>`, occurs 206 times and is already excluded correctly). "
+        "P-2 is HELD for Tuesday's scheduled rebuild -- ground=SCHEDULED-REBUILD, "
+        "declared in HANDOFF.md, gated by check_holds.py. *** THE REASON PRINTED HERE "
+        "UNTIL 1 Sep 17:55Z WAS `B is offline`. IT WAS FALSE FOR THE NINE HOURS IT "
+        "STOOD, AND IT WAS STILL PRINTING IN THIS TOOL SIX HOURS AFTER I CORRECTED IT "
+        "ELSEWHERE. Availability is no longer a legal ground for a hold here -- "
+        "HANDOFF.md sections 68, 69, 70. ***"),
 }
 
 

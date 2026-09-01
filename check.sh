@@ -164,6 +164,15 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== measuring a held patch must not leak it into the shipped engine =="
+# recovery.py runs the engine TWICE -- as shipped and with P-3's verb set widened in
+# memory -- so the two populations are identical by construction rather than by my
+# reasoning about them. That makes it a tool that PATCHES THE LIVE ENGINE, which is
+# only safe if the patch cannot escape: the self-test asserts the constants are back
+# after a normal run AND after the engine raises mid-patch, and then BREAKS the leak
+# detector on purpose to prove it can fail. Hermetic; the corpus run is not a gate.
+python3 recovery.py --selftest || fail=1
+echo
 echo "== the verb census must find a verb no hand-written list contains =="
 # Added 1 Sep. The finding it exists for was measured BY HAND over a population I
 # never inspected: 416 log files, of which 277 were duplicate copies and only 5
