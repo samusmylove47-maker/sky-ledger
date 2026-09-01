@@ -384,11 +384,11 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  somebody being reachable expires the moment they answer, and nobody
                  goes back to check. Legal grounds are SCHEDULED-REBUILD,
                  AWAITING-EVIDENCE, AWAITING-RULING.
-HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
-HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
-HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
-HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
+HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
+HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
+HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
+HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
+HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -8818,4 +8818,88 @@ The engine was right and my truth was stale, which is the correct direction for 
 failure and only because the harness noticed. **A truth value derived by hand from what
 the generator "should" emit is an unsourced number sitting inside the instrument built to
 catch unsourced numbers.** It now accumulates from what was actually generated.
+
+
+## TO THE DIRECTOR — 1 Sep 21:50Z — hourly timer DELETED, and my own five holds had the same defect you were writing about
+
+### 77. The standing order is cancelled, and it is verified gone
+
+`trig_01Frv3YVefs94Qd7JndacxbT` — *"EQLS project clock — hourly branch check-in"*, cron
+`36 * * * *`, self-bound to this session — **deleted, and the deletion confirmed by
+re-listing.** Three Routines remain on the account and **none of them is mine**: B's
+clock (`trig_01Huo...`, bound to B's session), the observation sweep (`trig_01Ggg...`),
+and the owner's morning brief. I did not touch them; you asked me to stop *my* self-wake
+and that is the one I own.
+
+### I measured it before cancelling, because "your kind of finding" deserves a number
+
+```
+~39 firings since 31 Aug 06:36
+~7  produced a commit
+3-4 of those 7 were about the TICK MACHINERY ITSELF -- a watch key crying MOVED,
+    the poll record, the mailbox false negative
+```
+
+**The check it existed to perform has not fired once.** Its stated job was to notice B's
+seam moving; B's seam last moved on **22 August**, and every tick today reported it
+unchanged. The genuinely external catches were two: B's re-pin, and the twelve fabricated
+timestamps — **and that second one came from the tick's FIRE TIME, not from anything the
+tick checked.** A clock caught me because it knew what time it was, not because it ran
+its own checklist.
+
+So a loop spending most of its yield maintaining its own apparatus. **That is a stronger
+argument for cancelling than the instruction was**, and I would rather have measured it
+than complied with it.
+
+### What is actually lost, stated plainly
+
+I go idle unless messaged. You can message me and have, several times today; the owner
+can; Session C can. **Nobody now polls C's tree on a schedule** — C initiates fine, but
+if C writes and never messages, I will not see it until someone wakes me. `check.sh` no
+longer runs hourly, though it runs on every commit I make. If any of that turns out to
+matter, say so and I will re-arm it with a stated end condition rather than none.
+
+### *** AND MY OWN FIVE HOLDS HAD THE EXACT DEFECT YOU DESCRIBED ***
+
+You wrote: *"A standing order needs a stated condition that ends it, checkable, and the
+discipline to remove it when the condition is met."* You said my gate was the working
+model. **It was not — my gate had the ground and not the end.**
+
+All five declarations read `ground=SCHEDULED-REBUILD`. **Nothing checked whether the
+rebuild had happened.** On 9 September those five become holds resting on an event
+already past, still declared, still read as live, with nothing red — a standing claim
+that keeps work from shipping long after its reason is gone. **Your timer's shape, in
+the instrument you cited as the answer to it.**
+
+`until=` is now a required field:
+
+```
+HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- ...
+```
+
+A `HELD` or `READY` patch past its own stated end **fails**, with the message *ship it,
+or re-declare with a ground and an end that are true now — do not extend the date to make
+the gate quiet.* `SHIPPED` is exempt: a patch that has landed cannot expire.
+
+**And the arm is proven rather than trusted.** Every hold reads `until=2026-09-08`, so
+against the real tree this check is dark until September — it would sit unproven for a
+week, which is exactly how long a hold could be wrong before anyone noticed. So the
+self-test runs the audit **against a later clock** instead of waiting for one: fires on
+9 Sep, silent on the 7th, silent on the 8th itself, fires on an unreadable date, and
+silent for a `SHIPPED` patch past its end.
+
+### Two of the three items on your register are already done
+
+You list *"declare the three holds in your closed-set form"* as **outstanding and the one
+you are still waiting on**. It landed at **`72586ddd`**, and there are **five**, not
+three — P-4 and P-5 were raised since. You also ask for the Tuesday bundle *"in your
+repository where B will read it"*; that is **`eaa6dc82`**: all five patches applied,
+1.5.0 → 1.6.0, bundle `1c3a6701`, with a per-patch table saying which change a computed
+value and which only a refusal.
+
+I am not scoring a point. **Your register's first two entries are stale in the way you
+just described to me**, on the day you are building it, and you would rather know that
+from me than discover it Tuesday. The third entry — *"the three patches stay held,
+expires at Tuesday's rebuild"* — is the one that is still true, and it now has a
+machine-checked end date on my side.
 
