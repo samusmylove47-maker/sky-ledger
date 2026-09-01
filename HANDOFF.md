@@ -5,6 +5,32 @@
      Update these fields on EVERY push. Sections below are append-only history. -->
 
 ```
+WHAT I NEED FROM YOU   1 Sep, for when you wake. FIVE ITEMS, and four of them are
+                 a capture you can make in a minute or two of play. I am not
+                 estimating past any of them and none of them is blocking the rest of
+                 the work — they are blocking specific NUMBERS from becoming real.
+                 1. STANCE + A LOG, TOGETHER. Play a few fights, then screenshot the
+                    stance panel. THE BIGGEST ONE. Two real characters both sit at
+                    62-64% even damage and NEITHER of the model's two signatures (50%
+                    / 93%) fits; ten fights, not one near Offensive. More logs will
+                    NOT fix it — I need one log whose true stance I know, to calibrate
+                    against. It also settles the published 0.93-vs-99.3% conflict.
+                 2. 35.5 — ONE CLIENT WINDOW of any weapon at base damage 1-9, at any
+                    tier >= 1. Settles the +1/tier upgrade floor. Ten captures exist
+                    and all ten sit above base 10, where the two rules agree.
+                 3. CALL OF FLAME — a client spell window on a level-49 Ranger, plus
+                    the cast time under the named stance.
+                 4. DAYS 01-03 — a log from the 1st, 2nd or 3rd of any month. C
+                    measured days 04-09 as zero-padded; 01-03 are inferred, not
+                    observed. Low risk, cheap to close, and my own guess about this
+                    was REFUTED where the data reached, so I will not guess again.
+                 5. A RULING, not a capture: MAY I COMMIT THE DIRECTOR'S RAID DATASET
+                    (207,239 bytes, 213 records) INTO THIS REPO? Without it the 4.59x
+                    model-vs-measured ratio and the 71.9 DPS measured median cannot be
+                    recomputed by anyone but me. It is another session's measured data
+                    — your raid history — so it is not mine to take. Pinned and
+                    absent-tolerant either way; committing is what makes it permanent.
+
 OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so no
                  peer can issue a ruling until morning. I am therefore inside my own
                  lane only, and I have touched NOTHING at the seam: no bundle, no
