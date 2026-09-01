@@ -439,7 +439,24 @@ TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exi
                  asserting. Widening costs one character and is provably inert:
                  `([ \d]\d)`. Worth C, D and B each grepping their own pattern.
                  §49.1 carries the evidence and what it does not establish.
-LAST CHANGE      1 Sep 16:55Z — check.sh PASS, 23 gates, 24.4s. THE THREE HELD
+LAST CHANGE      1 Sep 18:05Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
+                 I GAVE THE OWNER (90.0%) IS MEASURED ON A CORPUS BUILT OUT OF THE
+                 ENGINE'S OWN VOCABULARY, AND MY BIGGEST FINDING WAS MEASURED ON A
+                 POPULATION THAT IS 96% OTHER PROJECTS' TEST FIXTURES. Both are now
+                 corrected in place, and neither shipped. §69, §70. ***
+                 verbcensus.py: 472 files named, 416 open as EQ logs, 139 UNIQUE by
+                 sha256 (277 were duplicate copies), 5 carrying the name the CLIENT
+                 writes, 1 of those 5 named `_fixture`. claw and reave DROPPED from
+                 P-3 — zero occurrences in any client-written log. frenzy takes a
+                 PREPOSITION in 735 of 735 lines, and adding it without `(?:on )?`
+                 would have REOPENED P-2 on that verb.
+                 recovery.py: runs the SAME engine twice over the SAME log, differing
+                 only in the verb set, so the populations match by construction.
+                 Kenkyo dps 101.1 -> 117.9 (+16.62%, TOO LOW today). Shara dps
+                 1372.9 -> 1357.8 (-1.10%, TOO HIGH today — more damage counted,
+                 LOWER dps, because the recovered hits extend engaged_seconds faster
+                 than they add damage). THE SIGN IS NOT CONSTANT.
+                 PRIOR: 1 Sep 16:55Z — check.sh PASS, 23 gates, 24.4s. THE THREE HELD
                  PATCHES ARE NOW DECLARED — see the HELD PATCHES field above — and
                  check_holds.py reads them. 14 checks, 6 self-test mutations, all
                  firing. STATE AND GROUND ARE BOTH CLOSED SETS; the mutation this
