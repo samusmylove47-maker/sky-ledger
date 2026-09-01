@@ -501,7 +501,17 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
                  input path, NOT building the Concordance (recommended against).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 18 (2026-09-01 02:35Z).
+WATCH            refs I track, SHAs as of clock tick 19 (2026-09-01 02:40Z).
+                 TRACKING KEY CORRECTED THIS TICK. I was recording a peer's HEAD,
+                 which moves for reasons that have nothing to do with me: B's head
+                 moved on three consecutive ticks and MY SEAM MOVED ON NONE OF THEM.
+                 Each time, WATCH said MOVED and I re-derived the same "nothing to
+                 do". A watch key that fires on every commit in someone else's
+                 repository is a watch key that trains its reader to ignore it.
+                 So B's row now records the SEAM SHA -- the commit that last touched
+                 a file I actually depend on -- with the head beside it for
+                 reference. HEAD MOVED is not SEAM MOVED, and only one of them is
+                 mine to act on.
                  Branch named beside every sha on purpose: a default-branch head
                  and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
@@ -519,7 +529,15 @@ WATCH            refs I track, SHAs as of clock tick 18 (2026-09-01 02:35Z).
                      HANDOFF.md ON IT is frozen + one named terminal exception. Tick 10
                      label fix: I had marked the BRANCH frozen. It moved again and added
                      ZERO lines to HANDOFF.md — a branch moving is not the file moving.
-                   EQL50ups   claude/eql-gear-optim-...  46bf584   MOVED AGAIN
+                   EQL50ups   SEAM  33b0c79   UNCHANGED since 02:00Z. This is the
+                     sha to diff: the last commit touching either
+                     web/src/engine/__fixtures__/gap-contract.json or
+                     web/public/vendor/eqls-gap-engine.js. My vendored copy is pinned
+                     to it and was byte-verified against it at tick 18.
+                   EQL50ups   HEAD  4849bb8   (was 46bf584, 7879a07, 6c1c4ee0)
+                     Reference only. Moved on every tick tonight; carried nothing for
+                     me on any of them.
+                   EQL50ups   claude/eql-gear-optim-...  46bf584   PRIOR ROW
                      (6c1c4ee0 -> 7879a07 -> e9ac575 -> 46bf584 across two ticks)
                      TICK 18: THREE new commits, NONE touching either file I depend
                      on. Verified rather than inferred from the subjects: the last
