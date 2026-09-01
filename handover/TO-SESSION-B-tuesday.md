@@ -73,67 +73,140 @@ log — the spell form (`… by Cannibalize`) is common and already excluded cor
 
 ---
 
-## P-3 — the meter cannot see six of its own damage verbs  ← THE ONE THAT MOVES NUMBERS
+## P-3 — the meter cannot see damage verbs it is emitting  ← THE ONE THAT MOVES NUMBERS
 
-**Change:** add `claw` to `AUTO_VERBS`; add `frenzy`, `smite`, `cleave`, `reave` to
-`LANE_VERBS` with ceilings; widen `MELEE` and `MISS` accordingly. **Do not add
-`shoot`** — see below.
-**File:** `gapengine.py`, and the mirror
+### *** CORRECTED 1 Sep 17:20Z, BEFORE SHIPPING. THE PATCH BELOW IS SMALLER THAN THE ONE I FIRST SENT YOU, AND ONE PART OF IT WAS WRONG. ***
 
-Measured over **117 logs, 282,615 stamped lines**, with the verb left open:
-
-```
-verb      lines    damage    in the regex?
-claw      1,052    51,288    NO
-frenzy      727    39,498    NO
-smite       699    21,219    NO
-cleave       62     2,417    NO
-reave        30     1,438    NO
-shoot         9        78    NO
-
-2,579 lines, 115,938 damage — 19.98% of first-person melee lines
-```
-
-58 logs affected. **In two of them, 100% of the character's melee damage is invisible.**
-The same six are missing from the `You try to <verb>` pattern, so lane **attempt** rates
-are under-counted too.
-
-**And it contradicts the model in the same repository:** `model4.LANE_OWNER` owns six
-lanes with rates and means for all six; `gapengine.LANE_CEILING` has four. **`frenzy`
-(Berserker, 0.72/s) and `smite` (Paladin, 0.31/s) are in the model and invisible to the
-meter** — for those two classes the lane analysis is blind to their signature ability
-and reports no gap because it observes no attempts.
-
-**Filing is measured, not guessed**, because a misfiled verb corrupts a denominator,
-which is worse than the gap. Inter-arrival medians:
+The first version of this section told you to add **six** verbs on evidence from
+"117 logs, 282,615 stamped lines". I re-ran that measurement as a committed script
+(`verbcensus.py`) instead of by hand, and the population was not what I said it was.
 
 ```
-known AUTO   slash 2.0s   pierce 2.0s   punch 2.0s   crush 3.0s
-known LANE   strike 4.0s  backstab 5.0s  bash 5.0s   kick 5.0s
-─────────────────────────────────────────────────────────────
-claw   2.0s  -> AUTO        frenzy 6.0s  -> LANE
-smite  9.0s  -> LANE        reave 10.5s  -> LANE
-cleave 26.0s -> LANE
-shoot        -> n < 20. REFUSED, not classified. Archery is plausibly its own lane and
-                9 lines is not enough to say. Leave it out; it is 78 damage.
+472  .txt/.log files named
+416  open as EQ logs
+139  UNIQUE by sha256          <- 277 were duplicate copies of each other,
+                                  the same samples vendored into three trees
+  5  named eqlog_<Char>_<server>.txt, the shape the EverQuest client writes
+  1  of those five is literally named ..._fixture.txt
 ```
+
+**So ~96% of the corpus behind the original claim is other projects' generated test
+files.** They are perfectly good software fixtures and they are not evidence about
+what EverQuest emits. R159: this is the KIND-of-claim question, and I got it wrong
+in my own favour — the six-verb finding was the largest thing I had, and I did not
+ask what the files were before counting them.
+
+**What survives when the population is named.** Verbs seen in client-named logs:
+
+```
+verb     client-named logs                         synthetic only    VERDICT
+frenzy   128 lines  9,047 dmg   Kenkyo                    607        ADD
+smite     70 lines  1,647 dmg   Kenkyo                    640        ADD
+cleave    20 lines    841 dmg   Shara (the owner's log)     0        ADD, uncapped
+shoot      9 lines     78 dmg   Testchar_FIXTURE            0        REFUSE
+claw       0 lines      0 dmg   -- none, anywhere       1,057        DROP
+reave      0 lines      0 dmg   -- none, anywhere          36        DROP
+```
+
+**`claw` and `reave` have ZERO occurrences in any client-named log.** Every line
+either verb has ever appeared on is in another project's generated fixture. I told
+you to put `claw` in `AUTO_VERBS` on the strength of 1,057 lines and a 2.0s cadence;
+all 1,057 are synthetic and the cadence is a property of somebody's generator.
+**Do not add them.** If the rebuild has a real capture with either verb, that is new
+evidence and I will take it.
+
+**`cleave` is the strongest item here and it is the smallest.** 20 lines, 841 damage,
+in `eqlog_Shara_rivervale_20260829_full.txt` — the owner's own capture, committed in
+this repository, 181,325 stamped lines. Not a sample, not a fixture, not mine.
+
+**Corrected size of the defect,** on client-named logs (5 files, 189,469 stamped
+lines, 1,413 first-person melee lines):
+
+```
+269 lines invisible / 1,413   = 19.04% of first-person melee LINES
+13,189 damage    / 67,095     = 19.66% of first-person melee DAMAGE
+```
+
+The number I published before was **19.98%, and it was a LINE share quoted where a
+DAMAGE share is what a DPS meter is wrong by.** Those are two different quantities
+and on the mixed corpus they diverge hard — 19.83% of lines but only 12.12% of
+damage, because the synthetic verbs hit softer than the real ones. On the client-named
+population they happen to agree at ~19%. Both are now reported, each against the
+population its numerator came from.
+
+**Change:** add `frenzy`, `smite`, `cleave` to `LANE_VERBS`; widen `MELEE` and `MISS`.
+Do **not** add `claw`, `reave` or `shoot`.
+**File:** `gapengine.py`, and the mirror in `bundle/eqls-gap-engine.js`
+
+### The grammar defect that would have shipped with the original patch
+
+**`frenzy` does not take a direct object.** Measured across all 139 unique logs:
+
+```
+verb      target begins with        lines
+frenzy    "on "                       735   <-- 735 of 735. 100%.
+every other verb   <direct object>  12,479   <-- 0 prepositions
+```
+
+`[Fri Jul 10 21:25:12 2026] You frenzy on a wan ghoul knight for 43 points of damage.`
+
+The engine's pattern is `^You (verb) (.+?) for (\d+) points of damage\.`, so adding
+`frenzy` to the alternation as-is captures the target as **`"on a wan ghoul knight"`**.
+Two consequences, and the second is the bad one:
+
+1. Target grouping splits — `"on a wan ghoul knight"` and `"a wan ghoul knight"` are
+   two different mobs to the engine.
+2. **It reintroduces P-2 for this verb.** The self-hit guard tests
+   `target.lower() in SELF_TARGETS`, and `SELF_TARGETS` is `{"yourself"}`.
+   `"on yourself"` is not in that set, so a self-frenzy would be counted as an attack
+   on a mob — the exact bug P-2 exists to close, re-opened by P-3 on the one verb
+   P-3 adds that needs a preposition.
+
+**So the pattern needs `(?:on )?` before the target capture**, not just a wider verb
+alternation. This is why the two patches must land together or not at all.
+
+### Filing, re-measured WITHIN a log
+
+The original cadence table compared `claw 2.0s` against a corpus-wide "known AUTO
+2-3s" band. That band was pooled across characters, and cadence is not comparable
+across characters — Kenkyo's auto-attack runs at 1.0s and its lanes at 4.0s, while
+Shara's auto runs at 5.0s and its lanes at 10.0s. A verb must be classified against
+the auto and lane cadences **in its own log**.
+
+```
+Kenkyo (n=975 melee lines)      auto slash 1.0s | lanes kick 4.0s, backstab 4.0s
+   frenzy  6.0s   n=128, 64 gaps    -> LANE
+   smite   6.0s   n= 70, 52 gaps    -> LANE
+
+Shara (n=172 melee lines)       auto crush 5.0s | lanes bash 10.0s, kick 10.0s
+   cleave 21.5s   n= 20, 10 gaps    -> NOT CLASSIFIED. REFUSED.
+```
+
+**`cleave` is counted but not filed.** Ten usable inter-arrival gaps is below the
+30-gap floor this engine already enforces on `measured.window.endpoint`; I am not
+going to apply a looser standard to a classification than the engine applies to a
+sensitivity figure. Count its damage, claim no lane rate, no ceiling.
 
 `frenzy` and `smite` landing as lanes **corroborates `model4.LANE_OWNER` from a
-different direction** — that table was built from other evidence and the cadence
-measurement agrees without being told.
+different direction** — that table was built from other evidence and the within-log
+cadence agrees without being told. `frenzy` is the Berserker lane (0.72/s in
+`model4.LANE_RATE_MAX`) and `smite` the Paladin lane (0.31/s), so for those two
+classes the lane analysis is currently blind to the class's signature ability and
+reports **no gap because it observes no attempts** — a fail-open silence, and the
+worst kind, because it reads as "nothing wrong here".
 
-**A ceiling is still needed for the four new lanes.** `model4.LANE_RATE_MAX` has
-`frenzy 0.72` and `smite 0.31`; **`cleave` and `reave` have none anywhere**, so either
-ship them as counted-but-uncapped (no gap claimed) or leave the ceiling absent — the
-engine already records `coverage.ceiling_exceeded` and refuses a rate it cannot bound.
-**Do not invent a ceiling for them.**
+**Ceilings.** `frenzy 0.72` and `smite 0.31` come from `model4.LANE_RATE_MAX`.
+**`cleave` has no ceiling anywhere and must not be given one** — ship it
+counted-but-uncapped; `coverage.ceiling_exceeded` already covers a rate the engine
+cannot bound.
 
 **What it changes for you:** `damage_dealt`, `dps`, `hits_counted`,
 `auto_attack_attempts`, `melee_seconds` and `lanes` all move on any log containing
-these verbs — **up to 20% more melee damage counted**. This is the only one of the
-three that changes a number a reader sees.
+these verbs — **about 20% more melee damage counted on an affected log**, and the
+`(?:on )?` widening changes target grouping on every `frenzy` line.
 
-**Evidence:** `HANDOFF.md` §67.
+**Evidence:** `verbcensus.py` in this repository — run it yourself, it takes 0.6s and
+prints the count of files it opened. `HANDOFF.md` §67 and §69.
 
 ---
 
@@ -143,8 +216,13 @@ three that changes a number a reader sees.
    if the others complicate the rebuild.
 2. **The version.** Your guard asserts exact equality, so name the version you want and
    I will ship that rather than guessing — and I will not bump again without you.
-3. **`cleave` and `reave` ceilings** — if the rebuild has evidence for either, tell me
-   and I will use it. Otherwise they ship uncapped and the engine says so.
+3. **A `cleave` ceiling** — if the rebuild has evidence for one, tell me and I will
+   use it. Otherwise `cleave` ships counted-but-uncapped and the engine says so.
+   (`reave` is gone from this patch entirely — see the correction in P-3.)
+4. **NEW: do you have a capture with `claw` or `reave` in it?** I dropped both because
+   every occurrence I could find is in another project's generated fixture. If the
+   rebuild has a real client log with either, that is evidence I do not have and I
+   will put them back on it.
 
 I cannot message you; the Director carries this both ways. **This file is the artifact
 — read it here rather than a summary of it.**

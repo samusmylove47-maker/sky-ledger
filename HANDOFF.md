@@ -60,7 +60,63 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
-                 D-7 [OPEN, 1 Sep 16:10Z]  *** THE BIGGEST ACCURACY DEFECT I HAVE
+                 D-10 [OPEN, 1 Sep 17:20Z]  *** I HAVE TO CORRECT D-7, AND THE
+                 CORRECTION IS THE SAME FAULT THIS CHANNEL HAS BEEN CATALOGUING ALL
+                 NIGHT, COMMITTED BY ME, ON MY OWN HEADLINE FINDING. ***
+                 D-7 says "measured over 117 logs, 282,615 stamped lines". I never
+                 asked what those files WERE. Re-run as a committed script
+                 (verbcensus.py, 0.6s, prints the count it opened):
+                   472 files named .txt/.log
+                   416 open as EQ logs
+                   139 UNIQUE by sha256   <- 277 were DUPLICATE COPIES, the same
+                                             samples vendored into three trees
+                     5 named eqlog_<Char>_<server>.txt, the shape the CLIENT writes
+                     1 of those five is literally named ..._fixture.txt
+                 ~96% OF MY EVIDENCE WAS OTHER PROJECTS' GENERATED TEST FILES. Good
+                 fixtures; not evidence about what EverQuest emits. THIS IS R159 —
+                 what KIND of claim is this evidence for — and I got it wrong in the
+                 direction that made my finding bigger.
+                 WHAT SURVIVES, and it is still a real defect:
+                   frenzy  128 lines  9,047 dmg  client log (Kenkyo)      ADD
+                   smite    70 lines  1,647 dmg  client log (Kenkyo)      ADD
+                   cleave   20 lines    841 dmg  THE OWNER'S OWN LOG      ADD
+                   shoot     9 lines     78 dmg  a file named _fixture    REFUSE
+                   claw      0 lines in ANY client-named log (1,057 synthetic)  DROP
+                   reave     0 lines in ANY client-named log (   36 synthetic)  DROP
+                 I WAS ABOUT TO SHIP `claw` INTO AUTO_VERBS on 1,057 lines and a 2.0s
+                 cadence. Every one of those lines is somebody's generator, and so is
+                 the cadence. It is dropped.
+                 THE SIZE OF THE DEFECT, CORRECTED. I published 19.98% and that was a
+                 LINE share standing where a DAMAGE share belongs — a DPS meter is
+                 wrong by damage. On the client-named population: 19.04% of lines,
+                 19.66% OF DAMAGE (13,189 of 67,095). On the mixed corpus those two
+                 diverge hard, 19.83% vs 12.12%, because the synthetic verbs hit
+                 softer than the real ones. Both now reported with their populations.
+                 AND A GRAMMAR DEFECT THAT WOULD HAVE SHIPPED: `frenzy` takes a
+                 PREPOSITION. 735 of 735 lines are "You frenzy ON a mob for N". Every
+                 other verb, all 12,479 lines, takes a direct object. Adding frenzy to
+                 the alternation as-is captures the target as "on a wan ghoul knight",
+                 which splits target grouping AND REOPENS P-2 FOR THAT VERB: the
+                 self-guard tests `target in {"yourself"}` and "on yourself" is not in
+                 it. P-3 would have re-introduced the exact bug P-2 exists to close.
+                 The pattern needs `(?:on )?`, not just more verbs.
+                 ALSO CORRECTED: my cadence table pooled inter-arrival medians ACROSS
+                 CHARACTERS. Cadence is not comparable across characters — Kenkyo's
+                 auto runs 1.0s and its lanes 4.0s; Shara's auto runs 5.0s and its
+                 lanes 10.0s. Re-measured WITHIN each log: frenzy 6.0s -> LANE (n=128),
+                 smite 6.0s -> LANE (n=70), cleave 21.5s -> REFUSED, only 10 usable
+                 gaps, below the 30-gap floor this engine already enforces on
+                 window.endpoint. I am not applying a looser standard to a
+                 classification than the engine applies to a sensitivity figure.
+                 NOTHING SHIPPED WRONG. This was caught while P-3 was still held.
+                 handover/TO-SESSION-B-tuesday.md is rewritten; B gets the smaller,
+                 sourced patch, not the big unsourced one.
+
+                 D-7 [CORRECTED BY D-10, 1 Sep 17:20Z — READ D-10 FIRST. The
+                 finding is real and SMALLER: four verbs, not six, and the population
+                 quoted below is ~96% synthetic fixtures. Left standing unedited
+                 because a claim I got wrong is not improved by my rewriting it.]
+                 *** THE BIGGEST ACCURACY DEFECT I HAVE
                  FOUND, AND THE FIRST HELD PATCH THAT CHANGES REAL NUMBERS. ***
                  THE METER CANNOT SEE SIX FIRST-PERSON DAMAGE VERBS. Measured over
                  117 logs / 282,615 stamped lines: claw, frenzy, smite, cleave,
@@ -262,7 +318,7 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  AWAITING-EVIDENCE, AWAITING-RULING.
 HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
 HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add claw to AUTO_VERBS and frenzy, smite, cleave, reave to LANE_VERBS; six first-person damage verbs are invisible to the meter, 2,579 lines and 115,938 damage, 19.98% of first-person melee lines over 117 logs
+HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add frenzy, smite, cleave to LANE_VERBS and widen MELEE with (?:on )? for frenzy's preposition; three damage verbs invisible to the meter on client-written logs, 19.66% of first-person melee damage (13,189 of 67,095). CORRECTED 17:20Z: claw and reave DROPPED, zero occurrences outside synthetic fixtures; shoot still refused. See D-10.
                  ALL THREE change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -7840,3 +7896,149 @@ verb classification, and the three questions I need answered at re-pin.
 
 **35.5, Call of Flame and the stance capture stay BLOCKED. P-1, P-2, P-3 held for
 Tuesday.**
+
+
+## TO THE DIRECTOR — 1 Sep 17:20Z — my biggest finding was measured on a population that is 96% other projects' test fixtures
+
+### 69. The verb census: 416 files, 139 unique, 5 written by the game
+
+I published this last night as the largest accuracy defect in the meter:
+
+> *THE METER CANNOT SEE SIX FIRST-PERSON DAMAGE VERBS. Measured over 117 logs /
+> 282,615 stamped lines... 2,579 lines and 115,938 damage go uncounted — 19.98% OF
+> ALL FIRST-PERSON MELEE LINES.*
+
+Every arithmetic step in that sentence is right. The sentence is still wrong, and it
+is wrong in the one way this channel has spent the whole night cataloguing: **a share
+is only a share against the population its numerator came from, and I never asked
+what the population was.**
+
+I found those logs by discovering a directory my own `check.sh` had read from
+twenty-nine times, and I was so pleased to have gone from 4 files to 117 that I
+counted them instead of looking at them. `verbcensus.py` — committed, hermetic
+self-test, 0.6s, prints the count it opened (R73):
+
+```
+472  .txt/.log files named
+416  open as EQ logs
+139  UNIQUE by sha256      <- 277 were DUPLICATE COPIES. The eql-meter samples are
+                              vendored into corpus/, eqmeter/ and kpxcoolx/, so a
+                              naive count triple-counts them.
+  5  named eqlog_<Character>_<server>.txt — the shape the EverQuest client writes
+  1  of those five is literally named ..._fixture.txt
+```
+
+**134 of 139 are files called `e2e-combat.log`, `bosstier-hate-ladder-aug01.log`,
+`w39-spellblade-switch.log`.** Those are other sessions' generated test fixtures.
+They are good fixtures. They are not evidence about what EverQuest emits, and a verb
+census run over them measures **what somebody's generator emits**.
+
+### The finding survives, smaller and better sourced
+
+Split by whether the file carries the client's own naming convention:
+
+```
+verb     client-named             synthetic-only    verdict
+frenzy   128 lines  9,047 dmg   Kenkyo        607   ADD
+smite     70 lines  1,647 dmg   Kenkyo        640   ADD
+cleave    20 lines    841 dmg   SHARA           0   ADD, uncapped
+shoot      9 lines     78 dmg   _fixture        0   REFUSE
+claw       0 lines      0 dmg   -- none --  1,057   DROP
+reave      0 lines      0 dmg   -- none --     36   DROP
+```
+
+**`claw` and `reave` have zero occurrences in any client-named log.** I was about to
+tell B to put `claw` in `AUTO_VERBS` on the strength of 1,057 lines and a measured
+2.0s cadence. All 1,057 lines are synthetic and the 2.0s is a property of somebody's
+generator. Both dropped. If the rebuild has a real capture with either, that is
+evidence I do not have and I will take it — I have added it to B's question list.
+
+**`shoot` stays refused, now for two independent reasons.** I refused it last night at
+n<20. Its only client-named source turns out to be the file with `fixture` in its
+name. A refusal that was right for a weak reason is now right for a strong one.
+
+**`cleave` is the smallest item and the strongest.** 20 lines, 841 damage, in
+`eqlog_Shara_rivervale_20260829_full.txt` — the owner's own capture, committed in this
+repository. Not a sample, not a fixture, not mine.
+
+### The share I published was the wrong quantity
+
+19.98% was a **line** share. **A DPS meter is wrong by damage, not by lines.**
+
+```
+client-named population (5 files, 189,469 stamped, 1,413 melee lines)
+   19.04% of lines      19.66% of DAMAGE   13,189 / 67,095
+mixed corpus (139 files)
+   19.83% of lines      12.12% of DAMAGE   <- they DIVERGE, and it matters
+```
+
+On the mixed corpus the two figures differ by 1.6x, because the synthetic verbs hit
+softer than the real ones. I quoted the line share, which was the larger number, and
+I quoted it as the size of a damage defect. Both are now published with the
+population each was computed over.
+
+### A grammar defect that would have shipped inside the fix
+
+**`frenzy` does not take a direct object.** Across all 139 unique logs:
+
+```
+frenzy           target begins "on "     735 of 735    100%
+every other verb direct object        12,479 of 12,479   0 prepositions
+```
+
+`You frenzy on a wan ghoul knight for 43 points of damage.`
+
+The engine's pattern captures `(.+?)` between verb and `for`, so `frenzy` added to the
+alternation as-is yields the target `"on a wan ghoul knight"`. Target grouping splits
+— and worse, **it reopens P-2 for that verb.** The self-hit guard tests
+`target.lower() in SELF_TARGETS`, `SELF_TARGETS` is `{"yourself"}`, and `"on yourself"`
+is not in that set. **P-3 would have re-introduced the exact bug P-2 exists to close,
+on the one verb it adds that needs a preposition.** The pattern needs `(?:on )?`.
+
+### And my cadence table pooled across characters
+
+The filing evidence compared `claw 2.0s` against a corpus-wide "known AUTO 2–3s" band.
+That band was pooled across characters. **Cadence is not comparable across
+characters:**
+
+```
+Kenkyo   auto slash 1.0s   lanes kick 4.0s, backstab 4.0s
+Shara    auto crush 5.0s   lanes bash 10.0s, kick 10.0s
+```
+
+Shara's *auto-attack* is slower than Kenkyo's *lanes*. A global band classifies by
+whose log a verb happened to appear in. Re-measured **within** each log:
+
+```
+frenzy  6.0s  n=128, 64 gaps   -> LANE   (Kenkyo: auto 1.0, lanes 4.0)
+smite   6.0s  n= 70, 52 gaps   -> LANE   (Kenkyo: auto 1.0, lanes 4.0)
+cleave 21.5s  n= 20, 10 gaps   -> REFUSED
+```
+
+`cleave` is **counted but not filed**. Ten usable inter-arrival gaps is below the
+30-gap floor this engine already enforces on `measured.window.endpoint`, and I am not
+applying a looser standard to a classification than the engine applies to a
+sensitivity figure. Count the damage, claim no lane rate, invent no ceiling.
+
+`frenzy` and `smite` landing as lanes still corroborates `model4.LANE_OWNER` from a
+different direction — Berserker and Paladin — and now does so on client-written
+evidence rather than on a generator's.
+
+### What this says about the accuracy number I gave the owner
+
+I reported **90.0% exact recovery** from `simulate.py`. That harness generates
+`slash`, `kick` and `hit` — three verbs, all three of which the engine already reads.
+**It is structurally incapable of detecting any verb defect**, including the one above
+and including the six-verb version I believed at the time. The 90.0% is a true
+statement about a corpus I built out of the engine's own vocabulary: fault shape (7),
+a harness that sanitises its input before handing it to the thing under test. The
+figure is not retracted, but it needs its population printed next to it, and the
+simulator needs the real verb distribution. That is the next thing I am doing.
+
+### Nothing shipped wrong
+
+P-3 was held. The correction landed while it was held, which is the only reason this
+is a note and not an incident. **This is the first time tonight the hold itself paid
+for something** — and the ground on that hold, `SCHEDULED-REBUILD`, is the one I had
+to correct from `B is offline` six hours ago.
+

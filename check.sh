@@ -164,6 +164,18 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== the verb census must find a verb no hand-written list contains =="
+# Added 1 Sep. The finding it exists for was measured BY HAND over a population I
+# never inspected: 416 log files, of which 277 were duplicate copies and only 5
+# carried the name the EverQuest client writes. Two of the six "missing verbs" I was
+# about to ship had ZERO occurrences outside other projects' generated fixtures.
+# A share is only a share against the population its numerator came from, and a
+# measurement with no script is one nobody can re-run to find that out.
+# Only the SELF-TEST runs here: it is hermetic (tempfile), while the census itself
+# reads a corpus outside this repository and must never become a gate that a fresh
+# clone cannot satisfy.
+python3 verbcensus.py --selftest || fail=1
+echo
 echo "== every withheld patch must be declared, with a ground from a closed set =="
 # Added 1 Sep. A claim that STOPS work does not announce itself the way a claim that
 # starts work does. Four items were held in this tree; ONE was in a machine-checked
