@@ -60,6 +60,26 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
+                 D-12 [OPEN, 1 Sep 17:50Z]  RULING WANTED, AND IT IS A DESIGN
+                 QUESTION NOT A NUMBER. THE VERB LIST SHOULD PROBABLY NOT BE CLOSED.
+                 Three sessions now hold three different verb lexicons over the same
+                 game. Mine had 9 and was wrong twice today in both directions: too
+                 few (six missing), then too many (claw and reave dropped on a corpus
+                 that was 96% fixtures). C's is 19, derived by fixpoint over 5.6M
+                 lines of genuine captures. Shara's shipped parser carries 8 more that
+                 are ZERO in both C's corpus and mine.
+                 A CLOSED ALTERNATION FAILS SILENTLY AND IN THE EXPENSIVE DIRECTION:
+                 an unknown verb is not counted, and nothing says so. C's rule, which
+                 I think is right: "tolerance is free and a 26th verb should be
+                 LOGGED, not dropped."
+                 That means parsing the verb OPEN and reporting unknowns, instead of
+                 enumerating. It is a real mechanism change to the core pattern, so it
+                 is yours. P-5 is the smaller version I can do without a ruling:
+                 publish the verbs I counted but could not classify.
+                 WHAT I WILL NOT DO EITHER WAY: file a verb as auto-attack or lane
+                 without cadence evidence. Misfiling corrupts a denominator, which is
+                 worse than the gap it closes.
+
                  D-11 [OPEN, 1 Sep 17:35Z]  RULING WANTED. THE ENGINE NEEDS TO
                  KNOW THE LOGGING CHARACTER'S NAME, and today it does not. Session C
                  recommended a `self` parameter for a different reason (merging two
@@ -366,8 +386,9 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  AWAITING-EVIDENCE, AWAITING-RULING.
 HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
 HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add frenzy, smite, cleave to LANE_VERBS and widen MELEE with (?:on )? for frenzy's preposition; three damage verbs invisible to the meter on client-written logs, 19.66% of first-person melee damage (13,189 of 67,095). CORRECTED 16:16Z: claw and reave DROPPED, zero occurrences outside synthetic fixtures; shoot still refused. See D-10.
+HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
 HELD-PATCH: P-4 [HELD] ground=SCHEDULED-REBUILD -- append to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
+HELD-PATCH: P-5 [HELD] ground=SCHEDULED-REBUILD -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -8414,4 +8435,106 @@ command.
 reading. The gate refused it, I ran `date`, and by then the real answer *was* 17:40Z. The value is
 identical and its provenance is not, which is the whole distinction: a number that happens to be
 right is not a measurement.
+
+
+## TO THE DIRECTOR — 1 Sep 17:52Z — C answered with 5.6M lines of captures: claw and reave go back in, and a well-founded refusal is not a correct one
+
+### 73. The exchange closed, and what it cost me to be wrong in each direction
+
+I asked Session C for one thing: per-verb counts from its corpus and whether each file is a
+capture. **C ran my authenticity discriminator on its own corpus first — verbatim, plus sha256
+dedup — before answering.** 15 of 17 files genuine, 5,631,681 stamped lines, two excluded and
+named rather than quietly dropped, neither exclusion moving a count by more than 1.3%.
+
+```
+claw   24,756   I DROPPED THIS. 12th most common verb in C's corpus.
+strike 35,854   I flagged it as synthetic-only support. Real.
+bite   16,057
+smash   7,280
+reave   3,673   I DROPPED THIS.
+slice   3,326
+sting   3,089
+shoot   2,664   I REFUSED THIS TWICE.
+gore maul rend gouge slam burn gnaw lash    0 across 5.6M lines
+```
+
+**I was wrong in both directions today on the same finding.** First too many verbs, on a corpus
+that was 96% other projects' fixtures. Then too few, because I corrected the population and
+concluded from *my* 5 captures that `claw` and `reave` do not exist. **My drop was correct
+reasoning on the evidence I had, and the evidence I had was 5% of the evidence that exists.**
+
+**`shoot` is the sharpest case.** I refused it twice — at n<20, then again because its only
+client-named source was a file with `fixture` in the name. Both refusals were well-founded on what
+I could see, and both were wrong. **A well-founded refusal is not a correct one**, and I would
+rather have that written down than the comfortable version where my caution was vindicated.
+
+**One exact cross-validation.** C and I share a file. C counts `eqlog_Shara_rivervale_2026-08-29`
+at 181,325 lines; I count `eqlog_Shara_rivervale_20260829_full.txt` at 181,325 **stamped** lines.
+Two censuses, independently written, identical number.
+
+### But C's counts are ALL-ACTOR and this engine is `^You`-anchored
+
+C derived its lexicon from three anchors — actor exactly `You`, target exactly `YOU`, target
+beginning with an article. **Every pattern in my engine is first-person outgoing.** A verb that
+occurs only in the third person adds nothing to it. Deduplicated, in my 139 logs:
+
+```
+claw 1,057 first-person (all synthetic)   bite  0 first-person, ANYWHERE
+reave   36 first-person (all synthetic)   slice 0
+strike 684 first-person (all synthetic)   sting 0
+shoot    9 first-person (a fixture)       smash 0
+```
+
+**Four of the six I had never seen are third-person-only in everything I hold.** They may be mobs
+and pets biting and stinging players — real, C's count right, and worth nothing to my parser.
+**So I have asked C for one column: the first-person count.** It decides whether Tier 2 below is a
+fix or seven branches that can never fire, and whether `claw` is a player verb or a PET verb —
+and a pet's damage is not the player's first-person damage, which is the same grammar problem as
+the damage shield in D-11.
+
+### How it shipped: tiered by what each verb rests on, and nothing new classified
+
+- **Tier 1** — first-person cadence measured in a genuine capture: `frenzy`, `smite` to
+  `LANE_VERBS`; `cleave` counted, not filed (10 gaps, below my own 30-gap floor).
+- **Tier 2** — real per C's captures, first-person status unknown: `claw`, `reave`, `bite`,
+  `slice`, `sting`, `smash`, `shoot` into `MELEE` **and nothing else.**
+- **Tier 3** — `gore maul rend gouge slam burn gnaw lash`, zero in both corpora. **Not added.**
+  C's framing, which I adopted: for these the union of three lists is *tolerance, not evidence.*
+
+**Nothing in Tier 2 is classified.** Filing a verb without cadence evidence corrupts a denominator,
+which is worse than the gap it closes. That was true when I said it about `claw` on a synthetic
+cadence and it is still true now `claw` is real: **a count establishes that a verb exists, not what
+it is.**
+
+I checked rather than assumed that the engine already routes this correctly —
+`if v in LANE_VERBS / elif v in AUTO_VERBS` means a verb in `MELEE` and neither set contributes its
+damage and nothing else. Counted, unclaimed, no new mechanism. **But silent, which is P-5.**
+
+### Two new held patches and a design question
+
+- **P-5 declared**: publish `coverage.verbs_unclassified`. Tier 2 makes that set non-empty, and a
+  log where everything was classified currently emits the same `lanes` block as one where a fifth
+  of the damage came from unfiled verbs. The `measured: {}` shape again.
+- **D-12 raised**: *the verb list should probably not be closed at all.* Three sessions hold three
+  lexicons over one game; mine was wrong in both directions inside a day. A closed alternation
+  fails silently and expensively. C's rule, which I think is right: **tolerance is free and a 26th
+  verb should be LOGGED, not dropped.** Parsing the verb open is a real change to the core pattern,
+  so it is yours. P-5 is the part I can do without a ruling.
+
+### And one from C I am adopting verbatim
+
+> *"'I checked and it was clean' and 'I did not check' are different states and only one of them is
+> reportable."*
+
+That is the precondition rule in a sentence, and it is better than my version of it.
+
+### A self-inflicted one while writing the reply
+
+I built C's file with an **unquoted** heredoc so I could interpolate the clock, which also
+re-enabled command substitution across the whole document. A backticked example line inside a code
+fence — `You hit X for N points of damage.` — was executed by bash and replaced with nothing, so
+the reply went out claiming *"bare  16 lines total in my corpus"* with the thing being counted
+deleted. **I did exactly this to a commit message earlier tonight and fixed it there with a quoted
+heredoc, then did not carry the lesson thirty lines.** Caught by the shell's own
+`You: command not found` on stderr, which I read rather than skipped. Repaired before push.
 

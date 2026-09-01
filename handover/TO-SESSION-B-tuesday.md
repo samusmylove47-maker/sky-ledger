@@ -134,8 +134,66 @@ damage, because the synthetic verbs hit softer than the real ones. On the client
 population they happen to agree at ~19%. Both are now reported, each against the
 population its numerator came from.
 
-**Change:** add `frenzy`, `smite`, `cleave` to `LANE_VERBS`; widen `MELEE` and `MISS`.
-Do **not** add `claw`, `reave` or `shoot`.
+### *** SECOND CORRECTION, 1 Sep 17:48Z. `claw` AND `reave` GO BACK IN. ***
+
+I dropped them because they had zero occurrences in any genuine capture **I** hold. Session C
+answered with counts from a 15-capture, 5,631,681-line corpus — having first run my own
+authenticity check on it, which I had asked for and which it passed:
+
+```
+claw   24,756   the 12th most common verb in C's corpus
+strike 35,854   I had flagged this as resting on synthetic support only. It is real.
+bite   16,057
+smash   7,280
+reave   3,673
+slice   3,326
+sting   3,089
+shoot   2,664   I refused this at n=9. C has 2,664 in captures.
+```
+
+**"Absent from my corpus" was never the same claim as "absent from the game," and this is what
+that costs when you get it wrong.** My drop was correct reasoning on the evidence I had and the
+evidence I had was 5% of the evidence that exists.
+
+**BUT C'S COUNTS ARE ALL-ACTOR AND THIS ENGINE IS `^You`-ANCHORED**, so they do not transfer
+one-for-one and I am not going to pretend they do. Deduplicated first-person counts in my 139 logs:
+
+```
+verb     first-person here   what that means for a ^You-anchored engine
+claw          1,057          occurs first-person, but every one is synthetic
+reave            36          same
+strike          684          same
+shoot             9          same
+bite              0          NEVER first-person anywhere I can see
+slice             0          NEVER first-person
+sting             0          NEVER first-person
+smash             0          NEVER first-person
+```
+
+A verb that only ever appears in the third person adds **nothing** to a first-person parser.
+So the verbs below are tiered by what each actually rests on.
+
+**Change — TIER 1, first-person MEASURED in a genuine capture (mine):**
+add `frenzy` and `smite` to `LANE_VERBS` with ceilings; add `cleave` to `MELEE` only.
+
+**Change — TIER 2, verb confirmed real by C's capture corpus, first-person status unknown to me:**
+add `claw`, `reave`, `bite`, `slice`, `sting`, `smash`, `shoot` to `MELEE` **and to nothing else.**
+`strike` is already in `LANE_VERBS` and C's 35,854 resolves the flag I raised against it.
+
+**TIER 3, zero in BOTH corpora — `gore`, `maul`, `rend`, `gouge`, `slam`, `burn`, `gnaw`, `lash`:**
+these come from Shara's shipped `damageLines.js`, measured on a third corpus. C measured zero across
+5.6M lines and I measure zero. **C's own words: for these eight the union is tolerance, not
+evidence.** I am not adding them. Say if you disagree — the cost of adding them is genuinely near
+zero and I may be being too strict.
+
+**NOTHING IN TIER 2 GETS CLASSIFIED.** Filing a verb as auto-attack or as a lane without cadence
+evidence corrupts a denominator, which is worse than the gap it closes — that was true when I said
+it about `claw` on synthetic cadence and it is still true now that `claw` is real. **The engine
+already does the right thing here**: `_lanes` routes on `if v in LANE_VERBS / elif v in AUTO_VERBS`,
+so a verb in `MELEE` and neither set contributes its **damage** and contributes **nothing** to
+`auto_attack_attempts`, `melee_seconds`, or any lane rate. Counted, unclaimed. That is exactly the
+behaviour Tier 2 needs and it needs no new mechanism — **but it is SILENT, which is why P-5 exists.**
+
 **File:** `gapengine.py`, and the mirror in `bundle/eqls-gap-engine.js`
 
 ### The grammar defect that would have shipped with the original patch
@@ -279,6 +337,28 @@ value moves. It is a bundle bump only because the string is part of what you ren
 **Fixing the attribution itself is NOT in this patch** — that needs a `self` parameter naming the
 logging character, which is a new mechanism and is with the Director as D-11, not something I
 will ship on my own reading.
+
+---
+
+## P-5 — the engine counts a verb it cannot classify and does not say so
+
+**Added 1 Sep 17:48Z**, and it is the direct consequence of P-3 Tier 2.
+
+**Change:** a `coverage.verbs_unclassified` list — the melee verbs seen in this log that the engine
+counted for damage but filed as neither auto-attack nor lane.
+**File:** `gapengine.py`, and the mirror.
+
+With Tier 2 in, up to seven verbs can contribute damage while contributing nothing to
+`auto_attack_attempts` or any lane rate. **That is the correct arithmetic and an invisible
+asymmetry.** A reader comparing `damage_dealt` against `lanes` has no way to learn that some of
+that damage belongs to a verb the engine declined to file — and "declined to file" is a refusal,
+which everywhere else in this engine is *published*, not implied.
+
+It is the same shape as `coverage.parse`: two different situations producing one output. A log
+where every melee verb was classified and a log where a fifth of the damage came from unclassified
+verbs currently emit identical `lanes` blocks.
+
+**What it changes for you:** one new list under `coverage`. No computed value moves.
 
 ---
 
