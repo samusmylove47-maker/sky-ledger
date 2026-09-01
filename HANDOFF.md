@@ -17,7 +17,27 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      1 Sep 00:40Z — check.sh PASS, 15 gates. R79/R81 applied and both
+LAST CHANGE      1 Sep 01:10Z — check.sh PASS, 16 gates, bundle 32a50df4 (25,443 b),
+                 still 1.2.0. D's self-hit finding CHECKED, not accepted — THE HOLE
+                 WAS REAL IN MY MELEE BRANCH. A self-hit with no `by <spell>` clause
+                 cannot match SPELL and fell through to MELEE, which had no guard,
+                 and was emitted as ordinary OUTGOING damage. ZERO INSTANCES in
+                 189,460 lines, so THE CORPUS CANNOT TEST IT: check_selfhits.py uses
+                 a CRAFTED input and carries its own positive control.
+                 D's correction holds here too: 0 lines match BOTH patterns, so match
+                 ORDER was never protecting anything in this engine either.
+                 The 92,822-point exclusion is no longer silent —
+                 coverage.self_damage_excluded.
+                 AND THE ONE THAT MATTERS MOST TONIGHT: `TS` required `\d{2}` for the
+                 DAY. ctime() SPACE-PADS a single-digit day — `Sun Sep  1` — and
+                 against `\d{2}` that matches NOTHING. If EQ Legends writes that
+                 form, BOTH ENGINES DROPPED EVERY LINE ON DAYS 1-9 OF ANY MONTH.
+                 A THIRD OF THE CALENDAR, AND TODAY IS THE 1st. I CANNOT VERIFY IT:
+                 4 logs, 189,460 lines, ZERO single-digit days. Widened to `[ \d]\d`,
+                 PROVEN INERT — the full report over the corpus log is byte-identical
+                 before and after. Marked in both engines as a MECHANISM claim I have
+                 not established. ONE LOG FROM A DAY 1-9 SETTLES IT.
+                 PRIOR: 1 Sep 00:40Z — check.sh PASS, 15 gates. R79/R81 applied and both
                  found something. R79: measured the capitalisation hazard rather
                  than assuming immunity — 189,460 lines, 4 logs. The KILL JOIN is
                  immune (0 case-paired keys either side). `X resisted your Y` is
@@ -5834,3 +5854,107 @@ spent. I will re-run against D's `21cef313` when I have the oracle in hand and r
 whether the `blocked` band shrinks; I cannot do it from a relayed vocabulary.
 
 **35.5 and Call of Flame stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 01:10Z — D's self-hit hole was real in my tree, and chasing it found a worse one on the timestamp
+
+**RULING NOT NEEDED; one thing is BLOCKED on evidence I cannot produce.** Answered
+against Director main `edaa5b4` as relayed. `check.sh` PASS, **16 gates**. Bundle
+`5a11d18a` → **`32a50df4`**, 25,443 bytes, still 1.2.0.
+
+### 49. D's finding, checked rather than accepted — and it was real here
+
+```
+SPELL branch, target `yourself`   202 lines, 92,822 damage   already excluded
+MELEE branch, target `yourself`     0 lines,      0 damage   NO GUARD AT ALL
+lines matching BOTH SPELL and MELEE:                     0
+```
+
+The hole was real: my `yourself` guard existed **only on the SPELL branch**, so a
+self-hit written without a `by <spell>` clause — which *cannot* match SPELL, since
+SPELL requires that clause — fell to MELEE and was emitted as ordinary outgoing
+damage. **D's correction about match order holds here too**: zero lines in 189,460
+match both patterns, so the ordering was never protecting anything in this engine
+either.
+
+**D's warning about the obvious fix is correct and does not apply to me, for a reason
+worth stating rather than assuming.** Dropping rows where actor equals target
+silently drops real damage — a log cannot tell one entity hitting itself from two
+sharing a name. But every regex here is anchored `^You`, so the string compared is
+the client's **reflexive pronoun**, not a mob name. **Two entities cannot both be
+called `yourself`.** `Heart harpie` can be two entities — 10,383 lines, and it is a
+charm pet at the top of the damage board — which is exactly why the same filter is
+wrong in a third-person parser and right in this one.
+
+**Zero instances in the corpus, so the corpus cannot test the guard** (§20).
+`check_selfhits.py` uses a **crafted** input and carries its own positive control:
+the non-self line in the same log must still be counted, or a zero total is
+indistinguishable from a broken harness. 10 checks across both engines, 5 mutations.
+
+**The 92,822 points are no longer removed in silence** —
+`coverage.self_damage_excluded` reports lines and damage for both shapes. Building it
+found a second thing: the early-return path **replaced** `report.coverage` wholesale,
+so a log that was *only* self-damage reported nothing excluded. Same shape as the 31
+Aug refusals bug — the engine going silent exactly when it knew least.
+
+**And my first positive control was not a control.** It asserted
+`all_lines.damage == REAL`, which is the same sentence as the exclusion check
+directly below it — so removing the guard "failed the control", and the control
+proved nothing the check did not. **A control that moves with the thing it is
+controlling for is not a control.** My own self-test caught it, which is the first
+time one of these has caught a defect in the self-test rather than in the code.
+
+### 49.1 BLOCKED ON EVIDENCE — the timestamp drops a third of the calendar, and today is the 1st
+
+Chasing the above with a crafted log dated `Sun Sep  1` found this:
+
+```python
+TS = re.compile(r"^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
+                                   ^^^^^^
+```
+
+**EverQuest timestamps have the layout C's `ctime()` produces, and `ctime` SPACE-PADS
+a single-digit day** — `Sun Sep  1 00:00:00 2026`. Against `\d{2}` that matches
+nothing. If EQ Legends writes that form, **both engines have been silently dropping
+every line logged on days 1–9 of any month.** A third of the calendar. **Today is the
+1st.**
+
+What I can and cannot establish, kept apart deliberately:
+
+- **MEASURED** — no log in this corpus contains a single-digit day. 4 logs, 189,460
+  lines, zero instances. So "0 lines dropped" is worth nothing here: the shape has
+  not occurred, which is not the same as the parser handling it.
+- **MEASURED** — widening to `[ \d]\d` is **inert** on this corpus. The full report
+  over `corpus/amp/…_full.txt` is **byte-identical** before and after.
+- **NOT MEASURED** — what EQ Legends actually writes. That is a **mechanism claim
+  about a client I cannot run**, and R74 is the standing rule on mechanism claims. I
+  have shipped the widening because it is right either way and costs one character,
+  and I have marked it as unverified **in both engines** rather than leaving a
+  clean-looking pattern.
+- Circumstantial only, offered as such: `eql-meter` (`src-tauri/src/parse/mod.rs:116`)
+  does not use a fixed-width day at all — it splits on `]`, trims, and hands the
+  string to `%a %b %d %H:%M:%S %Y`. Its author chose not to depend on two digits.
+  **That is evidence about the risk, not about the format.**
+
+**ONE LOG FROM ANY DAY 1–9 SETTLES IT.** That is the whole ask, and it is smaller
+than 35.5 or Call of Flame. I am not guessing past it.
+
+### 49.2 The surface of my own suite, since you asked for the line and not the verdict
+
+D's `122 / 35 / 87` is the right shape and I will not fake my version of it. What I
+can defend:
+
+- **13 checkers** run by `check.sh`. **12 carry a `--selftest`** that mutates its own
+  input and asserts each check flips. The one that does not, `bundle/parity.py`,
+  carries an inline positive control instead (`walk() reports 1 difference on a
+  perturbed copy`) — added after it passed a *vacuous* agreement between two empty
+  dicts.
+- **What I have NOT done, and D has**: there is no mutation harness against
+  `gapengine.py` itself. So I can say every *checker* is capable of failing; I
+  **cannot** say what fraction of them would catch a defect injected into the engine.
+  **That is the number D can quote and I cannot**, and stating the gap is worth more
+  than a percentage I would have to invent.
+
+**35.5 and Call of Flame stay BLOCKED. The single-digit-day log joins them as a third
+thing I will not work around.**

@@ -205,6 +205,13 @@
   }
  ],
  "coverage": {
+  "self_damage_excluded": {
+   "spell_lines": 202,
+   "spell_damage": 92822,
+   "melee_lines": 0,
+   "melee_damage": 0,
+   "note": "A first-person line whose target is the reflexive pronoun is an HP-for-mana trade or self-inflicted damage, never output. Reported rather than dropped silently: 92,822 points on the corpus log."
+  },
   "inputs_observed": [
    "crit rate",
    "engaged time",

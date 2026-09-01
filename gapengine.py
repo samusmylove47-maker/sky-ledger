@@ -16,7 +16,24 @@ silence, because a short list reads as "nothing to improve".
 """
 import re, collections, statistics as st
 
-TS    = re.compile(r"^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
+# DAY OF MONTH: `[ \d]\d`, NOT `\d{2}`. WIDENED 1 Sep 2026, AND THE EVIDENCE IS
+# INCOMPLETE -- STATED HERE RATHER THAN LEFT AS A CLEAN-LOOKING PATTERN.
+# EverQuest timestamps have the layout C's ctime() produces, and ctime SPACE-PADS a
+# single-digit day: `Sun Sep  1 00:00:00 2026`. Against that, `\d{2}` matches nothing,
+# so BOTH ENGINES WOULD SILENTLY DROP EVERY LINE LOGGED ON DAYS 1-9 OF ANY MONTH --
+# a third of the calendar, and today is the 1st.
+# WHAT I CAN AND CANNOT ESTABLISH:
+#   MEASURED   no log in this corpus contains a single-digit day. 4 logs, 189,460
+#              lines, zero instances. So a "0 lines dropped" reading is worth
+#              nothing here: the shape has not occurred, which is not the same as
+#              the parser handling it (HANDOFF section 20).
+#   MEASURED   widening is INERT on this corpus: the full report over
+#              corpus/amp/..._full.txt is byte-identical before and after.
+#   NOT MEASURED  what EQ Legends actually writes for a single-digit day. That is a
+#              MECHANISM claim about a client I cannot run, and R74 is the standing
+#              rule on mechanism claims. ONE LOG FROM A DAY 1-9 SETTLES IT.
+# The class accepts both forms, so it is right either way and costs one character.
+TS    = re.compile(r"^\[\w{3} \w{3} ([ \d]\d) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
 LANE_VERBS = {"kick", "bash", "strike", "backstab"}
 AUTO_VERBS = {"crush", "slash", "pierce", "hit", "punch"}
 # Cooldown ceilings, attempts per second, measured across 138 committed logs
@@ -27,6 +44,26 @@ MISS = re.compile(r"^You try to (\w+) .+?, but ")
 
 SPELL = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")
 MELEE = re.compile(r"^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
+# SELF-DAMAGE, and why a name-equality filter is safe HERE and is not safe in a
+# third-person parser. Session D relayed 1 Sep 2026 that a self-hit with NO
+# `by <spell>` clause falls through to the melee shape and is emitted as ordinary
+# OUTGOING damage, and warned that the obvious fix -- dropping rows where actor
+# equals target -- SILENTLY DROPS REAL DAMAGE, because a log cannot tell one entity
+# hitting itself from two entities sharing a name. That warning is correct and it
+# does not apply to this engine, for a reason worth stating rather than assuming:
+# every regex here is anchored `^You`, so the string being compared is the client's
+# REFLEXIVE PRONOUN, not a mob name. Two entities cannot both be called `yourself`.
+# `Heart harpie` can be two entities -- 10,383 lines of it, and it is a charm pet --
+# and `yourself` cannot.
+#
+# MEASURED before the guard was written, 4 logs, 189,460 lines:
+#   SPELL branch, target `yourself`   202 lines, 92,822 damage   already excluded
+#   MELEE branch, target `yourself`     0 lines,      0 damage   NOT excluded
+# So the hole was real in the code and had no instances in this corpus. A zero is not
+# a guard; it is a shape that has not occurred yet. check_selfhits.py supplies the
+# positive control the corpus cannot.
+SELF_TARGETS = {"yourself"}
+
 SLAIN = re.compile(r"^You have slain (.+?)!$")
 # R79 HAZARD, MEASURED ON THIS CORPUS 1 Sep 2026 RATHER THAN ASSUMED AWAY.
 # Session C found that EQ capitalises a mob's leading article LINE-INITIALLY and not
@@ -105,19 +142,34 @@ def _parse(lines):
 
 
 def _hits(ev, kills):
-    out, resists = [], collections.Counter()
+    # An exclusion of 92,822 points should not be silent. Counted and surfaced in
+    # coverage.self_damage_excluded rather than dropped where no reader can see it.
+    out, resists, selfhit = [], collections.Counter(), {}
     for t, b in ev:
         m = SPELL.match(b)
         if m:
             # "You hit yourself ... by Cannibalize" is an HP-for-mana trade, not
             # output. It was 3.7% of a character's apparent total until excluded.
-            if m.group(1).lower() != "yourself":
+            if m.group(1).lower() in SELF_TARGETS:
+                selfhit["spell"] = selfhit.get("spell", 0) + 1
+                selfhit["spell_damage"] = selfhit.get("spell_damage", 0) + int(m.group(2))
+            else:
                 out.append(dict(t=t, tgt=m.group(1), amt=int(m.group(2)), kind="spell",
                                 verb=m.group(4), crit=bool(m.group(5)),
                                 kill=(t, m.group(1)) in kills))
             continue
         m = MELEE.match(b)
         if m:
+            # THE HOLE D FOUND. This branch had no self-target guard, so a self-hit
+            # written without a `by <spell>` clause -- which cannot match SPELL, since
+            # SPELL requires that clause -- landed here and was counted as OUTGOING.
+            # Measured: 0 instances in 189,460 lines, and 0 lines in this corpus match
+            # both patterns, so MATCH ORDER was never protecting anything either. D
+            # relayed the same correction about its own parser the same night.
+            if m.group(2).lower() in SELF_TARGETS:
+                selfhit["melee"] = selfhit.get("melee", 0) + 1
+                selfhit["melee_damage"] = selfhit.get("melee_damage", 0) + int(m.group(3))
+                continue
             out.append(dict(t=t, tgt=m.group(2), amt=int(m.group(3)), kind="melee",
                             verb=m.group(1), crit=bool(m.group(4)),
                             kill=(t, m.group(2)) in kills))
@@ -125,7 +177,7 @@ def _hits(ev, kills):
         m = RESIST.match(b)
         if m:
             resists[m.group(2)] += 1
-    return out, resists
+    return out, resists, selfhit
 
 
 def _runs(ts, gap=GAP):
@@ -304,7 +356,7 @@ def gap_engine(lines, context=None):
         m = MARKER.search(b)
         if m:
             context.setdefault("marker_raw", m.group(1).strip())
-    hits, resists = _hits(ev, kills)
+    hits, resists, selfhit = _hits(ev, kills)
 
     # The unconditional refusals are attached HERE, before any early return.
     # FIXED 31 Aug 2026: they used to be built at the end of the function, after
@@ -319,8 +371,15 @@ def gap_engine(lines, context=None):
     # the Director asked about. Neither depends on the log at all.
     report = {"context": context, "measured": {}, "deltas": [],
               "refusals": [dict(r) for r in ALWAYS_REFUSED], "coverage": {}}
+    report["coverage"]["self_damage_excluded"] = {
+        "spell_lines": selfhit.get("spell", 0), "spell_damage": selfhit.get("spell_damage", 0),
+        "melee_lines": selfhit.get("melee", 0), "melee_damage": selfhit.get("melee_damage", 0),
+        "note": ("A first-person line whose target is the reflexive pronoun is an "
+                 "HP-for-mana trade or self-inflicted damage, never output. Reported "
+                 "rather than dropped silently: 92,822 points on the corpus log."),
+    }
     if not hits:
-        report["coverage"] = {"note": "no outgoing damage lines matched; nothing measured"}
+        report["coverage"]["note"] = "no outgoing damage lines matched; nothing measured"
         return report
 
     runs = _engagements(hits)

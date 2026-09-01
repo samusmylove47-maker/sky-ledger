@@ -87,6 +87,15 @@ echo "== every number in the measured block must name the population it is over 
 python3 check_window.py --selftest || fail=1
 python3 check_window.py || fail=1
 echo
+echo "== a self-hit must never reach damage_dealt, in either engine =="
+# Added 1 Sep, relayed by D and CHECKED rather than accepted. A self-hit written
+# without a `by <spell>` clause cannot match the SPELL shape and fell through to
+# MELEE, where there was no guard -- emitted as ordinary OUTGOING damage. Zero
+# instances in 189,460 lines, so the corpus CANNOT test it: the input is crafted and
+# the file carries its own positive control.
+python3 check_selfhits.py --selftest || fail=1
+python3 check_selfhits.py || fail=1
+echo
 echo "== the unconditional refusals must survive ANY input, in both engines =="
 # Added 31 Aug. gap_engine([]) returned `refusals: []` because both engines built
 # the list AFTER the `if not hits` early return -- so the engine went silent about

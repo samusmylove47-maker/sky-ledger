@@ -52,7 +52,16 @@
     annotation: ["dps_window", "dps_window_note", "stance_evidence", "window"]
   };
 
-  var TS = /^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
+  // DAY OF MONTH: [ \d]\d, NOT \d{2}. Widened 1 Sep 2026, evidence INCOMPLETE and
+  // said so rather than left as a clean-looking pattern. EQ timestamps have ctime()'s
+  // layout and ctime SPACE-PADS a single-digit day -- `Sun Sep  1 00:00:00 2026`.
+  // Against that, \d{2} matches nothing and BOTH ENGINES DROP EVERY LINE ON DAYS 1-9
+  // OF ANY MONTH. Measured: no log in this corpus has a single-digit day (4 logs,
+  // 189,460 lines), so a zero here proves the shape has not occurred, not that the
+  // parser handles it; and the widening is INERT on this corpus, byte-identical
+  // report. NOT measured: what EQ Legends actually writes. One log from a day 1-9
+  // settles it. The class accepts both forms, so it is right either way.
+  var TS = /^\[\w{3} \w{3} ([ \d]\d) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
   var SPELL = /^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$/;
   var MELEE = /^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$/;
   var SLAIN = /^You have slain (.+?)!$/;
@@ -124,14 +133,32 @@
     return { ev: ev, kills: kills, months: Object.keys(months).sort() };
   }
 
+  // SELF-DAMAGE. D relayed 1 Sep 2026 that a self-hit with NO `by <spell>` clause
+  // falls through to the melee shape and is emitted as ordinary OUTGOING damage, and
+  // warned that dropping rows where actor equals target SILENTLY DROPS REAL DAMAGE --
+  // a log cannot tell one entity hitting itself from two entities sharing a name.
+  // Correct, and it does not apply here: every regex is anchored `^You`, so the string
+  // compared is the REFLEXIVE PRONOUN, not a mob name. Two entities cannot both be
+  // called `yourself`; `Heart harpie` can be two, and is a charm pet at the top of the
+  // damage board. Measured over 4 logs, 189,460 lines: SPELL branch 202 lines / 92,822
+  // damage (already excluded), MELEE branch 0 lines. The hole was real in the code with
+  // no instances in the corpus, and 0 lines matched both patterns -- so match ORDER was
+  // never protecting anything either. check_selfhits.py supplies the positive control.
+  var SELF_TARGETS = { yourself: 1 };
+
   function hitsOf(ev, kills) {
-    var out = [], resists = {}, i, m, b, t;
+    // An exclusion of 92,822 points should not be silent: counted and surfaced in
+    // coverage.self_damage_excluded rather than dropped where no reader can see it.
+    var out = [], resists = {}, i, m, b, t,
+        selfhit = { spell: 0, spell_damage: 0, melee: 0, melee_damage: 0 };
     for (i = 0; i < ev.length; i++) {
       t = ev[i][0]; b = ev[i][1];
       m = SPELL.exec(b);
       if (m) {
         // "You hit yourself ... by Cannibalize" is an HP-for-mana trade, not output.
-        if (m[1].toLowerCase() !== "yourself") {
+        if (SELF_TARGETS[m[1].toLowerCase()]) {
+          selfhit.spell++; selfhit.spell_damage += parseInt(m[2], 10);
+        } else {
           out.push({ t: t, tgt: m[1], amt: parseInt(m[2], 10), kind: "spell",
                      verb: m[4], crit: !!m[5], kill: !!kills[t + " " + m[1]] });
         }
@@ -139,6 +166,11 @@
       }
       m = MELEE.exec(b);
       if (m) {
+        // THE HOLE D FOUND: this branch had no self-target guard.
+        if (SELF_TARGETS[m[2].toLowerCase()]) {
+          selfhit.melee++; selfhit.melee_damage += parseInt(m[3], 10);
+          continue;
+        }
         out.push({ t: t, tgt: m[2], amt: parseInt(m[3], 10), kind: "melee",
                    verb: m[1], crit: !!m[4], kill: !!kills[t + " " + m[2]] });
         continue;
@@ -146,7 +178,7 @@
       m = RESIST.exec(b);
       if (m) resists[m[2]] = (resists[m[2]] || 0) + 1;
     }
-    return { hits: out, resists: resists };
+    return { hits: out, resists: resists, selfhit: selfhit };
   }
 
   function lanesOf(ev, gap) {
@@ -234,8 +266,19 @@
     // "refused in all cases" in its own detail and therefore was not.
     var report = { context: context, measured: {}, deltas: [],
                    refusals: alwaysRefused(), coverage: {} };
+    report.coverage.self_damage_excluded = {
+      spell_lines: hr.selfhit.spell, spell_damage: hr.selfhit.spell_damage,
+      melee_lines: hr.selfhit.melee, melee_damage: hr.selfhit.melee_damage,
+      note: "A first-person line whose target is the reflexive pronoun is an " +
+        "HP-for-mana trade or self-inflicted damage, never output. Reported " +
+        "rather than dropped silently: 92,822 points on the corpus log."
+    };
     if (!hits.length) {
-      report.coverage = { note: "no outgoing damage lines matched; nothing measured" };
+      // ASSIGN THE NOTE, do not replace the block: replacing it dropped
+      // self_damage_excluded on the early-return path, so a log that is ONLY
+      // self-damage reported nothing excluded. Same shape as the refusals bug
+      // of 31 Aug -- the engine going silent exactly when it knew least.
+      report.coverage.note = "no outgoing damage lines matched; nothing measured";
       return report;
     }
 
