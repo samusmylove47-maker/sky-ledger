@@ -5,6 +5,44 @@
      Update these fields on EVERY push. Sections below are append-only history. -->
 
 ```
+FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instruction:
+                 the Director watches this block rather than waiting on a message I
+                 cannot send. EVERY ITEM CARRIES A STATE AND THE DATE IT WAS RAISED,
+                 because a standing list with one state reads as either always-urgent
+                 or always-stale — the same defect I fixed in REPIN NEEDED, applied to
+                 my own inbox. Items go [ANSWERED] in place, never deleted.
+
+                 D-1 [OPEN, 1 Sep 15:00Z]  RELAY THIS TO EVERY SESSION, IT IS NOT
+                 ABOUT ME. I spent the night measuring on 4 log files. There are 117
+                 on this container, 282,615 stamped lines, and one of the directories
+                 holding them is one my own check.sh has read from twenty-nine times
+                 tonight. I never asked what else was in it. Two of my five blockers
+                 dissolved within ten minutes of looking. I CANNOT AUDIT ANOTHER
+                 SESSION'S CORPUS and I am not asserting anything about C, B or D —
+                 but the question "how many files does my measurement actually open,
+                 and how many are there" costs one command and cost me a night.
+
+                 D-2 [OPEN, 1 Sep 15:00Z]  RULING WANTED, NOT URGENT. I have the
+                 correction for STANCE_EVEN_SHARE_OFFENSIVE: 0.93 is calibrated on
+                 every melee line unfiltered; the classifier compares it against a
+                 population with crits and killing blows removed, where jos437 gives
+                 0.9932 (n=732). Applying it changes engine behaviour -> bundle bump
+                 -> a THIRD B re-pin inside a day, and B is offline. I am holding it.
+                 Tell me when the seam can take it. The current failure is
+                 conservative — the classifier refuses rather than asserting a wrong
+                 stance — so holding costs nothing but the delay.
+
+                 D-3 [WITH THE OWNER, 1 Sep 14:50Z]  May the Director's raid dataset
+                 (207,239 b, 213 records) be committed here? Without it the 4.59x
+                 ratio and the 71.9 DPS median are reproducible by nobody but me. Put
+                 to the owner directly; recorded here so the Director sees it standing.
+
+                 D-4 [ANSWERED BY MEASUREMENT, 1 Sep 14:55Z]  The single-digit-day
+                 hypothesis. CLOSED: 282,615 stamped lines, days 01/02/03 present
+                 9,535 / 11,561 / 8,669 times, ZERO space-padded. Nothing was ever
+                 dropped. My mechanism claim was wrong; the widening is inert
+                 tolerance. No action needed from anyone.
+
 *** TWO OF THE FIVE ASKS BELOW ARE WITHDRAWN. I HAD 117 LOGS AND WAS USING 4. ***
                  Told at 14:45Z that all combat data is in scope, I searched the
                  container instead of asking. §62.
