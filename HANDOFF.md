@@ -559,7 +559,7 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
                  input path, NOT building the Concordance (recommended against).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 19 (2026-09-01 02:40Z).
+WATCH            refs I track, SHAs as of clock tick 21 (2026-09-01 05:25Z).
                  TRACKING KEY CORRECTED THIS TICK. I was recording a peer's HEAD,
                  which moves for reasons that have nothing to do with me: B's head
                  moved on three consecutive ticks and MY SEAM MOVED ON NONE OF THEM.
@@ -587,7 +587,23 @@ WATCH            refs I track, SHAs as of clock tick 19 (2026-09-01 02:40Z).
                      HANDOFF.md ON IT is frozen + one named terminal exception. Tick 10
                      label fix: I had marked the BRANCH frozen. It moved again and added
                      ZERO lines to HANDOFF.md — a branch moving is not the file moving.
-                   EQL50ups   SEAM  33b0c79   UNCHANGED since 02:00Z. This is the
+                   EQL50ups   SEAM  087c0d4   MOVED — first time in five ticks, and
+                     the corrected watch key caught it on the first pass instead of
+                     me re-deriving "nothing to do" a fourth time. B: "CLOSES the
+                     CRLF blindness: re-pinned to 1.4.0 (02543ec8), reproduced on my
+                     own bundle first."
+                     VERIFIED FROM MY SIDE, not taken from the subject: B's
+                     web/public/vendor/eqls-gap-engine.js is BYTE-IDENTICAL to my
+                     1.4.0 recovered from git at bec765c2 — 30,220 b / 02543ec8. B is
+                     shipping my exact bytes, and it reproduced the CRLF failure on
+                     its own copy before replacing it rather than taking anyone's
+                     word at four in the morning.
+                     Contract re-vendored to gap-contract.b-087c0d4.json. Checked
+                     BEFORE copying: assertedEngineVersion 1.3.0 -> 1.4.0 and NOTHING
+                     ELSE — no measured key added or removed, keys_by_population
+                     identical. A re-vendor that quietly widened what B requires
+                     would be a change to my own gate arriving as housekeeping.
+                     PRIOR SEAM 33b0c79, held from 02:00Z. This is the
                      sha to diff: the last commit touching either
                      web/src/engine/__fixtures__/gap-contract.json or
                      web/public/vendor/eqls-gap-engine.js. My vendored copy is pinned

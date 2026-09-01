@@ -4,7 +4,12 @@
 B wrote `web/src/engine/__fixtures__/gap-contract.json` stating what its
 `measured` block needs. It is HAND-WRITTEN, not generated from my output, which is
 the point: B says what it needs and I make it pass, rather than B describing what I
-already do. Vendored here at B's `33b0c79` so this check cannot drift silently. Re-vendored
+already do. Vendored here at B's `087c0d4` so this check cannot drift silently. Re-vendored a
+second time on 1 Sep 2026 when B re-pinned to 1.4.0: `assertedEngineVersion` moved
+1.3.0 -> 1.4.0 and NOTHING ELSE DID -- no `measured` key added or removed, and
+`keys_by_population` byte-identical. Checked before copying, because a re-vendor that
+quietly widened what B requires would be a change to my own gate arriving as
+housekeeping. Re-vendored
 1 Sep 2026: B renamed the fixture to drop the version from its filename (a name that
 must be renamed by hand is a name that will be wrong), re-pinned to engine 1.3.0, and
 added `window` -- so B now asserts, against my real bundle, that `damage_dealt` is
@@ -28,7 +33,7 @@ sys.path.insert(0, ROOT); sys.path.insert(0, os.path.join(ROOT, "fixtures"))
 # twice over: `gap-contract-1.2.0.b-65e2f9e3.json` named a version AND a pin.
 # The commit stays in the name -- it is the pin, and it is SUPPOSED to change when the
 # content does. The version does not, because the file now states it in a field.
-CONTRACT = os.path.join(ROOT, "handover", "gap-contract.b-33b0c79.json")
+CONTRACT = os.path.join(ROOT, "handover", "gap-contract.b-087c0d4.json")
 
 SPELL_KEYS = {"landings", "normalised_key", "damage_total", "damage_median", "damage_max"}
 
