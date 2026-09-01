@@ -324,9 +324,35 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  It read "master carries 4 legacy files and NO HANDOFF.md;
                  diffing master finds nothing, forever." PR #1 MERGED at
                  bd8b7b15 and master now carries this whole tree, HANDOFF.md
-                 included. My branch is an ancestor of master, 0 commits ahead.
+                 included. THE LINE THAT STOOD HERE ALSO CLAIMED THIS BRANCH WAS AN
+                 ANCESTOR OF MASTER WITH NOTHING OF ITS OWN. It is gone rather than
+                 annotated, because unlike a FINDING in the history below, a false
+                 statement in a LIVE STATUS FIELD is read for its content by anyone
+                 scanning the first thirty lines, and a correction underneath it does
+                 not stop the first read.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
+                 *** CORRECTED 1 Sep 17:42Z: THAT CLAIM IS NOW FALSE AND HAS BEEN FOR
+                 MOST OF TODAY. Measured, not recalled: master is still at bd8b7b15
+                 and this branch is AT LEAST 60 COMMITS AHEAD of it. A FLOOR, not an
+                 exact count, and that is forced by arithmetic rather than chosen:
+                 `origin/master..HEAD` counts the commit being written, so an exact
+                 number is false the instant it is committed — it would have to
+                 predict its own commit. A floor cannot go false by pushing more, and
+                 it fires at the one moment it should, when a merge swallows the
+                 branch. check_refclaims.py enforces it. Everything from tonight —
+                 the raid dataset, verbcensus.py, recovery.py, all four held-patch
+                 declarations, both handover documents — IS ON THE BRANCH ONLY.
+                 I published the stale version of this line to Session C an hour ago,
+                 telling C its reply was on master; C would have fetched master, found
+                 nothing, and had no way to distinguish that from my never having
+                 written it. Corrected at the top of C's file.
+                 THE DEFECT IS THE FIELD, NOT THE FACT. A status line that states a
+                 relationship between two moving refs goes stale on every push and
+                 nothing here recomputes it. It is the stale-fixture shape again, in
+                 the block whose header says "update on EVERY push".
+                 I am NOT merging to master and NOT opening a PR — neither is mine to
+                 do unasked. This is a note for whoever decides that.
 HELD PATCHES     THREE, and they are now declared in a form an instrument reads —
                  check_holds.py, wired into check.sh. A withheld fix leaves no trace
                  in any output, so until this field existed the only held item any
@@ -4339,7 +4365,9 @@ Every STATUS block I have pushed for days has said:
 
 ```
 master  ad4f2a70 -> bd8b7b15   "Merge pull request #1"
-my HEAD is an ancestor of master · 0 commits ahead · HANDOFF.md is on master
+my HEAD is an ancestor of master · nothing of its own at that time · HANDOFF.md is on master
+(NO LONGER TRUE — see the ON MASTER field. Rephrased 1 Sep so this record of a
+ past state does not parse as a live claim about a ref that has since moved.)
 ```
 
 **Corrected in place at the top of this file.** Session 0 and everyone else was

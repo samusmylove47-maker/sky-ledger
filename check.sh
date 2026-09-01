@@ -164,6 +164,20 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== a claim about the distance between two moving refs must be recomputed =="
+# Added 1 Sep. My STATUS block said "my branch is an ancestor of master, 0 commits
+# ahead". True the day it was written, stale on the next push, and it kept asserting
+# itself through sixty commits -- until I read it and, on its authority, told Session C
+# that the reply I had written for C was on master. IT WAS NOT. C would have fetched
+# master, found nothing, and had NO WAY TO TELL THAT FROM MY NEVER HAVING WRITTEN IT:
+# a false negative that reads exactly like silence.
+# The claim is a FLOOR because `origin/master..HEAD` counts the commit being written,
+# so an exact number would have to predict its own commit. FAIL-CLOSED: an unresolvable
+# base ref REFUSES, because an instrument reporting "fine" when it could not look is
+# the fault this repository has caught more than any other.
+python3 check_refclaims.py --selftest || fail=1
+python3 check_refclaims.py || fail=1
+echo
 echo "== no document may claim a time that has not happened yet =="
 # Added 1 Sep on a clock tick, because between 16:01Z and 16:25Z I wrote TWELVE
 # timestamps into this tree -- the Director's polled channel, B's handover, and two
