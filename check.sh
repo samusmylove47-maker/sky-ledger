@@ -164,6 +164,19 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== every outbound document must be reachable from the watched file =="
+# Added 1 Sep, and it is NOT my finding. Session 0 described the new Auditor's failure:
+# FIVE communications went into five NEW files while the watched file sat untouched --
+# a full day of output invisible, and the session did not know, because it had been told
+# a file was watched but never which one.
+# I went to answer and found the same defect here. TO-SESSION-C-mailbox.md and
+# TO-SESSION-C-verb-census.md were named ZERO times in HANDOFF.md, and my attempt to
+# message C about them FAILED, so they reached C only if C happened to browse.
+# A WATCHED FILE IS AN ADDRESS, NOT A CONTAINER. Store anywhere; name it in the address,
+# or it does not exist to a reader following the only path they were given.
+python3 check_reachable.py --selftest || fail=1
+python3 check_reachable.py || fail=1
+echo
 echo "== the peer mailbox must carry a poll record, and name files that exist =="
 # Added 1 Sep. Session C reaches me by SendMessage; I cannot call it (verified: the
 # cloud credential is refused for cross-session delivery). Git already carries the

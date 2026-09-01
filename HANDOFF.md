@@ -528,6 +528,23 @@ TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exi
                  asserting. Widening costs one character and is provably inert:
                  `([ \d]\d)`. Worth C, D and B each grepping their own pattern.
                  §49.1 carries the evidence and what it does not establish.
+OUTBOUND         Everything I have written for another session, and the ONLY place a
+                 reader following this file will learn it exists. Gated by
+                 check_reachable.py: a file under handover/ that is not named here
+                 FAILS the suite.
+                 handover/TO-SESSION-B-tuesday.md   the five held patches, the bundle,
+                   and the per-patch table of what changes a computed value
+                 handover/TO-SESSION-C-log-parsing.md   reply to C's parsing document
+                 handover/TO-SESSION-C-verb-census.md   claw and reave back in on C's
+                   counts, and the first-person question I still need answered
+                 handover/TO-SESSION-C-mailbox.md   the polled-mailbox proposal
+                 handover/TO-SESSION-C.md, handover/TO-SESSION-A.md   earlier
+                 handover/gap-contract.b-087c0d4.json   B's contract, vendored
+                 handover/BUNDLE-CONTRACT.d5c2b4a4.md, handover/weapon-taxonomy.json
+                 *** TWO OF THESE WERE ORPHANS UNTIL 1 Sep 22:24Z. *** See section 80: I
+                 wrote two documents for Session C and named neither of them here,
+                 and my attempt to message C about them FAILED. They were reachable
+                 only by browsing.
 LAST CHANGE      1 Sep 16:25Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
                  I GAVE THE OWNER (90.0%) IS MEASURED ON A CORPUS BUILT OUT OF THE
                  ENGINE'S OWN VOCABULARY, AND MY BIGGEST FINDING WAS MEASURED ON A
