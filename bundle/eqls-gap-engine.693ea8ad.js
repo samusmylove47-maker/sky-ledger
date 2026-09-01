@@ -33,7 +33,21 @@
   // (ad4f2a70, the Sky Ledger Windows release, 100,482,932 bytes, and the site's
   // published download link is pinned to it). This field is EQLSGapEngine's, per
   // BUNDLE-CONTRACT section 2. Say "EQLSGapEngine 1.1.0", never "sky-ledger 1.1.0".
-  var VERSION = "1.2.0";
+  // 1.2.0 -> 1.3.0, 1 Sep 2026, RULED by the Director and not taken unilaterally.
+  // TWO byte-sets shipped as 1.2.0 within one night -- d6e17bec (20,337 b, B's pin)
+  // and 32a50df4 (25,443 b) -- and the second changed the PARSER: a self-hit guard on
+  // the melee branch and a day-of-month class that accepts a space-padded day. B's
+  // guard asserts version === "1.2.0" exactly and refuses a newer engine as readily
+  // as an older one, so B's pin could not tell the fixed engine from the broken one.
+  // That is the failure the pin exists to prevent, and it was mine to fix at source.
+  // MINOR, not MAJOR: no key was removed, renamed or retyped, and `measured.window`
+  // and `coverage.self_damage_excluded` are additive. Values a consumer reads CAN
+  // change for the same log -- that is the point of the fix -- but semver governs the
+  // shape of the contract, not bug-for-bug stability of the numbers.
+  // B'S EXACT-EQUALITY GUARD MEANS B MUST RE-PIN TO READ THIS. That is B's design and
+  // B's call; it is named in HANDOFF.md's STATUS block as REPIN NEEDED so the
+  // divergence cannot sit undeclared. check_contract.py fails if it ever does.
+  var VERSION = "1.3.0";
 
   // Every numeric key in `measured` is over ONE of three populations, and until
   // 1 Sep 2026 the report did not say which. Measured on the log this engine was

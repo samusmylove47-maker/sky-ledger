@@ -21,10 +21,49 @@ CONTRACT = os.path.join(ROOT, "handover", "gap-contract-1.2.0.b-65e2f9e3.json")
 SPELL_KEYS = {"landings", "normalised_key", "damage_total", "damage_median", "damage_max"}
 
 
-def audit(measured, version, contract):
+def _sv(v):
+    return tuple(int(x) for x in v.split("."))
+
+
+def audit(measured, version, contract, handoff=""):
+    """SHAPE is asserted against B's fixture; VERSION is asserted as a RELATIONSHIP.
+
+    This read `version == contract["version"]` until 1 Sep 2026, which was right while
+    the engine sat at 1.2.0 and became a gate that could only be satisfied by never
+    releasing again. Worse, it hid the thing the Director ruled on: TWO byte-sets
+    shipped as 1.2.0 in one night, the second with a changed PARSER, and B's guard --
+    exact equality -- could not tell them apart.
+
+    So the checks are now: the engine is not BELOW the contract, the MAJOR matches
+    (B's page refuses on a major mismatch), the SHAPE still satisfies every key B
+    asked for, and -- the load-bearing one -- **a version divergence is DECLARED**.
+    B asserts equality, so any divergence means B is reading its unknown band until B
+    re-pins, and a divergence nobody wrote down is a consumer silently switched off.
+    """
     want = contract["measured"]
-    out = [("version asserts " + contract["version"], version == contract["version"],
-            f"engine reports {version!r}")]
+    ev, cv = _sv(version), _sv(contract["version"])
+    out = [
+        ("engine is not BELOW the contract version", ev >= cv,
+         f"engine {version}, contract {contract['version']}"),
+        ("engine MAJOR matches the contract's", ev[0] == cv[0],
+         f"{ev[0]} vs {cv[0]}; B's page refuses on a major mismatch"),
+        # THE DETAIL MUST FOLLOW THE BRANCH THAT ACTUALLY HELD. The first version of
+        # this line computed the failure text unconditionally, so a PASSING check
+        # printed "HANDOFF.md carries no 'REPIN NEEDED: 1.3.0'" beside an `ok`. The
+        # right answer in the wrong words -- the shape this repository has spent a
+        # week finding in other people's instruments -- caught by reading the detail
+        # column of a green run.
+        ("a version divergence is DECLARED in HANDOFF.md",
+         ev == cv or (f"REPIN NEEDED: {version}" in handoff),
+         ("versions match, nothing to declare" if ev == cv
+          else (f"engine {version} != contract {contract['version']}, and HANDOFF.md "
+                f"DECLARES 'REPIN NEEDED: {version}' -- B is on its unknown band until "
+                "it re-pins, and that is written down"
+                if f"REPIN NEEDED: {version}" in handoff else
+                f"engine {version} != contract {contract['version']} and HANDOFF.md "
+                f"carries NO 'REPIN NEEDED: {version}' -- B is reading its unknown "
+                "band and nobody said so"))),
+    ]
     for k in ("engaged_seconds", "melee_seconds", "damage_dealt", "months_seen"):
         exp, got = want[k], measured.get(k, "<<ABSENT>>")
         ok = isinstance(got, type(exp)) and not isinstance(got, bool)
@@ -47,12 +86,11 @@ def load_contract():
     return json.load(open(CONTRACT, encoding="utf-8"))
 
 
-def real():
-    from gapengine import gap_engine
-    from synthetic_log import build
-    import bundle  # noqa: F401  (path only)
-    r = gap_engine(build(), {})
-    return r["measured"], "1.2.0"
+# `real()` lived here and was never called. It returned the engine's `measured` block
+# beside a HARD-CODED "1.2.0" -- a second, unsourced copy of a version the __main__
+# path already reads out of the bundle. Deleted 1 Sep 2026 rather than updated: a
+# duplicated constant is how two truths drift, and this one would have kept saying
+# 1.2.0 through tonight's bump with nothing to notice.
 
 
 if __name__ == "__main__":
@@ -64,6 +102,7 @@ if __name__ == "__main__":
                      open(os.path.join(ROOT, "bundle", "eqls-gap-engine.js"),
                           encoding="utf-8").read()).group(1)
     m = gap_engine(build(), {})["measured"]
+    handoff = open(os.path.join(ROOT, "HANDOFF.md"), encoding="utf-8").read()
 
     if "--selftest" in sys.argv:
         print("== check_contract self-test: it must be able to FAIL ==")
@@ -79,18 +118,32 @@ if __name__ == "__main__":
         print(f"  an absent key                            "
               f"{'correctly fails' if r2.get('measured.damage_dealt is int') is False else 'BROKEN'}")
         ok &= (r2.get("measured.damage_dealt is int") is False)
-        r3 = dict((n, o) for n, o, _ in audit(m, "9.9.9", c))
-        print(f"  a wrong version                          "
-              f"{'correctly fails' if list(r3.values())[0] is False else 'BROKEN'}")
-        ok &= (list(r3.values())[0] is False)
+        def arm(label, ver, hf, expect):
+            global ok
+            got = dict((n, o) for n, o, _ in audit(m, ver, c, hf)).get(expect)
+            print(f"  {label:<40} {'correctly fails' if got is False else 'BROKEN'}")
+            ok &= (got is False)
+
+        arm("an engine BELOW the contract", "1.1.9", handoff,
+            "engine is not BELOW the contract version")
+        arm("a MAJOR bump", "2.0.0", handoff, "engine MAJOR matches the contract's")
+        arm("a divergence nobody declared", "1.3.0", "",
+            "a version divergence is DECLARED in HANDOFF.md")
+        # ...and the matched pair: the SAME divergence, declared, must PASS.
+        got = dict((n, o) for n, o, _ in
+                   audit(m, "1.3.0", c, "REPIN NEEDED: 1.3.0")).get(
+                       "a version divergence is DECLARED in HANDOFF.md")
+        print(f"  {'the same divergence, DECLARED':<40} "
+              f"{'correctly passes' if got is True else 'BROKEN'}")
+        ok &= (got is True)
         sys.exit(0 if ok else 1)
 
-    rs = audit(m, ver, c)
+    rs = audit(m, ver, c, handoff)
     for n, o, d in rs:
         print(f"  {n:<52} {'ok' if o else 'FAILED'}   {d}")
     if not all(o for _, o, _ in rs):
         print("  B's contract is NOT satisfied. B is never blocked on me and I am "
-              "never blocked on B, but a consumer asserting 1.2.0 would read a "
-              "shape it did not ask for.")
+              f"never blocked on B, but a consumer asserting {c['version']} would read "
+              "a shape it did not ask for.")
         sys.exit(1)
     print(f"  {len(rs)} contract assertions, all satisfied, against B's fixture at 65e2f9e3")

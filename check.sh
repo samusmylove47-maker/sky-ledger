@@ -87,6 +87,15 @@ echo "== every number in the measured block must name the population it is over 
 python3 check_window.py --selftest || fail=1
 python3 check_window.py || fail=1
 echo
+echo "== every timestamp pattern in this tree must accept a space-padded day =="
+# Added 1 Sep. A fixed-width day discards the line BEFORE any parse, where nothing
+# downstream can report it. Two hand-sweeps for this fault ran the same day and both
+# were defective -- one returned zero everywhere, mine matched a literal and missed
+# amp.py. So this does not grep for a shape: it EXTRACTS every timestamp regex and
+# RUNS it against a space-padded line.
+python3 check_timestamps.py --selftest || fail=1
+python3 check_timestamps.py || fail=1
+echo
 echo "== a self-hit must never reach damage_dealt, in either engine =="
 # Added 1 Sep, relayed by D and CHECKED rather than accepted. A self-hit written
 # without a `by <spell>` clause cannot match the SPELL shape and fell through to

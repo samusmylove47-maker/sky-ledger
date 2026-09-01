@@ -14,7 +14,9 @@ remaining hit points, which was established in amp.py.
 import re, sys, collections, statistics as st
 
 LOG = sys.argv[1] if len(sys.argv) > 1 else "corpus/amp/eqlog_Shara_rivervale_20260829_full.txt"
-TS = re.compile(r"^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
+# DAY: `[ \d]\d`, not `\d{2}`. See gapengine.py's TS for the evidence and for what
+# it does NOT establish. A fixed-width day drops every line on days 1-9 of a month.
+TS = re.compile(r"^\[\w{3} \w{3} ([ \d]\d) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
 
 # outgoing damage. "You ..." is Shara; a named actor is anyone else.
 SPELL_YOU = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")

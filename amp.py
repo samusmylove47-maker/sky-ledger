@@ -8,7 +8,9 @@ Amplification out of the bar, memorise it, sing again, on the same mob type.
 import re, sys, os, collections
 
 LOG = sys.argv[1] if len(sys.argv) > 1 else "corpus/amp/eqlog_Shara_rivervale_20260829.txt"
-TS   = re.compile(r"^\[\w{3} (\w{3} \d{2}) (\d{2}):(\d{2}):(\d{2}) (\d{4})\] (.*)$")
+# DAY: `[ \d]\d`, not `\d{2}`. See gapengine.py's TS for the evidence and for what
+# it does NOT establish. A fixed-width day drops every line on days 1-9 of a month.
+TS   = re.compile(r"^\[\w{3} (\w{3} [ \d]\d) (\d{2}):(\d{2}):(\d{2}) (\d{4})\] (.*)$")
 HIT  = re.compile(r"You hit (.+?) for (\d+) points of magic damage by Denon's Desperate Dirge\.(\s*\(Critical\))?")
 
 rows, amp, sec0 = [], False, None
