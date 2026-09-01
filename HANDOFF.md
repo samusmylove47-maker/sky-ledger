@@ -5,6 +5,30 @@
      Update these fields on EVERY push. Sections below are append-only history. -->
 
 ```
+AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
+                 SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
+                 (02543ec8, verified byte-identical from my side), I am at 1.5.0
+                 (7a57b973). BOTH DECLARED, BOTH GUARDS LIVE. That is not drift and
+                 it is not an open task — 1.5.0 changes NO COMPUTED VALUE (measured:
+                 identical `measured`, `deltas` and `refusals` against 1.4.0 on both
+                 line endings; only `coverage` gains `parse`). RULED: B re-pins after
+                 the reset. DO NOT BUMP THE BUNDLE TO CLOSE THIS. It is closed.
+                 THREE THINGS ARE BLOCKED ON EVIDENCE, NOT ON EFFORT. Do not
+                 rediscover them as open questions:
+                   35.5   the +1/tier weapon upgrade floor. Needs ONE client window
+                          of a weapon at base damage 1-9, any tier >= 1. Not
+                          estimated, not worked around.
+                   CALL OF FLAME  needs a client spell window on a level-49 Ranger
+                          plus cast time under the named stance. Same.
+                   SINGLE-DIGIT DAY  NARROWED, NOT CLOSED, AND MY HYPOTHESIS IS
+                          REFUTED WHERE THE DATA REACHES. I proposed EQ might
+                          space-pad a single-digit day (ctime does); C measured days
+                          04-09 as ZERO-padded over ~9M stamped lines. Days 01-03
+                          remain inferred, not observed. RELAYED TO ME, NOT READ BY
+                          ME. The `([ \d]\d)` widening stays: it is inert on every
+                          log measured, costs one character, and is right either way.
+                          I was right to stop rather than guess, and wrong about the
+                          format. Both belong in the record.
 SESSION          E — EQLS Residual, ref 6861fc
 REPO             samusmylove47-maker/sky-ledger
 BRANCH           claude/eq-legends-class-analysis-q68111     <-- THE ONLY BRANCH I PUSH TO
@@ -6588,3 +6612,87 @@ finding is *a declaration with one state cannot express acknowledgement*, and th
 is the evidence, not the other way round.
 
 **35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 05:35Z — HANDOVER CLEAN: 17 gates green, 0 unpushed, three blockers restated, no bundle bump
+
+**Final push before the shutdown.** Every claim below is stated with the check that
+produced it, not with my belief about it.
+
+### 55. The state, verified rather than asserted
+
+```
+check.sh                     PASS, 17 gates          (run, not remembered)
+bundle                       7a57b973, 33,511 b, VERSION 1.5.0
+B's vendored bundle          02543ec8, 30,220 b, VERSION 1.4.0
+                             byte-identical to my 1.4.0 recovered from git at bec765c2
+vendored contract            gap-contract.b-087c0d4.json, asserts 1.4.0
+divergence                   DECLARED: REPIN NEEDED: 1.5.0 [DEFERRED]
+```
+
+### 55.1 R163 — the parity fix you flagged is already landed, and I checked rather than said so
+
+You listed it as possibly outstanding. It went in at `bec765c2` and I verified it in
+the tree before answering: the `/\r?\n/` normalisation is gone from the driver (the
+one remaining occurrence is inside a comment describing what it used to be), the
+harness now has `js_over(lines, eol)` and `py_over(lines, eol)` writing real bytes,
+and both arms run:
+
+```
+PARITY (LF):   the two implementations agree field for field.
+CRLF control:  PY dps=105.2 JS dps=105.2 -- both engines still read a log a Windows client wrote
+PARITY (CRLF): the two implementations agree field for field.
+```
+
+**The control is the part that matters and it needed care**: before the fix both sides
+went to `measured: {}` on CRLF, and **two empty reports agree field for field
+perfectly.** So the CRLF arm asserts a non-empty result *before* it reports agreement.
+Matched pair proven at the time by removing the strip in a scratch copy: `dps
+undefined`, `measured` keys `0`.
+
+### 55.2 The single-digit day: I was right to stop and wrong about the format
+
+C measured days **04–09 as zero-padded** over ~9M stamped lines. **My hypothesis is
+refuted where the data reaches**, and I want that in the record as plainly as the
+finding was. Days 01–03 remain inferred rather than observed — a gap I would not close
+by reasoning about `ctime`, since reasoning about `ctime` is what produced the wrong
+answer the first time.
+
+**The widening stays.** It is inert on every log measured, costs one character, and is
+right either way. That was the whole basis for shipping it — *right either way* — and
+it survives the refutation intact. **Relayed to me, not read by me**, and marked that
+way in the STATUS block.
+
+The general form is the one worth keeping: **a mechanism claim about a client I cannot
+run was wrong, and the measurement that bounded it — 4 logs, 189,460 lines, zero
+single-digit days of either form — was right.** That is R74 landing on me rather than
+on someone else, and it is the fourth time tonight the split has fallen that way.
+
+### 55.3 What I am NOT doing in the last twenty minutes
+
+- **No 1.6.0.** The seam is stable and it took two of B's re-pins to reach. A bump now
+  would leave it mid-flight across a shutdown, and nothing I have found is worth that.
+- **No new gate.** Seventeen is enough to hand over; an eighteenth written at 05:40
+  and never run against a real failure is a guard, not a gate.
+- **No work on 35.5, Call of Flame, or days 01–03.** All three are blocked on evidence
+  only the owner can produce, and estimating past any of them tonight would put an
+  unsourced number into a tree whose whole claim is that it has none.
+
+### 55.4 One thing for whoever picks this up
+
+The critical-path item I declared and never started is **per-character modelling**
+(`model4.py` + a new `percharacter.py`), carrying its own falsifier: the 213-fight
+residual, which the current model overshoots as a ceiling by a factor already
+published in `residual.py`. It is inside the standing bound because it is a
+re-parameterisation with a falsifier attached. **If it turns out to need a new
+mechanism rather than a re-fit, stop and ask.** That was true when I declared it at
+§39.5 and it is still true.
+
+The other thing I would hand over is smaller and more useful: **`rank.py`'s eighteen
+self-tests run against a stub oracle I wrote myself**, so they test my code against my
+own model of D's interface. The four R81 vocabulary checks are the only ones in that
+file that can disagree with me. Closing that needs D's real `lockoutCore.js`, which is
+a cross-repository read I have not made.
+
+**35.5, Call of Flame, and days 01–03 stay BLOCKED. Nothing was worked around.**
