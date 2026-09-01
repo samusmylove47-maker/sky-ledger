@@ -65,16 +65,28 @@ def audit(measured, version, contract, handoff=""):
         # right answer in the wrong words -- the shape this repository has spent a
         # week finding in other people's instruments -- caught by reading the detail
         # column of a green run.
-        ("a version divergence is DECLARED in HANDOFF.md",
-         ev == cv or (f"REPIN NEEDED: {version}" in handoff),
+        # A DECLARATION WITH ONE STATE CANNOT SAY "ACKNOWLEDGED AND SCHEDULED".
+        # Observed 1 Sep 2026 by the Director, about this exact field: "a declared
+        # REPIN NEEDED that goes unanswered for hours reads like a dropped message,
+        # and it is not one." B was RULED to hold at 1.4.0 through the ship -- the
+        # right call, measured -- and my declaration had no way to say so, so it sat
+        # there looking like an ask nobody had answered.
+        # The state is a CLOSED SET of two and the gate names them, because a
+        # free-text status is one nobody can check.
+        ("a version divergence is DECLARED in HANDOFF.md, WITH ITS STATE",
+         ev == cv or any(f"REPIN NEEDED: {version} [{st}]" in handoff
+                         for st in ("OPEN", "DEFERRED")),
          ("versions match, nothing to declare" if ev == cv
-          else (f"engine {version} != contract {contract['assertedEngineVersion']}, and HANDOFF.md "
-                f"DECLARES 'REPIN NEEDED: {version}' -- B is on its unknown band until "
-                "it re-pins, and that is written down"
-                if f"REPIN NEEDED: {version}" in handoff else
+          else (f"engine {version} != contract {contract['assertedEngineVersion']}, and "
+                "HANDOFF.md declares "
+                + ("OPEN -- the consumer should act" if f"REPIN NEEDED: {version} [OPEN]"
+                   in handoff else "DEFERRED -- ruled, scheduled, not a dropped message")
+                if any(f"REPIN NEEDED: {version} [{st}]" in handoff
+                       for st in ("OPEN", "DEFERRED")) else
                 f"engine {version} != contract {contract['assertedEngineVersion']} and HANDOFF.md "
-                f"carries NO 'REPIN NEEDED: {version}' -- B is reading its unknown "
-                "band and nobody said so"))),
+                f"carries no 'REPIN NEEDED: {version} [OPEN|DEFERRED]' -- the "
+                "consumer is on its unknown band and nobody said so, or said it "
+                "without saying whether anyone is acting on it"))),
     ]
     for k in ("engaged_seconds", "melee_seconds", "damage_dealt", "months_seen"):
         exp, got = want[k], measured.get(k, "<<ABSENT>>")
@@ -171,14 +183,20 @@ if __name__ == "__main__":
         cv = _sv(c["assertedEngineVersion"])
         newer = f"{cv[0]}.{cv[1] + 1}.0"
         arm(f"a divergence nobody declared ({newer})", newer, "",
-            "a version divergence is DECLARED in HANDOFF.md")
-        # ...and the matched pair: the SAME divergence, declared, must PASS.
-        got = dict((n, o) for n, o, _ in
-                   audit(m, newer, c, f"REPIN NEEDED: {newer}")).get(
-                       "a version divergence is DECLARED in HANDOFF.md")
-        print(f"  {'the same divergence, DECLARED':<40} "
-              f"{'correctly passes' if got is True else 'BROKEN'}")
-        ok &= (got is True)
+            "a version divergence is DECLARED in HANDOFF.md, WITH ITS STATE")
+        # A declaration with NO STATE is the shape that read as a dropped message.
+        arm("a divergence declared without a state", newer, f"REPIN NEEDED: {newer}",
+            "a version divergence is DECLARED in HANDOFF.md, WITH ITS STATE")
+        arm("a state outside the closed set", newer, f"REPIN NEEDED: {newer} [SOON]",
+            "a version divergence is DECLARED in HANDOFF.md, WITH ITS STATE")
+        # ...and the matched pair: the SAME divergence, declared WITH a state, passes.
+        for st in ("OPEN", "DEFERRED"):
+            got = dict((n, o) for n, o, _ in
+                       audit(m, newer, c, f"REPIN NEEDED: {newer} [{st}]")).get(
+                           "a version divergence is DECLARED in HANDOFF.md, WITH ITS STATE")
+            print(f"  {'the same divergence, declared [' + st + ']':<40} "
+                  f"{'correctly passes' if got is True else 'BROKEN'}")
+            ok &= (got is True)
         sys.exit(0 if ok else 1)
 
     rs = audit(m, ver, c, handoff)

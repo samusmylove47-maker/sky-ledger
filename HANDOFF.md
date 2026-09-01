@@ -16,12 +16,31 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  included. My branch is an ancestor of master, 0 commits ahead.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
-VERSION          EQLSGapEngine 1.5.0. REPIN NEEDED: 1.5.0
-                 TO SESSION B: IF YOU ARE STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND
-                 SKIP 1.4.0 — ONE re-pin, not two. Both changes are needed and
-                 neither is skippable in substance; 1.4.0 simply never has to be a
-                 stop. If you already moved to 1.4.0, this is a second re-pin and I
-                 am sorry for it.
+VERSION          EQLSGapEngine 1.5.0. REPIN NEEDED: 1.5.0 [DEFERRED]
+                 *** THE LINE HERE TOLD B TO SKIP 1.4.0. THAT IS NOW WRONG AND IT IS
+                 REMOVED. *** B landed on 1.4.0 and is RULED TO HOLD THERE THROUGH
+                 THE SHIP. My text was still telling B to do the opposite.
+                 NOT A DROPPED MESSAGE — RULED, MEASURED, AND SCHEDULED. The Director
+                 measured 1.4.0 against 1.5.0 before deciding, and I REPRODUCED IT
+                 INDEPENDENTLY from the 1.4.0 bundle recovered out of git at bec765c2
+                 (30,220 b / 02543ec8):
+                   crlf log   measured IDENTICAL  19 keys vs 19   deltas 0->0  ref 5->5
+                   lf   log   measured IDENTICAL  19 keys vs 19   deltas 2->2  ref 4->4
+                   coverage   4 keys -> 5 keys
+                 WIDER THAN THE RULING NEEDED: it is not only `measured` that is
+                 identical. Deltas and refusals are too. EVERY STRUCTURE A CONSUMER
+                 RENDERS IS UNCHANGED except `coverage`, which gains `parse`.
+                 So 1.5.0 changes NO COMPUTED VALUE. It adds a self-describing
+                 refusal on the path where the parser cannot read — and now that
+                 1.4.0 reads CRLF, that path should be rare. A third re-pin in under
+                 two hours would trade a real risk (B on a pin it has not tested
+                 against, on ship morning) for a better message on a path that should
+                 no longer fire. Re-pin lands after the reset.
+                 THE STATE TAG IS NEW AND IT IS THE FIX FOR A DEFECT IN THIS FIELD.
+                 A declaration with ONE state cannot say "acknowledged and
+                 scheduled", so it always reads as an ask nobody answered.
+                 check_contract.py now requires [OPEN] or [DEFERRED] — a closed set
+                 of two, because a free-text status is one nobody can check.
                  NEW IN 1.5.0 — `coverage.parse`, additive, and it is R159 turned
                  into code. A file this engine COULD NOT READ and a character who
                  DEALT NO DAMAGE used to produce the same output: `measured: {}` and
@@ -6479,5 +6498,77 @@ Your note on why this is safe at all is the part I want on the record, because i
 the justification for a discipline that has cost B real time tonight: *a repo without
 that would be asking B to swap a bundle on trust at four in the morning, and neither
 of you would know afterwards which bytes a player got.*
+
+**35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 05:15Z — REPIN DEFERRED: your ruling stands, I reproduced the measurement it rests on, and it is wider than you reported
+
+**FYI, no ruling needed.** `check.sh` PASS. Engine **1.5.0**, bundle `7a57b973`
+unchanged. Declaration now reads `REPIN NEEDED: 1.5.0 [DEFERRED]`.
+
+### 54. I checked the measurement your ruling rests on, because it overrides a declaration of mine
+
+Not because I doubted it — because a ruling that goes against something I published
+is exactly the kind I should be able to verify rather than accept. I recovered the
+1.4.0 bundle out of git at `bec765c2` (30,220 b, `02543ec8`) and ran both versions over
+both line endings in one process:
+
+```
+crlf log   1.4.0 vs 1.5.0   measured IDENTICAL: true   19 keys vs 19
+lf   log   1.4.0 vs 1.5.0   measured IDENTICAL: true   19 keys vs 19
+coverage   4 keys -> 5 keys
+```
+
+**Reproduced exactly. And it is wider than the ruling needed:** `deltas` and
+`refusals` are unchanged too — 0→0 and 5→5 on the CRLF log, 2→2 and 4→4 on the LF one.
+So it is not only `measured` that is identical. **Every structure a consumer renders
+is unchanged except `coverage`, which gains `parse`.** Your ruling was safer than the
+evidence you cited for it, and it should be recorded at the strength the evidence
+supports.
+
+**The ruling is right and I would not have made it.** I could see that 1.5.0 was a
+better message; I could not see B's re-pin cost or that B would be running on a pin it
+had not tested against on ship morning. That asymmetry is real and it is the seam you
+sit on. *A declaration is not an instruction* is the sentence I want to keep.
+
+### 54.1 My STATUS block was still telling B to do the opposite, and that is the actual defect
+
+The line read: **"IF YOU ARE STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND SKIP 1.4.0."**
+B has landed on 1.4.0 and is ruled to hold there. **My only outbound was carrying a
+live instruction that had been overruled** — the same class of stale claim I removed
+from this block twice already tonight, and the third time it was an instruction rather
+than a status, which is worse.
+
+### 54.2 The declaration had one state, so it could not say "answered"
+
+Your observation is the finding and it is about a field I built:
+
+> *a declared REPIN NEEDED that goes unanswered for hours reads like a dropped
+> message, and it is not one.*
+
+**A declaration with one state cannot express acknowledgement.** It can only say "this
+is needed", so the longer it stands the more it looks ignored — and the reader has no
+way to tell a dropped ask from a scheduled one. That is a fail-open in a
+communication channel rather than in code, but it has the same shape as everything
+else I have fixed tonight: the instrument cannot return one of its answers.
+
+`check_contract.py` now requires `REPIN NEEDED: <version> [OPEN|DEFERRED]` — **a closed
+set of two, because a free-text status is one nobody can check.** Three new self-test
+arms, all firing: a divergence declared with **no** state fails, a state **outside** the
+set (`[SOON]`) fails, and both legal states pass. The matched pair matters here — the
+gate has to accept DEFERRED as readily as OPEN, or it would push me back toward
+deleting the declaration to get green, which is how a real ask gets buried.
+
+### 54.3 On R149 again, and then I will stop saying it
+
+Two of the three findings you routed back tonight were **not measurements** — the
+harness-sanitises-its-input rule and the control rule are both one-sentence statements
+of a fault shape. The measurements got people to look; the sentences are what they
+could use without ever seeing my logs. I said last push that I would stop burying the
+sentence under the table it came from. §54.2 above is me doing that deliberately: the
+finding is *a declaration with one state cannot express acknowledgement*, and the gate
+is the evidence, not the other way round.
 
 **35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
