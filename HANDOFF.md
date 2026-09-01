@@ -8678,3 +8678,80 @@ still a premise I failed to check, and the fix in my tree is that availability i
 longer a legal ground in `check_holds.py`'s closed set. Neither of us can write it down
 again.
 
+
+## TO THE DIRECTOR — 1 Sep 18:44Z — my new mailbox reported "nothing new" while C's audit sat in C's tree, and my verb gap is actor-correlated with a SIGN FLIP
+
+### 75. Tick 24: the instrument I built to prevent false negatives produced one on its first real use
+
+`check.sh` PASS, 28 gates. B's head moved to `c996662`; **B's seam did not** — the last commit
+touching any file I depend on is still `8221d92` from 22 Aug.
+
+**And then the mailbox failed in exactly the way it exists to prevent.** `mailbox.py --poll`
+reported `NOTHING-NEW` for Session C. What it had actually established is that C has no
+`MAILBOX.md` — the protocol is proposed, not adopted. **It never looked at whether C had written
+anything.** C had: `docs/DAMAGE-FAMILY-AUDIT.md`, pushed at `7c7aaf2`, answering the coverage
+question you told me about an hour ago.
+
+I built that file *specifically* so that "I checked and it was clean" could not be confused with
+"I did not check", wrote `UNREACHABLE` into the closed set as the whole point of the exercise —
+**and then wrote a branch that returns `NOTHING-NEW` when it cannot read the mailbox at all.**
+Fixed: an absent peer mailbox is now `UNREACHABLE`, and the poller additionally reports whether
+the peer head moved since the last recorded poll, so "I could not look" and "the head is where I
+left it" are separate sentences.
+
+Session C's line from its own audit, which I am adopting because I earned it the same hour:
+
+> *"Knowing a failure shape does not protect you from it; only a guard in the code does."*
+
+C wrote that about the three-casings defect reappearing **inside the instrument C built to check
+for filtering**. Two of us wrote the same class of fault into the same class of tool within an hour
+of documenting it.
+
+### C's audit, and the property of my own defect I had not asked about
+
+C measured D's damage families against its parser and found both gaps **actor-correlated**:
+
+```
+GAP B  mob spell damage on a player, missed:  1.7% to 30.0% per actor, ONE direction
+GAP A  damage shields, unmodelled:  193,765 lines, and ONE actor is 70.7% of them
+```
+
+C's framing is the useful part: **a uniform miss rate is a scale error; an actor-correlated one is
+a wrong answer**, because it reorders a ranking.
+
+**I had not asked that question of my own verb gap. It is actor-correlated AND IT CHANGES SIGN**,
+which is a third case neither of us named:
+
+```
+Kenkyo (melee)   published dps 16.62% TOO LOW
+Shara  (bard)    published dps  1.10% TOO HIGH
+```
+
+**No single scale factor corrects a defect whose sign depends on the actor.** C's can be bounded —
+worst case 30%, one direction, so a reader knows which way to lean. Mine cannot: a reader
+reasoning "the meter under-counts, so the truth is higher" is right for Kenkyo and wrong for Shara.
+The mechanism is the one from §70 — recovered hits land in the numerator *and* in
+`engaged_seconds`, in a ratio set by how melee-heavy the character is. **Shipped in 1.6.0, so this
+describes the defect I fixed rather than one that is live** — but it is the reason P-3 needed
+figures re-verified and the others did not.
+
+### Two smaller things from C's audit that touch my tree
+
+**C's GAP A corroborates D-11 from a third direction, with a number I did not have.** I established
+that a player's own damage shield is never written in the first person, so my engine cannot
+attribute it as a matter of grammar. **C measured the concentration: 206 owners, one of them 70.7%
+of all shield damage.** A family that is 70% one actor is not a rounding error in any ranking that
+includes it, and P-4's job — saying out loud that the engine excludes it — matters more with that
+number attached than without.
+
+**C's F3 narrows my `hit` question without closing it.** C found `a gorgon hit Grimtusk for 113
+points of magic damage by Smite` — **third-person** bare `hit` carrying a spell suffix. My open
+question is **first-person** bare `hit` with **no** suffix, which my engine still treats as melee.
+More evidence that the word means *spell*; still not the shape I hold. It stays in `AUTO_VERBS`
+with a comment saying it rests on nothing.
+
+**And C is using a ruling of mine correctly**, which is the first time I have seen one travel:
+C proposes leaving damage shields unmodelled but declaring them *"per E's own ruling on my stun
+gap: it belongs in `refusals` as `no_log_evidence` with the count attached, not as silent absence —
+absence and zero look identical to a reader and mean opposite things."*
+

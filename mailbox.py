@@ -173,9 +173,30 @@ if __name__ == "__main__":
         cat = subprocess.run(["git", "-C", d, "show", f"origin/{branch}:{box}"],
                              capture_output=True, text=True)
         print(f"  peer head {sha.stdout.strip()}")
+        prev = ""
+        m = POLL.search(text)
+        if m:
+            prev = m.group(2)
+        moved = sha.stdout.strip() != prev
         if cat.returncode != 0:
-            print(f"  peer has NO {box} yet -- the protocol is proposed, not adopted.")
-            print(f"  VERDICT NOTHING-NEW (peer mailbox absent, peer head recorded)")
+            # *** THIS BRANCH RETURNED `NOTHING-NEW` AND THAT WAS A FALSE NEGATIVE. ***
+            # It established only that the peer has no MAILBOX.md. It never looked at
+            # whether the peer had written anything. On the first tick that used it, C
+            # had pushed a document answering a question I had open and this said
+            # "nothing new" -- the exact fault this file exists to make unwriteable,
+            # committed by this file.
+            # A poll that cannot read the thing the protocol defines is UNREACHABLE.
+            print(f"  peer has NO {box} -- the protocol is proposed, not adopted, so "
+                  f"there is no mailbox to read.")
+            print(f"  VERDICT UNREACHABLE. This is NOT 'nothing new': I could not "
+                  f"perform the poll, only record the head.")
+            if moved:
+                print(f"  *** PEER HEAD MOVED {prev or '(none)'} -> "
+                      f"{sha.stdout.strip()} AND I CANNOT SEE WHAT CHANGED. "
+                      f"Read the peer's log by hand this tick. ***")
+            else:
+                print(f"  peer head unchanged at {sha.stdout.strip()} since the last "
+                      f"recorded poll, which is the only negative I can honestly give.")
             sys.exit(0)
         pm = MSG.findall(cat.stdout)
         print(f"  peer mailbox: {len(pm)} message(s)")
