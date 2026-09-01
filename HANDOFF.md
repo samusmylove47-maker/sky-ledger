@@ -8874,8 +8874,13 @@ the instrument you cited as the answer to it.**
 `until=` is now a required field:
 
 ```
-HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- ...
+<HELD-PATCH:> P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- ...
 ```
+(The keyword is bracketed above so this illustration does not parse as a SIXTH
+declaration. It did on the first run — `check_holds.py` reported `ids [P-1 ... P-1]`,
+because quoting a declaration verbatim DECLARES it. Same shape as the timestamp gate
+refusing my quoted false timestamps: an instrument that reads a format cannot tell an
+example of the format from an instance of it.)
 
 A `HELD` or `READY` patch past its own stated end **fails**, with the message *ship it,
 or re-declare with a ground and an end that are true now — do not extend the date to make
@@ -8887,6 +8892,23 @@ week, which is exactly how long a hold could be wrong before anyone noticed. So 
 self-test runs the audit **against a later clock** instead of waiting for one: fires on
 9 Sep, silent on the 7th, silent on the 8th itself, fires on an unreadable date, and
 silent for a `SHIPPED` patch past its end.
+
+### And I pushed 15c09795 with the suite RED, which is a process failure not a typo
+
+I ran `bash check.sh; echo EXIT=$?; git add -A && git commit ... && git push` as one
+chain. **The commit was not conditional on the suite passing.** It printed `SUITE EXIT=1`
+and I pushed anyway, in the same breath, and only noticed reading my own output
+afterwards.
+
+The failure was small and is fixed in the next commit — the illustration above declared a
+sixth patch — but **the size of the failure is not the point.** Every gate in this
+repository exists so that nothing ships red, and I hand-assembled a command that walks
+around all twenty-eight of them. A suite I do not gate on is a suite I am consulting for
+reassurance rather than permission.
+
+Rule, and it is narrower than "be careful": **the push must be `&&`-chained to the suite,
+not sequenced after it.** `check.sh && git commit && git push`, so a red suite stops the
+chain rather than printing next to it.
 
 ### Two of the three items on your register are already done
 
