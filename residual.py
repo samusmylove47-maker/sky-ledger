@@ -34,8 +34,22 @@ import itertools, model4 as M
 DATA_SHA256 = "11823ae7b43509feb15721b4118458707d2828c465c625a989e233a836f342d5"
 DATA_BYTES = 207239
 DATA_RECORDS = 213
-DEFAULT_DATA = ("/tmp/claude-0/-home-user-sky-ledger/"
-                "caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json")
+# A genuine EXTERNAL dependency with no in-repo source: the Director's measured
+# dataset, pinned by sha256 above, absent-tolerant below, overridable with
+# EQLS_RAIDS_MEASURED. Whether to commit it needs a ruling.
+# The marker goes ON the assignment line, not in the comment block: check_paths.py
+# looks one line back and no further, so an exemption cannot drift onto an assignment
+# it was never written for. Two placements failed that rule before this one passed.
+# THE MARKER GOES ON ITS OWN LINE INSIDE THE PARENTHESES. Putting it after the opening
+# paren commented out the first fragment of the implicit concatenation, and
+# DEFAULT_DATA silently lost its "/tmp/claude-0/-home-user-sky-ledger/" prefix -- the
+# gate went green and the value it was guarding was broken. Caught in the same command
+# only because I ran `residual.py --check` beside the gate instead of trusting the gate
+# alone. A comment placed to satisfy a guard broke the thing the guard exists for.
+DEFAULT_DATA = (
+    # ABSOLUTE-PATH-EXEMPT
+    "/tmp/claude-0/-home-user-sky-ledger/"
+    "caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json")
 
 
 def resolve(path=None):

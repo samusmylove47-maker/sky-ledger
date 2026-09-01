@@ -73,6 +73,15 @@ echo "== B's hand-written contract for the measured block must be satisfied =="
 python3 check_contract.py --selftest || fail=1
 python3 check_contract.py || fail=1
 echo
+echo "== no committed file may hard-code an absolute path outside itself =="
+# Added 1 Sep. model4.py carried REPO="/home/user/sky-ledger" and a fresh clone with
+# ZERO shards of its own imported it and loaded 515 weapons and 1,973 spells -- all
+# from that path. fetch_shards.py fetches the shards INTO THE CLONE and verifies them
+# against their pins, and model4 then read a different copy: a gate verifying bytes the
+# consumer does not use, green on both machines for days.
+python3 check_paths.py --selftest || fail=1
+python3 check_paths.py || fail=1
+echo
 echo "== the Director's raid dataset must be pinned, and its absence must be LOUD =="
 # Added 1 Sep. residual.py's default data path was an absolute scratchpad path
 # carrying ONE SESSION'S UUID, and the file is committed nowhere -- so the published

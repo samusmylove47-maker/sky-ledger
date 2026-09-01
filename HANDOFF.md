@@ -46,6 +46,15 @@ OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so
                  THE ASSUMED-INPUT RANKING, baseline 4.59x: target mitigation 5.66x,
                  wrath/ATK 4.00x, haste 3.63x, strikethrough 4.55x — strikethrough is
                  ESSENTIALLY INERT and mitigation moves the model AWAY from measured.
+                 §60 — THE SHARD GATE WAS VERIFYING BYTES THE CONSUMER NEVER READ.
+                 model4.py carried REPO="/home/user/sky-ledger". MEASURED: a fresh
+                 clone with ZERO shards of its own imported model4 and loaded 515
+                 weapons and 1,973 spells — ALL FROM THAT PATH. fetch_shards.py
+                 fetches the shards INTO THE CLONE and verifies them against their
+                 pins, and model4 then read a different copy. GREEN ON BOTH MACHINES
+                 FOR DAYS. Derived from __file__ now; a clone with no shards FAILS
+                 LOUDLY naming its own path. check_paths.py is the 21st gate, and it
+                 caught THREE faults in itself before it was fit to ship.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -7066,6 +7075,93 @@ shows the derived list reproduces what was hand-chosen, **and adds the three the
 list missed.**
 
 `check.sh` PASS, 20 gates. Fresh clone passes with the dataset absent.
+
+**35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
+dataset still needs a ruling.**
+
+---
+
+## 60. The shard gate was verifying bytes the consumer never read
+
+Sweeping for the §58 shape found one more hard-coded absolute path: `model4.py:6`,
+`REPO="/home/user/sky-ledger"`. I expected a portability nit. **Measured, it is the
+sharpest instance of the night's recurring fault.**
+
+```
+clone at …/fresh6, its own sh-*.json and spells.json DELETED
+  import model4  ->  SUCCEEDS
+  REPO            /home/user/sky-ledger
+  weapons loaded  515
+  spells loaded   1,973
+```
+
+**A clone with zero data files of its own loaded 515 weapons and 1,973 spells — every
+one of them from another tree.** So `fetch_shards.py` fetches the three shards *into
+the clone* and verifies them against their pinned sha256s, and `model4.py` then reads a
+**different copy**. **A gate that verifies bytes the consumer does not use**, green on
+both machines, for days — and `fetch_shards.py` is the file I wrote on 31 Aug precisely
+to stop figures resting on a container-local file.
+
+`verify_upgrade.py:20` has always used `os.path.dirname(os.path.abspath(__file__))`.
+**Two files, one repository, two conventions for the same constant — and the hard-coded
+one is the one every published weapon and spell figure went through.**
+
+Derived from `__file__` now. Proof, inverted: a clone with its data files deleted
+**fails loudly naming its own path** instead of silently succeeding. Every figure in
+the real tree is unchanged, because there `REPO` resolves to the same directory it
+always did.
+
+### I was wrong about this once on the way, and the test is what corrected me
+
+My first probe deleted the clone's shards and ran its `verify_upgrade.py`; it failed,
+which I read as *"so it was reading the clone's copies"* — the opposite of the truth.
+**I read the exit code and not the error.** The traceback named
+`verify_upgrade.py:94`, which resolves its own path correctly and failed on its own
+account, before `model4` was ever reached. Reading it is what produced the real answer.
+
+### `check_paths.py` — the 21st gate, and it caught three faults in itself
+
+1. **It found strings, not behaviour.** The first version flagged four lines — three of
+   them its own docstring and control probe, and one a *comment* in `model4.py`
+   describing the value just removed. R80's fault, third time tonight. It now targets
+   an **assignment**, which is what the defect actually is.
+2. **A multi-line assignment escaped it entirely.** I dropped a probe file carrying
+   ```python
+   SNEAKY = (
+       "/home/user/sky-ledger"
+       "/spells.json")
+   ```
+   and the gate printed `ok` over it. **Worse: `residual.py` had just been rewritten
+   into exactly that shape, so the gate was passing my one known case by BLINDNESS
+   rather than by its declared exemption.** A gate reading clean on the very fault it
+   was written for. Two patterns now, and the probe fires.
+3. **Its dead-scanner control was aimed at the wrong global.** The mutation neutered
+   what `scan()` uses while `audit()`'s controls probe two other names, so the "dead
+   scanner" stayed alive. **A mutation aimed at the wrong global is a mutation that
+   cannot produce the defect** — and the self-test caught it.
+
+### Two more, found because each fix was verified rather than assumed
+
+- **A comment placed to satisfy the gate broke the value the gate protects.** Putting
+  `# ABSOLUTE-PATH-EXEMPT` after `DEFAULT_DATA = (` commented out the first fragment of
+  an implicit concatenation, and `residual.py` silently lost its path prefix — **gate
+  green, value broken.** Caught only because I ran `residual.py --check` beside the
+  gate instead of trusting the gate alone.
+- **`verify_upgrade.py` was lying about a module's identity.** It rebuilds `model4.py`
+  with `exec(compile(...), {'__name__': 'x'})` — no `__file__`. That worked only while
+  `model4` never asked. It now injects the real path, so the rebuilt copy resolves its
+  data **exactly where the original does**; otherwise the two upgrade rules would be
+  compared over different bytes and the comparison would mean nothing.
+
+### End-to-end verification
+
+```
+fresh clone + dataset unreachable   check.sh exit 0, ABSENT declared, 21 gates green
+clone's model4 REPO                 …/fresh8            (its own tree, not mine)
+clone with data files deleted       FileNotFoundError naming the clone's path
+```
+
+`check.sh` PASS, **21 gates, 23.4s.**
 
 **35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
 dataset still needs a ruling.**

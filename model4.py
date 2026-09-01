@@ -3,7 +3,26 @@
 so the sensitivity sweep can move exactly one thing at a time."""
 import json, os, itertools, re, math
 
-REPO="/home/user/sky-ledger"
+# DERIVED FROM __file__, NOT HARD-CODED. Until 1 Sep 2026 this read
+# REPO="/home/user/sky-ledger", and the consequence was measured rather than reasoned:
+# a fresh clone with ZERO shard files of its own imported this module successfully and
+# loaded 515 weapons and 1,973 spells -- ALL OF THEM FROM /home/user/sky-ledger.
+#
+# So every weapon and spell figure this model publishes came from one machine's
+# absolute path regardless of where the code was running. On a machine without that
+# path it fails; on a machine WITH a stale copy there it silently reads a different
+# tree, which is worse.
+#
+# AND IT MADE A GREEN GATE MEANINGLESS. fetch_shards.py fetches the three shards INTO
+# THE CLONE and verifies them against their pins -- and this module then read a
+# different copy. A gate that verifies bytes the consumer does not use. That is the
+# sharpest form of the fault this repository has spent a week finding in other
+# people's instruments, and it was here, green, the whole time.
+#
+# verify_upgrade.py:20 has always used the derived form. TWO FILES, ONE REPOSITORY,
+# TWO CONVENTIONS FOR THE SAME CONSTANT -- and the hard-coded one is the one every
+# published weapon figure went through. check_paths.py now fails on the typed form.
+REPO = os.path.dirname(os.path.abspath(__file__))
 CLASSES=['WAR','PAL','SHD','RNG','MNK','ROG','BER','BRD','BST','CLR','DRU','SHM','MAG','NEC','WIZ','ENC']
 MARTIAL={'WAR','PAL','SHD','RNG','MNK','ROG','BER','BRD','BST'}
 L=50

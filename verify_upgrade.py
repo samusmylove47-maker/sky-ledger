@@ -120,7 +120,15 @@ def build(rule, cap):
                       "def up10(v,N=10): return v+(max(N,(v*N)//10) if N else 0)")
     if not cap:
         s = s.replace("OH_RATE_CAP=1.42", "OH_RATE_CAP=1e9")
-    m = {'__name__': 'x'}
+    # `__file__` MUST BE PRESENT. This namespace is model4's source pretending to be
+    # model4, and it supplied `__name__` and nothing else -- so when model4.py stopped
+    # hard-coding its repo root on 1 Sep 2026 and derived it from `__file__`, this
+    # raised NameError and the reproducer went red. The harness was lying about the
+    # module's identity, and the module only worked because it never asked.
+    # Point it at the REAL model4.py: the rebuilt copy must resolve its data files
+    # exactly where the original does, or the two rules are compared over
+    # different bytes and the comparison means nothing.
+    m = {'__name__': 'x', '__file__': os.path.join(REPO, 'model4.py')}
     exec(compile(s, f'model4[{rule},cap={cap}]', 'exec'), m)
     return m
 # Full run = 4 x 560 trios x ~429 mains x ~200 offhands, about 2 minutes. check.sh
