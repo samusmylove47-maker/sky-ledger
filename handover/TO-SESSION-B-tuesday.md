@@ -75,7 +75,7 @@ log — the spell form (`… by Cannibalize`) is common and already excluded cor
 
 ## P-3 — the meter cannot see damage verbs it is emitting  ← THE ONE THAT MOVES NUMBERS
 
-### *** CORRECTED 1 Sep 17:20Z, BEFORE SHIPPING. THE PATCH BELOW IS SMALLER THAN THE ONE I FIRST SENT YOU, AND ONE PART OF IT WAS WRONG. ***
+### *** CORRECTED 1 Sep 16:16Z, BEFORE SHIPPING. THE PATCH BELOW IS SMALLER THAN THE ONE I FIRST SENT YOU, AND ONE PART OF IT WAS WRONG. ***
 
 The first version of this section told you to add **six** verbs on evidence from
 "117 logs, 282,615 stamped lines". I re-ran that measurement as a committed script

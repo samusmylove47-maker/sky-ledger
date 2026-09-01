@@ -164,6 +164,20 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== no document may claim a time that has not happened yet =="
+# Added 1 Sep on a clock tick, because between 16:01Z and 16:25Z I wrote TWELVE
+# timestamps into this tree -- the Director's polled channel, B's handover, and two
+# shipped Python files -- dated 16:30Z through 18:05Z. All in the future. I estimated
+# elapsed time from how much work I had done instead of running `date`, in the same
+# four commits whose subject lines are about not asserting unsourced values.
+# A timestamp is a number. Fault shape (8): having the measurement and not reading it.
+# It fired on its own self-test fixtures on the first run -- a true positive on a
+# false target, exactly as check_timestamps.py did -- so the exemption is asserted at
+# an EXACT count in both directions rather than capped: a cap raised whenever it binds
+# is not a cap, and skipping this file would blind the scanner to itself.
+python3 check_timeclaims.py --selftest || fail=1
+python3 check_timeclaims.py || fail=1
+echo
 echo "== measuring a held patch must not leak it into the shipped engine =="
 # recovery.py runs the engine TWICE -- as shipped and with P-3's verb set widened in
 # memory -- so the two populations are identical by construction rather than by my

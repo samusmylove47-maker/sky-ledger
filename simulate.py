@@ -228,7 +228,7 @@ KNOWN_DEFECT = {
         "`... by <spell>`, occurs 206 times and is already excluded correctly). "
         "P-2 is HELD for Tuesday's scheduled rebuild -- ground=SCHEDULED-REBUILD, "
         "declared in HANDOFF.md, gated by check_holds.py. *** THE REASON PRINTED HERE "
-        "UNTIL 1 Sep 17:55Z WAS `B is offline`. IT WAS FALSE FOR THE NINE HOURS IT "
+        "UNTIL 1 Sep 16:23Z WAS `B is offline`. IT WAS FALSE FOR THE NINE HOURS IT "
         "STOOD, AND IT WAS STILL PRINTING IN THIS TOOL SIX HOURS AFTER I CORRECTED IT "
         "ELSEWHERE. Availability is no longer a legal ground for a hold here -- "
         "HANDOFF.md sections 68, 69, 70. ***"),

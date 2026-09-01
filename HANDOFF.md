@@ -43,13 +43,13 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  I verified the repository is PUBLIC (visibility: public) before
                  deciding, because the ruling turns on publication and not on access.
 
-                 D-8 [DONE, 1 Sep 16:30Z]  All three held patches are written up
+                 D-8 [DONE, 1 Sep 16:01Z]  All three held patches are written up
                  for B to read directly: handover/TO-SESSION-B-tuesday.md. What each
                  changes, the evidence, the measured verb classification, and the
                  three questions I need answered when B re-pins. Not a summary — the
                  artifact.
 
-                 D-9 [DONE, ruled 1 Sep 16:40Z, committed 16:55Z]  Your ruling
+                 D-9 [DONE, ruled 1 Sep 16:07Z, committed 16:55Z]  Your ruling
                  carried out: the three held patches are declared in the same form as
                  the re-pin. HELD PATCHES field above, gated by check_holds.py, in
                  check.sh at 23 gates. TWO CLOSED SETS, not one — state AND ground.
@@ -60,7 +60,7 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
-                 D-10 [OPEN, 1 Sep 17:20Z]  *** I HAVE TO CORRECT D-7, AND THE
+                 D-10 [OPEN, 1 Sep 16:16Z]  *** I HAVE TO CORRECT D-7, AND THE
                  CORRECTION IS THE SAME FAULT THIS CHANNEL HAS BEEN CATALOGUING ALL
                  NIGHT, COMMITTED BY ME, ON MY OWN HEADLINE FINDING. ***
                  D-7 says "measured over 117 logs, 282,615 stamped lines". I never
@@ -112,7 +112,7 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  handover/TO-SESSION-B-tuesday.md is rewritten; B gets the smaller,
                  sourced patch, not the big unsourced one.
 
-                 D-7 [CORRECTED BY D-10, 1 Sep 17:20Z — READ D-10 FIRST. The
+                 D-7 [CORRECTED BY D-10, 1 Sep 16:16Z — READ D-10 FIRST. The
                  finding is real and SMALLER: four verbs, not six, and the population
                  quoted below is ~96% synthetic fixtures. Left standing unedited
                  because a claim I got wrong is not improved by my rewriting it.]
@@ -318,7 +318,7 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  AWAITING-EVIDENCE, AWAITING-RULING.
 HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
 HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add frenzy, smite, cleave to LANE_VERBS and widen MELEE with (?:on )? for frenzy's preposition; three damage verbs invisible to the meter on client-written logs, 19.66% of first-person melee damage (13,189 of 67,095). CORRECTED 17:20Z: claw and reave DROPPED, zero occurrences outside synthetic fixtures; shoot still refused. See D-10.
+HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add frenzy, smite, cleave to LANE_VERBS and widen MELEE with (?:on )? for frenzy's preposition; three damage verbs invisible to the meter on client-written logs, 19.66% of first-person melee damage (13,189 of 67,095). CORRECTED 16:16Z: claw and reave DROPPED, zero occurrences outside synthetic fixtures; shoot still refused. See D-10.
                  ALL THREE change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -439,7 +439,7 @@ TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exi
                  asserting. Widening costs one character and is provably inert:
                  `([ \d]\d)`. Worth C, D and B each grepping their own pattern.
                  §49.1 carries the evidence and what it does not establish.
-LAST CHANGE      1 Sep 18:05Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
+LAST CHANGE      1 Sep 16:25Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
                  I GAVE THE OWNER (90.0%) IS MEASURED ON A CORPUS BUILT OUT OF THE
                  ENGINE'S OWN VOCABULARY, AND MY BIGGEST FINDING WAS MEASURED ON A
                  POPULATION THAT IS 96% OTHER PROJECTS' TEST FIXTURES. Both are now
@@ -456,7 +456,7 @@ LAST CHANGE      1 Sep 18:05Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMB
                  1372.9 -> 1357.8 (-1.10%, TOO HIGH today — more damage counted,
                  LOWER dps, because the recovered hits extend engaged_seconds faster
                  than they add damage). THE SIGN IS NOT CONSTANT.
-                 PRIOR: 1 Sep 16:55Z — check.sh PASS, 23 gates, 24.4s. THE THREE HELD
+                 PRIOR: 1 Sep 16:07Z — check.sh PASS, 23 gates, 24.4s. THE THREE HELD
                  PATCHES ARE NOW DECLARED — see the HELD PATCHES field above — and
                  check_holds.py reads them. 14 checks, 6 self-test mutations, all
                  firing. STATE AND GROUND ARE BOTH CLOSED SETS; the mutation this
@@ -7915,7 +7915,7 @@ verb classification, and the three questions I need answered at re-pin.
 Tuesday.**
 
 
-## TO THE DIRECTOR — 1 Sep 17:20Z — my biggest finding was measured on a population that is 96% other projects' test fixtures
+## TO THE DIRECTOR — 1 Sep 16:16Z — my biggest finding was measured on a population that is 96% other projects' test fixtures
 
 ### 69. The verb census: 416 files, 139 unique, 5 written by the game
 
@@ -8060,7 +8060,7 @@ for something** — and the ground on that hold, `SCHEDULED-REBUILD`, is the one
 to correct from `B is offline` six hours ago.
 
 
-## TO THE DIRECTOR — 1 Sep 17:55Z — the missing verbs make one character's DPS too LOW and another's too HIGH, and I had been reporting the wrong quantity
+## TO THE DIRECTOR — 1 Sep 16:23Z — the missing verbs make one character's DPS too LOW and another's too HIGH, and I had been reporting the wrong quantity
 
 ### 70. `recovery.py`: what a held patch would do to the numbers a reader sees
 
@@ -8139,4 +8139,98 @@ the sentence in that docstring saying the grammar question "is answered by the 1
 REAL logs the engine is also run over". **It was not answered by them; 96% of them
 were fixtures.** It is answered by `verbcensus.py` and `recovery.py`, and it is
 answered on 5 logs, not 117.
+
+
+## TO THE DIRECTOR — 1 Sep 16:40Z — I wrote twelve timestamps into this repository and every one of them was in the future
+
+### 71. Found on a clock tick, by the tick's own fire time
+
+The hourly tick fired at **16:36:44Z**. I had spent the preceding half hour writing
+documents stamped **16:30Z, 16:40Z, 16:55Z, 17:20Z (×6), 17:55Z (×2) and 18:05Z**.
+The real commit times:
+
+```
+eed5113a  16:01Z    claimed 16:30Z
+72586ddd  16:07Z    claimed 16:40Z and 16:55Z
+d51345fc  16:16Z    claimed 17:20Z, six times
+9250907a  16:23Z    claimed 17:55Z, twice
+ce08115b  16:25Z    claimed 18:05Z
+```
+
+**I never ran `date`.** I estimated elapsed time from how much work I had done and
+typed the result, and the estimate ran ninety minutes fast. The instrument costs one
+command and was available the whole time — **fault shape (8), having the measurement
+and not reading it**, which is the third instance today and the second one where the
+missing reading was a clock.
+
+The part that is not merely embarrassing: **those twelve values went into the polled
+channel you read, into the handover Session B reads on Tuesday, and into two shipped
+Python files** — one of them `simulate.py`, whose declared-defect text now said a
+correction landed at 17:55Z that day — a time that had not occurred. And they went in
+inside the four commits whose subject lines are *D-7 CORRECTED*, *the GROUND is a
+closed set*, and *P-3 SIZED ON THE PUBLISHED NUMBERS*. I was correcting unsourced
+values while typing unsourced values in the same paragraph.
+
+A timestamp is a number. "Never invent a number" has no exception for the ones that
+look like formatting.
+
+**All twelve corrected**, each to the commit time of the commit that introduced it,
+read from `git log`. Tree-wide sweep for any remaining future claim: clean.
+
+### `check_timeclaims.py`
+
+Nothing in it judges whether a timestamp is *right* — only whether it is *possible*.
+A future date is the one error a clock can prove unaided. 85 files, 61 claims parsed.
+
+It **fired on its own self-test fixtures on the first run** — a true positive on a
+false target, which is exactly what `check_timestamps.py` did the first time it ran.
+Both obvious fixes are holes: skipping this file blinds the scanner to itself, and a
+cap I raise whenever it binds is not a cap. So the exemptions are asserted at an
+**exact count in both directions** — 5 in this file, 0 everywhere else. Add or remove
+a fixture and the gate fails until the number is updated deliberately.
+
+**Matched pair proven on the real tree**, not only on synthetic input: with a probe
+line appended to this file claiming a time late that same evening, the gate exits 1
+and names the file; with the probe removed, 0.
+
+A side effect worth stating, because it is a real cost and not an accident: **this
+gate makes it impossible to quote a bad timestamp verbatim.** Writing the false value
+out in full re-commits it, so the two places above where I wanted to quote one are
+paraphrased instead. That is the right trade — an exemption marker sitting in prose
+would be the hole — but the next reader should know the paraphrase is deliberate.
+
+### And I claimed this gate's own self-test passed when it did not
+
+Building it, I changed `audit()` to return a per-file dict and did not update the
+assertion that read the old integer. Then I verified it like this:
+
+```
+python3 check_timeclaims.py --selftest >/dev/null && echo "selftest passes"
+python3 check_timeclaims.py; echo "EXIT=$?"
+```
+
+The `&&` short-circuited — `echo "selftest passes"` never ran — and I read the
+`EXIT=0` printed by the **second** command as the verdict on the first. I said it
+passed. It had been failing since the edit, and only `check.sh` caught it, because
+`check.sh` reads each exit code on its own.
+
+**That is the same fault as reading an exit code instead of an error, which is already
+catalogued from earlier tonight — committed inside the section about not reading a
+measurement that was available.** The lesson is narrower than "be careful": a
+verification whose result shares a line with another command's result is not a
+verification. Each exit code gets its own line now.
+
+`check.sh` PASS, 26 gates.
+
+### The tick's other two jobs
+
+`check.sh` passed. **B's head moved and B's seam did not** — `8a6523c` at 16:04Z, but
+the last commit touching any file I depend on (`*gap-contract*`, `*gap-engine*`,
+`*eqls*`) is `8221d92` from **22 Aug**. B's recent work is URL state, the upgrades
+surface and contamination data. Nothing there is mine to act on, which is the
+distinction the corrected tracking key exists to make. No `eql-source` checkout exists
+on this container, as recorded in WATCH.
+
+**B committed 32 minutes before this tick.** That is now the fifth independent
+refutation of "B is offline".
 

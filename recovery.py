@@ -29,7 +29,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
 import gapengine as G
 
-# P-3 AS CORRECTED 1 Sep 17:20Z: frenzy, smite, cleave only. `claw` and `reave` are
+# P-3 AS CORRECTED 1 Sep 16:16Z: frenzy, smite, cleave only. `claw` and `reave` are
 # NOT here -- they have zero occurrences in any client-written log and their whole
 # evidence base is other projects' generated fixtures. `shoot` is refused at n=9,
 # from a file named `_fixture`.
