@@ -9008,3 +9008,89 @@ move every time** — a pattern narrowed to spare the documentation is a pattern
 also miss the real instance the documentation describes. The right move is to mark the
 example, not to weaken the reader. I only know that because I nearly did the other thing.
 
+
+## TO THE DIRECTOR — 1 Sep 22:10Z — the retirement arm, in the record properly, and the sweep refuted the hypothesis I started it with
+
+### 79. What the retirement arm is, since you asked for it stated rather than inferred
+
+**`simulate.py` reported a declared defect ONLY WHILE THE DEFECT WAS STILL FIRING.** The
+loop was `for k in sorted(failing & set(KNOWN_DEFECT))`. So the moment P-2 fixed D-6 and
+`auto_attempts` went 0/50 to 50/50, the declaration **stopped printing** and stayed in
+the source as a claim about this engine that was no longer true — with nothing red, and
+no output anywhere that mentioned it.
+
+**What it does now:** `retired = sorted(set(KNOWN_DEFECT) - failing)` is computed on
+every run, and a non-empty `retired` is a **failure**:
+
+> *STALE DECLARATION(S): the defect(s) named here NO LONGER FIRE. The declaration is now
+> a false claim about this engine. DELETE IT. A closed set whose entries never expire is
+> a list of things that were once true.*
+
+**Proven, not trusted.** `KNOWN_DEFECT` is empty now, so the arm has nothing to catch and
+would sit dark — the same trap as every other arm I built today. So the self-test
+declares a defect against a quantity that is demonstrably fine and requires it to be
+reported stale, then requires the check NOT to fire on a declaration that is still true.
+Both directions.
+
+**And the entry is gone.** P-2 retired D-6, so the dictionary is empty, and the comment
+where it stood says why the check exists: *it went silently stale for the ten minutes
+between the fix landing and my noticing.*
+
+### THE SWEEP, AND IT SAYS I WAS WRONG
+
+You told me this morning that the fault was *"one author with the right mechanism,
+applied once and not aimed at the neighbouring cases."* I went looking for that pattern
+in my own tree, expecting to find it. **The measurement mostly refutes it:**
+
+```
+simulate.py       KNOWN_DEFECT        retirement arm   YES  (today)
+check_holds.py    HELD-PATCH          end condition    YES  (today)
+check_paths.py    ABSOLUTE-PATH-EXEMPT                 YES  -- and STRONGER than mine:
+                                                       ANY outstanding exemption fails
+check_timeclaims  FUTURE-TIME-OK      exact 2-sided    YES  -- add or remove one, it fails
+check_timestamps  TIMESTAMP-EXEMPT    counted+capped   PARTIAL -> now fixed
+mailbox.py        AWAITING-REPLY                       NO, and genuinely uncheckable
+```
+
+**Four of six already had it, and `check_paths.py` had a stricter version than the one I
+built today** — it does not cap exemptions, it refuses to let any exist. I would have
+published "applied once, not aimed at neighbours" as a finding about my own tree and it
+would have been false.
+
+**I also nearly published a second false claim inside the same sweep.** My first probe
+showed a stale exemption failing to shelter a new violation, and I wrote that the hole
+"is not real" — from an exit code. Reading the actual output showed it failed for a
+completely different reason: `check_paths.py` fails on *any* exemption at all. **The
+verdict was right and my reason for it was wrong**, which is the fourth time today an
+exit code stood in for a diagnosis.
+
+### The one real gap, and it was narrow
+
+`check_timestamps.py` counted and capped its exemptions but let an **inert** one through:
+a `TIMESTAMP-EXEMPT` beside a line with no timestamp pattern passed forever. Measured
+before fixing — an inert marker on `INERT = "no regex here"` exited 0.
+
+It does not shelter anything today. It is a **standing grant nobody can justify**, sitting
+in the tree above whatever line gets written next. Now: *no exemption marker guards
+nothing*, with the matched pair — fires on a real inert marker, silent on the tree.
+
+**And that check immediately flagged its own definition.** `EXEMPT = "TIMESTAMP-EXEMPT"`
+contains the marker, as does the docstring naming it. **The third appearance of one law
+today, and this time it is the DEFINITION rather than an example.** The two fixes are not
+equal: excluding the file blinds the scanner to itself, which this repository has already
+been burned by. Splitting the literal — `"TIMESTAMP-" + "EXEMPT"` — keeps the reader at
+full strength and moves the example out of its way. **Mark the example; never weaken the
+reader.**
+
+### The one that stays open, declared rather than faked
+
+**`mailbox.py`'s `AWAITING-REPLY` has no retirement arm and cannot have one.** It retires
+when the peer answers, and I have no way to detect that: C answers by writing a file whose
+name I do not know in advance, or by sending a message that reaches me as conversation
+rather than as state.
+
+Both available proxies are worse than the gap. Keying on the peer's head moving retires a
+message every time C commits anything. Keying on elapsed time is a date, and a date is not
+a condition. **So it is marked `UNCHECKABLE` in the source with the reasoning, per your
+rule** — I retire these by hand, and a reader should not assume otherwise.
+

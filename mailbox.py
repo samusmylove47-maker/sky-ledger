@@ -35,7 +35,23 @@ MAILBOX = os.path.join(ROOT, "MAILBOX.md")
 # A message is open, answered, closed, or purely informational. Closed set, for the
 # same reason every other state in this repository is one: a free-text status is one
 # nobody can check.
+#
+# *** AWAITING-REPLY HAS NO RETIREMENT ARM AND I AM DECLARING THAT RATHER THAN FAKING
+# ONE. *** Every other declaration in this tree can be caught going stale: a KNOWN_DEFECT
+# that stops firing, a hold whose end condition is met, an exemption guarding nothing, a
+# poll record whose answer moved. This one cannot. `AWAITING-REPLY` retires when the PEER
+# ANSWERS, and I have no way to detect that -- C answers by writing a file whose name and
+# location I do not know in advance, or by sending a message that reaches me as
+# conversation, not as state.
+#
+# The available fakes are worse than the gap. Keying retirement on the peer's head moving
+# would retire a message every time C commits anything. Keying it on elapsed time is a
+# date, and a date is not a condition. So per the rule adopted from the Director: what
+# cannot be phrased as a check is marked UNCHECKABLE rather than given a proxy, and the
+# only honest handling is that I retire these by hand and a reader should not assume
+# otherwise.
 STATES = ("AWAITING-REPLY", "ANSWERED", "CLOSED", "FYI")
+RETIREMENT = "UNCHECKABLE -- retires when the peer answers, which I cannot detect"
 # What a poll actually established. UNREACHABLE is the whole point of the field.
 VERDICTS = ("NEW", "NOTHING-NEW", "UNREACHABLE")
 

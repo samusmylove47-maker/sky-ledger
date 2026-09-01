@@ -45,17 +45,42 @@ JS_RE = re.compile(r'=\s*/((?:[^/\\\n]|\\.)+)/[gimsuy]*\s*;')
 # lookup that succeeds on a name and returns a false answer about a role.
 # The exemption is explicit, greppable, and counted, and `audit` asserts it stays
 # rare rather than becoming a way to quiet the gate.
-EXEMPT = "TIMESTAMP-EXEMPT"
+# BUILT FROM PIECES SO THIS LINE IS NOT ITSELF A MARKER. The inert-exemption check
+# added below immediately flagged its own definition and the docstring that names it:
+# an instrument that reads a format cannot tell the DEFINITION of the format from an
+# INSTANCE of it -- the third appearance of that law today, after a documented
+# declaration declared itself and a quoted timestamp re-asserted itself.
+# The two available fixes are not equal. Excluding this file would blind the scanner to
+# itself, and a scanner that cannot see its own file is one this repository has already
+# been burned by. Splitting the literal keeps the reader at full strength and takes the
+# example out of its way -- mark the example, never weaken the reader.
+EXEMPT = "TIMESTAMP-" + "EXEMPT"
 
 
 def candidates(read, walk):
-    """Return ([(path, pattern)], [(path, pattern)]) -- tested, and exempt."""
-    out, exempt = [], []
+    """Return ([(path, pattern)], [(path, pattern)], [(path, line)]) -- tested, exempt,
+    and INERT: markers that guard nothing at all.
+
+    THE THIRD RETURN VALUE IS NEW AND IT CLOSES A NARROW HOLE. This gate counted and
+    capped its exemptions, which is most of the job -- but a marker sitting beside a
+    line that no longer contains a timestamp pattern passed unnoticed forever. Measured
+    before fixing: an inert marker on a line reading `INERT = "no regex here"` exited 0.
+    (The marker is not spelled out in this docstring for the reason given at its
+    definition above.)
+    An exemption that guards nothing is a permission with no reason. It does not shelter
+    anything today -- `check_paths.py` takes the stricter line that ANY outstanding
+    exemption fails, and that gate is right -- but it is a standing grant nobody can
+    justify, sitting in the tree waiting for the next line written beneath it.
+    """
+    out, exempt, inert = [], [], []
     for path in walk():
         body = read(path)
         if body is None:
             continue
         lines = body.split("\n")
+        # A marker earns its place only if the line it guards, or the next one, is
+        # something this gate would otherwise have tested.
+        guarded = set()
         pats = PY_RE.finditer(body) if path.endswith(".py") else JS_RE.finditer(body)
         for m in pats:
             p = m.group(1)
@@ -63,16 +88,30 @@ def candidates(read, walk):
                 continue
             n = body[:m.start()].count("\n")           # 0-based line of the match
             near = "\n".join(lines[max(0, n - 1):n + 1])
-            (exempt if EXEMPT in near else out).append((path, p))
-    return out, exempt
+            if EXEMPT in near:
+                exempt.append((path, p))
+                guarded.add(n if EXEMPT in lines[n] else n - 1)
+            else:
+                out.append((path, p))
+        for i, line in enumerate(lines):
+            if EXEMPT in line and i not in guarded:
+                inert.append((path, i + 1))
+    return out, exempt, inert
 
 
-def audit(cands, exempt=()):
+def audit(cands, exempt=(), inert=()):
     out = []
     # The exemption must stay a rarity that is read, not a switch that is used. Two
     # is the count today: the known-bad control below, and nothing else.
     out.append(("deliberate-control exemptions stay rare and named", len(exempt) <= 2,
                 f"{len(exempt)} exempt: {[p for p, _ in exempt]}"))
+    # AN EXEMPTION THAT GUARDS NOTHING IS A PERMISSION WITH NO REASON. Measured before
+    # this existed: an inert marker beside a line with no timestamp pattern exited 0
+    # and stayed forever.
+    out.append(("no exemption marker guards nothing", not inert,
+                f"{len(inert)} inert: {inert} -- the pattern it was written for is "
+                f"gone, so the grant is standing with nothing to justify it. Delete "
+                f"the marker."))
     # POSITIVE CONTROL FIRST, because a sweep that finds nothing passes every check
     # below it vacuously -- which is exactly how the Director's first sweep read as a
     # clean bill of health for four repositories.
@@ -125,16 +164,16 @@ if __name__ == "__main__":
     # R73: the file set actually opened, not the one intended.
     print(f"read {len(files)} .py/.js file(s) under {os.path.basename(ROOT)}/ "
           f"(skipping {sorted(SKIP_DIRS)})")
-    cands, exempt = candidates(reader, walker)
+    cands, exempt, inert = candidates(reader, walker)
 
     if "--selftest" not in sys.argv:
-        bad = show(audit(cands, exempt))
-        print(f"  {len(audit(cands, exempt))} checks over {len(cands)} pattern(s), "
+        bad = show(audit(cands, exempt, inert))
+        print(f"  {len(audit(cands, exempt, inert))} checks over {len(cands)} pattern(s), "
               f"{len(exempt)} exempt, {bad} failing")
         sys.exit(1 if bad else 0)
 
     print("SELFTEST -- the sweep must fail on a bad pattern and on its own blindness")
-    if show(audit(cands, exempt)):
+    if show(audit(cands, exempt, inert)):
         print("  the real tree does not pass"); sys.exit(1)
     print(f"  the real tree passes, {len(cands)} patterns")
     bad = 0
