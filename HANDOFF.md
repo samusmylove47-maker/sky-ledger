@@ -55,6 +55,14 @@ OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so
                  FOR DAYS. Derived from __file__ now; a clone with no shards FAILS
                  LOUDLY naming its own path. check_paths.py is the 21st gate, and it
                  caught THREE faults in itself before it was fit to ship.
+                 §61 — check_fresh.sh, THE RELEASE CHECK. I ran the fresh-clone test
+                 by hand three times tonight and it found three faults no in-tree gate
+                 could see. It is a script now: clone elsewhere, dataset removed,
+                 assert the clone reads ITS OWN data. Its control comes FIRST — if the
+                 clone ever lands in the source tree every arm passes and proves
+                 nothing, which is how §60 stayed hidden. PROVEN ABLE TO FAIL against
+                 the pre-fix model4 recovered from git. Deliberately NOT in check.sh:
+                 it clones and needs the network. Named in the README.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -7162,6 +7170,66 @@ clone with data files deleted       FileNotFoundError naming the clone's path
 ```
 
 `check.sh` PASS, **21 gates, 23.4s.**
+
+**35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
+dataset still needs a ruling.**
+
+---
+
+## 61. `check_fresh.sh` — the release check, because I ran it by hand three times
+
+Three faults today were **invisible to every in-tree gate** and were found the same
+way each time: clone the tree somewhere else, take away what the machine was quietly
+providing, and see what breaks.
+
+```
+§58  the raid dataset lived at an absolute scratchpad path, committed nowhere
+§59  making that absence tolerable left it FATAL one import downstream, at module scope
+§60  model4 hard-coded its repo root, so a clone with ZERO shards loaded 515 weapons
+     and 1,973 spells from ANOTHER TREE -- while fetch_shards.py verified the clone's
+     copies against their pins
+```
+
+I ran that by hand, three times. **A test I run by hand is a test the next regression
+escapes**, so it is a script.
+
+```
+sh check_fresh.sh
+  clone at /tmp/tmp.…/clone, source at /home/user/sky-ledger
+  ok   check.sh PASS with the dataset gone
+  ok   and the absence was DECLARED, not silent
+  ok   model4 failed on THIS clone's path, so it reads its own tree
+```
+
+**Its control comes first, and it is the one that matters.** If the clone ever lands in
+the source tree, every arm below passes and proves nothing — **which is exactly how §60
+stayed hidden for days.** So the script establishes the clone is elsewhere before
+trusting anything it says.
+
+**Proven able to fail, not merely written.** The third arm was run against the pre-fix
+`model4.py` recovered from git at `1e028355`, in a clone with its data files deleted:
+
+```
+IMPORTED -> REPO = /home/user/sky-ledger
+weapons 515  spells 1973  - all from another tree
+```
+
+The arm treats `IMPORTED` as failure, so it fires on the exact defect it was written
+for. *A guard is not a gate until something fails because of it.*
+
+**Deliberately not in `check.sh`.** It clones, it needs the network for the shards, and
+it takes ~23s. `check.sh` is the 23-second inner loop; this is the release check, and
+it is named in the README so `check_readme.py` keeps the reference honest.
+
+### The shape all three shared, stated once
+
+Every one was **an instrument reading a copy the consumer did not use, or a machine
+supplying something the repository never declared.** The in-tree gates all passed
+because they measured the thing that was there. **The only way to see what a machine is
+quietly providing is to take it away** — and the corollary is the sentence I want kept:
+*it is not enough to clone fresh on the machine that has the files.*
+
+`check.sh` PASS, 21 gates, ~23s. `check_fresh.sh` PASS.
 
 **35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
 dataset still needs a ruling.**

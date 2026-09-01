@@ -10,7 +10,8 @@ are **not in this tree** and the instructions further down assume they are.
 
 | | |
 |---|---|
-| `sh check.sh` | **the one entry point.** Validator self-test, committed claims, reproducers, shard pins, bundle contract, byte integrity, Python↔JS parity, fixture drift. ~15 s. |
+| `sh check.sh` | **the one entry point.** Validator self-test, committed claims, reproducers, shard pins, bundle contract, byte integrity, Python↔JS parity, fixture drift, measured-block populations, self-hit guard, timestamp tolerance, absolute paths. 21 gates, ~23 s. |
+| `sh check_fresh.sh` | **the release check, deliberately not in `check.sh`.** Clones this tree elsewhere, removes the container-local dataset, and asserts the clone reads its own data files. Three faults on 1 Sep were invisible to every in-tree gate; this is the one that sees them. Needs the network. ~23 s. |
 | `HANDOFF.md` | the project log and the outbound channel. A STATUS block in the first 30 lines says what changed and what is unresolved; §§1–41 are append-only history and retractions are struck in place, never deleted. |
 | `SOURCING.md` | the six-tier sourcing standard. Provenance attaches to a **claim**, not a page, and `verified` is derived — never typed. |
 | `model4.py` | the trio model. Every knob is a module global with its source in a comment; a knob with no source says so. |
