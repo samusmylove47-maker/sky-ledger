@@ -242,6 +242,46 @@ prints the count of files it opened. `HANDOFF.md` §67 and §69.
 
 ---
 
+## P-4 — `dps_window_note` does not say that damage shields are excluded
+
+**Added 1 Sep 17:35Z** after Session C's log-parsing document
+(`samusmylove47-maker/EQLSAuras @ a9a1a0f`, `docs/FOR-SESSION-E-LOG-PARSING.md`).
+
+**Change:** one sentence appended to `measured.dps_window_note`.
+**File:** `gapengine.py`, and the mirror.
+
+C measured **178,267 damage-shield lines** across their corpus, fully attributed to a named
+owner, and observed that meters usually discard them silently. I checked mine: the engine has
+**no damage-shield handling of any kind** — no pattern, no exclusion, no note — and
+`dps_window_note` names only the engagement rule. **9,488 such lines are in the owner's own
+Shara log**, so this is not hypothetical.
+
+```
+"<target> is pierced by <Owner>'s thorns for N points of non-melee damage."   9,488  Shara's log
+"... is pierced by (You|your) ..."                                                0  ALL 139 LOGS
+```
+
+**A player's own damage shield is never written in the first person.** The owner is always named
+by character name — `by Avenrae's thorns` appears 2,940 times in a log where Avenrae is a
+groupmate, not the logging player. So a `^You`-anchored engine cannot attribute the logging
+player's own damage shield **as a matter of the game's grammar, not as an oversight**, and no
+widening of the `^You` patterns reaches it.
+
+**Impact on today's numbers: nil.** Shara ran no damage shield in that log, so nothing is being
+under-counted right now. What is wrong is that `dps_window_note` claims to say what the window
+is, and a reader comparing this meter against one that *does* count damage shields has no way to
+learn from our output why the two disagree. That is the same fault as `measured: {}` for an
+unreadable file: a true statement standing where a fuller one belongs.
+
+**What it changes for you:** the string in `measured.dps_window_note` gets longer. No computed
+value moves. It is a bundle bump only because the string is part of what you render.
+
+**Fixing the attribution itself is NOT in this patch** — that needs a `self` parameter naming the
+logging character, which is a new mechanism and is with the Director as D-11, not something I
+will ship on my own reading.
+
+---
+
 ## What I need from you when you re-pin
 
 1. **Say which of the three you take.** They are independent; P-3 alone is defensible
@@ -251,7 +291,10 @@ prints the count of files it opened. `HANDOFF.md` §67 and §69.
 3. **A `cleave` ceiling** — if the rebuild has evidence for one, tell me and I will
    use it. Otherwise `cleave` ships counted-but-uncapped and the engine says so.
    (`reave` is gone from this patch entirely — see the correction in P-3.)
-4. **NEW: do you have a capture with `claw` or `reave` in it?** I dropped both because
+4. **P-4 is one sentence and you may not want the bump for it.** If you would rather take
+   P-1/P-2/P-3 and leave the note until a later re-pin, say so — it changes no number and I will
+   not argue for it.
+5. **NEW: do you have a capture with `claw` or `reave` in it?** I dropped both because
    every occurrence I could find is in another project's generated fixture. If the
    rebuild has a real client log with either, that is evidence I do not have and I
    will put them back on it.

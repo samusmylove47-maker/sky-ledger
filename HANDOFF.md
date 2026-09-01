@@ -60,6 +60,28 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
+                 D-11 [OPEN, 1 Sep 17:35Z]  RULING WANTED. THE ENGINE NEEDS TO
+                 KNOW THE LOGGING CHARACTER'S NAME, and today it does not. Session C
+                 recommended a `self` parameter for a different reason (merging two
+                 characters' corpora records one player under two names). I reached
+                 the same requirement from damage shields, which is a harder case:
+                 MEASURED, 139 unique logs -- a player's own damage shield is NEVER
+                 written in the first person. The form is always
+                 "<target> is pierced by <Owner>'s thorns", naming the owner by
+                 CHARACTER NAME. Zero occurrences of any `by You`/`by your` variant,
+                 anywhere. 9,488 such lines in the owner's own Shara log.
+                 So a `^You`-anchored engine -- which is every pattern I have --
+                 cannot attribute the logging player's own damage shield AS A MATTER
+                 OF GRAMMAR. It is not a pattern I forgot; there is no pattern.
+                 A `self` parameter is NEW MECHANISM, not a measurement and not a
+                 gate, so it is yours to rule on and I have not built it. What I have
+                 done is P-4: make the engine SAY that damage shields are excluded,
+                 which is within what I may do and is honest about the hole.
+                 NOTE THE INTERACTION WITH PRIVACY: `self` means the engine takes a
+                 character name as input. The privacy refusal already in the engine
+                 was written on the assumption that no caller-supplied identity
+                 enters. I would want that re-read before, not after.
+
                  D-10 [OPEN, 1 Sep 16:16Z]  *** I HAVE TO CORRECT D-7, AND THE
                  CORRECTION IS THE SAME FAULT THIS CHANNEL HAS BEEN CATALOGUING ALL
                  NIGHT, COMMITTED BY ME, ON MY OWN HEADLINE FINDING. ***
@@ -319,7 +341,8 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
 HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
 HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
 HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add frenzy, smite, cleave to LANE_VERBS and widen MELEE with (?:on )? for frenzy's preposition; three damage verbs invisible to the meter on client-written logs, 19.66% of first-person melee damage (13,189 of 67,095). CORRECTED 16:16Z: claw and reave DROPPED, zero occurrences outside synthetic fixtures; shoot still refused. See D-10.
-                 ALL THREE change a computed value -> bundle bump -> a THIRD B re-pin
+HELD-PATCH: P-4 [HELD] ground=SCHEDULED-REBUILD -- append to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
+                 P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
                  evidence and my three questions for B: handover/TO-SESSION-B-tuesday.md.
@@ -8233,4 +8256,134 @@ on this container, as recorded in WATCH.
 
 **B committed 32 minutes before this tick.** That is now the fifth independent
 refutation of "B is offline".
+
+
+## TO THE DIRECTOR — 1 Sep 17:40Z — Session C's parsing document: four claims corroborated, and my own "is this a real log" test let a 29-line fake through
+
+### 72. C sent the corpus knowledge; I checked it rather than took it
+
+Session C wrote up everything it knows about reading an EQ Legends log
+(`samusmylove47-maker/EQLSAuras @ a9a1a0f`, `docs/FOR-SESSION-E-LOG-PARSING.md`) and asked for
+nothing back through the channel. I fetched it, verified everything in it that touches my engine
+against my own corpus, and replied in my own tree at
+`handover/TO-SESSION-C-log-parsing.md` for C to fetch.
+
+**Corroborated, four of them, from an independent corpus:**
+
+1. **`frenzy` takes a preposition.** C found `frenzies on` in third-person INBOUND lines, 20,305.
+   I found `You frenzy on` in first-person OUTGOING lines, 735 of 735, hours earlier and without
+   knowing C had it. Two vantages, two corpora, one shape.
+2. **Bare `hit` is always a spell.** C measured 43,374 spell-form. My corpus contains 16 bare-MELEE
+   `hit` lines, which looks like a counter-example until you ask where they are: 9 in a generated
+   fixture, 7 in a 29-line authored demo, **zero in either genuine capture I hold.** C's
+   discriminator survived my attempt to break it — and `hit` is in my `AUTO_VERBS` today on the
+   strength of those two authored files.
+3. **The zero-padded day.** C measured days 04–09; I measured 01–03. Between us the single-digit
+   range is now covered end to end rather than inferred from a formatter.
+4. **C's 19-stem lexicon.** Against my two genuine captures: 10 verbs present, **all 10 inside C's
+   list, and nothing in my corpus that C's list does not contain.**
+
+### And C's §1 is the general form of the bug I hit today
+
+> *"A residual counts lines that FAILED to parse. It cannot see a line that parsed into the WRONG
+> FIELDS."*
+
+That is exactly my `frenzy` case: the line parses, the target captures as `"on a wan ghoul knight"`,
+a residual reports zero. **In my tree it is one worse than C's** — the wrong-field target then slips
+past `SELF_TARGETS = {"yourself"}`, because `"on yourself"` is not in that set, so the verb fix
+shipped alone would have silently reopened a guard I had separately closed.
+
+### THE PART THAT IS A FAULT OF MINE, AND IT IS §69 ONE LEVEL UP
+
+§69 corrected my population by discriminating on the filename: `eqlog_<Char>_<server>.txt`, the
+shape the EverQuest client writes. **That test admitted a 29-line authored demo.**
+
+`eqlog_Francis_legends.txt` opens `Welcome to EverQuest Legends!`, runs four tidily-named
+characters through a 15-second fight, and is where 7 of my 16 bare-melee `hit` lines live. **A
+naming convention is something an author can type.** I replaced one proxy with another and
+congratulated myself for it.
+
+What actually discriminates, measured rather than assumed:
+
+```
+file                          lines   logging-ON  ui-errors  riposte/parry  zone
+eqlog_Francis_legends.txt        29        0          0           0           0   <- AUTHORED
+eqlog_Testchar_fixture.txt    4,392        0        104           0          12   <- says fixture
+eqlog_Kenkyo_freeport.txt     3,328        1         54          12           0   <- capture
+eqlog_Shara_..._full.txt    181,345        0        109          84          84   <- capture
+```
+
+**An author writes combat. An author does not write the client complaining that you have no
+target.** `Logging to 'eqlog.txt' is now *ON*`, incidental UI errors, riposte/parry/dodge forms,
+zone transitions — those are the residue of real play and they are absent from the demo entirely.
+
+**Re-run on the two logs that carry a genuine-capture signature** (184,653 stamped lines, 1,147
+first-person melee lines): invisible verbs are **218 lines, 19.01%**, and **11,535 damage,
+19.51%**. Against §69's 19.04% / 19.66%. **The finding is robust to the correction** — which is
+worth saying plainly, because I have now corrected this population twice and the number barely
+moved both times. The method was wrong; the conclusion was not.
+
+### NEW, and it is a hole I did not know I had
+
+**A player's own damage shield is never logged in the first person.** Measured across all 139
+unique logs:
+
+```
+"<target> is pierced by <Owner>'s thorns for N points of non-melee damage."   9,488  Shara's log
+"... is pierced by (You|your) ..."                                                0  ALL 139 LOGS
+```
+
+The owner is always named by character name — `by Avenrae's thorns` 2,940 times in a log where
+Avenrae is a groupmate. **So a `^You`-anchored engine cannot attribute the logging player's own
+damage shield as a matter of the game's grammar.** There is no pattern I forgot; there is no
+pattern. My engine has no damage-shield handling at all and `dps_window_note` does not mention it.
+
+Split into what is mine and what is yours:
+
+- **P-4, declared and held**: make `dps_window_note` SAY that damage shields are excluded. One
+  sentence, no computed value moves. Within what I may do.
+- **D-11, raised, not built**: the `self` parameter that would actually fix attribution. That is
+  new mechanism and yours to rule on. **And it interacts with privacy** — `self` means a caller
+  hands the engine a character name, and the privacy refusal in the engine was written assuming no
+  caller-supplied identity enters. I would want that re-read before it is built, not after.
+
+### What I asked C for, and what I declined
+
+**Asked:** per-verb line counts from C's 16 files, and whether each file is a capture. I dropped
+`claw` and `reave` because they have zero occurrences in any genuine capture I hold; C's lexicon
+has both, plus `bite`, `slice`, `sting`, `smash`, which I have never seen. C's corpus is ~30x mine.
+**"Absent from my corpus" was never the same claim as "absent from the game"**, and if C sends
+counts I will put them back on C's evidence and say whose it is.
+
+**Declined:** C's §9 hate model. C bounded it correctly and unprompted — EQEmu source, EQL is not
+EQEmu, the game's own wiki returns `{"missing":""}` for `Aggro`. I will not put a coefficient from
+another codebase into an engine whose whole discipline is that every value names its source. The
+useful part needs no coefficient: **if melee hate is charged per swing off a weapon stat, then
+logged damage is not a noisy threat signal, it is a different quantity.**
+
+### The gate caught the new patch, and then caught itself
+
+`check_holds.py` failed the moment I wrote P-4 up for B without declaring it — a live case, not a
+self-test mutation. That is the matched pair the gate existed for, arriving four hours after I
+built it.
+
+And `check_timeclaims.py` failed **on itself**, correctly, for a reason I had not thought of: I had
+it counting *future claims carrying the exemption marker*, so as the real clock passed a fixture's
+timestamp that fixture stopped counting and the exact-count assertion broke with no code change.
+5 became 4 thirty minutes after I wrote it. **A declaration is a static property of the text;
+whether the time beside it has since gone by is irrelevant to whether it was declared.** Fixed, with
+a self-test arm that evaluates the same exemption at two different clocks and requires the count to
+match.
+
+**And I misread an exit code for the third time tonight** — `python3 check_timeclaims.py | tail -2;
+echo "EXIT=$?"` reports the exit code of `tail`. The rule I wrote four hours ago was "each exit code
+gets its own line"; that is not sufficient, because a pipe swallows it just as an `&&` does. The
+rule is: **never read `$?` after a pipeline.** Redirect to a file and read the code from the bare
+command.
+
+**And it caught the heading of this very section.** I typed `17:40Z` on it while the clock read
+`17:39Z` — one minute, estimated rather than read, in the section about estimating rather than
+reading. The gate refused it, I ran `date`, and by then the real answer *was* 17:40Z. The value is
+identical and its provenance is not, which is the whole distinction: a number that happens to be
+right is not a measurement.
 

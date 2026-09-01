@@ -27,6 +27,10 @@ MONTHS = {m: i for i, m in enumerate(
     "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), 1)}
 
 # The shape this repository writes: `1 Sep 16:16Z`, `31 Aug 17:34Z`.
+# NO YEAR IS PRESENT, so the current year is assumed. Consequence, stated rather than
+# discovered later: a claim about a PRIOR year reads as this year and can look future.
+# That direction is safe here -- it can only ever raise a false alarm a human resolves,
+# never hide a real one -- but it is a limit, not an absence of one.
 CLAIM = re.compile(r"\b(\d{1,2}) (" + "|".join(MONTHS) + r") (\d{2}):(\d{2})Z")
 
 # A deliberate future reference declares itself and is counted -- the same convention
@@ -41,7 +45,7 @@ CLAIM = re.compile(r"\b(\d{1,2}) (" + "|".join(MONTHS) + r") (\d{2}):(\d{2})Z")
 # number, the gate fails and I have to look.
 EXEMPT = "FUTURE-TIME-OK"
 SELF = os.path.basename(__file__) if "__file__" in dir() else "check_timeclaims.py"
-EXEMPT_HERE = 5       # the self-test fixtures below, exactly
+EXEMPT_HERE = 8       # the self-test fixtures below, exactly
 EXEMPT_ELSEWHERE = 0  # no document in this tree has a legitimate future claim yet
 
 SCAN = (".md", ".py", ".sh", ".js")
@@ -63,14 +67,23 @@ def claims(text, year):
 
 
 def audit(files, now):
-    """files: list of (path, text). Returns (rows, {path: exempt_count})."""
+    """files: list of (path, text). Returns (rows, {path: declared_exemptions}).
+
+    THE EXEMPTION COUNT IS DELIBERATELY NOT TIME-DEPENDENT, and the first version of
+    this function got that wrong. It counted future claims CARRYING the marker, so as
+    the real clock passed a fixture's timestamp that fixture stopped counting and the
+    exact-count assertion failed on its own, with no code change -- 5 became 4 thirty
+    minutes after I wrote it, and the gate caught itself. A declaration is a static
+    property of the text; whether the time beside it has since gone by is irrelevant
+    to whether it was declared. So: count every claim on a marked line, past or
+    future."""
     rows, exempt = [], {}
     for path, text in files:
         for t, line, ex in claims(text, now.year):
-            if t <= now:
-                continue
             if ex:
                 exempt[path] = exempt.get(path, 0) + 1
+                continue
+            if t <= now:
                 continue
             rows.append((path, t, line))
     return rows, exempt
@@ -124,6 +137,19 @@ if __name__ == "__main__":
         chk("every claim on a line is checked, not just the first", len(r) == 2, f"{r}")
         r, _ = audit([("f.md", "31 Feb 10:00Z is not a date")], fake)
         chk("an impossible date is skipped, not crashed on", not r, f"{r}")
+        # THE ONE THIS FUNCTION WAS REWRITTEN FOR: an exemption must not expire.
+        # Same year deliberately: `claims()` assumes the CURRENT year (the repo writes
+        # `1 Sep 16:16Z` with no year), so a "2 Sep" claim read in Jan 2027 parses as
+        # Sep 2027 and is future again. My first version of this check used Jan 2027
+        # and failed for that reason -- the test was wrong, not the code.
+        past = datetime.datetime(2026, 12, 31, 0, 0, tzinfo=datetime.timezone.utc)
+        a = audit([("f.md", f"held 2 Sep 09:00Z {EXEMPT}")], fake)[1]  # FUTURE-TIME-OK
+        b = audit([("f.md", f"held 2 Sep 09:00Z {EXEMPT}")], past)[1]  # FUTURE-TIME-OK
+        chk("a declared exemption is counted the same after its time has passed",
+            a == b == {"f.md": 1}, f"before {a} after {b}")
+        chk("an unmarked PAST claim is still not an error",
+            not audit([("f.md", "landed 2 Sep 09:00Z")], past)[0],  # FUTURE-TIME-OK
+            "a past time fired")
         print(f"  {bad} self-test checks failed")
         sys.exit(1 if bad else 0)
 
