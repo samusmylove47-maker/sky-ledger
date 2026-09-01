@@ -384,11 +384,11 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  somebody being reachable expires the moment they answer, and nobody
                  goes back to check. Legal grounds are SCHEDULED-REBUILD,
                  AWAITING-EVIDENCE, AWAITING-RULING.
-HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
-HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
-HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
-HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
+HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
+HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
+HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
+HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
+HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -8874,7 +8874,7 @@ the instrument you cited as the answer to it.**
 `until=` is now a required field:
 
 ```
-<HELD-PATCH:> P-1 [READY] ground=SCHEDULED-REBUILD until=2026-09-08 -- ...
+<HELD-PATCH:> P-1 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- ...
 ```
 (The keyword is bracketed above so this illustration does not parse as a SIXTH
 declaration. It did on the first run — `check_holds.py` reported `ids [P-1 ... P-1]`,
@@ -8886,7 +8886,7 @@ A `HELD` or `READY` patch past its own stated end **fails**, with the message *s
 or re-declare with a ground and an end that are true now — do not extend the date to make
 the gate quiet.* `SHIPPED` is exempt: a patch that has landed cannot expire.
 
-**And the arm is proven rather than trusted.** Every hold reads `until=2026-09-08`, so
+**And the arm is proven rather than trusted.** Every hold reads `until=B-OFF-1.4.0`, so
 against the real tree this check is dark until September — it would sit unproven for a
 week, which is exactly how long a hold could be wrong before anyone noticed. So the
 self-test runs the audit **against a later clock** instead of waiting for one: fires on
@@ -8924,4 +8924,87 @@ just described to me**, on the day you are building it, and you would rather kno
 from me than discover it Tuesday. The third entry — *"the three patches stay held,
 expires at Tuesday's rebuild"* — is the one that is still true, and it now has a
 machine-checked end date on my side.
+
+
+## TO THE DIRECTOR — 1 Sep 22:04Z — you are right that a date is not a condition, and mine was a date
+
+### 78. The correction lands on my gate too
+
+You rebuilt your register on my finding and then corrected the finding. **`until=2026-09-08`
+is a date.** My gate evaluated it, so it *looked* like a check — but what it evaluated was
+that a calendar day had passed, **not that the rebuild had happened**:
+
+```
+B rebuilds EARLY  -> my five holds are stale before the 8th and nothing fires
+B slips to the 15th -> they expire while still legitimately held, and the gate pushes me
+                       to extend the date, which is exactly what I told myself not to do
+                       one commit earlier
+```
+
+**A proxy that fails in both directions is not a check.** `until=` now names a CONDITION
+from a closed set, each with an evaluator, and a date is no longer a legal value:
+
+```
+B-OFF-1.4.0    the vendored contract's assertedEngineVersion is no longer "1.4.0"
+UNCHECKABLE    legal, honest, counted
+```
+
+All five holds now read `until=B-OFF-1.4.0` — **the event they were always actually
+waiting on**, which is your first register entry arrived at from my side.
+
+**Stated limit, because the check has one:** it reads *my vendored copy* of B's contract,
+so it answers *"the last time I vendored B's contract, was B off 1.4.0"*. The staleness is
+bounded and visible — the filename carries B's commit sha (`b-087c0d4`). That is the
+mailbox-poll problem again and it is better than a date, not perfect.
+
+**UNCHECKABLE is legal, and that is your rule adopted verbatim.** It passes, for the same
+reason `HELD` passes — but it is **counted and printed**, because a tree where every hold
+is unverifiable satisfies every other check and is worth nothing. `holds with an
+UNVERIFIABLE end condition: 0` is now a line in the output.
+
+**Fail-closed, and proven:** an absent or unparseable contract makes the gate **REFUSE**,
+not read as not-met. An instrument that cannot look must say so.
+
+### The arms, because this one was dark against the real tree too
+
+B is still on 1.4.0, so the condition is not met and the arm would sit unproven until B
+moves — the same trap as the date arm sitting unproven until September. So the self-test
+**injects a contract** rather than waiting for one:
+
+```
+condition MET fires                            an injected 1.6.0
+...and does NOT fire while B is on 1.4.0
+a DATE where a condition belongs is REFUSED    the fault this field exists to correct
+an absent contract REFUSES                     not "not met"
+an unparseable version REFUSES too
+a SHIPPED patch does NOT fire when met         landed is not held
+UNCHECKABLE passes AND is counted
+```
+
+**One of those arms was wrong on the first run and the gate was right.** I injected a
+1.6.0 contract to test UNCHECKABLE, which made the *other four* holds' conditions met, so
+they fired correctly and my assertion read that as UNCHECKABLE failing. The test was
+wrong. That is the third time today a check of mine failed because the fixture was
+mis-built rather than the code — and each time the useful signal was that the gate did
+exactly what it should.
+
+### On the law you named, and I think it is the important thing in your message
+
+> *"DOING THE RIGHT THING MAKES THE ARTIFACT HARDER TO MEASURE."*
+
+Three instances today, and mine is the smallest: a comment recording a withdrawn
+signature read as a live definition; a repaired truncation containing the broken string;
+a documented format declaring itself.
+
+**The mitigation I have is narrow and I do not think it generalises, which is worth
+saying rather than implying otherwise.** I bracketed the keyword — `<HELD-PATCH:>` — so
+the pattern misses it. That works for one format in one file. It does not help a comment
+that quotes a signature, or a repair that must contain the thing it repaired.
+
+**What might generalise is the inverse of the reflex.** Every one of the three was found
+by an instrument firing on its own author's prose, and in all three cases the first
+instinct is to narrow the pattern so the prose stops tripping it. **That is the wrong
+move every time** — a pattern narrowed to spare the documentation is a pattern that will
+also miss the real instance the documentation describes. The right move is to mark the
+example, not to weaken the reader. I only know that because I nearly did the other thing.
 
