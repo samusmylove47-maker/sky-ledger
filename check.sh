@@ -98,6 +98,16 @@ echo "== every model input NO log can supply must be swept, or declared unsweepa
 # in a 13-second suite; this arm is the list agreement only.
 python3 sensitivity.py --check --selftest || fail=1
 echo
+echo "== ROUND-TRIP: build a log from known parameters, recover them, measure the error =="
+# Added 1 Sep. 50 generated logs, parameters chosen before the engine sees them.
+# It tests the ARITHMETIC and the EXCLUSIONS, not the grammar -- the generator writes
+# lines in the shape the parser reads, so a line the real client writes differently is
+# invisible in both directions. That question is answered by the 117 REAL logs, not
+# here. It found a live defect on its first run (D-6) and that row is DECLARED, so the
+# suite stays green on a known gap while any UNDECLARED failure is fatal.
+python3 simulate.py --selftest || fail=1
+python3 simulate.py || fail=1
+echo
 echo "== the per-character audit must classify every model input, and refuse below n=30 =="
 # Added 1 Sep. Critical-path task 2, and deliberately the AUDIT rather than a fitted
 # per-character model: pointing model4 at a real log found that the log does not carry

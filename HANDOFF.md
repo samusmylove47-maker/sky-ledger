@@ -42,6 +42,17 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  I verified the repository is PUBLIC (visibility: public) before
                  deciding, because the ruling turns on publication and not on access.
 
+                 D-6 [OPEN, 1 Sep 15:45Z]  A LIVE ENGINE DEFECT, found by the
+                 round-trip simulator on its FIRST RUN. `_lanes` counts
+                 `You hit yourself` as an AUTO-ATTACK ATTEMPT: `hit` is in AUTO_VERBS
+                 and `_lanes` reads the raw events, so the self-target guard I added
+                 to `_hits` on 1 Sep never reached it. auto_attack_attempts is
+                 inflated and melee_seconds' run set can be extended by a self-hit
+                 second. ZERO instances in 189,460 lines of real log, so impact today
+                 is nil. HELD with D-2, same reason: the fix changes engine behaviour
+                 and B is offline. Two held patches now; tell me when the seam can
+                 take both and they go together in one bump.
+
                  D-5 [OPEN, 1 Sep 15:25Z]  YOUR "NAME ANYTHING ELSE ONLY YOU CAN
                  REPRODUCE" — I found one AN HOUR OLD, in the finding I published
                  just before your message. §62 and §63 rest on 117 logs, and most of
@@ -7493,3 +7504,108 @@ it of everyone before the site goes out.
 
 **35.5, Call of Flame and the stance stay BLOCKED. Days 01–03 and the dataset are
 CLOSED.**
+
+---
+
+## 66. Round-trip accuracy: 90.0%, and the missing 10% is a real bug the test found
+
+The owner asked whether the tool is finished and, if so, to simulate its accuracy.
+**It is not finished, and "accuracy" needs three different answers**, so the first
+thing this section does is separate them.
+
+```
+1  does the meter COUNT correctly?          simulable   -> 90.0%, below
+2  does the meter READ EverQuest correctly? NOT simulable -- see the caveat
+3  does the MODEL predict EverQuest?        already published: 4.59x off
+```
+
+### What was simulated
+
+`simulate.py` builds a log from parameters chosen **before the engine sees anything** —
+engagement count and durations, crit rate, even-damage share, lane rate, misses,
+killing blows, self-damage in both shapes, spells — then runs `gap_engine` and measures
+how far what comes back is from what went in. 50 generated logs, 10 quantities.
+
+```
+quantity                    n   exact   max rel err
+auto_attempts              50   0/50        0.0326   <- DECLARED DEFECT, D-6
+crit_rate                  50  50/50        0.0000
+damage_dealt               50  50/50        0.0000
+engagements                50  50/50        0.0000
+hits_counted               50  50/50        0.0000
+killing_blows              50  50/50        0.0000
+lane_attempts              50  50/50        0.0000
+self_damage_excluded       50  50/50        0.0000
+spell_damage_total         50  50/50        0.0000
+spell_landings             50  50/50        0.0000
+
+EXACT RECOVERY: 450 of 500 quantity-instances -- 90.0%
+```
+
+**Nine of ten quantities recover exactly. The tenth is a live engine bug this file
+found on its first run.**
+
+### THE CAVEAT THAT GOVERNS THE NUMBER
+
+**This tests the arithmetic and the exclusions. It does NOT test the grammar.** The
+generator writes lines in the same shape the parser reads, so **a line the real client
+writes differently is invisible to this file in both directions** — that is the
+`rank.py` stub-oracle fault and it cannot be designed away inside a simulation. It is
+answered by running the engine over the **117 real logs**, not here. Anyone quoting
+"90%" without that sentence is quoting a number I did not measure.
+
+### What the first three runs found — three defects, and only one was the engine's
+
+1. **Killing blows, 5/50.** My generator put the killing blow at a second the
+   auto-attack loop also lands on, so two hits shared the death second and the engine —
+   **correctly, by its documented same-second-same-target rule** — marked both. **The
+   generator was wrong.** Fixed by removing the ambiguity rather than relaxing the
+   expectation, which would have hidden the rule.
+2. **`crit_rate`, 2/50.** My truth divided auto-attack crits by a denominator that also
+   counted lane hits. **Two populations, one ratio — in the harness written to check
+   exactly that.** And once corrected, a residual 0.56% was **entirely the engine's
+   documented 4-decimal rounding**: I was comparing numbers held to different precision
+   and calling the difference an error. Both harness defects.
+3. **`auto_attempts`, 0/50 — THE ENGINE.** `_lanes` counts `You hit yourself` as an
+   auto-attack attempt. `hit` is in `AUTO_VERBS`, `_lanes` reads the raw events, and
+   **the self-target guard I added to `_hits` on 1 Sep never reached it.** Confirmed on
+   a four-line probe: two real swings and two self-hits report `auto_attack_attempts:
+   3`. `auto_attack_attempts` is inflated and `melee_seconds`' run set can be extended
+   by a self-hit second.
+
+**Zero instances in 189,460 lines of real log**, so today's impact is nil — the same
+shape as the original self-hit hole. **Held with D-2**: it changes engine behaviour, B
+is offline, and two held patches should go in one bump when the seam can take them.
+
+### The controls, because a round trip that scores 100% proves nothing
+
+A harness can agree with itself. Three broken engines must score worse, and do:
+
+```
+killing blows NOT excluded          350/500 vs 450
+self-damage counted as output       150/500 vs 450
+engagement gap 15s -> 600s          400/500 vs 450
+a NEW failing quantity is reported as UNDECLARED, not absorbed   ok
+```
+
+That last one guards the declaration itself: `auto_attempts` is declared so the suite
+stays green on a known gap, and **any undeclared failure is fatal.** Remove the entry
+when the fix ships and the run fails until it does.
+
+### Is the tool finished?
+
+**No, and here is the honest register.**
+
+```
+gapengine.py   1.5.0, shipped, B is consuming 1.4.0.  Counts correctly to 90%
+               with one declared defect. Grammar unvalidated against the client.
+rank.py        ships, 18 self-tests -- all against a stub oracle I wrote.
+               Only the 4 R81 vocabulary checks can disagree with me.
+model4.py      publishes a ceiling 4.59x the measured median. Not a prediction.
+percharacter.py  the audit: a log supplies at most 6 of 13 model inputs.
+                 Per-character MODELLING is not built and cannot be validated
+                 until the stance is calibrated.
+```
+
+**35.5, Call of Flame and the stance stay BLOCKED. D-2 and D-6 are held patches
+awaiting a seam window.**
