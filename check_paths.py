@@ -83,7 +83,12 @@ def audit(bad, ok):
                 bool(frag), f"probe -> {frag.group(1) if frag else None}"))
     out.append(("no committed file hard-codes an absolute path", not bad,
                 "; ".join(f"{p}:{n} {lit}" for p, n, lit in bad[:4])))
-    out.append(("declared exemptions stay rare and named", len(ok) <= 3,
+    # CAP TIGHTENED TO 0 on 1 Sep 2026. The one exemption this file ever carried was
+    # residual.py's scratchpad path, and the dataset is committed now, so there is
+    # nothing left to exempt. A cap left at 3 after the last exemption is spent is a
+    # budget nobody is watching -- and the exemption mechanism has already, once,
+    # passed a real defect by blindness rather than by declaration.
+    out.append(("no exemptions are outstanding", len(ok) == 0,
                 f"{len(ok)} exempt: {[(p, n) for p, n, _ in ok]}"))
     return out
 
@@ -130,9 +135,9 @@ if __name__ == "__main__":
     hit = "no committed file hard-codes an absolute path" in got
     print(f"  [{'ok' if hit else 'FAIL'}] the pre-fix model4.py literal is caught")
     n += 0 if hit else 1
-    got = {x for x, g, _ in audit(bad, ok + [("a", 1, "/x")] * 4) if not g}
-    hit = "declared exemptions stay rare and named" in got
-    print(f"  [{'ok' if hit else 'FAIL'}] a growing exemption list is caught, not absorbed")
+    got = {x for x, g, _ in audit(bad, ok + [("a", 1, "/x")]) if not g}
+    hit = "no exemptions are outstanding" in got
+    print(f"  [{'ok' if hit else 'FAIL'}] a NEW exemption is caught the moment it appears")
     n += 0 if hit else 1
     # A dead scanner must be caught before its clean verdict is read.
     import re as _re

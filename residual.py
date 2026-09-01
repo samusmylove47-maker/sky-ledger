@@ -40,16 +40,20 @@ DATA_RECORDS = 213
 # The marker goes ON the assignment line, not in the comment block: check_paths.py
 # looks one line back and no further, so an exemption cannot drift onto an assignment
 # it was never written for. Two placements failed that rule before this one passed.
-# THE MARKER GOES ON ITS OWN LINE INSIDE THE PARENTHESES. Putting it after the opening
-# paren commented out the first fragment of the implicit concatenation, and
-# DEFAULT_DATA silently lost its "/tmp/claude-0/-home-user-sky-ledger/" prefix -- the
-# gate went green and the value it was guarding was broken. Caught in the same command
-# only because I ran `residual.py --check` beside the gate instead of trusting the gate
-# alone. A comment placed to satisfy a guard broke the thing the guard exists for.
-DEFAULT_DATA = (
-    # ABSOLUTE-PATH-EXEMPT
-    "/tmp/claude-0/-home-user-sky-ledger/"
-    "caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json")
+# COMMITTED 1 Sep 2026, ruled by the Director after the field check below.
+# It lived at an absolute scratchpad path carrying one session's UUID, so the 4.59x
+# model-vs-measured ratio and the 71.9 DPS measured median were reproducible by nobody
+# but me. That is the fault this repository exists to refuse -- a number a reader must
+# take on trust because the data behind it is unreachable -- and an absent-tolerant pin
+# was the right engineering and the wrong epistemics.
+# WHAT IS IN IT, read before committing rather than assumed: 25 fields, all combat and
+# raid facts -- boss, damage_low/high, seconds, attackers, spells, zone, difficulty,
+# date. Scanned for identifying data: ZERO emails, URLs, Windows paths, unix absolute
+# paths, IPv4s or account-shaped keys. Two names, both CHARACTERS -- Avenrae and Shara
+# -- and both were already public in this repository, in three committed filenames and
+# 23 lines of HANDOFF.md, before today. Committing adds no identity that was not there.
+DEFAULT_DATA = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "assets", "raids-measured.json")
 
 
 def resolve(path=None):

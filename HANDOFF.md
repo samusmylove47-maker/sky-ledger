@@ -32,10 +32,24 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  conservative — the classifier refuses rather than asserting a wrong
                  stance — so holding costs nothing but the delay.
 
-                 D-3 [WITH THE OWNER, 1 Sep 14:50Z]  May the Director's raid dataset
-                 (207,239 b, 213 records) be committed here? Without it the 4.59x
-                 ratio and the 71.9 DPS median are reproducible by nobody but me. Put
-                 to the owner directly; recorded here so the Director sees it standing.
+                 D-3 [DONE, ruled 1 Sep 15:15Z, committed 15:25Z]  The raid dataset
+                 is at assets/raids-measured.json, 207,239 b, 213 records, sha256
+                 11823ae7... FIELD CHECK RUN BEFORE COMMITTING, not assumed: 25
+                 fields, all combat and raid facts. ZERO emails, URLs, Windows paths,
+                 unix absolute paths, IPv4s or account-shaped keys. Two names, both
+                 CHARACTERS, and both were ALREADY public in this repo — three
+                 committed filenames and 23 lines of this file — before today.
+                 I verified the repository is PUBLIC (visibility: public) before
+                 deciding, because the ruling turns on publication and not on access.
+
+                 D-5 [OPEN, 1 Sep 15:25Z]  YOUR "NAME ANYTHING ELSE ONLY YOU CAN
+                 REPRODUCE" — I found one AN HOUR OLD, in the finding I published
+                 just before your message. §62 and §63 rest on 117 logs, and most of
+                 them are NOT in this repository. Now pinned: jmoyers/
+                 everquest-companion @ fd5e5bb, kpxcoolx/eql-meter @ 9bdd31f,
+                 DranakCorps-bot/EQBuddy @ 20fe1d8. A stranger can reach all three;
+                 they could not have known WHICH commit. Same fault, one hour old,
+                 caught only because you asked.
 
                  D-4 [ANSWERED BY MEASUREMENT, 1 Sep 14:55Z]  The single-digit-day
                  hypothesis. CLOSED: 282,615 stamped lines, days 01/02/03 present
@@ -7412,3 +7426,70 @@ pinned captures — and the two real player logs.
 
 **35.5, Call of Flame and the stance stay BLOCKED. Days 01–03 is CLOSED. The raid
 dataset ruling stands.**
+
+---
+
+## 64. The raid dataset is committed, and what I checked before doing it
+
+**Ruled by the Director; the field check is mine and I ran it rather than assuming it.**
+`assets/raids-measured.json`, 207,239 bytes, 213 records, sha256 `11823ae7…`.
+
+**The repository is PUBLIC** — verified through the API (`visibility: public`), not
+assumed, because the whole question turns on publication rather than access. The owner
+had already granted access in writing; I separated the two and the Director agreed the
+separation was right before ruling.
+
+**Every field, read not guessed:**
+
+```
+attackers  boss  damage_high  damage_low  damage_is_floor  damage_spread_pct  date
+difficulty  difficulty_evidence  difficulty_from  difficulty_label  group_instance
+joined_late_seconds  melee_verbs  observers  other_players  our_damage_share_pct
+partial_reason  seconds  self_heal_high  self_heal_low  spells  spells_distinct  zone
+```
+
+Twenty-five fields, all combat and raid facts. **Scanned for identifying data: zero
+emails, zero URLs, zero Windows paths, zero unix absolute paths, zero IPv4s, zero
+account-shaped keys.** Two names, both characters — and **both were already public in
+this repository before today**, in three committed filenames and 23 lines of this file.
+**Committing adds no identity that was not already there**, which is the fact that made
+the decision easy rather than the ruling alone.
+
+**What it buys:** the `4.59×` model-vs-measured ratio and the `71.9 DPS` measured median
+were recomputable by nobody but me. `/data/` already tells consumers *"if you publish a
+percentage from this, you have invented it"* — an absent-tolerant pin was the right
+engineering and the wrong epistemics, and the Director's phrasing of that is better than
+mine.
+
+`check_paths.py`'s exemption cap is **tightened from 3 to 0**: the only exemption it ever
+carried was this dataset's scratchpad path. **A cap left at 3 after the last exemption is
+spent is a budget nobody is watching** — and that mechanism has already once passed a
+real defect by blindness rather than by declaration.
+
+## 65. You asked what else only I can reproduce. I found one an hour old.
+
+The Director's second ask, with the site going public: *name anything in your published
+output that only you can recompute.* **The newest finding in this file was already an
+example.**
+
+§62 and §63 rest on **117 log files, 282,615 stamped lines** — and most of them are not
+in this repository. They live in three third-party checkouts on this container, and I
+cited figures from them without saying where they came from. **A reader could not have
+recomputed the day-padding census, the even-damage distribution, or jos437's 0.9932.**
+
+Now pinned, so they can:
+
+```
+jmoyers/everquest-companion       @ fd5e5bb    ~40 logs incl. jos437, jos438
+kpxcoolx/eql-meter                @ 9bdd31f    eqlog_Kenkyo_freeport
+DranakCorps-bot/EQBuddy           @ 20fe1d8    eqlog_Testchar_fixture
+sky-ledger corpus/amp             (this repo)  the two Shara logs
+```
+
+All three are reachable. The gap was never access — **it was that I named a measurement
+without naming its corpus**, one hour after writing a section about exactly that. The
+audit found it because the Director asked the question, which is the argument for asking
+it of everyone before the site goes out.
+
+**35.5, Call of Flame and the stance stay BLOCKED. Days 01–03 and the dataset are
+CLOSED.**
