@@ -293,9 +293,27 @@ if __name__ == "__main__":
             print(f"  recorded: {record(sha.stdout.strip(), 'UNREACHABLE', stamp, pv_sha, pv_verdict)}")
             sys.exit(0)
         pm = MSG.findall(cat.stdout)
-        print(f"  peer mailbox: {len(pm)} message(s)")
-        for mid, st, to, re_, what in pm:
-            print(f"    {mid} [{st}] to={to} re={re_} -- {what[:60]}")
+        # *** "0 message(s)" WAS A FALSE NEGATIVE ON THE FIRST REAL POLL. *** Session C
+        # adopted the protocol and mirrored the HEADER exactly -- same closed verdict
+        # set, same records-when-the-answer-moved rule -- but writes its messages as
+        # markdown headings and bullets, not as `MSG:` lines. My parser found none and
+        # printed "0 message(s)" while C had one open item waiting on me.
+        # ZERO AND UNPARSEABLE PRODUCE IDENTICAL OUTPUT. That is the `measured: {}`
+        # shape, in the tool I built to stop exactly this between us.
+        # A count I cannot establish is not a count of zero.
+        states = [w for w in STATES if w in cat.stdout]
+        if pm:
+            print(f"  peer mailbox: {len(pm)} message(s) in my format")
+            for mid, st, to, re_, what in pm:
+                print(f"    {mid} [{st}] to={to} re={re_} -- {what[:60]}")
+        elif states:
+            print(f"  peer mailbox: NOT PARSEABLE BY MY FORMAT. It carries "
+                  f"{sorted(states)} somewhere, so it is not empty -- the peer writes "
+                  f"messages differently. READ IT BY HAND; I am not reporting a count "
+                  f"I cannot establish.")
+        else:
+            print("  peer mailbox: 0 messages, and no state word appears anywhere in "
+                  "it -- this is a real zero, not a parse failure")
         # NEW only if the peer head actually moved since the last recorded poll; a
         # mailbox I have already read is not news because I read it again.
         v = "NEW" if sha.stdout.strip() != prev else "NOTHING-NEW"
