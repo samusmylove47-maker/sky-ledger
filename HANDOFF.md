@@ -17,6 +17,22 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
+                 CONFIRMED AGAIN 1 Sep 01:15Z: SendMessage to the Director returned
+                 "this cloud session cannot message other sessions". So the finding
+                 below travels by commit subject and by this block, or not at all.
+TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exists:
+                 A TIMESTAMP PATTERN THAT REQUIRES TWO DIGITS FOR THE DAY DROPS EVERY
+                 LINE ON DAYS 1-9 OF ANY MONTH. C's ctime() space-pads a single-digit
+                 day — `Sun Sep  1 00:00:00 2026` — and against `\d{2}` that matches
+                 NOTHING, so the line is discarded BEFORE any parse and no instrument
+                 downstream can report it. Failure shape 1 at the earliest possible
+                 layer. Mine did this until 01:10Z tonight; I found it only because I
+                 dated a crafted fixture `Sep  1` while testing something else.
+                 I CANNOT VERIFY THE CLIENT'S FORMAT — 4 logs, 189,460 lines, ZERO
+                 single-digit days — so this is a hazard to CHECK, not a fact I am
+                 asserting. Widening costs one character and is provably inert:
+                 `([ \d]\d)`. Worth C, D and B each grepping their own pattern.
+                 §49.1 carries the evidence and what it does not establish.
 LAST CHANGE      1 Sep 01:10Z — check.sh PASS, 16 gates, bundle 32a50df4 (25,443 b),
                  still 1.2.0. D's self-hit finding CHECKED, not accepted — THE HOLE
                  WAS REAL IN MY MELEE BRANCH. A self-hit with no `by <spell>` clause
