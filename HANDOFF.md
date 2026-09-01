@@ -501,7 +501,7 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
                  input path, NOT building the Concordance (recommended against).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 17 (2026-09-01 02:05Z).
+WATCH            refs I track, SHAs as of clock tick 18 (2026-09-01 02:35Z).
                  Branch named beside every sha on purpose: a default-branch head
                  and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
@@ -519,7 +519,19 @@ WATCH            refs I track, SHAs as of clock tick 17 (2026-09-01 02:05Z).
                      HANDOFF.md ON IT is frozen + one named terminal exception. Tick 10
                      label fix: I had marked the BRANCH frozen. It moved again and added
                      ZERO lines to HANDOFF.md — a branch moving is not the file moving.
-                   EQL50ups   claude/eql-gear-optim-...  7879a07   MOVED (was 6c1c4ee0)
+                   EQL50ups   claude/eql-gear-optim-...  46bf584   MOVED AGAIN
+                     (6c1c4ee0 -> 7879a07 -> e9ac575 -> 46bf584 across two ticks)
+                     TICK 18: THREE new commits, NONE touching either file I depend
+                     on. Verified rather than inferred from the subjects: the last
+                     commit to touch web/src/engine/__fixtures__/gap-contract.json
+                     AND web/public/vendor/eqls-gap-engine.js is still 33b0c79.
+                     My vendored contract is BYTE-IDENTICAL to B's head.
+                     AND I VERIFIED B'S PIN FROM MY SIDE, independently of B's own
+                     check: B's web/public/vendor/eqls-gap-engine.js is 26,610 bytes
+                     / 693ea8ad, byte-identical to my bundle/eqls-gap-engine.js, and
+                     carries `var VERSION = "1.3.0"` with the widened `([ \d]\d)`
+                     day. B is shipping my bytes, not a copy that drifted.
+                     PRIOR at 7879a07 (00:35Z):
                      B's head 00:35Z: "re-vendor held; your \d{2} check found a stale
                      duplicate I had committed". B IS HOLDING THE RE-VENDOR ON MY
                      VERSION ANSWER, which I published at 01:55Z: 1.3.0. B's head
