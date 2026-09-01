@@ -81,7 +81,7 @@ def observe(lines):
     """Everything this file measures, in one pass over the parsed events."""
     ev, kills, months, n_lines = G._parse(lines)
     hits, resists, selfhit = G._hits(ev, kills)
-    lane_t, lane_dmg, melee_s, auto_n = G._lanes(ev, hits)
+    lane_t, lane_dmg, melee_s, auto_n, _unclassified = G._lanes(ev, hits)
     rep = G.gap_engine(lines, {})
 
     mel = [h for h in hits if h["kind"] == "melee" and h["verb"] in AUTO and not h["kill"]]

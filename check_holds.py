@@ -110,12 +110,12 @@ if __name__ == "__main__":
         n += 0 if hit else 1
 
     mut("a state outside the closed set",
-        h.replace("HELD-PATCH: P-1 [HELD]", "HELD-PATCH: P-1 [SOON]", 1), p, "state is one of")
+        h.replace("HELD-PATCH: P-1 [READY]", "HELD-PATCH: P-1 [SOON]", 1), p, "state is one of")
     # THE ONE THIS FILE EXISTS FOR: my own nine-hour false ground would not compile.
     mut("a free-text ground -- the 'B is offline' shape",
         h.replace("ground=SCHEDULED-REBUILD", "ground=B-IS-OFFLINE", 1), p, "ground is one of")
     mut("a declaration that does not say what it changes",
-        re.sub(r"(HELD-PATCH: P-1 \[HELD\] ground=[A-Z-]+ --).*", r"\1 x", h, count=1),
+        re.sub(r"(HELD-PATCH: P-1 \[[A-Z]+\] ground=[A-Z-]+ --).*", r"\1 x", h, count=1),
         p, "says what it changes")
     mut("a patch written up for B but not declared",
         DECL.sub("", h, count=1), p, "every patch written up for B is declared")

@@ -63,7 +63,7 @@
   // slot where a measurement goes. Now three verdicts and three sentences.
   // IF B IS STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND SKIP 1.4.0 -- one re-pin, not
   // two. Both changes are needed; neither is skippable in substance.
-  var VERSION = "1.5.0";
+  var VERSION = "1.6.0";
 
   // Every numeric key in `measured` is over ONE of three populations, and until
   // 1 Sep 2026 the report did not say which. Measured on the log this engine was
@@ -93,7 +93,12 @@
   // settles it. The class accepts both forms, so it is right either way.
   var TS = /^\[\w{3} \w{3} ([ \d]\d) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
   var SPELL = /^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$/;
-  var MELEE = /^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$/;
+  // `(?:on )?` IS LOAD-BEARING. `frenzy` takes a preposition in 735 of 735 first-person
+  // lines measured here, and Session C measures 57,733 occurrences across both persons
+  // with NONE in the direct-object form. Without the group the target captures as
+  // "on a wan ghoul knight", which splits grouping AND makes "on yourself" fail the
+  // SELF_TARGETS test below -- silently reopening the guard that test exists to be.
+  var MELEE = /^You (backstab|bash|bite|claw|cleave|crush|frenzy|hit|kick|pierce|punch|reave|shoot|slash|slice|smash|smite|sting|strike)(?:es)? (?:on )?(.+?) for (\d+) points of damage\.(\s*\(Critical\))?$/;
   var SLAIN = /^You have slain (.+?)!$/;
   var RESIST = /^(.+?) resisted your (.+?)!$/;
   var MISS = /^You try to (\w+) .+?, but /;
@@ -101,11 +106,23 @@
   var RANK_SUFFIX = / [IVX]+$/;
 
   var GAP = 15, MIN_ENGAGEMENT = 20;
-  var LANE_VERBS = { kick: 1, bash: 1, strike: 1, backstab: 1 };
+  var LANE_VERBS = { kick: 1, bash: 1, strike: 1, backstab: 1, frenzy: 1, smite: 1 };
+  // TIER 2: in MELEE so the damage counts, in NEITHER set so they contribute nothing
+  // to auto_attack_attempts, melee_seconds or any lane rate. Filing a verb without
+  // cadence evidence corrupts a denominator, which is worse than the gap it closes.
+  var UNCLASSIFIED_VERBS = { cleave: 1, claw: 1, reave: 1, bite: 1, slice: 1,
+                             sting: 1, smash: 1, shoot: 1 };
   var AUTO_VERBS = { crush: 1, slash: 1, pierce: 1, hit: 1, punch: 1 };
-  var LANE_CEILING = { kick: 0.54, bash: 0.54, strike: 0.50, backstab: 0.47 };
+  // frenzy/smite from model4.LANE_RATE_MAX, filed on WITHIN-LOG cadence: Kenkyo auto
+  // 1.0s, lanes 4.0s, both verbs 6.0s. Cadence is NOT comparable across characters.
+  var LANE_CEILING = { kick: 0.54, bash: 0.54, strike: 0.50, backstab: 0.47,
+                       frenzy: 0.72, smite: 0.31 };
   var STANCE_OFFENSIVE_MULT = 2.00;
-  var EVEN_OFFENSIVE = 0.93, EVEN_BALANCED = 0.50;
+  // P-1: 0.93 was calibrated on every melee line unfiltered; the classifier compares
+  // it against a crit- and killing-blow-excluded population where the same file gives
+  // 0.9932 (n=732) vs 0.9387 (n=832). Measured consequence: none on either real
+  // capture -- Shara 0.636 and Kenkyo 0.615 both still return null, correctly.
+  var EVEN_OFFENSIVE = 0.993, EVEN_BALANCED = 0.50;
 
   function round(x, n) { var f = Math.pow(10, n); return Math.round(x * f) / f; }
   function mean(a) { var s = 0, i; for (i = 0; i < a.length; i++) s += a[i]; return s / a.length; }
@@ -222,11 +239,17 @@
   }
 
   function lanesOf(ev, gap) {
-    var laneT = {}, laneDmg = {}, auto = [], i, m, v, r, melee = 0;
+    var laneT = {}, laneDmg = {}, auto = [], i, m, v, r, melee = 0, seen = {};
     for (i = 0; i < ev.length; i++) {
       m = MELEE.exec(ev[i][1]);
       if (m) {
         v = m[1];
+        // P-2. This function reads the RAW events, so the self-target guard applied to
+        // the hit list never reached here: `You hit yourself` counted as an auto-attack
+        // attempt and inflated the denominator every lane rate divides by. Measured
+        // impact: ZERO melee self-hits across 139 unique logs.
+        if (SELF_TARGETS[m[2].trim().toLowerCase()]) continue;
+        if (UNCLASSIFIED_VERBS[v]) seen[v] = 1;
         if (LANE_VERBS[v]) {
           (laneT[v] = laneT[v] || []).push(ev[i][0]);
           (laneDmg[v] = laneDmg[v] || []).push(parseInt(m[3], 10));
@@ -244,7 +267,12 @@
     }
     r = runs(auto, gap);
     for (i = 0; i < r.length; i++) melee += r[i][1] - r[i][0];
-    return { laneT: laneT, laneDmg: laneDmg, meleeSeconds: melee, autoAttempts: auto.length };
+    // A SEPARATE FIELD, not a key on laneT. laneT is iterated with Object.keys to
+    // build the `lanes` block, so anything parked on it becomes a FAKE LANE with an
+    // attempts count. Caught before running; it would have shipped a lane named
+    // `__unclassified` to every consumer.
+    return { laneT: laneT, laneDmg: laneDmg, meleeSeconds: melee,
+             autoAttempts: auto.length, unclassified: Object.keys(seen).sort() };
   }
 
   function stanceOf(hits) {
@@ -262,7 +290,13 @@
     var se = Math.sqrt(0.25 / v.length);
     var dBal = Math.abs(even - EVEN_BALANCED) / se, dOff = Math.abs(even - EVEN_OFFENSIVE) / se;
     var detail = (even * 100).toFixed(1) + "% even damage across " + v.length +
-      " non-crit melee hits (killing blows excluded). Balanced prints ~50%, Offensive ~93%. " +
+      // DERIVED, NOT RETYPED. This line carried a hard-coded "93%" while the constant
+      // above changed to 0.993 -- a second unsourced copy of a value, which is the
+      // defect this repository deleted from check_contract.py earlier. Parity caught
+      // it; a human reading the two files side by side would not have.
+      " non-crit melee hits (killing blows excluded). Balanced prints ~" +
+      Math.round(EVEN_BALANCED * 100) + "%, Offensive ~" +
+      Math.round(EVEN_OFFENSIVE * 100) + "%. " +
       "Distance: " + dBal.toFixed(1) + " SE from Balanced, " + dOff.toFixed(1) + " SE from Offensive.";
     if (dBal <= 2.0 && dOff > 2.0) return { name: "Balanced", evidence: detail };
     if (dOff <= 2.0 && dBal > 2.0) return { name: "Offensive", evidence: detail };
@@ -382,7 +416,12 @@
     m.dps_window = "engaged";
     m.dps_window_note = "Engaged = damage over runs of hits with no gap above " + GAP +
       "s, lasting " + MIN_ENGAGEMENT + "s or more. Four shipped meters use four denominators; " +
-      "a DPS figure without its window is not a measurement.";
+      "a DPS figure without its window is not a measurement. " +
+      "DAMAGE-SHIELD DAMAGE IS EXCLUDED. A player's own shield is never written in the " +
+      "first person -- the form is `<target> is pierced by <Owner>'s thorns`, naming the " +
+      "owner by character name, with zero `by You` variants across 139 logs -- so this " +
+      "engine cannot attribute it as a matter of the game's grammar, not as an oversight. " +
+      "A meter that counts damage shields will report a higher figure and both can be right.";
     // E2: computed and thrown away until 1.2.0. meleeSeconds survived only as
     // ENGLISH inside basis.denominator, and a consumer cannot compute against a sentence.
     m.engaged_seconds = engaged;
@@ -585,6 +624,17 @@
     if (st.name) obs.push("stance");
     obs.sort();
     report.coverage.inputs_observed = obs;
+    // P-5. Verbs whose damage IS counted and which are filed as NEITHER auto-attack nor
+    // lane. Without this a log where everything was classified and a log where a fifth of
+    // the damage came from unfiled verbs emit an identical `lanes` block.
+    report.coverage.verbs_unclassified = {
+      verbs: L.unclassified || [],
+      note: "Damage from these verbs IS in damage_dealt and dps. They contribute NOTHING " +
+            "to auto_attack_attempts, melee_seconds or any lane rate, because filing a verb " +
+            "without cadence evidence corrupts a denominator and that is worse than the gap " +
+            "it closes. An empty list means no such verb occurred, not that the check was " +
+            "skipped."
+    };
     report.coverage.inputs_assumed = ["haste at cap", "target mitigation", "buff uptime"];
     report.coverage.note = "Every delta is a difference against this character's own observed " +
       "baseline. No absolute modelled figure appears in this document, by design - HANDOFF.md 21.3.";

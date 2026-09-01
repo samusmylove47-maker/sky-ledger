@@ -14,10 +14,90 @@ that consumes the bundle serves nobody, and Tuesday is a re-pin B is doing anywa
 **That ground does not depend on anyone's availability** — an earlier version of this
 hold rested on my believing B was offline, which was false; see §68 of `HANDOFF.md`.
 
-**All three are conservative failures today.** Nothing wrong is being emitted while
-they wait: the stance classifier *refuses* rather than asserting, the lane counter
-over-counts an attempt that never occurs in a real log, and the missing verbs are
-absent rather than wrong. Only P-3 changes numbers a reader sees.
+## *** THE "ALL CONSERVATIVE" CLAIM WAS MINE AND IT IS FALSE. READ THIS FIRST. ***
+
+The paragraph that stood here said **"all three are conservative failures today —
+nothing wrong is being emitted while they wait,"** and that the missing verbs are
+*"absent rather than wrong."* The Director has that sentence from me and was about to
+record it as the reason you could adopt this bump **without re-verifying every figure.**
+
+**Two of the five are conservative. P-3 is not, and P-3 is the one that moves numbers.**
+
+`recovery.py` measures it by running the same engine twice over the same log, differing
+only in the verb set, so the two populations match by construction:
+
+```
+Kenkyo (melee)   dps  101.1 ->  117.9    the published figure is 16.62% TOO LOW
+Shara  (bard)    dps 1372.9 -> 1357.8    the published figure is  1.10% TOO HIGH
+```
+
+**A missing hit is not only missing damage. It is a missing SECOND.** `dps` divides by
+engaged time, engaged runs are built out of hits, and a hit the parser cannot see is a
+second the engine does not count as engaged. Recovering Shara's twenty `cleave` lines
+adds 0.05% to `damage_dealt` and 1.16% to `engaged_seconds`, so the number goes **down**.
+
+**So the shipped engine is currently OVER-reporting a caster's DPS**, and "absent rather
+than wrong" is exactly the wrong description of that. I wrote it before I had measured
+which direction the error ran, and I had no basis for the direction when I wrote it.
+
+**What this means for you: P-3 requires re-verifying published figures. P-1, P-2, P-4
+and P-5 do not.** The per-patch table below says which is which, in the terms the
+Director asked for.
+
+---
+
+## THE TUESDAY BUNDLE — what each patch changes, in one table
+
+**Written 1 Sep 18:30Z at the Director's request, for you to read directly.** The question
+the Director asked me to answer explicitly, because it is the sentence that decides
+whether you re-verify figures: **does this patch change a COMPUTED VALUE, or only a
+REFUSAL?**
+
+```
+      changes a       measured impact on a          you must
+      COMPUTED VALUE  published number              re-verify?
+P-1   no              none on any real log          NO
+P-2   yes, in theory  ZERO on 139 logs, measured    NO
+P-3   YES             dps -1.10% to +16.62%         *** YES ***
+P-4   no              none -- one string is longer  NO
+P-5   no              none -- one new list appears  NO
+```
+
+**P-1 — a REFUSAL becomes an ASSERTION, and on no log I hold.** The stance classifier
+currently returns `null` where the constant is miscalibrated. Correcting `0.93` to
+`0.993` lets it decide on logs that today refuse. **Measured: it changes nothing on
+either real capture** — Shara sits at 0.636 and Kenkyo at 0.615, both further from 0.993
+than from 0.93, and both stay `null`. So this patch widens where the engine is *willing*
+to speak without changing what it says anywhere I can test. Conservative in the strict
+sense: the failure it fixes is a refusal, and refusals are the safe direction.
+
+**P-2 — a computed value, whose measured impact is exactly zero.** `auto_attack_attempts`
+and `melee_seconds` both move if a self-hit melee line exists. **There are none.** Zero
+across 139 unique logs; the spell form (`... by <Spell>`) occurs 206 times and is already
+excluded correctly. So it is a real correctness fix with a measured impact of nil, and
+you do not need to re-check a figure for it. **I am not calling it "conservative"** — it
+over-counts a denominator, which is the unsafe direction; it simply never fires.
+
+**P-3 — YES, AND IN BOTH DIRECTIONS.** See the correction at the top of this file. This
+is the only patch here that requires you to re-verify published figures, and the reason
+is not the size of the change but its **sign**: a melee character's DPS is currently too
+low and a caster's is currently too high, because recovered hits land in the numerator
+*and* the denominator in a ratio that depends on the character. **There is no single "the
+meter was X% wrong" you can print.**
+
+**P-4 — a string.** `dps_window_note` gains a sentence saying damage-shield damage is
+excluded. It is a bundle bump only because you render the string.
+
+**P-5 — an additive field.** `coverage.verbs_unclassified`. Nothing existing moves.
+
+### And one thing the Director did not ask but you will want
+
+**P-3 and P-2 must land together or not at all.** P-3 adds `frenzy`, whose object is
+always prepositional (735 of 735 first-person lines; Session C measures 57,733
+occurrences and *none* without `on`). Widening `MELEE` without `(?:on )?` captures the
+target as `"on a wan ghoul knight"` — and `"on yourself"` then fails
+`target.lower() in SELF_TARGETS`, **silently reopening the exact bug P-2 exists to
+close.** One missing group produces two defects and one of them is invisible.
 
 ---
 

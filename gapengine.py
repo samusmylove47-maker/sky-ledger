@@ -34,16 +34,41 @@ import re, collections, statistics as st
 #              rule on mechanism claims. ONE LOG FROM A DAY 1-9 SETTLES IT.
 # The class accepts both forms, so it is right either way and costs one character.
 TS    = re.compile(r"^\[\w{3} \w{3} ([ \d]\d) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$")
-LANE_VERBS = {"kick", "bash", "strike", "backstab"}
+LANE_VERBS = {"kick", "bash", "strike", "backstab", "frenzy", "smite"}
 AUTO_VERBS = {"crush", "slash", "pierce", "hit", "punch"}
+# P-3 TIER 2. Verbs Session C measured in a 15-capture, 5,631,681-line corpus and I
+# have never seen first-person outside a generated fixture. They are in MELEE so their
+# damage is counted, and in NEITHER set above so they contribute nothing to
+# `auto_attack_attempts`, `melee_seconds`, or any lane rate.
+# FILING A VERB WITHOUT CADENCE EVIDENCE CORRUPTS A DENOMINATOR, WHICH IS WORSE THAN
+# THE GAP IT CLOSES. C's count establishes that a verb exists, not what it is.
+# `cleave` is here rather than in LANE_VERBS for the same reason on my own evidence:
+# 10 usable inter-arrival gaps, below the 30-gap floor this engine already enforces on
+# its own sensitivity figure. I am not applying a looser standard to a classification
+# than to a sensitivity number.
+UNCLASSIFIED_VERBS = {"cleave", "claw", "reave", "bite", "slice", "sting", "smash",
+                      "shoot"}
 # Cooldown ceilings, attempts per second, measured across 138 committed logs
 # (model4.py LANE_RATE_MAX). These are the MAXIMUM observed, so a gap to them is
 # a floor on what is available, not a promise.
-LANE_CEILING = {"kick": 0.54, "bash": 0.54, "strike": 0.50, "backstab": 0.47}
+LANE_CEILING = {"kick": 0.54, "bash": 0.54, "strike": 0.50, "backstab": 0.47,
+                # model4.LANE_RATE_MAX: frenzy is the Berserker lane, smite the Paladin
+                # lane. Filed on WITHIN-LOG cadence -- Kenkyo's auto runs 1.0s and its
+                # lanes 4.0s, and both land at 6.0s. Cadence is NOT comparable across
+                # characters (Shara's auto is slower than Kenkyo's lanes), which is a
+                # correction to how the first version of this table was built.
+                "frenzy": 0.72, "smite": 0.31}
 MISS = re.compile(r"^You try to (\w+) .+?, but ")
 
 SPELL = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")
-MELEE = re.compile(r"^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
+# `(?:on )?` IS LOAD-BEARING AND IS NOT COSMETIC. `frenzy` takes a preposition in 735
+# of 735 first-person lines here, and Session C measures 57,733 occurrences across both
+# persons with NONE in the direct-object form. Without this group the target captures as
+# "on a wan ghoul knight" -- which splits target grouping AND makes "on yourself" fail
+# `target.lower() in SELF_TARGETS`, silently REOPENING the bug the self-hit guard below
+# exists to close. One missing group, two defects, one of them invisible.
+_MELEE_VERBS = "|".join(sorted(LANE_VERBS | AUTO_VERBS | UNCLASSIFIED_VERBS))
+MELEE = re.compile(r"^You (" + _MELEE_VERBS + r")(?:es)? (?:on )?(.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
 # SELF-DAMAGE, and why a name-equality filter is safe HERE and is not safe in a
 # third-person parser. Session D relayed 1 Sep 2026 that a self-hit with NO
 # `by <spell>` clause falls through to the melee shape and is emitted as ordinary
@@ -89,7 +114,14 @@ MIN_ENGAGEMENT = 20
 
 # Measured, tier M. DAMAGE-CHAIN.md carries the evidence and the residuals.
 STANCE_OFFENSIVE_MULT = 2.00
-STANCE_EVEN_SHARE_OFFENSIVE = 0.93   # Offensive prints ~93% even damage
+# P-1. 0.93 was calibrated on EVERY melee line unfiltered; the classifier compares it
+# against a population with crits and killing blows removed, where the same file gives
+# 0.9932 (n=732) against 0.9387 (n=832). The constant was the unfiltered figure and the
+# code the filtered one -- the 202% defect, inside the classifier.
+# MEASURED CONSEQUENCE: none on either real capture. Shara 0.636 and Kenkyo 0.615 are
+# further from 0.993 than from 0.93 and both still return null, correctly, until the
+# owner supplies a stance screenshot alongside a log.
+STANCE_EVEN_SHARE_OFFENSIVE = 0.993  # Offensive prints ~99.3% even damage
 STANCE_EVEN_SHARE_BALANCED  = 0.50
 
 
@@ -227,10 +259,20 @@ def _lanes(ev, hits):
     lane_t = collections.defaultdict(list)
     lane_dmg = collections.defaultdict(list)
     auto_t = []
+    seen = set()
     for t, b in ev:
         m = MELEE.match(b)
         if m:
             v = m.group(1)
+            # P-2. `hit` is in AUTO_VERBS and this function reads the RAW events, so
+            # the self-target guard added to _hits never reached here: a
+            # `You hit yourself` line was counted as an auto-attack attempt, inflating
+            # the denominator every lane rate divides by. Measured impact: ZERO melee
+            # self-hits across 139 unique logs. A real fix that never fires -- which is
+            # why it is stated as measured-nil rather than as "conservative".
+            if m.group(2).strip().lower() in SELF_TARGETS:
+                continue
+            seen.add(v)
             if v in LANE_VERBS:
                 lane_t[v].append(t); lane_dmg[v].append(int(m.group(3)))
             elif v in AUTO_VERBS:
@@ -242,7 +284,7 @@ def _lanes(ev, hits):
             if v in LANE_VERBS: lane_t[v].append(t)
             elif v in AUTO_VERBS: auto_t.append(t)
     melee_s = sum(b - a for a, b in _runs(auto_t))
-    return lane_t, lane_dmg, melee_s, len(auto_t)
+    return lane_t, lane_dmg, melee_s, len(auto_t), sorted(seen & UNCLASSIFIED_VERBS)
 
 
 def _engagements(hits):
@@ -473,7 +515,14 @@ def gap_engine(lines, context=None):
     m["dps_window"] = "engaged"
     m["dps_window_note"] = ("Engaged = damage over runs of hits with no gap above "
                             f"{GAP}s, lasting {MIN_ENGAGEMENT}s or more. Four shipped meters use "
-                            "four denominators; a DPS figure without its window is not a measurement.")
+                            "four denominators; a DPS figure without its window is not a measurement. "
+                            "DAMAGE-SHIELD DAMAGE IS EXCLUDED. A player's own shield is never "
+                            "written in the first person -- the form is "
+                            "`<target> is pierced by <Owner>'s thorns`, naming the owner by "
+                            "character name, with zero `by You` variants across 139 logs -- so "
+                            "this engine cannot attribute it as a matter of the game's grammar, "
+                            "not as an oversight. A meter that counts damage shields will report "
+                            "a higher figure and both can be right.")
     # E2. These were all computed and thrown away. `melee_seconds` in particular
     # survived only as ENGLISH inside basis.denominator, and a consumer cannot
     # compute against a sentence.
@@ -561,7 +610,7 @@ def gap_engine(lines, context=None):
             "stance: already Offensive, which is the largest free gain and it is taken")
 
     # --- ability lanes: the delta that needs no catalogue and no worn stats ---
-    lane_t, lane_dmg, melee_s, auto_n = _lanes(ev, hits)
+    lane_t, lane_dmg, melee_s, auto_n, unclassified = _lanes(ev, hits)
     m["time_in_melee_s"] = melee_s
     m["melee_seconds"] = melee_s   # E2: the same number under the contract name
     m["auto_attack_attempts"] = auto_n
@@ -696,6 +745,19 @@ def gap_engine(lines, context=None):
     report["coverage"]["inputs_observed"] = sorted(
         {"engaged time", "crit rate", "resist counts"} |
         ({"stance"} if stance else set()))
+    # P-5. Verbs whose damage IS counted and which are filed as NEITHER auto-attack nor
+    # lane. Without this, a log where every verb was classified and a log where a fifth
+    # of the damage came from unfiled verbs emit an identical `lanes` block -- the
+    # `measured: {}` shape, two situations producing one output. Everywhere else in this
+    # engine a refusal is published; declining to file a verb is a refusal.
+    report["coverage"]["verbs_unclassified"] = {
+        "verbs": unclassified,
+        "note": ("Damage from these verbs IS in damage_dealt and dps. They contribute "
+                 "NOTHING to auto_attack_attempts, melee_seconds or any lane rate, "
+                 "because filing a verb without cadence evidence corrupts a denominator "
+                 "and that is worse than the gap it closes. An empty list means no such "
+                 "verb occurred, not that the check was skipped."),
+    }
     report["coverage"]["inputs_assumed"] = ["haste at cap", "target mitigation", "buff uptime"]
     report["coverage"]["note"] = ("Every delta is a difference against this character's own "
                                   "observed baseline. No absolute modelled figure appears in this "

@@ -219,19 +219,12 @@ def report(rows, label):
 # everything or hides everything. Remove the entry when the fix ships; the run then
 # fails until it does, which is the point.
 KNOWN_DEFECT = {
-    "auto_attempts": (
-        "D-6: _lanes counts `You hit yourself` as an auto-attack attempt. `hit` is in "
-        "AUTO_VERBS and _lanes reads the raw events, so the self-target guard added to "
-        "_hits on 1 Sep never reached it. FOUND BY THIS FILE on its first run. "
-        "IMPACT TODAY IS NIL, measured on a population I have now actually counted: "
-        "ZERO self-hit MELEE lines across 139 UNIQUE logs (the spell form, "
-        "`... by <spell>`, occurs 206 times and is already excluded correctly). "
-        "P-2 is HELD for Tuesday's scheduled rebuild -- ground=SCHEDULED-REBUILD, "
-        "declared in HANDOFF.md, gated by check_holds.py. *** THE REASON PRINTED HERE "
-        "UNTIL 1 Sep 16:23Z WAS `B is offline`. IT WAS FALSE FOR THE NINE HOURS IT "
-        "STOOD, AND IT WAS STILL PRINTING IN THIS TOOL SIX HOURS AFTER I CORRECTED IT "
-        "ELSEWHERE. Availability is no longer a legal ground for a hold here -- "
-        "HANDOFF.md sections 68, 69, 70. ***"),
+    # EMPTY, AND THAT IS A RESULT. The one entry here -- D-6, `_lanes` counting
+    # `You hit yourself` as an auto-attack attempt -- was FIXED by P-2 in the Tuesday
+    # bundle, and `auto_attempts` went 0/50 to 50/50. Its declaration was deleted the
+    # same commit, because the retirement check above now FAILS on a declaration whose
+    # defect no longer fires. That check exists because this dictionary went silently
+    # stale for the ten minutes between the fix landing and my noticing.
 }
 
 
@@ -249,13 +242,27 @@ if __name__ == "__main__":
         by.setdefault(k, []).append(rel)
     failing = {k for k, v in by.items() if any(x != 0.0 for x in v)}
     undeclared = sorted(failing - set(KNOWN_DEFECT))
+    # THE RETIREMENT ARM, and it is the only thing that makes a closed set worth
+    # anything. Until 1 Sep this file reported a declaration ONLY while its defect was
+    # still firing: fix the defect and the declaration went SILENT, standing in the
+    # source as a false claim that no instrument would ever contradict. That is the
+    # stale-fixture shape wearing a third set of clothes, and it fired for real the
+    # moment P-2 landed -- auto_attempts went 0/50 to 50/50 and its declaration simply
+    # stopped printing.
+    # A DECLARATION THAT HAS BECOME FALSE MUST BE FORCED OUT, NOT IGNORED.
+    retired = sorted(set(KNOWN_DEFECT) - failing)
     for k in sorted(failing & set(KNOWN_DEFECT)):
         print(f"\n  DECLARED DEFECT  {k}: {KNOWN_DEFECT[k]}")
     if undeclared:
         print(f"\n  UNDECLARED FAILURE(S): {undeclared} -- this is a regression, not a "
               "known gap.")
+    if retired:
+        print(f"\n  STALE DECLARATION(S): {retired} -- the defect(s) named here NO "
+              "LONGER FIRE. The declaration is now a false claim about this engine. "
+              "DELETE IT. A closed set whose entries never expire is a list of things "
+              "that were once true.")
     if "--selftest" not in sys.argv:
-        sys.exit(1 if undeclared else 0)
+        sys.exit(1 if (undeclared or retired) else 0)
 
     # POSITIVE CONTROL. A round-trip that scores 100% proves nothing until a WRONG
     # engine scores worse -- otherwise the harness may simply be agreeing with
@@ -296,5 +303,24 @@ if __name__ == "__main__":
     print(f"    [{'FAIL' if swallowed else 'ok'}] a NEW failing quantity would be "
           "reported as undeclared, not absorbed")
     fails += 1 if swallowed else 0
+
+    # MATCHED PAIR FOR THE RETIREMENT ARM. A guard is not a gate until something fails
+    # because of it, and this one currently has nothing to catch: KNOWN_DEFECT is empty
+    # and every quantity passes, so the arm is dark. Declare a defect against a quantity
+    # that is DEMONSTRABLY fine and confirm it is reported as stale.
+    fake = {"crit_rate": "a defect that does not exist"}
+    stale = sorted(set(fake) - {k for k, v in by.items()
+                                if any(x != 0.0 for x in v)})
+    caught = stale == ["crit_rate"]
+    print(f"    [{'ok' if caught else 'FAIL'}] a declaration whose defect no longer "
+          f"fires is reported STALE, not silently dropped")
+    fails += 0 if caught else 1
+    # ...and the inverse: a declaration whose defect DOES fire is not called stale.
+    live = sorted({"engagements"} - {k for k, v in by.items()
+                                     if any(x != 0.0 for x in v)} - {"engagements"})
+    print(f"    [{'ok' if not live else 'FAIL'}] ...and the check does not fire on a "
+          f"declaration that is still true")
+    fails += 0 if not live else 1
+
     print(f"  {fails} control(s) failed to detect a broken engine")
-    sys.exit(1 if (fails or undeclared) else 0)
+    sys.exit(1 if (fails or undeclared or retired) else 0)

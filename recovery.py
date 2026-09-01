@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
-"""recovery.py -- WHAT THE PUBLISHED NUMBERS LOSE TO THE MISSING VERBS, measured on
-real client-written logs by running the SAME engine twice: as shipped, and with the
-verb set widened in memory.
+"""recovery.py -- WHAT THE PUBLISHED NUMBERS WOULD LOSE IF THE VERB SET REGRESSED,
+measured on real client-written logs by running the SAME engine twice: as shipped, and
+narrowed in memory back to where it stood before the Tuesday bundle.
+
+*** THIS FILE WAS INVERTED WHEN THE BUNDLE LANDED AND THAT IS DELIBERATE. *** It was
+built to FORECAST what P-3 would recover, by widening a narrow engine. P-3 is applied,
+so the forecast is spent; it now narrows the shipped engine instead and measures the
+same delta from the other side. Identical number, different meaning: a forecast became
+a REGRESSION GUARD. A tool whose premise is settled by the fix it measured has to be
+re-pointed or retired -- leaving it aimed at a world that no longer exists is how a
+green check stops meaning anything.
 
 WHY IT IS BUILT THIS WAY. The obvious measurement -- "invisible damage over total
 damage in the file" -- needs two populations to agree, and they do not: `damage_dealt`
@@ -29,40 +37,48 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
 import gapengine as G
 
-# P-3 AS CORRECTED 1 Sep 16:16Z: frenzy, smite, cleave only. `claw` and `reave` are
-# NOT here -- they have zero occurrences in any client-written log and their whole
-# evidence base is other projects' generated fixtures. `shoot` is refused at n=9,
-# from a file named `_fixture`.
-ADD_LANE = ("frenzy", "smite", "cleave")
+# *** INVERTED WHEN THE TUESDAY BUNDLE LANDED. ***
+# This file used to WIDEN a narrow shipped engine to measure what P-3 would recover.
+# P-3 is now applied, so it NARROWS the shipped engine back to the pre-bundle verb set
+# and measures the same delta from the other side. The number is identical and its
+# meaning is not: it was a forecast and it is now a REGRESSION GUARD -- if someone
+# removes the verbs, this reports the damage that goes missing, on real logs.
+# A tool whose premise is fixed by the fix it measured is a tool that has to be
+# re-pointed or retired, and silently leaving it pointing at the old world is how a
+# passing test stops meaning anything.
+REMOVE_LANE = ("frenzy", "smite")
+REMOVE_UNCLASSIFIED = ("cleave", "claw", "reave", "bite", "slice", "sting", "smash",
+                       "shoot")
 # `frenzy` takes a preposition in 735 of 735 lines: `You frenzy ON a mob for N`.
 # Without `(?:on )?` the target captures as "on a wan ghoul knight", which splits
 # target grouping and -- worse -- slips past SELF_TARGETS, reopening P-2 on this verb.
 PREPOSITION = r"(?:on )?"
 
 
-def widened():
-    """The MELEE pattern P-3 would ship. Built from the engine's own live constants
-    rather than retyped, so it cannot silently disagree with what is deployed."""
-    verbs = sorted(G.AUTO_VERBS | G.LANE_VERBS | set(ADD_LANE))
-    return re.compile(r"^You (" + "|".join(verbs) + r")(?:es)? " + PREPOSITION +
+def narrowed():
+    """The MELEE pattern as it stood BEFORE the Tuesday bundle. Built by subtracting
+    from the engine's own live constants rather than retyped, so it cannot silently
+    disagree with what is deployed."""
+    verbs = sorted((G.AUTO_VERBS | G.LANE_VERBS | G.UNCLASSIFIED_VERBS)
+                   - set(REMOVE_LANE) - set(REMOVE_UNCLASSIFIED))
+    return re.compile(r"^You (" + "|".join(verbs) + r")(?:es)? "
                       r"(.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
 
 
-def run(lines, patched):
-    """One engine run. `patched` widens the verb set for the duration and puts every
-    constant back, whether or not the engine raises."""
-    if not patched:
+def run(lines, pre_bundle):
+    """One engine run. `pre_bundle` narrows the verb set back to where it stood before
+    the Tuesday bundle, for the duration, and puts every constant back whether or not
+    the engine raises."""
+    if not pre_bundle:
         return G.gap_engine(list(lines))
-    old = (G.MELEE, G.LANE_VERBS, G.LANE_CEILING)
+    old = (G.MELEE, G.LANE_VERBS, G.UNCLASSIFIED_VERBS)
     try:
-        G.MELEE = widened()
-        G.LANE_VERBS = G.LANE_VERBS | set(ADD_LANE)
-        # NO CEILING INVENTED. frenzy 0.72 and smite 0.31 come from
-        # model4.LANE_RATE_MAX; `cleave` has no ceiling anywhere and gets none here.
-        G.LANE_CEILING = dict(G.LANE_CEILING, frenzy=0.72, smite=0.31)
+        G.MELEE = narrowed()
+        G.LANE_VERBS = G.LANE_VERBS - set(REMOVE_LANE)
+        G.UNCLASSIFIED_VERBS = G.UNCLASSIFIED_VERBS - set(REMOVE_UNCLASSIFIED)
         return G.gap_engine(list(lines))
     finally:
-        G.MELEE, G.LANE_VERBS, G.LANE_CEILING = old
+        G.MELEE, G.LANE_VERBS, G.UNCLASSIFIED_VERBS = old
 
 
 def measured(rep):
@@ -102,7 +118,7 @@ FIELDS = ("dps", "damage_dealt", "hits_counted", "engaged_seconds",
 
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
-        print("SELFTEST -- the widened run must differ, and only where it should")
+        print("SELFTEST -- the SHIPPED engine must see what the pre-bundle one could not")
         bad = 0
 
         def chk(name, ok, d=""):
@@ -113,23 +129,23 @@ if __name__ == "__main__":
         S = "[Mon Aug 31 12:00:%02d 2026] "
         body = [S % i + "You slash a gnoll for 10 points of damage." for i in range(0, 40, 2)]
         body += [S % i + "You cleave a gnoll for 100 points of damage." for i in (5, 15, 25)]
-        base, wide = run(body, False), run(body, True)
-        b, w = measured(base), measured(wide)
+        shipped, pre = run(body, False), run(body, True)
+        w, b = measured(shipped), measured(pre)
         # POSITIVE CONTROL FIRST: if the widened run cannot differ from the shipped
         # one, every comparison below is vacuous and this file measures nothing.
-        chk("the widened run recovers damage the shipped run does not",
+        chk("THE SHIPPED ENGINE NOW SEES IT -- P-3 is live, not merely written up",
             w.get("damage_dealt", 0) > b.get("damage_dealt", 0),
-            f"{b.get('damage_dealt')} -> {w.get('damage_dealt')}")
+            f"pre-bundle {b.get('damage_dealt')} -> shipped {w.get('damage_dealt')}")
         chk("the recovered amount is exactly the cleave damage",
             w.get("damage_dealt", 0) - b.get("damage_dealt", 0) == 300,
             f"delta {w.get('damage_dealt', 0) - b.get('damage_dealt', 0)}")
-        chk("the shipped run is genuinely blind to it",
+        chk("the PRE-BUNDLE engine was genuinely blind to it",
             b.get("damage_dealt") == 200, f"got {b.get('damage_dealt')}")
         # The engine's live constants must be exactly as they were.
-        chk("engine constants restored after a patched run",
-            "cleave" not in G.MELEE.pattern and "cleave" not in G.LANE_VERBS
-            and "frenzy" not in G.LANE_CEILING,
-            "the in-memory patch LEAKED into the shipped engine")
+        chk("engine constants restored after a narrowed run",
+            "cleave" in G.MELEE.pattern and "cleave" in G.UNCLASSIFIED_VERBS
+            and "frenzy" in G.LANE_VERBS,
+            "the in-memory narrowing LEAKED and left the shipped engine crippled")
         boom = G.gap_engine
         try:
             G.gap_engine = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("x"))
@@ -139,23 +155,26 @@ if __name__ == "__main__":
                 pass
         finally:
             G.gap_engine = boom
-        chk("constants intact after the engine RAISES mid-patch",
-            "cleave" not in G.MELEE.pattern and "cleave" not in G.LANE_VERBS
-            and "frenzy" not in G.LANE_CEILING,
-            "a raising engine left the patch in place")
+        chk("constants intact after the engine RAISES mid-narrowing",
+            "cleave" in G.MELEE.pattern and "cleave" in G.UNCLASSIFIED_VERBS
+            and "frenzy" in G.LANE_VERBS,
+            "a raising engine left the narrowing in place")
         # NEGATIVE CONTROL for the two restore checks above: they are string tests,
         # and a string test that can only pass proves nothing. Break it on purpose.
         _keep = G.MELEE
-        G.MELEE = widened()
+        G.MELEE = narrowed()
         chk("...and those two restore checks CAN fail",
-            "cleave" in G.MELEE.pattern, "the leak detector is blind")
+            "cleave" not in G.MELEE.pattern, "the leak detector is blind")
         G.MELEE = _keep
         # frenzy's preposition must actually be handled
         fr = [S % i + "You slash a gnoll for 10 points of damage." for i in range(0, 40, 2)]
         fr += [S % i + "You frenzy on a gnoll for 50 points of damage." for i in (5, 15, 25)]
-        wf = measured(run(fr, True))
-        chk("`You frenzy ON a mob` is read by the widened pattern",
-            wf.get("damage_dealt", 0) == 350, f"got {wf.get('damage_dealt')}")
+        chk("`You frenzy ON a mob` is read by the SHIPPED pattern",
+            measured(run(fr, False)).get("damage_dealt", 0) == 350,
+            f"got {measured(run(fr, False)).get('damage_dealt')}")
+        chk("...and the pre-bundle pattern could NOT read it",
+            measured(run(fr, True)).get("damage_dealt", 0) == 200,
+            f"got {measured(run(fr, True)).get('damage_dealt')}")
         print(f"  {bad} self-test checks failed")
         sys.exit(1 if bad else 0)
 
@@ -165,10 +184,9 @@ if __name__ == "__main__":
     print("is deliberately excluded -- see HANDOFF.md section 69.\n")
     dps_moves = []
     for p in logs:
-        base, wide = measured(run(io.open(p, encoding="utf-8", errors="replace")
-                                  .read().splitlines(), False)), None
-        wide = measured(run(io.open(p, encoding="utf-8", errors="replace")
-                            .read().splitlines(), True))
+        _l = io.open(p, encoding="utf-8", errors="replace").read().splitlines()
+        base = measured(run(_l, True))    # pre-bundle
+        wide = measured(run(_l, False))   # shipped, with the bundle applied
         name = os.path.basename(p)
         moved = [(f, base.get(f), wide.get(f)) for f in FIELDS
                  if base.get(f) != wide.get(f)]

@@ -384,11 +384,11 @@ HELD PATCHES     THREE, and they are now declared in a form an instrument reads 
                  somebody being reachable expires the moment they answer, and nobody
                  goes back to check. Legal grounds are SCHEDULED-REBUILD,
                  AWAITING-EVIDENCE, AWAITING-RULING.
-HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
-HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
-HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
-HELD-PATCH: P-4 [HELD] ground=SCHEDULED-REBUILD -- append to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
-HELD-PATCH: P-5 [HELD] ground=SCHEDULED-REBUILD -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
+HELD-PATCH: P-1 [READY] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
+HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
+HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
+HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
+HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -396,7 +396,26 @@ HELD-PATCH: P-5 [HELD] ground=SCHEDULED-REBUILD -- publish coverage.verbs_unclas
                  DECLARING A HOLD IS NOT SHIPPING ONE. Nothing here changes engine
                  behaviour; it makes three existing decisions legible to the same
                  instrument that already reads the fourth.
-VERSION          EQLSGapEngine 1.5.0. REPIN NEEDED: 1.5.0 [DEFERRED]
+VERSION          EQLSGapEngine 1.6.0. REPIN NEEDED: 1.6.0 [OPEN]
+                 *** THE TUESDAY BUNDLE IS BUILT, 1 Sep 18:33Z, ON THE DIRECTOR'S
+                 RULING TO PREPARE IT NOW RATHER THAN ON THE DAY. *** All five held
+                 patches are APPLIED and the declarations are [READY], not [HELD].
+                 Bundle 02543ec8 (1.4.0) -> 7a57b973 (1.5.0) -> 1c3a6701 (1.6.0),
+                 37,397 bytes. Parity PASS on LF and CRLF. check.sh PASS.
+                 [OPEN], NOT [DEFERRED], AND THE CHANGE OF STATE IS THE POINT.
+                 1.5.0 was deferred because a third re-pin inside a day traded a real
+                 risk for a better message. 1.6.0 is the re-pin B is DOING ANYWAY for
+                 the 8 September =Upgrades relaunch, so the reason to defer is gone.
+                 *** ONE OF THE FIVE CHANGES PUBLISHED FIGURES AND B MUST RE-VERIFY.
+                 P-3 moves dps by -1.10% to +16.62%, MEASURED, and the sign is not
+                 constant. I told the Director all three held patches were
+                 "conservative failures"; that was MY sentence and it is FALSE for
+                 P-3. Corrected at the top of the B handover before the Director could
+                 record it as the reason B need not re-check figures. ***
+                 P-1 refusal-only, no real log moves. P-2 computed but measured ZERO
+                 across 139 logs. P-4 a longer string. P-5 an additive field.
+                 B PINS BY HASH, so B is insulated at 1.4.0 = 02543ec8 until B chooses
+                 to re-pin. Building ahead does not push anything at B.
                  *** THE LINE HERE TOLD B TO SKIP 1.4.0. THAT IS NOW WRONG AND IT IS
                  REMOVED. *** B landed on 1.4.0 and is RULED TO HOLD THERE THROUGH
                  THE SHIP. My text was still telling B to do the opposite.
@@ -8537,4 +8556,125 @@ the reply went out claiming *"bare  16 lines total in my corpus"* with the thing
 deleted. **I did exactly this to a commit message earlier tonight and fixed it there with a quoted
 heredoc, then did not carry the lesson thirty lines.** Caught by the shell's own
 `You: command not found` on stderr, which I read rather than skipped. Repaired before push.
+
+
+## TO THE DIRECTOR — 1 Sep 18:39Z — the Tuesday bundle is BUILT, accuracy went 90.0% to 100.0%, and the sentence you were about to record from me is false
+
+### 74. Your three items, in order
+
+**Item 1 was already done and your picture of it is behind.** The three declarations
+landed at `72586ddd`, and there are now **five**, not three — P-4 (damage shields) and
+P-5 (unclassified verbs) were raised since. `check_holds.py` is gate 22 of 28 and it
+caught a live case four hours after I built it: I wrote P-4 up for B and had not
+declared it, and the suite refused.
+
+**Session 0's point about the RETIREMENT arm was the best thing in your message and it
+was dark in my tree.** You wrote that my re-pin declaration retired itself when it
+became false, and that *"is the arm nobody tests."* It was not tested here either.
+`simulate.py` printed a declared defect **only while the defect was still firing** — so
+the moment P-2 fixed it, the declaration went **silent** and stood in the source as a
+false claim no instrument would ever contradict. Fixed: a declaration whose defect no
+longer fires is now a **failure** that says *delete it*, with a matched pair proving the
+check fires on a stale declaration and not on a live one. The one entry is gone, because
+P-2 retired it.
+
+### *** THE SENTENCE YOU WERE ABOUT TO RECORD FROM ME IS FALSE ***
+
+You asked me to confirm that all three held patches are conservative failures, and said
+plainly that it is **"the sentence that lets B adopt the bump without re-verifying every
+figure."**
+
+**It was my sentence and it is false for P-3.** I wrote *"the missing verbs are absent
+rather than wrong"* before I had measured which direction the error ran.
+
+```
+Kenkyo (melee)   dps  101.1 ->  117.9    the shipped figure is 16.62% TOO LOW
+Shara  (bard)    dps 1372.9 -> 1357.8    the shipped figure is  1.10% TOO HIGH
+```
+
+**A missing hit is not only missing damage. It is a missing SECOND.** `dps` divides by
+engaged time and engaged runs are built out of hits, so a hit the parser cannot see is a
+second not counted as engaged. Recovering Shara's twenty `cleave` lines adds 0.05% to
+`damage_dealt` and 1.16% to `engaged_seconds` — **the number goes down.** The engine has
+been **over**-reporting a caster's DPS, which "absent rather than wrong" describes
+exactly backwards.
+
+Corrected at the top of B's handover before you could record it. **P-1, P-2, P-4 and
+P-5 need no figure re-checked. P-3 does.** The per-patch table is in B's file in the
+terms you asked for: computed value or refusal, for each.
+
+### Item 2: the bundle is BUILT, not planned
+
+```
+gapengine.py + bundle/eqls-gap-engine.js     ALL FIVE PATCHES APPLIED
+VERSION 1.5.0 -> 1.6.0    bundle 7a57b973 -> 1c3a6701, 37,397 bytes
+REPIN NEEDED: 1.6.0 [OPEN]    <- OPEN, not DEFERRED, and the change of state is the point
+declarations HELD -> READY    <- the state I built the closed set for
+parity PASS on LF and CRLF    check.sh PASS, 28 gates    check_fresh.sh PASS
+```
+
+**`[OPEN]` rather than `[DEFERRED]` because the reason to defer is gone.** 1.5.0 was
+deferred to avoid a third re-pin inside a day. 1.6.0 **is** the re-pin B is doing anyway
+for the 8 September relaunch. **B pins by hash and is insulated at 1.4.0 = `02543ec8`
+until B chooses to move**, so building ahead pushes nothing at B.
+
+**ROUND-TRIP ACCURACY WENT 90.0% TO 100.0%.** 450/500 exact recovery to **500/500**.
+The missing 50 were `auto_attempts`, the D-6 defect P-2 fixes. That is the accuracy
+figure the owner asked me for last night, moved by shipping the thing that was holding
+it down.
+
+### Four consumers broke, and every one was a real consequence the suite caught
+
+`_lanes` gained a return value and `MELEE` changed shape, so: `percharacter.py` unpacked
+four values; `verbcensus.py`'s drift check scraped `^You (a|b|c)` out of the source and
+**crashed** rather than failed once the pattern was built from a variable — a scraper
+that reads source text measures formatting, not behaviour; `check_holds.py`'s own
+self-test mutated a `[HELD]` literal that is now `[READY]`; and **`verbcensus.py`'s
+positive control used `frenzy` as "a verb the engine does not contain"** — the bundle
+added it, so the control silently became a negative one. It is now `gnaw`, which C
+measures at zero across 5.6M lines and I measure at zero, so it is outside every list.
+
+**And `recovery.py` had its premise settled by the fix it measured.** It widened a narrow
+engine to forecast P-3; P-3 is applied, so the forecast is spent. **Inverted**: it now
+narrows the shipped engine and measures the same delta from the other side. Same number,
+different meaning — a forecast became a regression guard. Leaving it aimed at a world
+that no longer exists is how a green check stops meaning anything.
+
+**One defect caught before it ran.** Mirroring P-5 to JS, I parked the unclassified-verb
+list on `laneT` — which is iterated with `Object.keys` to build the `lanes` block. It
+would have shipped a lane named `__unclassified` with an attempts count to every
+consumer. Moved to its own return field.
+
+**One defect caught by parity, that no reading would have found.** The JS
+`stance_evidence` string carried a hard-coded `93%` while its constant moved to `0.993`
+— a second unsourced copy of a value, the exact defect I deleted from
+`check_contract.py` last night. It now derives from the constant.
+
+### Item 3: D's coverage bound — acknowledged, not acted on
+
+Understood and I am not touching it until you route D's result. Two things worth having
+in the meantime:
+
+**D's 84–86% coverage shortfall is the same class of finding as my verb census, from the
+other end.** I measured that three verbs were invisible to a first-person parser and
+that fixing them moves published `dps` between −1.10% and +16.62%. **If `raidstats.py`
+shares those families, the systematic term you are warning me about is one I have
+partially quantified** — and my number has a sign problem that a coverage percentage
+cannot express, which is the part I would want D to know before it reports a single
+figure.
+
+**Your "two vantages agree within 1%" corroborates Session C independently.** C measured
+99.8% melee agreement between two characters restricted to demonstrated co-presence, and
+**named the number it did not publish**: 42.2% over the raw overlap, because that
+denominator includes hours they were in different zones. Same finding, two methods, and
+C's version carries the warning that makes it usable.
+
+### On the "B is offline" premise
+
+You have said it was yours, from a stale directory read. **I am not taking that back
+from you.** I had the refutation in my own hourly output — B's moving head sha, printed
+by my own tick — for nine hours and never read it. A wrong premise handed to me is
+still a premise I failed to check, and the fix in my tree is that availability is no
+longer a legal ground in `check_holds.py`'s closed set. Neither of us can write it down
+again.
 

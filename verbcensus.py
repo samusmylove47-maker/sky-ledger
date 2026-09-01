@@ -34,8 +34,13 @@ SELF = {"yourself"}
 # What gapengine.py's MELEE pattern reads today. Kept as a literal rather than
 # imported so this census stays a measurement of the LOGS and does not silently
 # change meaning when the engine changes. Cross-checked against the engine below.
-ENGINE_VERBS = {"slash", "pierce", "hit", "crush", "bash", "kick", "punch",
-                "backstab", "strike"}
+# UPDATED when the Tuesday bundle landed: nine verbs became nineteen. Kept as a
+# LITERAL rather than imported, deliberately, so this file stays a measurement of the
+# LOGS and does not silently change meaning when the engine changes -- but the
+# self-test below compares it against the engine's live sets, so drift fails loudly.
+ENGINE_VERBS = {"backstab", "bash", "bite", "claw", "cleave", "crush", "frenzy",
+                "hit", "kick", "pierce", "punch", "reave", "shoot", "slash", "slice",
+                "smash", "smite", "sting", "strike"}
 
 
 def census(paths):
@@ -141,7 +146,13 @@ if __name__ == "__main__":
         S = "[Mon Aug 31 12:00:0%d 2026] "
         body = "\n".join([
             S % 0 + "You slash a gnoll for 10 points of damage.",
-            S % 1 + "You frenzy on a gnoll for 40 points of damage.",   # NOT in the engine
+            # `gnaw` is the control BECAUSE it is outside every list: it comes from
+            # Shara's shipped parser and Session C measures it at ZERO across 5.6M
+            # lines, as do I. The control used to be `frenzy`, which the Tuesday
+            # bundle ADDED -- so the positive control silently became a negative one
+            # and this check failed the moment the engine caught up with it. A control
+            # must name something the thing under test genuinely cannot know.
+            S % 1 + "You gnaw a gnoll for 40 points of damage.",   # NOT in the engine
             S % 2 + "You hit a gnoll for 7 points of magic damage.",    # a spell, excluded
             S % 3 + "You hit yourself for 500 points of damage.",       # self, excluded
             S % 4 + "a gnoll hits YOU for 9 points of damage.",         # inbound, no stamp match on `You `
@@ -162,7 +173,7 @@ if __name__ == "__main__":
         # POSITIVE CONTROL FIRST: a census that finds nothing passes every exclusion
         # check below it vacuously.
         chk("finds a verb the engine's list does NOT contain",
-            "frenzy" in got and "frenzy" not in ENGINE_VERBS, f"got {sorted(got)}")
+            "gnaw" in got and "gnaw" not in ENGINE_VERBS, f"got {sorted(got)}")
         chk("finds the verb the engine DOES contain", got.get("slash") == (1, 10),
             f"slash -> {got.get('slash')}")
         chk("a qualified damage line is not counted as melee", "magic" not in got
@@ -173,11 +184,16 @@ if __name__ == "__main__":
             f"opened {opened} unique {uniq}")
         chk("stamped lines counted from the unique file only", stamped == 5,
             f"stamped {stamped}")
-        chk("the engine verb list matches gapengine.py",
-            ENGINE_VERBS == set(re.search(r"\^You \(([a-z|]+)\)",
-                io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                        "gapengine.py"), encoding="utf-8").read()).group(1).split("|")),
-            "the literal here has drifted from the engine")
+        # DRIFT CHECK, now against the engine's LIVE SETS rather than a regex over a
+        # literal alternation. The old version scraped `^You (a|b|c)` out of the source;
+        # the moment MELEE was built from a variable that regex returned None and the
+        # check CRASHED instead of failing -- a scraper that reads source text is a
+        # measurement of formatting, not of behaviour.
+        import gapengine as _G
+        live = _G.LANE_VERBS | _G.AUTO_VERBS | _G.UNCLASSIFIED_VERBS
+        chk("the engine verb list matches gapengine.py's live sets",
+            ENGINE_VERBS == live,
+            f"literal-only {sorted(ENGINE_VERBS - live)}, engine-only {sorted(live - ENGINE_VERBS)}")
         print(f"  {bad} self-test checks failed")
         sys.exit(1 if bad else 0)
 
