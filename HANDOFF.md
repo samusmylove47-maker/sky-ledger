@@ -15,7 +15,16 @@ OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so
                  logs the STANCE is unidentified, and stance is the precondition for
                  every observed-vs-model comparison, so every ratio is SUPPRESSED.
                  The ONLY log where the comparison is possible is a third-party TEST
-                 FIXTURE. percharacter.py, 18th gate, 5 self-test injections.
+                 FIXTURE. percharacter.py, 18th gate, 6 self-test injections.
+                 §57 — I MEASURED WHY THE STANCE REFUSES AND IT CHANGES THE ASK.
+                 TWO independent real characters, 741 non-crit melee hits, pooled
+                 even-damage share 63.6% and 61.5%. TEN engagements with 20+ hits,
+                 shares 0.51-0.69, and NOT ONE within 0.10 of the Offensive signature
+                 0.93. A between-fight mixture of the two known stances DOES NOT FIT.
+                 So "get a log in an identifiable stance" was the WRONG ASK — more
+                 logs of the same kind will not help. THE ASK IS A CLIENT SCREENSHOT
+                 OF THE STANCE TAKEN ALONGSIDE A LOG, so the signature can be
+                 calibrated against ground truth instead of assumed.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -6808,3 +6817,73 @@ checks fires. Two things went wrong on the way and both are the night's recurrin
 
 **35.5, Call of Flame, days 01–03, and now the stance stay BLOCKED. Nothing was worked
 around and nothing at the seam was touched.**
+
+---
+
+## 57. Why the stance refuses — measured, and it changes the ask
+
+§56 ended with "the blocker is the stance; get a log in an identifiable stance." **That
+ask was wrong, and measuring why the classifier refuses is what showed it.**
+
+### The classifier is not short of data. It is looking for a signature that is not there
+
+```
+Shara full   63.6% even damage over 121 non-crit melee hits   3.0 SE from Balanced,  6.5 SE from Offensive
+Kenkyo       61.5% even damage over 620 non-crit melee hits   5.7 SE from Balanced, 15.7 SE from Offensive
+Testchar*    85.7% even damage over 126 non-crit melee hits   8.0 SE from Balanced,  1.6 SE from Offensive
+                                                              * third-party TEST FIXTURE, not a real log
+```
+
+**Two independent real characters, 741 non-crit melee hits between them, both landing
+at 62–64%.** Kenkyo's 61.5% is 5.7 SE from Balanced over n=620 — that is not noise, and
+more of the same log will not move it.
+
+### The distinguishing test, and what it rules out
+
+If a character switched stance **between fights**, the per-engagement shares would be
+bimodal near 0.50 and 0.93 — that is what a mixture means at the fight level.
+
+```
+Shara    3 fights with 20+ hits:  0.57  0.60  0.69
+Kenkyo   7 fights with 20+ hits:  0.51  0.57  0.65  0.65  0.65  0.66  0.69
+         within 0.10 of Balanced 0.50: 4 of 10     of Offensive 0.93: 0 of 10
+```
+
+**Not one of ten fights sits near the Offensive signature.** So a between-fight mixture
+of the two known stances does not fit this data.
+
+**What that does NOT establish**, kept separate on purpose: a mixture *within* a single
+fight is not excluded; nothing here says whether `STANCE_EVEN_SHARE_OFFENSIVE = 0.93`
+is wrong, whether a third stance exists, or whether even-damage share is a stance
+signature at all. **Those are mechanism claims and R74 is the standing rule on them.**
+The measurement is the ten shares; the explanation is not mine to assert.
+
+### THE ASK, RESTATED
+
+Not "a log in an identifiable stance" — **a client screenshot of the stance taken
+alongside a log**, so the signature is calibrated against ground truth rather than
+assumed. One capture settles it, and it joins 35.5 and Call of Flame as a thing only
+the owner can produce. It is also the same shape as the existing published conflict
+`STANCE_EVEN_SHARE_OFFENSIVE` 0.93 vs 99.3%, which has been sitting unresolved.
+
+### Three defects in my own hour-old file, all found by using it
+
+1. **I collapsed two refusals into one.** The stance row reported `n=0` whenever the
+   stance was None, so *"only 0 usable hits, need 30"* and *"ample sample, neither
+   signature"* looked identical. **That is R159's fault — the one I fixed in the engine
+   four hours ago — reproduced by me in the row where it matters most**, because the
+   two have opposite consequences: more data fixes the first and cannot fix the second.
+2. **My first fix made it worse.** Reporting the real `n` made the verdict `OBSERVED
+   n=86` while the observed value was `None` — **claiming an observation I did not
+   have.** There are now three verdicts: an ample sample that yields no answer is
+   `INCONCLUSIVE`, exactly as `coverage.parse` separates *unreadable* from *read,
+   nothing there*. A check asserts nothing is `OBSERVED` with no value.
+3. **The n was the wrong population.** I passed 86 — auto-attack swings only — beside a
+   verdict the classifier computes over all 121 non-crit melee hits. **A sample size
+   printed beside a verdict derived from a different sample** is the same defect as the
+   202% share, at one-tenth the size and in my own new code.
+
+`percharacter.py --selftest` now injects six bad rows and each trips the check that
+owns it. `check.sh` PASS, 18 gates.
+
+**35.5, Call of Flame, days 01–03, and the stance capture stay BLOCKED.**

@@ -86,6 +86,9 @@ def observe(lines):
 
     mel = [h for h in hits if h["kind"] == "melee" and h["verb"] in AUTO and not h["kill"]]
     nc = [h["amt"] for h in mel if not h["crit"]]
+    # The classifier's population: EVERY melee verb, non-crit, killing blows excluded.
+    stance_n = len([h for h in hits if h["kind"] == "melee"
+                    and not h["crit"] and not h["kill"]])
     cr = [h["amt"] for h in mel if h["crit"]]
     lanes_seen = sorted(set(lane_t) & set(M.LANE_OWNER))
     # The log narrows the class set: a lane appears only if somebody in the trio owns
@@ -100,9 +103,12 @@ def observe(lines):
         swings_landed=len(mel), swings_attempted=auto_n, melee_s=melee_s,
         nc=nc, cr=cr, lanes=lane_t, lanes_seen=lanes_seen,
         class_candidates=sorted(classes) if classes else [],
-        stance=rep["measured"].get("stance_inferred"),
+        stance=rep["measured"].get("stance_inferred"), stance_n=stance_n,
         stance_evidence=rep["measured"].get("stance_evidence"),
         dps=rep["measured"].get("dps"),
+        runs=G._engagements(hits),
+        melee_nc=[h for h in hits if h["kind"] == "melee"
+                  and not h["crit"] and not h["kill"]],
     )
 
 
@@ -111,10 +117,17 @@ def rows(o):
     out = []
 
     def add(name, kind, n, obs, model, note):
+        # THREE VERDICTS, not two. The two-verdict version called the stance
+        # "OBSERVED n=86" while its observed value was None -- it claimed an
+        # observation it did not have, which is worse than the conflation it replaced.
+        # An ample sample that yields no answer is its own state, exactly as
+        # coverage.parse separates "unreadable" from "read, nothing there".
         if kind == "assumed":
             v = "ASSUMED"
         elif n is None or n < N_FLOOR:
             v = "REFUSED"
+        elif obs is None:
+            v = "INCONCLUSIVE"
         else:
             v = "OBSERVED"
         out.append((name, v, n, obs, model, note))
@@ -130,8 +143,24 @@ def rows(o):
     add("crit multiplier", "refusable", len(o["cr"]),
         (st.mean(o["cr"]) / st.mean(o["nc"])) if o["cr"] and o["nc"] else None,
         M.CRIT_MULT, "ratio of two means; n is the CRIT count, the scarcer side")
-    add("stance", "refusable", len(o["nc"]) if o["stance"] else 0,
-        o["stance"], M.STANCE_DMG, "engine's own classifier; None means NOT identified")
+    # TWO DIFFERENT REFUSALS, and the first version of this line collapsed them into
+    # one by reporting n=0 whenever the stance was None. That is R159's fault -- the
+    # shape I fixed in the engine four hours ago -- reproduced in code I wrote an hour
+    # ago, in the row where it matters most.
+    #   "only 0 usable hits; need 30"   the sample cannot support an answer
+    #   "neither signature within 2 SE" the sample is ample and says NEITHER
+    # More data fixes the first. It does NOT fix the second, and that changes the ask.
+    ev = o["stance_evidence"] or ""
+    inconclusive = "NOT identified" in ev and "need 30" not in ev
+    # n IS THE CLASSIFIER'S OWN POPULATION, not mine. I first passed len(nc), which
+    # counts AUTO-attack swings only, while _stance uses every melee verb -- 86 against
+    # its 121. Reporting a sample size beside a verdict computed from a different
+    # sample is the population defect this repository named in measured.window.
+    add("stance", "refusable", o["stance_n"],
+        o["stance"], M.STANCE_DMG,
+        ("the sample is AMPLE and the classifier says NEITHER -- more of the same log "
+         "will not fix this" if inconclusive else
+         "sample below the 30-hit floor the classifier requires"))
     for v in o["lanes_seen"]:
         n_l = len(o["lanes"][v])
         add(f"lane rate: {v}", "refusable", n_l,
@@ -171,11 +200,46 @@ def audit(o, r=None):
     above = [x for x in r if x[1] == "OBSERVED" and (x[2] is None or x[2] < N_FLOOR)]
     out.append((f"nothing is OBSERVED on fewer than {N_FLOOR} samples", not above,
                 f"{[(x[0], x[2]) for x in above]}"))
+    empty = [x for x in r if x[1] == "OBSERVED" and x[3] is None]
+    out.append(("nothing is OBSERVED with no value", not empty,
+                f"{[x[0] for x in empty]} -- an ample sample that answered nothing is "
+                "INCONCLUSIVE, not observed"))
     # THE PRECONDITION. A run where nothing is observable proves nothing about the
     # audit -- it reads identically to an audit that cannot observe anything at all.
     out.append(("at least one input IS observed on this log",
                 any(x[1] == "OBSERVED" for x in r),
                 f"{sum(1 for x in r if x[1] == 'OBSERVED')} observed"))
+    return out
+
+
+def stance_band(o):
+    """WHY the classifier says NEITHER, as a distribution rather than a verdict.
+
+    If the character switched stance between fights, the PER-ENGAGEMENT even-damage
+    shares should be bimodal near 0.50 and 0.93 -- that is what a mixture means at the
+    fight level. If it is one steady value, they cluster. Measured, not asserted, and
+    nothing here says which stance the character is in or whether 0.93 is right.
+    """
+    out, shares = [], []
+    for a, b in o["runs"]:
+        w = [h for h in o["melee_nc"] if a <= h["t"] <= b]
+        if len(w) >= 20:
+            shares.append(sum(1 for h in w if h["amt"] % 2 == 0) / len(w))
+    if not shares:
+        return ["per-engagement share NOT CLAIMED: no engagement carries 20+ non-crit hits"]
+    ss = sorted(shares)
+    n50 = sum(1 for x in ss if abs(x - G.STANCE_EVEN_SHARE_BALANCED) < 0.10)
+    n93 = sum(1 for x in ss if abs(x - G.STANCE_EVEN_SHARE_OFFENSIVE) < 0.10)
+    out.append(f"per-engagement even share, {len(ss)} fights with 20+ hits: "
+               f"{[round(x, 2) for x in ss]}")
+    out.append(f"within 0.10 of Balanced {G.STANCE_EVEN_SHARE_BALANCED:.2f}: {n50}   "
+               f"of Offensive {G.STANCE_EVEN_SHARE_OFFENSIVE:.2f}: {n93}   "
+               f"neither: {len(ss) - n50 - n93}")
+    if n93 == 0 and len(ss) >= 3:
+        out.append("NO fight sits near the Offensive signature, so a BETWEEN-FIGHT "
+                   "mixture of the two known stances does not fit. A mixture WITHIN "
+                   "one fight is not excluded, and nothing here says what the true "
+                   "signature is -- that would be a mechanism claim.")
     return out
 
 
@@ -200,6 +264,11 @@ def report(o):
                 print(f"  {'':22} {'':9} {'':6}  ratio observed/model = {obs/model:.3f}")
         if v == "REFUSED":
             print(f"  {'':22} NOT CLAIMED: {note}")
+        if v == "INCONCLUSIVE":
+            print(f"  {'':22} INCONCLUSIVE: {note}")
+            if name == "stance":
+                for ln in stance_band(o):
+                    print(f"  {'':22} {ln}")
 
 
 if __name__ == "__main__":
@@ -252,6 +321,9 @@ if __name__ == "__main__":
     inject("a REFUSABLE input no measurement reaches is caught",
            lambda r: [r.remove(x) for x in list(r) if x[0].startswith("lane rate:")],
            "every REFUSABLE input is reached by a measurement")
+    inject("an OBSERVED row carrying no value is caught",
+           lambda r: r.__setitem__(0, [r[0][0], "OBSERVED", 999, None, r[0][4], r[0][5]]),
+           "nothing is OBSERVED with no value")
     inject("a run where NOTHING is observed is caught, not read as clean",
            lambda r: [x.__setitem__(1, "REFUSED") for x in r if x[1] == "OBSERVED"],
            "at least one input IS observed on this log")
