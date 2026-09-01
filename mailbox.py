@@ -27,7 +27,7 @@ finding nothing, which is the fault this repository has caught more than any oth
     python3 mailbox.py --poll     fetch the peer's repo and read its mailbox
     python3 mailbox.py --selftest
 """
-import io, os, re, subprocess, sys
+import datetime, io, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MAILBOX = os.path.join(ROOT, "MAILBOX.md")
@@ -103,6 +103,30 @@ def here(rel):
     return os.path.exists(os.path.join(ROOT, rel))
 
 
+def record(sha, verdict, stamp):
+    """Write the poll result back into MAILBOX.md.
+
+    WHY THIS IS NOT LEFT TO THE AUTHOR. A poll record that must be hand-edited goes
+    stale, and every hand-maintained field in this repository has: LAST CHANGE stood
+    15 hours old under a header reading "update on EVERY push", and "0 commits ahead"
+    stood through sixty commits and was then repeated to a peer as fact.
+    A field whose whole purpose is to say WHEN I last looked cannot depend on my
+    remembering to say it. Every exit path of --poll writes here, including the
+    UNREACHABLE ones -- especially those, because a failed look is the reading most
+    worth having a timestamp on."""
+    try:
+        t = io.open(MAILBOX, encoding="utf-8").read()
+    except OSError:
+        return False
+    new, n = re.subn(r"^LAST-POLLED-PEER:.*$",
+                     f"LAST-POLLED-PEER: {stamp} {sha or '-'} {verdict}",
+                     t, count=1, flags=re.M)
+    if not n:
+        return False
+    io.open(MAILBOX, "w", encoding="utf-8").write(new)
+    return True
+
+
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         print("SELFTEST -- each check must fail when its own condition is broken")
@@ -146,6 +170,26 @@ if __name__ == "__main__":
         chk("NO messages at all is caught, not read as clean",
             any("at least one message" in x for x in
                 fired(re.sub(r"^MSG:.*$", "", GOOD, flags=re.M))), "")
+        # record() is the piece that keeps the field honest, so it cannot be the one
+        # piece with no test. Exercised on its SUBSTITUTION, hermetically -- the real
+        # function writes MAILBOX.md and a self-test must not.
+        import re as _re
+        def _sub(t, stamp, sha, verdict):
+            out, n = _re.subn(r"^LAST-POLLED-PEER:.*$",
+                              f"LAST-POLLED-PEER: {stamp} {sha or '-'} {verdict}",
+                              t, count=1, flags=_re.M)
+            return out, n
+        w, n = _sub(GOOD, "2026-09-01T19:39Z", "abc1234", "UNREACHABLE")
+        chk("a recorded poll replaces the line and does not append a second",
+            n == 1 and w.count("LAST-POLLED-PEER:") == 1, f"n={n}")
+        chk("...and the rewritten mailbox still passes every check",
+            not fired(w), f"{fired(w)}")
+        chk("recording an UNREACHABLE poll with NO sha still yields a legal line",
+            not fired(_sub(GOOD, "2026-09-01T19:39Z", "", "UNREACHABLE")[0]),
+            "a failed fetch cannot be recorded, so it would go unrecorded")
+        chk("a mailbox with no poll line is NOT silently given one",
+            _sub("MAILBOX-VERSION: 1\n", "x", "y", "NEW")[1] == 0,
+            "record() would fabricate a poll record where none was declared")
         chk("a duplicate message id fires",
             any("reused" in x for x in fired(
                 GOOD + "MSG: E-001 [FYI] to=C re=dupe -- a second use of one id\n"
@@ -159,14 +203,17 @@ if __name__ == "__main__":
         repo, branch = hdr.get("PEER-REPO", ""), hdr.get("PEER-BRANCH", "main")
         box = hdr.get("PEER-MAILBOX", "MAILBOX.md")
         d = os.path.join("/home/user", *repo.split("/")) if repo else ""
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
         print(f"peer {repo} @ {branch}, mailbox {box}")
         if not d or not os.path.isdir(os.path.join(d, ".git")):
             print(f"  VERDICT UNREACHABLE -- no checkout at {d}. NOT 'nothing new'.")
+            print(f"  recorded: {record('', 'UNREACHABLE', stamp)}")
             sys.exit(0)
         r = subprocess.run(["git", "-C", d, "fetch", "origin", branch],
                            capture_output=True, text=True)
         if r.returncode != 0:
             print(f"  VERDICT UNREACHABLE -- fetch failed: {r.stderr.strip()[:120]}")
+            print(f"  recorded: {record('', 'UNREACHABLE', stamp)}")
             sys.exit(0)
         sha = subprocess.run(["git", "-C", d, "rev-parse", "--short",
                               f"origin/{branch}"], capture_output=True, text=True)
@@ -197,11 +244,17 @@ if __name__ == "__main__":
             else:
                 print(f"  peer head unchanged at {sha.stdout.strip()} since the last "
                       f"recorded poll, which is the only negative I can honestly give.")
+            print(f"  recorded: {record(sha.stdout.strip(), 'UNREACHABLE', stamp)}")
             sys.exit(0)
         pm = MSG.findall(cat.stdout)
         print(f"  peer mailbox: {len(pm)} message(s)")
         for mid, st, to, re_, what in pm:
             print(f"    {mid} [{st}] to={to} re={re_} -- {what[:60]}")
+        # NEW only if the peer head actually moved since the last recorded poll; a
+        # mailbox I have already read is not news because I read it again.
+        v = "NEW" if sha.stdout.strip() != prev else "NOTHING-NEW"
+        print(f"  VERDICT {v}")
+        print(f"  recorded: {record(sha.stdout.strip(), v, stamp)}")
         sys.exit(0)
 
     print(f"read 1 file: MAILBOX.md ({len(text)} bytes)")
