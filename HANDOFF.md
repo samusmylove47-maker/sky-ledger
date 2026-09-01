@@ -42,6 +42,30 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  I verified the repository is PUBLIC (visibility: public) before
                  deciding, because the ruling turns on publication and not on access.
 
+                 D-7 [OPEN, 1 Sep 16:10Z]  *** THE BIGGEST ACCURACY DEFECT I HAVE
+                 FOUND, AND THE FIRST HELD PATCH THAT CHANGES REAL NUMBERS. ***
+                 THE METER CANNOT SEE SIX FIRST-PERSON DAMAGE VERBS. Measured over
+                 117 logs / 282,615 stamped lines: claw, frenzy, smite, cleave,
+                 reave, shoot are absent from the MELEE pattern. 2,579 lines and
+                 115,938 damage go uncounted — 19.98% OF ALL FIRST-PERSON MELEE
+                 LINES. 58 logs affected; TWO where 100% of the character's melee
+                 damage is invisible.
+                 WORSE, AND IT IS AN INTERNAL CONTRADICTION I SHOULD HAVE CAUGHT:
+                 model4's LANE_OWNER owns SIX lanes and carries rates and means for
+                 all six; gapengine's LANE_CEILING has FOUR. `frenzy` (Berserker)
+                 and `smite` (Paladin) are in the model and INVISIBLE TO THE METER.
+                 For a Berserker or a Paladin the lane analysis is silently blind to
+                 their signature ability.
+                 CLASSIFICATION IS MEASURED, NOT GUESSED — inter-arrival medians:
+                 known AUTO verbs 2-3s, known LANE verbs 4-5s. claw 2.0s -> AUTO.
+                 frenzy 6.0s, smite 9.0s, reave 10.5s, cleave 26.0s -> LANES. shoot
+                 n<20 -> REFUSED, not classified. frenzy and smite landing as lanes
+                 CORROBORATES model4's table from a different direction entirely.
+                 HELD, and the reason is the seam not the evidence: it is a bundle
+                 bump and B is offline. THIS ONE IS NOT LIKE D-2 AND D-6 — those have
+                 zero real-world instances; this changes published numbers. Your call
+                 whether a 20% under-count forces the bump.
+
                  D-6 [OPEN, 1 Sep 15:45Z]  A LIVE ENGINE DEFECT, found by the
                  round-trip simulator on its FIRST RUN. `_lanes` counts
                  `You hit yourself` as an AUTO-ATTACK ATTEMPT: `hit` is in AUTO_VERBS
@@ -7609,3 +7633,95 @@ percharacter.py  the audit: a log supplies at most 6 of 13 model inputs.
 
 **35.5, Call of Flame and the stance stay BLOCKED. D-2 and D-6 are held patches
 awaiting a seam window.**
+
+---
+
+## 67. Grammar accuracy: the meter cannot see six of its own damage verbs
+
+§66 measured the arithmetic at 90.0% and said the grammar question — *does the meter
+read EverQuest correctly* — was answerable only against real logs, not in a simulation.
+**Here it is, and the answer is worse than the simulation's.**
+
+Every `You <verb> X for N points of damage.` line in **117 logs, 282,615 stamped
+lines**, with the verb left open instead of enumerated:
+
+```
+verb          lines       damage    in the regex?
+slash         4,559      423,828    yes
+pierce        1,457       56,135    yes
+kick          1,307       71,786    yes
+claw          1,052       51,288    *** NO ***
+bash          1,049       65,202    yes
+frenzy          727       39,498    *** NO ***
+smite           699       21,219    *** NO ***
+strike          681       35,390    yes
+backstab        528       84,784    yes
+crush           442       12,581    yes
+punch           288       36,456    yes
+cleave           62        2,417    *** NO ***
+reave            30        1,438    *** NO ***
+hit              16        1,292    yes
+shoot             9           78    *** NO ***
+
+MISSED: 2,579 lines, 115,938 damage — 19.98% of first-person melee lines
+```
+
+**One line in five of this character's own melee output is invisible to the DPS
+meter.** 58 logs are affected. In two of them, **100% of the first-person melee damage
+is missed.** The same six verbs are missing from the `You try to <verb>` miss pattern,
+so lane *attempt* rates are under-counted too — and attempts are the denominator the
+lane gap is computed against.
+
+### The internal contradiction I should have caught weeks ago
+
+```
+model4.LANE_OWNER    backstab bash frenzy kick smite strike      SIX lanes
+gapengine.LANE_CEILING  backstab bash      kick       strike     FOUR
+```
+
+**`frenzy` (Berserker) and `smite` (Paladin) have rates and means in the model —
+`frenzy` 0.72/s and 57.21 mean, `smite` 0.31/s and 31.30 — and the meter cannot see
+them at all.** For a Berserker or a Paladin, the lane analysis is silently blind to
+their signature ability, and the engine reports no gap because it observes no attempts.
+Two files in one repository, one of them enumerating what the other cannot parse.
+
+### The classification is measured, and one of my two tests was useless
+
+Adding verbs is only safe if each is filed correctly: an auto-attack verb feeds
+`melee_seconds`, the **denominator**, while a lane verb feeds a rate. Misfiling one
+would corrupt a denominator, which is worse than the gap.
+
+**Test 1 — co-occurrence — was inconclusive** and I am recording that it failed rather
+than quietly dropping it. I reasoned that a character's auto-attack verb would appear
+*alone*; `claw` co-occurs with a known auto verb in 18 of 19 logs. These are
+third-party fixtures that can carry several characters, so the test cannot separate
+"a second lane" from "a second character".
+
+**Test 2 — inter-arrival cadence — is decisive.** An auto-attack fires on a weapon-delay
+cadence; a lane fires on a cooldown:
+
+```
+known AUTO   slash 2.0s   pierce 2.0s   punch 2.0s   crush 3.0s
+known LANE   strike 4.0s  backstab 5.0s  bash 5.0s   kick 5.0s
+─────────────────────────────────────────────────────────────
+claw   2.0s  -> AUTO-ATTACK
+frenzy 6.0s  -> LANE      smite 9.0s -> LANE
+reave 10.5s  -> LANE      cleave 26.0s -> LANE
+shoot        -> n < 20, REFUSED. Not classified, and archery is plausibly its own
+                lane rather than either of these. It is 9 lines and 78 damage.
+```
+
+**`frenzy` and `smite` landing as lanes corroborates `model4.LANE_OWNER` from a
+completely different direction** — that table was built from other evidence and the
+cadence measurement agrees with it without being told.
+
+### Why it is held, and why this one is different
+
+The patch is a bundle change and **B is offline on 1.4.0**. But this is **not** like D-2
+and D-6: both of those have **zero instances in real logs**, so holding them costs
+nothing. **This one changes published numbers by up to 20% on a fifth of the corpus.**
+
+**The evidence is not what is holding it — the seam is.** D-7 puts the question where it
+belongs: whether a 20% under-count forces a bump the consumer cannot yet take.
+
+**35.5, Call of Flame and the stance stay BLOCKED. D-2, D-6 and D-7 are held patches.**
