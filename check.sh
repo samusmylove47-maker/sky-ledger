@@ -164,6 +164,18 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== every withheld patch must be declared, with a ground from a closed set =="
+# Added 1 Sep. A claim that STOPS work does not announce itself the way a claim that
+# starts work does. Four items were held in this tree; ONE was in a machine-checked
+# closed set (REPIN NEEDED) and three were prose in commit bodies, visible to no
+# instrument. The GROUND is a closed set for the same reason the state is: I held
+# these three for nine hours on "B is offline", which was false the whole time and
+# which my own hourly output refuted. Availability is not a legal ground.
+# HELD is a PASSING state on purpose -- a gate that punishes an honest hold teaches
+# its author to delete the declaration to get green.
+python3 check_holds.py --selftest || fail=1
+python3 check_holds.py || fail=1
+echo
 echo "== the JS bundle and the Python engine must agree field for field =="
 python3 bundle/parity.py || fail=1
 echo

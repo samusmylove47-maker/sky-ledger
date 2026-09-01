@@ -49,6 +49,17 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  three questions I need answered when B re-pins. Not a summary — the
                  artifact.
 
+                 D-9 [DONE, ruled 1 Sep 16:40Z, committed 16:55Z]  Your ruling
+                 carried out: the three held patches are declared in the same form as
+                 the re-pin. HELD PATCHES field above, gated by check_holds.py, in
+                 check.sh at 23 gates. TWO CLOSED SETS, not one — state AND ground.
+                 The ground is the half that matters: mine was "B is offline" for
+                 nine hours, it was false, and a free-text ground is one nobody can
+                 check. Availability is not a legal ground, so that claim can no
+                 longer be written down. HELD PASSES the gate on purpose — a gate
+                 that punishes an honest hold teaches you to delete the declaration
+                 to get green.
+
                  D-7 [OPEN, 1 Sep 16:10Z]  *** THE BIGGEST ACCURACY DEFECT I HAVE
                  FOUND, AND THE FIRST HELD PATCH THAT CHANGES REAL NUMBERS. ***
                  THE METER CANNOT SEE SIX FIRST-PERSON DAMAGE VERBS. Measured over
@@ -238,6 +249,27 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  included. My branch is an ancestor of master, 0 commits ahead.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
+HELD PATCHES     THREE, and they are now declared in a form an instrument reads —
+                 check_holds.py, wired into check.sh. A withheld fix leaves no trace
+                 in any output, so until this field existed the only held item any
+                 gate could see was the re-pin.
+                 THE GROUND IS A CLOSED SET AND THAT IS THE POINT. I held these three
+                 for nine hours on the reason "B is offline", which was FALSE the whole
+                 time and which my own hourly tick refuted in its own output (§68).
+                 Availability is deliberately NOT a legal ground: a hold resting on
+                 somebody being reachable expires the moment they answer, and nobody
+                 goes back to check. Legal grounds are SCHEDULED-REBUILD,
+                 AWAITING-EVIDENCE, AWAITING-RULING.
+HELD-PATCH: P-1 [HELD] ground=SCHEDULED-REBUILD -- STANCE_EVEN_SHARE_OFFENSIVE 0.93 -> 0.993; 0.93 was calibrated on every melee line, the classifier compares it against a crit- and killing-blow-excluded population where the same file gives 0.9932 (n=732)
+HELD-PATCH: P-2 [HELD] ground=SCHEDULED-REBUILD -- apply the existing SELF_TARGETS guard inside _lanes, not only _hits; a self-hit is currently counted as an auto-attack attempt and inflates the lane-share denominator
+HELD-PATCH: P-3 [HELD] ground=SCHEDULED-REBUILD -- add claw to AUTO_VERBS and frenzy, smite, cleave, reave to LANE_VERBS; six first-person damage verbs are invisible to the meter, 2,579 lines and 115,938 damage, 19.98% of first-person melee lines over 117 logs
+                 ALL THREE change a computed value -> bundle bump -> a THIRD B re-pin
+                 inside a day, four days before B rewrites the consumer. The ground is
+                 Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
+                 evidence and my three questions for B: handover/TO-SESSION-B-tuesday.md.
+                 DECLARING A HOLD IS NOT SHIPPING ONE. Nothing here changes engine
+                 behaviour; it makes three existing decisions legible to the same
+                 instrument that already reads the fourth.
 VERSION          EQLSGapEngine 1.5.0. REPIN NEEDED: 1.5.0 [DEFERRED]
                  *** THE LINE HERE TOLD B TO SKIP 1.4.0. THAT IS NOW WRONG AND IT IS
                  REMOVED. *** B landed on 1.4.0 and is RULED TO HOLD THERE THROUGH
@@ -351,7 +383,17 @@ TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exi
                  asserting. Widening costs one character and is provably inert:
                  `([ \d]\d)`. Worth C, D and B each grepping their own pattern.
                  §49.1 carries the evidence and what it does not establish.
-LAST CHANGE      1 Sep 01:55Z — check.sh PASS, 17 gates. VERSION 1.2.0 -> 1.3.0,
+LAST CHANGE      1 Sep 16:55Z — check.sh PASS, 23 gates, 24.4s. THE THREE HELD
+                 PATCHES ARE NOW DECLARED — see the HELD PATCHES field above — and
+                 check_holds.py reads them. 14 checks, 6 self-test mutations, all
+                 firing. STATE AND GROUND ARE BOTH CLOSED SETS; the mutation this
+                 file exists for is `ground=B-IS-OFFLINE`, which is the exact claim I
+                 held these three on for nine hours and which is now undeclarable.
+                 THIS FIELD WAS ITSELF 15 HOURS STALE, under a header that says
+                 "Update these fields on EVERY push". Nine pushes went by. An
+                 append-only history below and a stale summary above is the same
+                 defect as a stale fixture: the artifact nothing produces.
+                 PRIOR: 1 Sep 01:55Z — check.sh PASS, 17 gates. VERSION 1.2.0 -> 1.3.0,
                  RULED by the Director, not taken unilaterally. Bundle 693ea8ad,
                  26,610 b. Two byte-sets shipped as 1.2.0 in one night and the second
                  CHANGED THE PARSER, so B's exact-equality guard could not tell the
