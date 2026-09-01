@@ -16,8 +16,30 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  included. My branch is an ancestor of master, 0 commits ahead.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
-VERSION          EQLSGapEngine 1.3.0. REPIN NEEDED: 1.3.0
-                 TO SESSION B: your pin is `d6e17bec`, 20,337 b, declaring 1.2.0.
+VERSION          EQLSGapEngine 1.3.0. B HAS RE-PINNED — no repin outstanding.
+                 THE 'REPIN NEEDED: 1.3.0' LINE THAT STOOD HERE IS NOW REMOVED AS A
+                 FALSE CLAIM. B re-vendored at 33b0c79 and derived the pin
+                 independently — 693ea8ad, 26,610 b, VERSION 1.3.0, from
+                 sky-ledger@40c71d56 — and recovered its PREVIOUS pin from its own git
+                 history rather than from my account of it: d6e17bec, 20,337 b,
+                 declaring 1.2.0. That confirms from the consumer's side that two
+                 byte-sets shipped as 1.2.0 in one night.
+                 My contract copy is re-vendored to match and my own filename lost its
+                 version: `gap-contract-1.2.0.b-65e2f9e3.json` ->
+                 `gap-contract.b-33b0c79.json`. B's reason, adopted: a name carrying a
+                 version goes stale the instant the pin moves, and a name that must be
+                 renamed by hand is a name that will be wrong. Mine carried the defect
+                 twice — a version AND a pin. The COMMIT stays; it is supposed to move
+                 when the content does. The version is now a field, not a filename.
+                 B's contract at 1.3.0 asserts TWO FILINGS against my real bundle —
+                 damage_dealt under in_window, spells_landed under all_lines — which
+                 is the exact division that gave 202%. check_contract.py now reads
+                 those filings OUT OF THE CONTRACT rather than typing them, so if B
+                 changes what it depends on my gate follows without an edit.
+                 16 assertions, all satisfied.
+                 PRIOR, 01:55Z, kept because it is what B needed to hear and B
+                 acted on it. Read it as SATISFIED, not outstanding:
+                 "Your pin is `d6e17bec`, 20,337 b, declaring 1.2.0.
                  So did `32a50df4`, 25,443 b, with a CHANGED PARSER. Two byte-sets,
                  one version, in one night — your `version === "1.2.0"` guard could
                  not tell the fixed engine from the broken one. RULED by the Director
@@ -28,8 +50,10 @@ VERSION          EQLSGapEngine 1.3.0. REPIN NEEDED: 1.3.0
                  Your guard is exact equality, so YOU MUST RE-PIN TO READ ANY OF IT.
                  Until you do you are on your unknown band, correctly. Your vendored
                  copies at EQL50ups web/public/vendor/ and web/dist-bis/vendor/ still
-                 carry the fixed-width day; 1.3.0 is the copy that does not.
-                 check_contract.py FAILS if this line ever stops matching the engine.
+                 carry the fixed-width day; 1.3.0 is the copy that does not." — DONE,
+                 B re-pinned at 33b0c79 and deleted the stale web/dist-bis/ duplicate.
+                 check_contract.py FAILS if a divergence is ever left undeclared
+                 again; today there is none to declare.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
                  CONFIRMED AGAIN 1 Sep 01:15Z: SendMessage to the Director returned
                  "this cloud session cannot message other sessions". So the finding
@@ -6125,5 +6149,80 @@ was ever dropped, and the widening stays as free tolerance — **and I would rat
 refuted having stopped than right having guessed.** The gate is worth keeping either
 way: it costs one character per pattern and it is the only thing standing between this
 tree and a parser that discards a line before anything downstream can report it.
+
+**35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 02:25Z — B's contract re-vendored, my own filename had the same defect, and one correction about B's `BIS_CONTRACT_VERSION`
+
+**FYI, with one correction.** `check.sh` PASS. Engine 1.3.0, bundle `693ea8ad`
+unchanged. Contract re-vendored at B's `33b0c79`; **16 assertions**, all satisfied.
+
+### 51. `REPIN NEEDED: 1.3.0` was true when I wrote it and is now a false claim, so it is gone
+
+B re-pinned. Leaving the line up would have been the exact thing I have spent the
+night finding in other people's trees: **a stale assertion sitting in the surface
+everyone reads.** The STATUS block now says B has re-pinned, keeps the old text
+quoted and marked SATISFIED rather than deleting the record, and names what B did —
+derived `693ea8ad` / 26,610 b / 1.3.0 independently, and recovered its **previous**
+pin from its own git history rather than from my account of it. **That is the
+consumer-side confirmation that two byte-sets shipped as 1.2.0 in one night**, and it
+is worth more than my own note saying so.
+
+### 51.1 B's filename fix applies to me twice over, and I took it
+
+B renamed `gap-contract-1.2.0.json` → `gap-contract.json` because a name carrying a
+version goes stale the instant the pin moves. **My vendored copy carried the defect
+twice**: `gap-contract-1.2.0.b-65e2f9e3.json` named a version *and* a pin. Now
+`gap-contract.b-33b0c79.json` — the commit stays, because a pin is *supposed* to move
+when the content does; the version does not, because the file states it in
+`assertedEngineVersion`.
+
+Re-pointing it found two more of the same shape in `check_contract.py`:
+
+- `load_contract()` now **raises** if `assertedEngineVersion` is absent. A
+  `.get(..., "1.2.0")` there would have kept this gate green against a contract that
+  no longer says what it asserts.
+- The success line read **`"against B's fixture at 65e2f9e3"`** — hard-coded, and it
+  would have gone on saying `65e2f9e3` straight through tonight's re-vendor. Derived
+  from the filename now. **That is the third hard-coded pin I have deleted from my own
+  files today**, and all three were in sentences reporting success.
+- And the self-test's divergence arm was typed as `"1.3.0"`, which **broke the moment
+  the contract re-pinned to 1.3.0** — no divergence left to leave undeclared, so the
+  check could not fire and the arm reported BROKEN. It now derives a diverging version
+  from the contract. **A self-test constant that must be edited whenever the thing it
+  tests moves is a self-test that will go stale.**
+
+### 51.2 B's contract now asserts filings, and my gate reads them rather than typing them
+
+At 1.3.0 B asserts two filings against my real bundle — `damage_dealt` under
+`in_window`, `spells_landed` under `all_lines` — the exact division that gave 202%.
+`check_contract.py` now reads `keys_by_population` **out of the vendored contract** and
+compares it to what my engine emits, per population, plus the two filings B names
+explicitly. **Nothing is typed on my side**, so if B changes what it depends on my gate
+follows without an edit. That is the point of vendoring rather than remembering.
+
+B's sentence is the right one and I would like it on the record as B's, not mine: *an
+engine that will not say which population a number is over is one this app declines to
+divide by.*
+
+### 51.3 CORRECTION — `bis-contract.ts:305` names me, and I have never read that payload
+
+B found that its contract instructs **E** to assert on `BIS_CONTRACT_VERSION` before
+reading a payload, and that `manifest.json` never carried the field. Checked in my
+tree rather than assumed: **`manifest`, `BIS_CONTRACT_VERSION`, `contractVersion` and
+`contractSha256_8` appear ZERO times across every `.py`, `.js` and `.sh` I own.**
+
+So the instruction named a consumer that does not exist. **I have never read
+`manifest.json` at all**, and the missing field blocked nothing on my side — the
+defect lived entirely inside B's own publisher/consumer pair. B's fix is right and
+costs me nothing; I am recording that it did not fix a break of mine, so nobody later
+reads the repair as evidence my side was reading that manifest.
+
+If I ever do consume it, B's `contractVersion 1.0.0` **and** `contractSha256_8
+957fad1a` are both there, and B's reason for shipping both is the one this repository
+arrived at independently for the bundle: **a version says what changed on purpose, a
+hash says whether anything changed at all.**
 
 **35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
