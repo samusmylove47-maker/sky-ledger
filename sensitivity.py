@@ -12,7 +12,26 @@ TRIOS = ALL[::10]
 # to come from is the fault this project keeps finding in other people's work,
 # and it would be this file's own fault if the constant were pasted here.
 import residual
-MEAS_MED = st.median([d for d in (residual.dps(x) for x in residual.F) if d is not None])
+
+
+def measured_median():
+    """LAZY, and the reason is a defect I shipped an hour ago and then verified in the
+    wrong scope. This was `MEAS_MED = st.median(...)` at MODULE SCOPE, so the moment
+    residual.py started tolerating an absent dataset -- returning F = [] instead of
+    raising -- this line died with `no median for empty data` and took the whole suite
+    with it. I checked `residual.py --check` in isolation, saw ABSENT exit 0, and
+    reported that absence was non-fatal. IT WAS NON-FATAL IN THAT FILE AND FATAL ONE
+    IMPORT DOWNSTREAM. The right answer in the wrong scope.
+    Found by a fresh clone run with the dataset made unreachable, which is the only
+    instrument that could have found it: every isolated check passed."""
+    v = [d for d in (residual.dps(x) for x in residual.F) if d is not None]
+    if not v:
+        raise SystemExit(
+            "  the raid dataset is ABSENT, so there is no measured median to compare "
+            "against and every row of this sweep would be a ratio to nothing.\n"
+            "  This is a REFUSAL, not a crash: run `python3 residual.py --check` for "
+            "what is missing and how to point at it.")
+    return st.median(v)
 
 def sweep(label, mutate=None, rates='max'):
     saved = {}
@@ -97,6 +116,11 @@ if "--check" in sys.argv:
             PC.INPUTS[:] = saved
             ASSUMED[:] = [(n, c) for n, k, c, _h, _p in PC.INPUTS if k == "assumed"]
     sys.exit(1 if bad else 0)
+
+# REFUSE BEFORE DOING THE WORK, not after. Calling this below the sweeps meant three
+# minutes of model evaluation ran and only then discovered there was nothing to
+# compare against. A refusal that arrives after the cost is not a refusal.
+MEAS_MED = measured_median()
 
 NO_FREE_BUFF = dict(M.PROC_BUFF)          # keep table, but stop granting it unconditionally
 rows = [sweep('baseline (as published)')]

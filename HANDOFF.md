@@ -35,6 +35,17 @@ OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so
                  sha256, ABSENT is loud and non-fatal, DRIFTED is fatal, and
                  COMMITTING THE DATASET NEEDS A RULING — it is another session's
                  measured data and not mine to take. check.sh 20 gates, 17.8s.
+                 §59 — I REPORTED THAT ABSENCE WAS NON-FATAL AND IT WAS FATAL ONE
+                 IMPORT DOWNSTREAM. sensitivity.py computed the measured median at
+                 MODULE SCOPE, so the moment residual.py started returning F=[] the
+                 whole suite died on "no median for empty data". I verified
+                 residual.py --check IN ISOLATION and reported a suite-level claim.
+                 Found only by a FRESH CLONE RUN WITH THE DATASET UNREACHABLE — every
+                 isolated check passed. Now refuses in 0.075s BEFORE the three minutes
+                 of sweeps, and the fresh clone passes with the file gone.
+                 THE ASSUMED-INPUT RANKING, baseline 4.59x: target mitigation 5.66x,
+                 wrath/ATK 4.00x, haste 3.63x, strikethrough 4.55x — strikethrough is
+                 ESSENTIALLY INERT and mitigation moves the model AWAY from measured.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -6983,3 +6994,78 @@ ASSUMED input with no sweep.
 
 **35.5, Call of Flame, days 01–03 and the stance capture stay BLOCKED. Committing the
 raid dataset is a fourth item and it needs a ruling, not a capture.**
+
+---
+
+## 59. I reported that absence was non-fatal. It was non-fatal in one file and fatal one import downstream
+
+§58 pinned the raid dataset and made `residual.py --check` report ABSENT and exit 0,
+on the reasoning that *a suite red for a reason nobody can fix teaches its reader to
+ignore it.* I verified that arm and said absence was non-fatal.
+
+**I verified it in the wrong scope.** `sensitivity.py:15` computed the measured median
+at **module scope**:
+
+```python
+MEAS_MED = st.median([d for d in (residual.dps(x) for x in residual.F) if d is not None])
+```
+
+The moment `residual.py` started tolerating absence — returning `F = []` instead of
+raising — that line died with `no median for empty data` and **took the whole suite
+with it.** My change made one file tolerant and one import downstream fatal, and I
+reported the file's behaviour as the suite's.
+
+### The instrument that found it, and why nothing else could have
+
+A **fresh clone run with the dataset made unreachable.** Every isolated check passed:
+`residual.py --check` exits 0 on ABSENT, `sensitivity.py --check` is instant, `check.sh`
+on this container is green — because on this container the file exists. The fault only
+appears when the file is gone, and **the only way to see that is to take it away.**
+
+```
+fresh clone, dataset present      check.sh exit 0
+fresh clone, dataset unreachable  check.sh exit 1   <- StatisticsError at sensitivity.py:15
+fresh clone, after the fix        check.sh exit 0, ABSENT declared, everything else green
+```
+
+That is the 31 Aug fresh-clone test again, with one addition that made it work: **it is
+not enough to clone fresh on the machine that has the files. The container-local
+dependency has to be removed for the clone to be a test of anything.**
+
+**Also fixed: the refusal arrived after the cost.** `measured_median()` was called
+*below* the sweeps, so three minutes of model evaluation ran before discovering there
+was nothing to compare against. **A refusal that arrives after the cost is not a
+refusal.** It now refuses in 0.075s, before the first sweep.
+
+### The ranking §56 asked for — what each unsupplyable assumption is worth
+
+Baseline model median is **4.59×** the measured median. Setting each assumed input to
+its stated neutral value:
+
+```
+target mitigation   raid targets mitigate like average ones   4.59x -> 5.66x   +23%
+wrath / ATK         no worn STR contribution                  4.59x -> 4.00x   -13%
+haste               none at all, against the capped 75        4.59x -> 3.63x   -21%
+strikethrough       the non-Ranger case                       4.59x -> 4.55x    -1%
+```
+
+**Haste is the largest gap-closer of the four; target mitigation moves the model
+*away* from measurement; strikethrough is essentially inert.** That is decision-relevant:
+if the owner can pin down one assumed quantity, haste and mitigation are worth an order
+of magnitude more than strikethrough, and **the 4.59× residual is demonstrably not
+hiding in strikethrough.**
+
+Three of the seven are declared unsweepable with a reason rather than skipped — weapon
+damage and delay are properties of a catalogue choice, not numbers, and buff uptime has
+no constant to move.
+
+**One redundancy, stated rather than hidden:** the derived list re-adds a `haste 0`
+sweep that the ad-hoc list already had, and the two rows agree exactly
+(`117.7 / 261.0 / 411.3`). That agreement is worth more than the duplication costs — it
+shows the derived list reproduces what was hand-chosen, **and adds the three the hand
+list missed.**
+
+`check.sh` PASS, 20 gates. Fresh clone passes with the dataset absent.
+
+**35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
+dataset still needs a ruling.**
