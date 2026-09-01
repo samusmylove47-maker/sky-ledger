@@ -5,6 +5,17 @@
      Update these fields on EVERY push. Sections below are append-only history. -->
 
 ```
+OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so no
+                 peer can issue a ruling until morning. I am therefore inside my own
+                 lane only, and I have touched NOTHING at the seam: no bundle, no
+                 version, no contract. The Director's ruling against a third re-pin
+                 gets STRONGER when B cannot respond at all, not weaker.
+                 STARTED CRITICAL-PATH TASK 2 and the first result is a REFUSAL, §56.
+                 model4 needs 13 inputs. A LOG SUPPLIES AT MOST 6. On all three REAL
+                 logs the STANCE is unidentified, and stance is the precondition for
+                 every observed-vs-model comparison, so every ratio is SUPPRESSED.
+                 The ONLY log where the comparison is possible is a third-party TEST
+                 FIXTURE. percharacter.py, 18th gate, 5 self-test injections.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -6696,3 +6707,104 @@ file that can disagree with me. Closing that needs D's real `lockoutCore.js`, wh
 a cross-repository read I have not made.
 
 **35.5, Call of Flame, and days 01–03 stay BLOCKED. Nothing was worked around.**
+
+---
+
+## 56. Critical-path task 2, started — and the first honest answer is that the log cannot support it
+
+**Overnight work, 1 Sep 08:00Z.** No peer is reachable, so this is strictly inside the
+standing bound: a measurement, a gate, and a refusal. **Nothing at the seam was
+touched** — bundle, version and contract are exactly as handed over.
+
+### What I set out to do, and why I did not do it
+
+§39.5 declared per-character modelling: take `model4`'s machinery, substitute what a
+log actually shows for a character, and see whether the model reproduces the observed
+DPS. I pointed it at the corpus log and stopped, because two things were true before
+any fitting could begin:
+
+- **The stance classifier REFUSES on that log**, and stance is a factor of **two** on
+  melee output.
+- **Auto-attack is 86 non-crit landed swings against a measured 1,372.9 DPS**, because
+  Shara is a Bard doing almost all of it through Denon's Desperate Dirge.
+
+Fitting on top of that produces a number whose uncertainty nobody can see. So
+`percharacter.py` answers the prior question instead: **for each input
+`model4.evaluate` consumes, can a log supply it?**
+
+### The result — `model4` needs 13 inputs, a log supplies at most 6
+
+On `corpus/amp/…_full.txt`:
+
+```
+model4 input           verdict        n      observed       model
+swing land rate        OBSERVED     211        0.4360      0.5765
+crit rate              OBSERVED      92        0.0652      0.1272
+crit multiplier        REFUSED        6        1.7829      1.7000
+stance                 REFUSED        0          None      2.0000
+lane rate: bash        OBSERVED      39        0.1074      0.5400
+lane rate: kick        OBSERVED      32        0.0882      0.5400
+class set              OBSERVED     211  BST,MNK,PAL,RNG,SHD,WAR
+weapon damage / delay  ASSUMED        -    a log does not show worn stats
+haste                  ASSUMED        -    swing rate confounds haste with delay
+target mitigation      ASSUMED        -    a property of the fight, not the log
+wrath / ATK            ASSUMED        -    worn ATK is not in a log
+strikethrough          ASSUMED        -    class-conditional, needs the class
+buff uptime            ASSUMED        -    not a line this parser reads
+```
+
+**Seven of thirteen are ASSUMED and no log can ever supply them.** That is not a defect
+in the model; it is the size of the gap between a log and a ceiling model, stated for
+the first time as a count rather than as a feeling.
+
+**The class set is the one pleasant surprise.** The observed lane verbs narrow the trio
+to `BST, MNK, PAL, RNG, SHD, WAR` — six of sixteen, from `bash` and `kick` alone. It is
+a **union**, so it narrows and never identifies, and it is derived from the log rather
+than looked up. It never names an item.
+
+### EVERY comparison is suppressed, and that is the finding
+
+`CRIT_RATE`, `P_LAND_BAL` and the lane ceilings are all **level-50 Offensive-stance**
+figures. Printing `observed / model` beside them when the stance is not identified
+compares two different conditions — **a number in the wrong column**, the exact fault
+this repository has spent a week finding in other people's instruments. So the ratio is
+suppressed with its reason until its precondition holds.
+
+**Measured across every log available to me:**
+
+```
+Shara full      stance NOT identified   -> all 4 ratios suppressed
+Shara short     nothing observable at all (n=0 everywhere)
+Kenkyo sample   stance NOT identified   -> all 5 ratios suppressed
+Testchar        stance OBSERVED Offensive (n=99) -> ratios live
+```
+
+**The only log where the comparison is possible is
+`EQBuddy/tests/fixtures/eqlog_Testchar_fixture.txt` — a third-party TEST FIXTURE.** Its
+numbers cannot support a claim about the game, so the live ratios there (land rate
+0.876, crit rate 0.305, kick rate 0.297 against model) are reported by the tool and are
+**not** findings about EverQuest. I am recording them only so nobody later finds them in
+the output and mistakes them for measurements.
+
+**So: per-character modelling cannot be validated on the corpus as it stands, and the
+blocker is the stance.** That is a small, concrete ask of exactly the same shape as the
+single-digit-day one: **one log where the character is in an identifiable stance, or one
+client screenshot of the stance.** I am not estimating past it.
+
+### The gate, and two faults it caught in itself
+
+`percharacter.py --selftest` injects a bad row directly and asserts each of the five
+checks fires. Two things went wrong on the way and both are the night's recurring shape:
+
+1. **The reach-check guessed at a name.** It matched a declared input to its rows by
+   `name.split()[0]`, so `"ability lane rates"` went looking for a row beginning
+   `"ability"` while the rows are named `"lane rate: bash"`. **It fired, and it was
+   right to** — a coverage test that succeeds or fails on a string is R80's fault
+   exactly. Inputs now declare their row prefix.
+2. **The first self-test could only mutate the observations and hope.** The verdict is
+   *derived* from `n`, so mutating a log does not reliably produce the row you want to
+   test — a mutation that may not produce the defect, which is D's own harness fault.
+   `audit()` now accepts an injected row list, and all five checks are proven.
+
+**35.5, Call of Flame, days 01–03, and now the stance stay BLOCKED. Nothing was worked
+around and nothing at the seam was touched.**

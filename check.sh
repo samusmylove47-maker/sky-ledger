@@ -73,6 +73,15 @@ echo "== B's hand-written contract for the measured block must be satisfied =="
 python3 check_contract.py --selftest || fail=1
 python3 check_contract.py || fail=1
 echo
+echo "== the per-character audit must classify every model input, and refuse below n=30 =="
+# Added 1 Sep. Critical-path task 2, and deliberately the AUDIT rather than a fitted
+# per-character model: pointing model4 at a real log found that the log does not carry
+# most of what the model needs. This reports each input as OBSERVED / REFUSED /
+# ASSUMED and suppresses any observed-vs-model ratio whose precondition -- the stance
+# -- is not established.
+python3 percharacter.py --selftest || fail=1
+python3 percharacter.py || fail=1
+echo
 echo "== the MAKE ME BIS ranker must enforce every ruling it was built to =="
 python3 rank.py --selftest || fail=1
 echo
