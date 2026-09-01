@@ -103,8 +103,17 @@ def here(rel):
     return os.path.exists(os.path.join(ROOT, rel))
 
 
-def record(sha, verdict, stamp):
-    """Write the poll result back into MAILBOX.md.
+def record(sha, verdict, stamp, prev_sha=None, prev_verdict=None):
+    """Write the poll result back into MAILBOX.md, IF THE ANSWER CHANGED.
+
+    ONLY ON CHANGE, and that is a correction to how this started. The first version
+    rewrote the line on every poll, so a quiet hourly tick produced a one-line commit
+    whose entire content was a new timestamp. I said at the time that I would batch it
+    if it became noise; it became noise on the very next tick.
+    What a reader needs is the SHA and the VERDICT. A timestamp an hour old against an
+    unchanged sha and verdict is not a false claim -- it is the last time the ANSWER
+    moved, which is the thing worth recording. The field is labelled accordingly so
+    nobody reads it as "the last time E looked".
 
     WHY THIS IS NOT LEFT TO THE AUTHOR. A poll record that must be hand-edited goes
     stale, and every hand-maintained field in this repository has: LAST CHANGE stood
@@ -118,6 +127,8 @@ def record(sha, verdict, stamp):
         t = io.open(MAILBOX, encoding="utf-8").read()
     except OSError:
         return False
+    if prev_sha is not None and (sha or "-") == prev_sha and verdict == prev_verdict:
+        return "unchanged -- record not rewritten, the answer has not moved"
     new, n = re.subn(r"^LAST-POLLED-PEER:.*$",
                      f"LAST-POLLED-PEER: {stamp} {sha or '-'} {verdict}",
                      t, count=1, flags=re.M)
@@ -190,6 +201,23 @@ if __name__ == "__main__":
         chk("a mailbox with no poll line is NOT silently given one",
             _sub("MAILBOX-VERSION: 1\n", "x", "y", "NEW")[1] == 0,
             "record() would fabricate a poll record where none was declared")
+        # THE SKIP-ON-UNCHANGED RULE, both directions. Skipping is a WRITE THAT DOES
+        # NOT HAPPEN, which is the hardest kind of behaviour to notice going wrong:
+        # if the skip is too eager the record silently stops tracking reality.
+        def _would_write(sha, verdict, pv_sha, pv_verdict):
+            return not (pv_sha is not None and (sha or "-") == pv_sha
+                        and verdict == pv_verdict)
+        chk("an unchanged sha AND verdict does not rewrite the record",
+            not _would_write("abc1234", "UNREACHABLE", "abc1234", "UNREACHABLE"), "")
+        chk("a MOVED sha does rewrite it",
+            _would_write("def5678", "UNREACHABLE", "abc1234", "UNREACHABLE"), "")
+        # The one that matters: C adopting the mailbox changes the VERDICT without
+        # necessarily moving the head I last recorded.
+        chk("a changed VERDICT on the SAME sha does rewrite it",
+            _would_write("abc1234", "NEW", "abc1234", "UNREACHABLE"),
+            "the day C adopts the protocol would go unrecorded")
+        chk("a first-ever poll, with nothing recorded, always writes",
+            _would_write("abc1234", "NEW", None, None), "")
         chk("a duplicate message id fires",
             any("reused" in x for x in fired(
                 GOOD + "MSG: E-001 [FYI] to=C re=dupe -- a second use of one id\n"
@@ -204,16 +232,18 @@ if __name__ == "__main__":
         box = hdr.get("PEER-MAILBOX", "MAILBOX.md")
         d = os.path.join("/home/user", *repo.split("/")) if repo else ""
         stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+        _p = POLL.search(text)
+        pv_sha, pv_verdict = (_p.group(2), _p.group(3)) if _p else (None, None)
         print(f"peer {repo} @ {branch}, mailbox {box}")
         if not d or not os.path.isdir(os.path.join(d, ".git")):
             print(f"  VERDICT UNREACHABLE -- no checkout at {d}. NOT 'nothing new'.")
-            print(f"  recorded: {record('', 'UNREACHABLE', stamp)}")
+            print(f"  recorded: {record('', 'UNREACHABLE', stamp, pv_sha, pv_verdict)}")
             sys.exit(0)
         r = subprocess.run(["git", "-C", d, "fetch", "origin", branch],
                            capture_output=True, text=True)
         if r.returncode != 0:
             print(f"  VERDICT UNREACHABLE -- fetch failed: {r.stderr.strip()[:120]}")
-            print(f"  recorded: {record('', 'UNREACHABLE', stamp)}")
+            print(f"  recorded: {record('', 'UNREACHABLE', stamp, pv_sha, pv_verdict)}")
             sys.exit(0)
         sha = subprocess.run(["git", "-C", d, "rev-parse", "--short",
                               f"origin/{branch}"], capture_output=True, text=True)
@@ -244,7 +274,7 @@ if __name__ == "__main__":
             else:
                 print(f"  peer head unchanged at {sha.stdout.strip()} since the last "
                       f"recorded poll, which is the only negative I can honestly give.")
-            print(f"  recorded: {record(sha.stdout.strip(), 'UNREACHABLE', stamp)}")
+            print(f"  recorded: {record(sha.stdout.strip(), 'UNREACHABLE', stamp, pv_sha, pv_verdict)}")
             sys.exit(0)
         pm = MSG.findall(cat.stdout)
         print(f"  peer mailbox: {len(pm)} message(s)")
@@ -254,7 +284,7 @@ if __name__ == "__main__":
         # mailbox I have already read is not news because I read it again.
         v = "NEW" if sha.stdout.strip() != prev else "NOTHING-NEW"
         print(f"  VERDICT {v}")
-        print(f"  recorded: {record(sha.stdout.strip(), v, stamp)}")
+        print(f"  recorded: {record(sha.stdout.strip(), v, stamp, pv_sha, pv_verdict)}")
         sys.exit(0)
 
     print(f"read 1 file: MAILBOX.md ({len(text)} bytes)")

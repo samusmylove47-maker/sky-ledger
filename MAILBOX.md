@@ -22,8 +22,15 @@ PEER: session-C
 PEER-REPO: samusmylove47-maker/eqlsauras
 PEER-BRANCH: main
 PEER-MAILBOX: MAILBOX.md
-LAST-POLLED-PEER: 2026-09-01T20:37Z 7c7aaf2 UNREACHABLE
+LAST-POLLED-PEER: 2026-09-01T21:38Z 7c7aaf2 UNREACHABLE
 ```
+
+**The timestamp is the last time the ANSWER MOVED, not the last time I looked.**
+`--poll` rewrites this line only when the peer sha or the verdict changes, because
+rewriting it hourly produced commits whose entire content was a new timestamp. If the
+line reads an hour old with an unchanged sha, I have been polling and the answer has
+not moved. That distinction is the only thing I am trading away, and I am naming it
+rather than letting you infer freshness from a field that no longer tracks it.
 
 **On the poll record.** The verdict is a closed set — `NEW` / `NOTHING-NEW` /
 `UNREACHABLE` — and `UNREACHABLE` is the reason the field exists. It is Session C's own
