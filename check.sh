@@ -95,6 +95,13 @@ echo "== the unconditional refusals must survive ANY input, in both engines =="
 python3 check_refusals.py --selftest || fail=1
 python3 check_refusals.py || fail=1
 echo
+echo "== the unreported-findings index must still be true of the tree =="
+# Added 1 Sep under R74. An index of findings is an artifact nothing produces --
+# the exact shape that went stale inside the drift gate for a day. Each row cites a
+# VERBATIM FRAGMENT and this fails when the fragment is gone.
+python3 check_unreported.py --selftest || fail=1
+python3 check_unreported.py || fail=1
+echo
 echo "== the JS bundle and the Python engine must agree field for field =="
 python3 bundle/parity.py || fail=1
 echo

@@ -24,10 +24,32 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 NAME_RE = re.compile(r"eqls-gap-engine\.([0-9a-f]{8})\.js")
 
 
-def audit(raw, hashed_name, hashed_raw):
-    """Pure. Returns a list of (check_name, ok, detail). No I/O, no globals."""
+def audit(raw, hashed_name, hashed_raw, found=None):
+    """Pure. Returns a list of (check_name, ok, detail). No I/O, no globals.
+
+    `found` is the FULL list of hashed copies the directory holds. Added 1 Sep 2026
+    under R73 -- a command that reads a file set states the count it opened.
+    Reproduced before it was written: with two hashed copies present this file
+    printed
+
+        hashed copy is byte-identical  FAILED   22403 vs 0 bytes
+        FAILED. The served bytes are not what this tree says they are.
+
+    The bytes were fine. There were TWO hashed copies, `load()` silently took the
+    first sorted one and handed b"" alongside it, and the gate reported a corruption
+    that had not happened. The right answer in the wrong words -- and the wrong words
+    send you to debug the bundle instead of the directory.
+
+    The real fault it was hiding is the one BUNDLE-CONTRACT section 6 exists for: a
+    stale hashed copy left behind is a valid-looking hashed URL serving YESTERDAY'S
+    ENGINE, which is the exact scar that section records."""
     out = []
     digest = hashlib.sha256(raw).hexdigest()
+
+    if found is None:
+        found = [hashed_name] if hashed_name else []
+    out.append(("exactly one hashed copy in the directory", len(found) == 1,
+                f"found {len(found)}: {sorted(found)}"))
 
     m = NAME_RE.fullmatch(hashed_name or "")
     out.append(("hashed copy is named correctly", bool(m),
@@ -66,9 +88,15 @@ def audit(raw, hashed_name, hashed_raw):
 def load():
     raw = open(os.path.join(HERE, "eqls-gap-engine.js"), "rb").read()
     names = [f for f in sorted(os.listdir(HERE)) if NAME_RE.fullmatch(f)]
-    if len(names) != 1:
-        return raw, (names[0] if names else None), b""
-    return raw, names[0], open(os.path.join(HERE, names[0]), "rb").read()
+    # READ THE COPY IT NAMES, whatever the count. This used to hand back b"" as soon
+    # as the count was not 1, so with two copies present the byte-identical check
+    # reported "22403 vs 0 bytes" -- a corruption that had not happened, sitting
+    # beside the count check that names the real fault. Two true statements are worth
+    # more than one true and one false: the count check owns the extra copy, and this
+    # one now tells the truth about the copy it named.
+    if not names:
+        return raw, None, b"", names
+    return raw, names[0], open(os.path.join(HERE, names[0]), "rb").read(), names
 
 
 def show(results):
@@ -78,15 +106,15 @@ def show(results):
 
 
 def selftest():
-    raw, name, hraw = load()
+    raw, name, hraw, found = load()
     ok = True
 
-    def mutate(label, r2, n2, h2, expect_failing):
+    def mutate(label, r2, n2, h2, expect_failing, f2=None):
         """Assert the mutation is real, then assert it breaks the named check."""
         nonlocal ok
-        if (r2, n2, h2) == (raw, name, hraw):
+        if (r2, n2, h2, f2) == (raw, name, hraw, None):
             print(f"  {label:<44} BROKEN -- mutation was a no-op"); ok = False; return
-        res = dict((n, o) for n, o, _ in audit(r2, n2, h2))
+        res = dict((n, o) for n, o, _ in audit(r2, n2, h2, f2))
         got = res.get(expect_failing)
         if got is None:
             print(f"  {label:<44} BROKEN -- '{expect_failing}' not reported"); ok = False
@@ -107,12 +135,20 @@ def selftest():
            "round-trip stable (ASCII/LF/final NL)")
     mutate("hashed copy missing", raw, None, b"",
            "hashed copy is named correctly")
+    # The one this file used to misreport. A stale hashed copy left beside the new
+    # one is a valid-looking URL serving yesterday's engine, and until tonight it
+    # surfaced as "the served bytes are not what this tree says they are".
+    mutate("a stale hashed copy left behind", raw, name, hraw,
+           "exactly one hashed copy in the directory",
+           f2=sorted(set(found) | {"eqls-gap-engine.deadbeef.js"}))
+    mutate("no hashed copy at all", raw, None, b"",
+           "exactly one hashed copy in the directory", f2=[])
 
     # and the negative: the real bundle must pass every check
-    if not all(o for _, o, _ in audit(raw, name, hraw)):
+    if not all(o for _, o, _ in audit(raw, name, hraw, found)):
         print("  the real bundle does not pass its own checks"); ok = False
     else:
-        print("  the unmutated bundle still passes all four")
+        print(f"  the unmutated bundle still passes all {len(audit(raw, name, hraw, found))}")
     return ok
 
 
@@ -120,10 +156,23 @@ if __name__ == "__main__":
     if "--selftest" in sys.argv:
         print("== check-integrity self-test: every check must be able to FAIL ==")
         sys.exit(0 if selftest() else 1)
-    raw, name, hraw = load()
-    good = show(audit(raw, name, hraw))
+    raw, name, hraw, found = load()
+    # R73: state the file set actually opened, not the one intended.
+    print(f"  read {len(found) + 1} file(s) in {os.path.relpath(HERE)}/: "
+          f"eqls-gap-engine.js + {len(found)} hashed cop(y/ies) {sorted(found)}")
+    good = show(audit(raw, name, hraw, found))
     print(f"\n  sha256 {hashlib.sha256(raw).hexdigest()}")
     if not good:
-        print("  FAILED. The served bytes are not what this tree says they are.")
+        # NAME THE FAULT THAT FIRED. One sentence for every failure read as "the
+        # bytes are corrupt" is the shape this file spent tonight fixing elsewhere.
+        failed = [n for n, o, _ in audit(raw, name, hraw, found) if not o]
+        if failed == ["exactly one hashed copy in the directory"]:
+            print(f"  FAILED. The bytes are fine. This directory holds {len(found)} hashed "
+                  "copies, so a hashed URL can serve an engine that is not this one -- "
+                  "the stale-asset scar BUNDLE-CONTRACT section 6 records. Delete the "
+                  "copies that are not the current hash.")
+        else:
+            print(f"  FAILED: {failed}. The served bytes are not what this tree says "
+                  "they are.")
         sys.exit(1)
     print("  bundle integrity verified here, not only where it is served.")

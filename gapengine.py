@@ -28,6 +28,22 @@ MISS = re.compile(r"^You try to (\w+) .+?, but ")
 SPELL = re.compile(r"^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$")
 MELEE = re.compile(r"^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$")
 SLAIN = re.compile(r"^You have slain (.+?)!$")
+# R79 HAZARD, MEASURED ON THIS CORPUS 1 Sep 2026 RATHER THAN ASSUMED AWAY.
+# Session C found that EQ capitalises a mob's leading article LINE-INITIALLY and not
+# mid-sentence, so "A vis ghoul knight" and "a vis ghoul knight" key as two mobs.
+# C's decidable set went 133 -> 385 and agreement 72.2% -> 86.8% on that one fix.
+# Measured here across 4 logs, 189,460 lines, this engine's own regexes:
+#   targets of MY damage         65 distinct, 0 case-paired keys
+#   targets of `You have slain`  46 distinct, 0 case-paired keys
+#   slain names matching a hit target ONLY under a case flip: 0
+#   names on `X resisted your`   13 distinct, 13 of 13 LEADING-CAPITAL
+# The kill join -- (t, target) against hit targets -- is IMMUNE, because both line
+# shapes put the name mid-sentence. THE RESIST LINE IS NOT: its name is line-initial
+# and therefore capitalised, and SIX of those 13 are the same mob as a damage target
+# under a case flip. The only reason it does not bite is that this regex's group(1)
+# IS DISCARDED -- resists are keyed by the SPELL, group(2).
+# IMMUNE BY DISCARD, NOT BY DESIGN. The moment anyone joins group(1) to a damage
+# target, it splits, and the measurement above says by how much.
 RESIST= re.compile(r"^(.+?) resisted your (.+?)!$")
 MARKER= re.compile(r"ATTN CLAUDE:\s*(.+)$")
 

@@ -17,7 +17,30 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
 OUTBOUND         blocked (cloud session, inbound only). Commits are my only outbound.
-LAST CHANGE      1 Sep 00:10Z — check.sh PASS. THE DPS METER'S `measured` BLOCK
+LAST CHANGE      1 Sep 00:40Z — check.sh PASS, 15 gates. R79/R81 applied and both
+                 found something. R79: measured the capitalisation hazard rather
+                 than assuming immunity — 189,460 lines, 4 logs. The KILL JOIN is
+                 immune (0 case-paired keys either side). `X resisted your Y` is
+                 NOT: 13 of 13 names leading-capital, SIX the same mob as a damage
+                 target under a case flip. IMMUNE BY DISCARD, NOT BY DESIGN — I
+                 key resists by the SPELL and throw the name away.
+                 R81: I HAD B'S COLLISION AND I BUILT IT. rank.py emitted
+                 `unknownKind: "coverage"` — D'S OWN STRING — from two causes that
+                 are not D's. Fixed the way B fixed it, the VALUE not the field:
+                 every kind I originate now carries `e-`. Disjointness asserted
+                 against D's vocabulary held as DATA, with 3 positive controls.
+                 THE NEW GATE CAUGHT TWO THINGS ON ITS FIRST TWO RUNS: an
+                 `oracle-contract` my rename missed (an f-string first argument my
+                 grep pattern did not match), and then ITSELF — the scan split the
+                 source on a literal whose first occurrence was the split call, so
+                 it read 60 lines, found nothing, and PASSED VACUOUSLY. A check
+                 incapable of failing, inside the block I wrote to prove my checks
+                 can fail. Its own positive control is now a check.
+                 R74: docs/UNREPORTED-FINDINGS.md, 10 rows, gated by
+                 check_unreported.py against verbatim fragments. MEASURED FIRST:
+                 of 8 figures living in code comments, SEVEN appear nowhere in
+                 HANDOFF.md.
+                 PRIOR: 1 Sep 00:10Z — check.sh PASS. THE DPS METER'S `measured` BLOCK
                  CARRIED THREE POPULATIONS WITH NO LABELS, and B's own contract
                  names the division that breaks on it: `damage_dealt` is "the
                  denominator for share-of-output" and `spells_landed[*].
@@ -5702,3 +5725,112 @@ makes a minor bump behave like a break? I have shipped the conservative answer �
 working today — and I will move on your word, not before.
 
 **35.5 and Call of Flame stay BLOCKED. I have not worked around either.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 00:40Z — R79 and R81 both found something in my tree, and one of my new checks caught itself
+
+**FYI**, with one line that is a correction to something I told you an hour ago.
+Answered against Director main `edaa5b4` **as relayed in R80** — not fetched.
+`check.sh` PASS, 15 gates. Bundle unchanged at `5a11d18a`, 1.2.0.
+
+### 48. R79: measured, not assumed — the kill join is immune, the resist line is not
+
+You wrote: *"Your regexes are anchored on `You `, which may make you immune — but
+'may' is why it is worth the check rather than the assumption."* Checked. 4 logs,
+**189,460 lines**, this engine's own regexes:
+
+```
+targets of MY damage            65 distinct   11 leading-upper   0 case-paired keys
+targets of `You have slain`     46 distinct    6 leading-upper   0 case-paired keys
+names on `X resisted your`      13 distinct   13 leading-upper   0 case-paired keys
+slain names matching a hit target ONLY under a case flip:        0
+```
+
+**The kill join is immune, and now for a reason rather than a hope**: `You hit a vis
+ghoul knight` and `You have slain a vis ghoul knight` both put the name
+*mid-sentence*, so neither is capitalised, so `(t, target)` cannot split. That
+protects `killing_blows_excluded_from_rates` and the stance classifier, which
+excludes killing blows.
+
+**`X resisted your Y` is a different story. Its name is LINE-INITIAL — 13 of 13
+capitalised — and six of those 13 are the same mob as a damage target under a case
+flip:** `A dar ghoul knight`, `A giant spider`, `A yun ghoul wizard`, `A zol ghoul
+knight`, `An avenging gazer`, `An essence tamer`.
+
+**The only reason it does not bite is that I throw that name away** — resists are keyed
+by the *spell*, `group(2)`. **Immune by discard, not by design.** The moment anyone
+joins `group(1)` to a damage target it splits, and the count above says by how much.
+Recorded at the regex, not in a note, so a future widening reads it at the site.
+
+### 48.1 R81: I had B's collision, and I am the one who built it
+
+`rank.py` emitted `unknownKind: "coverage"` — **D's own string** — from two causes that
+are not D's: *"B recorded no drop location for this candidate"* and *"no oracle was
+supplied at all"*. Three distinct causes, one string, two repositories. That is B's
+`actionability: 'unknown'` defect exactly, on my seam.
+
+Fixed the way B fixed it — **the value, not the field**, so nothing breaks on access.
+Every kind this module *originates* now carries `e-`: `e-obtainable-not-recorded`,
+`e-no-oracle`, `e-oracle-contract`. Kinds arriving from D pass through untouched and
+unprefixed, **so the prefix is also the answer to "who said this"**.
+
+Disjointness is asserted, not assumed: D's vocabulary is held **as data**
+(`D_UNKNOWN_KINDS_RELAYED`) and compared to mine, with three positive controls proving
+each arm can fire. **Marked at the site: that list is RELAYED from R80, not read from
+`lockoutCore.js`. I have not opened D's file.** The gate therefore proves disjointness
+against a relayed vocabulary, which is weaker than against the source, and R36 is the
+standing scar on precisely that gap.
+
+### 48.2 The new gate caught two things on its first two runs, and the second was itself
+
+I added *"every kind this file emits is registered"* — it scans this module's own
+source rather than my memory of it.
+
+**Run 1** — it failed, and it was right: `"oracle-contract"` was still unprefixed at
+`return U(f"oracle returned {…}", "oracle-contract")`. My rename had missed it because
+my grep pattern assumed a plain-string first argument and this one is an f-string.
+**A gate that reads the code found what a gate reading my memory of the code could
+not.**
+
+**Run 2 — it caught itself, and this is the one worth your time.** To exclude the
+self-test's stub oracle (which stands in for D and emits D's kinds on purpose) I split
+the source on the literal `if __name__ == "__main__":`. **The literal's first occurrence
+in the file is the split call itself.** So the scan read the first 60 lines, found zero
+emissions, and **passed** — because an empty set is a subset of everything.
+
+**A check that had become incapable of failing, inside the block I had just written to
+prove my checks can fail.** It printed `emits []; unregistered []` and a green tick. The
+only reason I caught it is that I read its detail line instead of its verdict — which is
+the whole of your "right answer in the wrong words" shape, turned on me. The scan now
+splits on a line-anchored match and **its own positive control is a check**: *"the scan
+found the kinds it is meant to check"*, `19,282 of 30,612 chars, found 3`.
+
+This is the concrete answer to §47.3. That section said my suite could only ever agree
+with me. These four R81 checks are the first in `rank.py` that **do not touch the stub
+oracle at all** — they hold D's vocabulary as data and compare it to mine, so they are
+the first checks in that file capable of disagreeing with me. Two of the four found
+something within ten minutes.
+
+### 48.3 R74: the index, and the measurement that justifies it
+
+`docs/UNREPORTED-FINDINGS.md`, ten rows, adopted from D's file. **Measured before
+written**: eight figures that live in code comments in this tree, grepped against
+`HANDOFF.md` — **seven appear nowhere in it**. The one that escaped did so because it
+was the subject of a push, not because the comment reached anyone.
+
+Gated by `check_unreported.py`: each row cites a **verbatim fragment**, and the gate
+fails when a fragment leaves the file it names — 11 checks, 11 mutations. An index of
+findings is an artifact nothing produces, which is the exact shape that went stale
+inside the drift gate for a day, and I am not building that twice in one night.
+
+### 48.4 A correction to §47.2
+
+I told you `no` lands in `spend.blocked_this_week` "carrying D's `because`", and that
+a page rendering only `allocate` sees a silent shortening. **You went further and you
+are right: I am exposed, and the row is worse than shortened — it is shown as blocked
+with a confident reason attached.** An item the player could go get tonight, labelled
+spent. I will re-run against D's `21cef313` when I have the oracle in hand and report
+whether the `blocked` band shrinks; I cannot do it from a relayed vocabulary.
+
+**35.5 and Call of Flame stay BLOCKED.**

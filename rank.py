@@ -55,6 +55,58 @@ NOT_DAMAGE_KEYS = {"ac", "hp", "mana", "wis", "int", "sta", "cha",
 
 BANDS = ("modelled", "unknown_impact", "unknown_actionability", "unsourced_impact")
 
+# R81, adopted 1 Sep 2026: alike-named fields across repos must be PROVABLY DISJOINT
+# or PROVABLY IDENTICAL, asserted by a test. B found two fields named `actionability`
+# in two repos where 'unknown' meant OPPOSITE things -- D's "asked, cannot answer" vs
+# B's "nobody has asked" -- and no type checker sees it, because both are strings.
+#
+# I HAD THE SAME DEFECT AND I BUILT IT. This module emitted `unknownKind: "coverage"`
+# -- D'S OWN STRING -- from two causes that are not D's: "B did not record where this
+# item drops" and "no oracle was supplied at all". Three distinct causes, one string,
+# across two repositories. A consumer joining them reads one as another.
+#
+# Fixed the way B fixed it: THE VALUE, NOT THE FIELD, so nothing breaks on access.
+# Every kind this module ORIGINATES now carries an `e-` prefix. Kinds that arrive
+# from D are passed through untouched and unprefixed, so the prefix is also the
+# answer to "who said this".
+E_UNKNOWN_KINDS = {
+    "e-obtainable-not-recorded",  # B recorded no drop location for this candidate
+    "e-no-oracle",                # no actionability oracle was supplied to rank()
+    "e-oracle-contract",          # the oracle answered outside D's three-way contract
+}
+# D's vocabulary, held AS DATA so the disjointness is testable rather than assumed.
+# RELAYED, NOT READ: this list reached me in the Director's R80 message naming
+# EQLSLockouts:src/lockoutCore.js at 21cef313. I have not opened that file. The gate
+# below therefore proves disjointness against a RELAYED vocabulary, which is weaker
+# than against the source, and R36 is the standing scar on exactly that gap. Stated
+# here rather than left for someone to discover.
+D_UNKNOWN_KINDS_RELAYED = {"coverage", "reset-hour", "raid-not-in-roster", "refusal-not-cap"}
+# D's three answers. My band names must not be readable as one of these.
+D_ANSWERS = {"yes", "no", "unknown"}
+
+
+# This file's own source, read once, so the registration check below reads the code
+# rather than a memory of it. SPLIT AT THE __main__ GUARD, because everything below
+# it is the SELF-TEST, and the self-test's stub oracle stands in for D and therefore
+# emits D'S kinds on purpose. Scanning the whole file asks "does this string appear"
+# when the question is "does this module ORIGINATE this kind" -- R80's exact error,
+# a lookup that succeeds on a name and returns a false answer about a relationship.
+#
+# The scoped check earned this on its first run: it found `"oracle-contract"` still
+# unprefixed at the `U(f"...")` call, which the rename missed because my grep pattern
+# assumed a plain string first argument. A gate that reads the code caught what a
+# gate reading my memory of the code could not.
+_SRC = __import__("io").open(__file__, encoding="utf-8").read()
+# SPLIT ON A LINE-ANCHORED MATCH, not on the literal. Splitting on the literal cut
+# the file at THIS LINE -- the literal's first occurrence in the source is the split
+# call itself -- so `_SRC_PRODUCTION` was the first 60 lines and the registration
+# check below scanned a region containing no emissions at all. It printed
+# `emits []; unregistered []` and PASSED: an empty set is a subset of everything.
+# A check that had become incapable of failing, inside the block I had just written
+# to prove my checks can fail. Caught by reading its own detail line, which is the
+# only reason it was caught. The scan's own positive control is now a check.
+_SRC_PRODUCTION = __import__("re").split(r"^if __name__", _SRC, flags=__import__("re").M)[0]
+
 
 class SeamError(TypeError):
     """Raised when this module is asked to do another session's job."""
@@ -128,7 +180,7 @@ def _actionable(cand, character, actionability, now):
 
     obt = cand.get("obtainable")
     if obt in (None, "not recorded"):
-        return U("obtainable_not_recorded", "coverage")
+        return U("obtainable_not_recorded", "e-obtainable-not-recorded")
     if not isinstance(obt, dict):
         raise SeamError("obtainable must be a mapping carrying at least a mob; got "
                         f"{type(obt).__name__}. Item ids belong to B, not here.")
@@ -156,12 +208,12 @@ def _actionable(cand, character, actionability, now):
         return U("the player's current difficulty was not supplied, and per R37 it "
                  "cannot be taken from the item", "coverage")
     if actionability is None:
-        return U("no actionability oracle was supplied", "coverage")
+        return U("no actionability oracle was supplied", "e-no-oracle")
 
     r = actionability(character.get("state"), now,
                       {"raid": raid, "difficulty": difficulty})
     if not isinstance(r, dict):
-        return U(f"oracle returned {type(r).__name__}, not a result object", "oracle-contract")
+        return U(f"oracle returned {type(r).__name__}, not a result object", "e-oracle-contract")
     ans = r.get("answer")
     # READ FROM D'S SHIPPED SOURCE, NOT FROM ITS DESCRIPTION. src/lockoutCore.js at
     # raid-rows 74609f14 returns THREE answers only -- yes | no | unknown -- and its
@@ -171,7 +223,7 @@ def _actionable(cand, character, actionability, now):
     if ans not in ("yes", "no", "unknown"):
         return {"answer": "unknown",
                 "why": f"oracle returned an answer outside D's three-way contract: {ans!r}",
-                "unknownKind": "oracle-contract", "doesNotAnswer": r.get("doesNotAnswer"),
+                "unknownKind": "e-oracle-contract", "doesNotAnswer": r.get("doesNotAnswer"),
                 "gates": r.get("gates")}
     return {"answer": ans,
             # D'S FIELD IS `because`. Reading `why` returned None on every row and
@@ -431,6 +483,48 @@ if __name__ == "__main__":
         # the cap caveat travels with the cap
         check("TOKEN_CAP carries its n=3 caveat",
               "BOUND, not a measurement" in rank([], PLAYING, oracle, "now")["spend"]["cap_caveat"])
+
+        # --- R81: the two vocabularies must be PROVABLY disjoint, not assumed ------
+        # These are the only checks in this file that do not depend on the stub
+        # oracle, which is the point: section 47.3 records that every OTHER check
+        # here tests my code against MY OWN MODEL of D's interface and therefore
+        # could only ever agree with me. These four hold D's vocabulary as data and
+        # compare it to mine, so they can disagree with me.
+        clash = E_UNKNOWN_KINDS & D_UNKNOWN_KINDS_RELAYED
+        check("kinds I originate are disjoint from D's", not clash, f"overlap {sorted(clash)}")
+        check("every kind I originate is prefixed `e-`",
+              all(k.startswith("e-") for k in E_UNKNOWN_KINDS),
+              "so the prefix answers 'who said this'")
+        check("no kind I originate is prefixed like D's",
+              not any(k.startswith("e-") for k in D_UNKNOWN_KINDS_RELAYED))
+        band_clash = set(BANDS) & D_ANSWERS
+        check("my band names cannot be read as D's answers", not band_clash,
+              f"BANDS {sorted(BANDS)} vs answers {sorted(D_ANSWERS)}")
+        # AND THE PROOF THEY CAN FIRE. A disjointness check over two sets that
+        # happen not to overlap reads identically to one that cannot detect overlap.
+        prove = [("overlap is detected", bool({"coverage"} & D_UNKNOWN_KINDS_RELAYED)),
+                 ("an unprefixed kind is detected",
+                  not all(k.startswith("e-") for k in E_UNKNOWN_KINDS | {"coverage"})),
+                 ("a band named like an answer is detected",
+                  bool((set(BANDS) | {"unknown"}) & D_ANSWERS))]
+        for label, fired in prove:
+            check(f"positive control: {label}", fired)
+
+        # EVERY kind this module can emit is in E_UNKNOWN_KINDS, checked by reading
+        # this file rather than by remembering. A kind added without registering it
+        # is a kind whose disjointness was never tested.
+        import re as _re
+        emitted = set(_re.findall(r'"unknownKind": "([a-z-]+)"', _SRC_PRODUCTION)) | set(
+            _re.findall(r'U\(.*?, "([a-z-]+)"\)', _SRC_PRODUCTION))
+        stray = {k for k in emitted if not k.startswith("e-")}
+        # POSITIVE CONTROL ON THE SCAN ITSELF, before its verdict is read. An empty
+        # `emitted` satisfies the subset test vacuously, which is how this check
+        # passed while scanning the wrong 60 lines.
+        check("the scan found the kinds it is meant to check", len(emitted) >= 3,
+              f"scanned {len(_SRC_PRODUCTION)} of {len(_SRC)} chars, found {sorted(emitted)}")
+        check("every kind this file emits is registered", emitted <= E_UNKNOWN_KINDS,
+              f"emits {sorted(emitted)}; unregistered {sorted(emitted - E_UNKNOWN_KINDS)}"
+              + (f"; unprefixed {sorted(stray)}" if stray else ""))
 
         sys.exit(0 if ok else 1)
 
