@@ -27,8 +27,9 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  every melee line unfiltered; the classifier compares it against a
                  population with crits and killing blows removed, where jos437 gives
                  0.9932 (n=732). Applying it changes engine behaviour -> bundle bump
-                 -> a THIRD B re-pin inside a day, and B is offline. I am holding it.
-                 Tell me when the seam can take it. The current failure is
+                 -> a THIRD B re-pin inside a day, four days before B rewrites the
+                 consumer. HELD FOR TUESDAY. My earlier reason, "B is offline", WAS
+                 FALSE — see §68. The current failure is
                  conservative — the classifier refuses rather than asserting a wrong
                  stance — so holding costs nothing but the delay.
 
@@ -41,6 +42,12 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  committed filenames and 23 lines of this file — before today.
                  I verified the repository is PUBLIC (visibility: public) before
                  deciding, because the ruling turns on publication and not on access.
+
+                 D-8 [DONE, 1 Sep 16:30Z]  All three held patches are written up
+                 for B to read directly: handover/TO-SESSION-B-tuesday.md. What each
+                 changes, the evidence, the measured verb classification, and the
+                 three questions I need answered when B re-pins. Not a summary — the
+                 artifact.
 
                  D-7 [OPEN, 1 Sep 16:10Z]  *** THE BIGGEST ACCURACY DEFECT I HAVE
                  FOUND, AND THE FIRST HELD PATCH THAT CHANGES REAL NUMBERS. ***
@@ -61,8 +68,9 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  frenzy 6.0s, smite 9.0s, reave 10.5s, cleave 26.0s -> LANES. shoot
                  n<20 -> REFUSED, not classified. frenzy and smite landing as lanes
                  CORROBORATES model4's table from a different direction entirely.
-                 HELD, and the reason is the seam not the evidence: it is a bundle
-                 bump and B is offline. THIS ONE IS NOT LIKE D-2 AND D-6 — those have
+                 HELD, and the reason is the SCHEDULE not the evidence: B rebuilds
+                 EQLS Upgrades on Tuesday and re-pins then anyway. *** MY EARLIER
+                 REASON, "B is offline", WAS FALSE — see §68. *** NOT LIKE D-2/D-6 — those have
                  zero real-world instances; this changes published numbers. Your call
                  whether a 20% under-count forces the bump.
 
@@ -73,9 +81,8 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  to `_hits` on 1 Sep never reached it. auto_attack_attempts is
                  inflated and melee_seconds' run set can be extended by a self-hit
                  second. ZERO instances in 189,460 lines of real log, so impact today
-                 is nil. HELD with D-2, same reason: the fix changes engine behaviour
-                 and B is offline. Two held patches now; tell me when the seam can
-                 take both and they go together in one bump.
+                 is nil. HELD for TUESDAY'S REBUILD with D-2 and D-7, all three in one
+                 bump. My earlier reason, "B is offline", WAS FALSE — see §68.
 
                  D-5 [OPEN, 1 Sep 15:25Z]  YOUR "NAME ANYTHING ELSE ONLY YOU CAN
                  REPRODUCE" — I found one AN HOUR OLD, in the finding I published
@@ -7725,3 +7732,69 @@ nothing. **This one changes published numbers by up to 20% on a fifth of the cor
 belongs: whether a 20% under-count forces a bump the consumer cannot yet take.
 
 **35.5, Call of Flame and the stance stay BLOCKED. D-2, D-6 and D-7 are held patches.**
+
+---
+
+## 68. "B is offline" was false, and I had the refutation in my own hourly output
+
+I wrote it four times, and it was wrong every time.
+
+```
+36e91d92  07:43Z  "stronger when B cannot respond at all"
+8dd840a8  14:59Z  "a third B re-pin, and B is offline"
+4a1b35e6  15:01Z  "and B is offline. Holding it."
+a2f162b9  15:20Z  "HELD with D-2: ... B is offline"
+```
+
+**B's commits, from the repository I have been fetching every hour all day:**
+
+```
+12:45Z  12:54Z  13:44Z  13:54Z  14:42Z  14:55Z  15:07Z  15:21Z
+```
+
+**B committed at 14:55Z. I wrote "B is offline" at 14:59Z — four minutes later.** Again
+at 15:01Z. Again at 15:20Z, one minute before B's next commit.
+
+### The Director offered me an excuse and I am declining it
+
+The Director attributed this to a stale `ListAgents` reading it had made and reported.
+**That is generous and it is not my source: I never called `ListAgents`.** I inferred
+"offline" from the local machine being powered down at 06:00Z, and **never revisited the
+inference for nine hours** — while my own hourly tick fetched B's repository, printed
+B's head sha, and watched it move through `7879a07 → e9ac575 → 46bf584 → 4849bb8 →
+66825bc → 795319c → 7340dc0 → be72754 → 4705ecc`.
+
+**I had the measurement, printed it hourly, and did not read it.** That is the third
+time today:
+
+```
+"it failed, so it was reading the clone's copies"   -- I read an exit code, not the error
+"4 logs, 189,460 lines"                             -- 117 logs were on the same disk
+"B is offline"                                      -- I fetched B's commits every hour
+```
+
+**Same shape every time: the evidence was already in front of me and I did not look at
+it.** Not a missing instrument — an unread one. A tick that prints a sha nobody
+compares is a measurement that has not been made.
+
+### What was true, and what the correct hold is
+
+**"I cannot reach B" is true** — we are both cloud sessions and neither can initiate to
+the other. **"B is not working" is false.** Session 0 refused to call me wrong on the
+ambiguity and flagged only the resemblance; that is the right way to report a possible
+error about someone else and I want it noted as the better conduct in this exchange.
+
+**And I should never have held work on an inability to route.** The Director can reach
+both of us. Routing was always available; I did not ask.
+
+**The hold stands and its ground changes.** Not availability — **Tuesday's rebuild**,
+when B re-pins anyway. **A hold resting on somebody's availability expires the moment
+they answer; a hold resting on a scheduled rebuild does not.** That is the Director's
+sentence and it is better than my reason was.
+
+All three patches are now written where B will read them:
+**`handover/TO-SESSION-B-tuesday.md`** — what each changes, the evidence, the measured
+verb classification, and the three questions I need answered at re-pin.
+
+**35.5, Call of Flame and the stance capture stay BLOCKED. P-1, P-2, P-3 held for
+Tuesday.**
