@@ -26,6 +26,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIXTURE = os.path.join(ROOT, "fixtures", "sample-report.json")
 REAL = os.path.join(ROOT, "fixtures", "real-report-shara.json")
 MAKER = os.path.join(ROOT, "fixtures", "make_fixture.py")
+# The REAL report had no maker until 1 Sep 2026. It was a committed artifact that
+# no tool produced, and it had gone stale in a VALUE this gate does not compare:
+# `months_seen: ["Aug"]`, the list form B's contract rejected and both engines
+# stopped emitting on 31 Aug. Key-set comparison read clean over it for a day.
+# Both sides of this comparison are now engine output, so neither can drift.
+MAKER_REAL = os.path.join(ROOT, "fixtures", "make_real.py")
 
 # Keys the fixture carries for the reader that the engine never emits.
 FIXTURE_ONLY = {"_fixture", "_never", "_regenerate", "_why",
@@ -103,6 +109,7 @@ def passthrough_holds():
 def load(regenerate=True):
     if regenerate:
         subprocess.run([sys.executable, MAKER], check=True, capture_output=True)
+        subprocess.run([sys.executable, MAKER_REAL], check=True, capture_output=True)
     return json.load(open(FIXTURE)), json.load(open(REAL))
 
 

@@ -205,6 +205,43 @@ def _stance(hits):
     return None, detail + " Neither signature is within 2 SE, so the stance is NOT identified.", even
 
 
+# Every numeric key in `measured` is computed over ONE of three populations, and
+# until 1 Sep 2026 the report did not say which one. THREE populations, one block,
+# no labels -- so a consumer that combined two of them got a number that is a share
+# of nothing. Measured on the log this engine was built against
+# (corpus/amp/eqlog_Shara_rivervale_20260829_full.txt):
+#
+#   sum(spells_landed[*].damage_total) / damage_dealt  =  2,388,509 / 1,182,027
+#                                                      =  202%
+#
+# and B's own contract names that exact division: `damage_dealt` is "the denominator
+# for share-of-output" and `spells_landed.damage_total` is the numerator a consumer
+# attributes with. Both are in `measured`, side by side, and they are over different
+# populations. 324% on the short log; 34% and 0% on two outside logs, so the error is
+# not a constant a reader could learn to subtract.
+#
+# THE FIX IS NOT TO RESCOPE THE FIELDS. Scoping `spells_landed` to the engagement
+# window would delete a spell that landed only outside it -- `Puma Maw`, 5 landings,
+# would vanish -- and B's contract says in as many words that a spell ABSENT from
+# this object is unmeasured, and must not be read as unused. Deleting it would
+# manufacture the exact false reading B wrote that clause to prevent.
+#
+# So: no existing value moves. The report states its populations and publishes the
+# totals, and every share becomes computable against the right denominator.
+# check_window.py is the gate; it fails if a key here belongs to no population.
+POPULATIONS = {
+    # damage over runs of hits with no gap above GAP, lasting MIN_ENGAGEMENT or more
+    "in_window": ("dps", "engaged_seconds", "damage_dealt", "engagements"),
+    # every matched line in the file, whatever window it fell in
+    "all_lines": ("hits_counted", "killing_blows_excluded_from_rates", "crit_rate",
+                  "spells_landed", "resists", "months_seen", "stance_inferred"),
+    # auto-attack runs; deliberately NOT engaged time, and documented in _lanes
+    "melee_time": ("time_in_melee_s", "melee_seconds", "auto_attack_attempts", "lanes"),
+    # not measurements: labels and prose about the measurements
+    "annotation": ("dps_window", "dps_window_note", "stance_evidence", "window"),
+}
+
+
 # Refusals that hold for ANY input, including no input. Emitted before the
 # engine looks at a single line, because each is a fact about what a log can
 # never show -- not a finding about this log.
@@ -274,6 +311,10 @@ def gap_engine(lines, context=None):
     engaged = sum(b - a for a, b in runs)
     dealt = sum(h["amt"] for h in hits for a, b in [(0, 0)] if True) if not runs else \
             sum(h["amt"] for h in hits if any(a <= h["t"] <= b for a, b in runs))
+
+    # The hits `dealt` was summed over, named rather than recomputed, so
+    # window.in_window.hits and damage_dealt can never describe different sets.
+    in_window = [h for h in hits if any(a <= h["t"] <= b for a, b in runs)]
 
     nk = [h for h in hits if not h["kill"]]
     crits = [h for h in nk if h["crit"]]
@@ -380,6 +421,21 @@ def gap_engine(lines, context=None):
     m["lanes"] = {v: {"attempts": len(ts), "landed": len(lane_dmg[v]),
                       "per_melee_second": round(len(ts) / melee_s, 4) if melee_s else None}
                   for v, ts in sorted(lane_t.items())}
+    # THE POPULATIONS, stated. See POPULATIONS above for why. `all_lines` is the
+    # denominator `spells_landed` and `resists` were always missing; `in_window` is
+    # the one `dps` and `damage_dealt` already used without saying so.
+    m["window"] = {
+        "basis": "engaged",
+        "in_window": {"hits": len(in_window), "damage": dealt},
+        "all_lines": {"hits": len(hits), "damage": sum(h["amt"] for h in hits)},
+        "melee_time": {"seconds": melee_s, "auto_attack_attempts": auto_n},
+        "keys_by_population": {k: sorted(v) for k, v in sorted(POPULATIONS.items())},
+        "note": ("Three populations in one block. A share is only a share against the "
+                 "population its numerator came from: sum(spells_landed[*].damage_total) "
+                 "divides by window.all_lines.damage, NOT by damage_dealt. Dividing it by "
+                 "damage_dealt on the log this engine was built against gives 202%."),
+    }
+
     if melee_s >= 60:
         for v, ts in sorted(lane_t.items()):
             ceil = LANE_CEILING.get(v)

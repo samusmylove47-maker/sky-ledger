@@ -35,6 +35,23 @@
   // BUNDLE-CONTRACT section 2. Say "EQLSGapEngine 1.1.0", never "sky-ledger 1.1.0".
   var VERSION = "1.2.0";
 
+  // Every numeric key in `measured` is over ONE of three populations, and until
+  // 1 Sep 2026 the report did not say which. Measured on the log this engine was
+  // built against: sum(spells_landed[*].damage_total) / damage_dealt = 202%, and
+  // B's contract names that exact division -- damage_dealt is "the denominator for
+  // share-of-output". 324% on the short log, 34% and 0% on two outside logs, so the
+  // error is not a constant a reader could learn to subtract. No value moves: the
+  // report states its populations and publishes the totals. Rescoping was the wrong
+  // fix -- scoping spells_landed to the window would DELETE a spell that landed only
+  // outside it, and B's contract says an absent spell is unmeasured, not unused.
+  var POPULATIONS = {
+    in_window: ["damage_dealt", "dps", "engaged_seconds", "engagements"],
+    all_lines: ["crit_rate", "hits_counted", "killing_blows_excluded_from_rates",
+                "months_seen", "resists", "spells_landed", "stance_inferred"],
+    melee_time: ["auto_attack_attempts", "lanes", "melee_seconds", "time_in_melee_s"],
+    annotation: ["dps_window", "dps_window_note", "stance_evidence", "window"]
+  };
+
   var TS = /^\[\w{3} \w{3} (\d{2}) (\d{2}):(\d{2}):(\d{2}) \d{4}\] (.*)$/;
   var SPELL = /^You hit (.+?) for (\d+) points of (\w+) damage by (.+?)\.(\s*\(Critical\))?$/;
   var MELEE = /^You (slash|pierce|hit|crush|bash|kick|punch|backstab|strike)(?:es)? (.+?) for (\d+) points of damage\.(\s*\(Critical\))?$/;
@@ -224,11 +241,12 @@
 
     var rr = runs(hits.map(function (h) { return h.t; }), GAP)
              .filter(function (r) { return r[1] - r[0] >= MIN_ENGAGEMENT; });
-    var engaged = 0, dealt = 0;
+    var engaged = 0, dealt = 0, inWindow = 0, allDamage = 0;
     for (i = 0; i < rr.length; i++) engaged += rr[i][1] - rr[i][0];
     for (i = 0; i < hits.length; i++) {
+      allDamage += hits[i].amt;
       for (j = 0; j < rr.length; j++) {
-        if (hits[i].t >= rr[j][0] && hits[i].t <= rr[j][1]) { dealt += hits[i].amt; break; }
+        if (hits[i].t >= rr[j][0] && hits[i].t <= rr[j][1]) { dealt += hits[i].amt; inWindow++; break; }
       }
     }
     var nk = hits.filter(function (h) { return !h.kill; });
@@ -309,6 +327,21 @@
         per_melee_second: L.meleeSeconds ? round(L.laneT[v].length / L.meleeSeconds, 4) : null
       };
     });
+
+    // THE POPULATIONS, stated. `all_lines` is the denominator spells_landed and
+    // resists were always missing; `in_window` is the one dps and damage_dealt
+    // already used without saying so.
+    m.window = {
+      basis: "engaged",
+      in_window: { hits: inWindow, damage: dealt },
+      all_lines: { hits: hits.length, damage: allDamage },
+      melee_time: { seconds: L.meleeSeconds, auto_attack_attempts: L.autoAttempts },
+      keys_by_population: POPULATIONS,
+      note: "Three populations in one block. A share is only a share against the " +
+        "population its numerator came from: sum(spells_landed[*].damage_total) " +
+        "divides by window.all_lines.damage, NOT by damage_dealt. Dividing it by " +
+        "damage_dealt on the log this engine was built against gives 202%."
+    };
 
     if (st.name === "Balanced" && melee.length) {
       var sum = 0;

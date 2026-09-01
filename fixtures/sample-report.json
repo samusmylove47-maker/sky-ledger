@@ -66,6 +66,51 @@
     "landed": 15,
     "per_melee_second": 0.0946
    }
+  },
+  "window": {
+   "basis": "engaged",
+   "in_window": {
+    "hits": 328,
+    "damage": 22923
+   },
+   "all_lines": {
+    "hits": 328,
+    "damage": 22923
+   },
+   "melee_time": {
+    "seconds": 222,
+    "auto_attack_attempts": 462
+   },
+   "keys_by_population": {
+    "all_lines": [
+     "crit_rate",
+     "hits_counted",
+     "killing_blows_excluded_from_rates",
+     "months_seen",
+     "resists",
+     "spells_landed",
+     "stance_inferred"
+    ],
+    "annotation": [
+     "dps_window",
+     "dps_window_note",
+     "stance_evidence",
+     "window"
+    ],
+    "in_window": [
+     "damage_dealt",
+     "dps",
+     "engaged_seconds",
+     "engagements"
+    ],
+    "melee_time": [
+     "auto_attack_attempts",
+     "lanes",
+     "melee_seconds",
+     "time_in_melee_s"
+    ]
+   },
+   "note": "Three populations in one block. A share is only a share against the population its numerator came from: sum(spells_landed[*].damage_total) divides by window.all_lines.damage, NOT by damage_dealt. Dividing it by damage_dealt on the log this engine was built against gives 202%."
   }
  },
  "deltas": [

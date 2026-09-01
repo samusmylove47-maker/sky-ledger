@@ -76,6 +76,17 @@ echo
 echo "== the MAKE ME BIS ranker must enforce every ruling it was built to =="
 python3 rank.py --selftest || fail=1
 echo
+echo "== every number in the measured block must name the population it is over =="
+# Added 1 Sep. `measured` carried THREE populations in one block with no labels --
+# in_window (dps, damage_dealt), all_lines (spells_landed, resists, crit_rate) and
+# melee_time (lanes) -- so a consumer combining two got a share of nothing. B's
+# contract names the exact division: sum(spells_landed[*].damage_total) over
+# damage_dealt gives 202% on the log this engine was built against, 324% on the
+# short one. No value moved; the report now states its populations and publishes
+# the totals, and this fails if a new key is added without declaring one.
+python3 check_window.py --selftest || fail=1
+python3 check_window.py || fail=1
+echo
 echo "== the unconditional refusals must survive ANY input, in both engines =="
 # Added 31 Aug. gap_engine([]) returned `refusals: []` because both engines built
 # the list AFTER the `if not hits` early return -- so the engine went silent about
