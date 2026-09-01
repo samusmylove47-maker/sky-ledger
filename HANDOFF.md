@@ -16,7 +16,26 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  included. My branch is an ancestor of master, 0 commits ahead.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
-VERSION          EQLSGapEngine 1.4.0. REPIN NEEDED: 1.4.0
+VERSION          EQLSGapEngine 1.5.0. REPIN NEEDED: 1.5.0
+                 TO SESSION B: IF YOU ARE STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND
+                 SKIP 1.4.0 — ONE re-pin, not two. Both changes are needed and
+                 neither is skippable in substance; 1.4.0 simply never has to be a
+                 stop. If you already moved to 1.4.0, this is a second re-pin and I
+                 am sorry for it.
+                 NEW IN 1.5.0 — `coverage.parse`, additive, and it is R159 turned
+                 into code. A file this engine COULD NOT READ and a character who
+                 DEALT NO DAMAGE used to produce the same output: `measured: {}` and
+                 "no outgoing damage lines matched". True in both cases, and in one
+                 of them a true statement about a file that was never read, sitting
+                 in the slot where a measurement goes. THAT IS HOW THE CRLF DEFECT
+                 STAYED QUIET. Now three verdicts — empty / unreadable / read — and
+                 three different sentences, one of which says in capitals that
+                 nothing below it is a measurement about the character.
+                 MEASURED, not guessed: 99.99%, 100%, 100%, 100% of lines carry a
+                 timestamp across 4 logs and 189,460 lines, so a low share is a READ
+                 failure and not a finding about the player. The 0.50 boundary sits
+                 far below that floor deliberately.
+                 PRIOR: 1.4.0 — REPIN NEEDED: 1.4.0
                  TO SESSION B: I am asking you to re-pin a SECOND time in an hour and
                  I am naming the cost rather than avoiding it. Two changes, both
                  measured, neither optional:
@@ -6374,5 +6393,91 @@ measurement that produced the rule.** The 202% got B to look; *"a control that m
 with the thing it is controlling for is not a control"* is what A could use without
 ever seeing my log. I will keep putting both in, and I will stop burying the sentence
 under the table it came from.
+
+**35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 04:45Z — R159 CLOSED in my tree: the engine now says what KIND of claim its silence is
+
+**FYI.** `check.sh` PASS, 17 gates. Bundle `02543ec8` → **`7a57b973`**, 33,511 bytes,
+**VERSION 1.5.0**. `REPIN NEEDED: 1.5.0`.
+
+### 53. The sentence that was true about a file nobody could read
+
+Your R159 framing is the part of the CRLF finding I had not seen, and it is the more
+important half:
+
+> *the engine takes its `if (!hits.length)` path and says "no outgoing damage lines
+> matched". That is TRUE. It is a true statement about a file it could not read, filed
+> in the slot where a measurement goes.*
+
+That is exactly how the defect stayed quiet, and it is fixed rather than noted.
+`coverage.parse` now carries `lines_in`, `lines_with_timestamp`, `share_timestamped`
+and a **verdict**, and the silence path has **three sentences instead of one**:
+
+```
+empty       NO INPUT. Zero lines were supplied. This is not a measurement.
+unreadable  THIS FILE WAS NOT READ. Only 0 of 50 lines matched the timestamp shape...
+            NOTHING HERE IS A MEASUREMENT ABOUT THE CHARACTER -- it is a statement
+            about the parser and the file. Check the line endings and the timestamp
+            format before reading anything below.
+read        READ AND MEASURED: 40 timestamped lines, none of which were outgoing
+            damage. THIS IS A REAL ZERO -- a support character's log, or a log for a
+            different character. It is not a parse failure.
+```
+
+**The boundary is measured, not chosen.** Four real logs, 189,460 lines: **99.99%,
+100%, 100%, 100%** of lines carry a timestamp; the 0.01% are wrapped chat. So a low
+share is unambiguous — it means the timestamp shape did not match, which is a fact
+about the parser and the file. The 0.50 threshold sits far below that floor
+deliberately, so an unusual but genuine log is never called unreadable; it separates
+*could not read this* from *read it, there was nothing*, and does not grade quality.
+
+**Gated in `check_refusals.py` rather than an eighteenth checker**, because that file's
+existing six-case matrix already contains both kinds — two unreadable inputs, three
+readable, one empty. **Every verdict is exercised, so no arm can pass by never being
+reached**, and that is asserted as its own check. The self-test's failing mutation is
+the pre-1.5.0 behaviour exactly: an engine that calls everything `read`.
+
+### 53.1 Two things I got wrong on the way, both caught before shipping
+
+**A generator would have been reported as an empty file.** I first counted lines in
+`gap_engine` with `sum(1 for _ in lines)` — which reads **zero** for a generator,
+because `_parse` has already consumed it. An `isinstance(lines, list)` guard then
+reports a real generator input as `"empty"`. **That is a third wrong claim, in the
+block written to stop wrong claims.** Caught by asking what a caller other than my own
+`__main__` would hand it. The count now happens at the iteration site.
+
+**Parity caught prose drift between the ports.** I wrote `` `text.split()` `` with
+backticks in Python and without them in JS. One character class of difference in a
+documentation string, and `parity.py` failed the build over it — correctly. Field for
+field means field for field.
+
+### 53.2 R163, and what my harness now states about itself
+
+Adopted. `parity.py` performs **no** normalisation now — the LF arm joins with `\n`
+and splits on `\n`, the CRLF arm joins with `\r\n` and splits on `\n`, so a carriage
+return reaches both engines exactly as it reaches a consumer doing
+`text.split('\n')`. The engine strips it; the harness does not.
+
+Related, and stated in the report rather than left for someone to trip on:
+**`lines_in` counts what the CALLER SUPPLIED, not what the file contained.**
+`text.split()` on a file ending in a newline yields one more element than
+`readlines()` does — Python reads my corpus log as 181,345 lines and node as 181,346.
+A one-line difference between two callers over one file is that, and is not an engine
+disagreement.
+
+### 53.3 On the third re-pin, and how to make it the second
+
+**If B is still on 1.3.0 it should go straight to 1.5.0 and skip 1.4.0 — one re-pin,
+not two.** Both changes are needed and neither is skippable in substance; 1.4.0 simply
+never has to be a stop. If B already moved to 1.4.0 then this is a second re-pin
+inside an hour, and I would rather say that plainly than let it arrive as a surprise.
+
+Your note on why this is safe at all is the part I want on the record, because it is
+the justification for a discipline that has cost B real time tonight: *a repo without
+that would be asking B to swap a bundle on trust at four in the morning, and neither
+of you would know afterwards which bytes a player got.*
 
 **35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**

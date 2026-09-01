@@ -56,7 +56,14 @@
   // which is a loophole in the rule that a changed bundle needs a changed version,
   // and a number in prose is one a consumer cannot compute against. Declared as
   // REPIN NEEDED: 1.4.0 in HANDOFF.md; check_contract.py fails without it.
-  var VERSION = "1.4.0";
+  // 1.4.0 -> 1.5.0, 1 Sep 2026. `coverage.parse` is additive and answers R159's
+  // question: what KIND of claim is this evidence for. A file that could not be read
+  // and a character who dealt no damage used to produce the same output, and that is
+  // how the CRLF defect stayed quiet -- a true sentence about an unread file, in the
+  // slot where a measurement goes. Now three verdicts and three sentences.
+  // IF B IS STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND SKIP 1.4.0 -- one re-pin, not
+  // two. Both changes are needed; neither is skippable in substance.
+  var VERSION = "1.5.0";
 
   // Every numeric key in `measured` is over ONE of three populations, and until
   // 1 Sep 2026 the report did not say which. Measured on the log this engine was
@@ -299,6 +306,32 @@
     // "refused in all cases" in its own detail and therefore was not.
     var report = { context: context, measured: {}, deltas: [],
                    refusals: alwaysRefused(), coverage: {} };
+    // R159: WHAT KIND OF CLAIM IS THIS EVIDENCE FOR?
+    // Until 1.5.0 a file this engine could not read and a character who dealt no
+    // damage produced the SAME output -- `measured: {}` and "no outgoing damage lines
+    // matched". That sentence is TRUE in both cases, and in one of them it is a true
+    // statement about a file that was never read, sitting in the slot where a
+    // measurement goes. The CRLF defect did its damage through exactly this.
+    // MEASURED, four real logs, 189,460 lines: 99.99%, 100%, 100%, 100% of lines carry
+    // a timestamp; the 0.01% are wrapped chat. The 0.50 boundary sits far below that
+    // floor on purpose -- it separates "could not read this" from "read it, there was
+    // nothing", and does not grade quality.
+    var shareStamped = lines.length ? ev.length / lines.length : null;
+    var verdict = !lines.length ? "empty"
+                : (shareStamped >= 0.50 ? "read" : "unreadable");
+    report.coverage.parse = {
+      lines_in: lines.length,
+      lines_with_timestamp: ev.length,
+      share_timestamped: shareStamped === null ? null : round(shareStamped, 4),
+      verdict: verdict,
+      note: "Every line of a real EverQuest log carries a timestamp: measured " +
+        "99.99%-100% across 4 logs and 189,460 lines. A share below 50% means the " +
+        "timestamp shape did not match, which is a fact about THIS PARSER AND THIS " +
+        "FILE and not about the character. `lines_in` COUNTS WHAT THE CALLER " +
+        "SUPPLIED, not what the file contained: text.split() on a file ending in a " +
+        "newline yields one more element than readlines() does. A one-line difference " +
+        "between two callers over one file is that, and is not an engine disagreement."
+    };
     report.coverage.self_damage_excluded = {
       spell_lines: hr.selfhit.spell, spell_damage: hr.selfhit.spell_damage,
       melee_lines: hr.selfhit.melee, melee_damage: hr.selfhit.melee_damage,
@@ -311,7 +344,21 @@
       // self_damage_excluded on the early-return path, so a log that is ONLY
       // self-damage reported nothing excluded. Same shape as the refusals bug
       // of 31 Aug -- the engine going silent exactly when it knew least.
-      report.coverage.note = "no outgoing damage lines matched; nothing measured";
+      // THREE DIFFERENT CLAIMS, three different sentences. One sentence for all
+      // three is what let a file that was never read report as a clean zero.
+      report.coverage.note =
+        verdict === "empty"
+          ? "NO INPUT. Zero lines were supplied. This is not a measurement."
+        : verdict === "unreadable"
+          ? ("THIS FILE WAS NOT READ. Only " + ev.length + " of " + lines.length +
+             " lines matched the timestamp shape this parser requires, against " +
+             "99.99%-100% in every real log measured. NOTHING HERE IS A MEASUREMENT " +
+             "ABOUT THE CHARACTER -- it is a statement about the parser and the file. " +
+             "Check the line endings and the timestamp format before reading anything " +
+             "below.")
+          : ("READ AND MEASURED: " + ev.length + " timestamped lines, none of which " +
+             "were outgoing damage. THIS IS A REAL ZERO -- a support character's log, " +
+             "or a log for a different character. It is not a parse failure.");
       return report;
     }
 

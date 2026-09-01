@@ -108,6 +108,13 @@ def _parse(lines):
     D's interface is what makes the fix possible: the damage row and the kill
     row are separate events that both carry the target, precisely so the join
     is the consumer's to make. It was mine to make and I had made it wrong."""
+    # COUNT THE LINES HERE, where they are actually iterated. Counting them in
+    # gap_engine with `sum(1 for _ in lines)` reads ZERO for a generator, because
+    # _parse has already consumed it -- and an `isinstance(lines, list)` guard would
+    # then report a real generator input as "empty", which is a THIRD wrong claim in
+    # the block written to stop wrong claims. Caught before shipping by asking what a
+    # caller other than my own __main__ would hand this.
+    n_lines = 0
     ev, kills, months = [], set(), set()
     # A MONOTONIC DAY INDEX, not the day-of-month. `t` was day_of_month*86400 +
     # h*3600 + m*60 + s, which RUNS BACKWARDS at a month boundary: 31 Aug 23:59
@@ -135,6 +142,7 @@ def _parse(lines):
         # bundle/check-integrity.py has guarded this bundle's OWN bytes against CRLF
         # since 31 Aug. I checked the artifact for carriage returns and never checked
         # the input for them.
+        n_lines += 1
         raw = raw.rstrip("\r\n")
         m = TS.match(raw)
         if not m:
@@ -153,7 +161,7 @@ def _parse(lines):
         k = SLAIN.match(body)
         if k:
             kills.add((t, k.group(1)))
-    return ev, kills, months
+    return ev, kills, months, n_lines
 
 
 def _hits(ev, kills):
@@ -366,7 +374,7 @@ def gap_engine(lines, context=None):
     # "The engine reads nothing from context" is close but too strong; "the engine
     # consumes no context value" is the sentence that survives reading the lines.
     context = dict(context or {})
-    ev, kills, months = _parse(lines)
+    ev, kills, months, n_lines = _parse(lines)
     for _, b in ev:
         m = MARKER.search(b)
         if m:
@@ -386,6 +394,41 @@ def gap_engine(lines, context=None):
     # the Director asked about. Neither depends on the log at all.
     report = {"context": context, "measured": {}, "deltas": [],
               "refusals": [dict(r) for r in ALWAYS_REFUSED], "coverage": {}}
+    # R159: WHAT KIND OF CLAIM IS THIS EVIDENCE FOR?
+    # Until 1.5.0 a file the engine could not read and a character who dealt no damage
+    # produced the SAME output: `measured: {}` and "no outgoing damage lines matched;
+    # nothing measured". That sentence is TRUE in both cases, and in one of them it is
+    # a true statement about a file that was never read, sitting in the slot where a
+    # measurement goes. The CRLF defect did its damage through exactly this: the parse
+    # failed silently and the failure was indistinguishable from a legitimate zero.
+    #
+    # MEASURED, four real logs, 189,460 lines: 99.99%, 100%, 100%, 100% of lines carry
+    # a timestamp. The 0.01% are wrapped chat lines. So a low share is not ambiguous --
+    # it means the timestamp shape did not match, which is a READ failure, not a
+    # finding about the player.
+    #
+    # The 0.50 boundary is deliberately far below the measured floor of 99.99%, so an
+    # unusual but genuine log is never called unreadable. It is there to separate
+    # "could not read this" from "read it, there was nothing", not to grade quality.
+    stamped = len(ev)
+    share = (stamped / n_lines) if n_lines else None
+    verdict = ("empty" if not n_lines else
+               "read" if share is not None and share >= 0.50 else "unreadable")
+    report["coverage"]["parse"] = {
+        "lines_in": n_lines,
+        "lines_with_timestamp": stamped,
+        "share_timestamped": round(share, 4) if share is not None else None,
+        "verdict": verdict,
+        "note": ("Every line of a real EverQuest log carries a timestamp: measured "
+                 "99.99%-100% across 4 logs and 189,460 lines. A share below 50% means "
+                 "the timestamp shape did not match, which is a fact about THIS "
+                 "PARSER AND THIS FILE and not about the character. "
+                 "`lines_in` COUNTS WHAT THE CALLER "
+                 "SUPPLIED, not what the file contained: text.split() on a file "
+                 "ending in a newline yields one more element than readlines() does. "
+                 "A one-line difference between two callers over one file is that, "
+                 "and is not an engine disagreement."),
+    }
     report["coverage"]["self_damage_excluded"] = {
         "spell_lines": selfhit.get("spell", 0), "spell_damage": selfhit.get("spell_damage", 0),
         "melee_lines": selfhit.get("melee", 0), "melee_damage": selfhit.get("melee_damage", 0),
@@ -394,7 +437,21 @@ def gap_engine(lines, context=None):
                  "rather than dropped silently: 92,822 points on the corpus log."),
     }
     if not hits:
-        report["coverage"]["note"] = "no outgoing damage lines matched; nothing measured"
+        # THREE DIFFERENT CLAIMS, three different sentences. One sentence for all
+        # three is what let a file that was never read report as a clean zero.
+        report["coverage"]["note"] = {
+            "empty": "NO INPUT. Zero lines were supplied. This is not a measurement.",
+            "unreadable": (
+                f"THIS FILE WAS NOT READ. Only {stamped} of {n_lines} lines matched the "
+                "timestamp shape this parser requires, against 99.99%-100% in every "
+                "real log measured. NOTHING HERE IS A MEASUREMENT ABOUT THE CHARACTER "
+                "-- it is a statement about the parser and the file. Check the line "
+                "endings and the timestamp format before reading anything below."),
+            "read": (
+                f"READ AND MEASURED: {stamped} timestamped lines, none of which were "
+                "outgoing damage. THIS IS A REAL ZERO -- a support character's log, or "
+                "a log for a different character. It is not a parse failure."),
+        }[verdict]
         return report
 
     runs = _engagements(hits)

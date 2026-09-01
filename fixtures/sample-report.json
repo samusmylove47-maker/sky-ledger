@@ -203,6 +203,13 @@
   }
  ],
  "coverage": {
+  "parse": {
+   "lines_in": 523,
+   "lines_with_timestamp": 523,
+   "share_timestamped": 1.0,
+   "verdict": "read",
+   "note": "Every line of a real EverQuest log carries a timestamp: measured 99.99%-100% across 4 logs and 189,460 lines. A share below 50% means the timestamp shape did not match, which is a fact about THIS PARSER AND THIS FILE and not about the character. `lines_in` COUNTS WHAT THE CALLER SUPPLIED, not what the file contained: text.split() on a file ending in a newline yields one more element than readlines() does. A one-line difference between two callers over one file is that, and is not an engine disagreement."
+  },
   "self_damage_excluded": {
    "spell_lines": 0,
    "spell_damage": 0,
