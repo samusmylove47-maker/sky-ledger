@@ -58,12 +58,31 @@ def synth(seed):
     crit_rate = rnd.choice([0.05, 0.10, 0.15, 0.20])
     even_share = rnd.choice([0.50, 0.93])          # Balanced / Offensive signatures
     lane_rate = rnd.choice([0.20, 0.35, 0.50])     # kick attempts per melee second
+    # ADDED AFTER THE 1.6.0 BUNDLE, AND THE REASON IS THAT THE BUNDLE WAS UNCOVERED.
+    # This harness published "100.0% exact recovery" over a corpus generating slash,
+    # kick and hit -- NONE of the ten verbs 1.6.0 added. Every new path shipped
+    # untested by the instrument that certifies the number: the `(?:on )?` group, the
+    # unclassified routing, and two new lane ceilings. A harness that cannot produce
+    # the input a change handles does not test that change, and the score it prints
+    # afterwards is the same score it printed before.
+    frenzy_rate = rnd.choice([0.10, 0.25])         # frenzy attempts per melee second
     lines, t = [], 0
     dmg_in_window = 0
     hits_in_window = 0
     crits = nonc = 0
     even = 0
     lane_attempts = lane_landed = 0
+    frenzy_attempts = frenzy_landed = 0
+    unclassified_dmg = 0
+    self_frenzy = 0
+    # ACCUMULATED, NOT HAND-MULTIPLIED. This was `540 * n_eng` -- 500 + 40, the two
+    # self-hit lines, times the engagement count -- and the moment I generated a THIRD
+    # self-damage shape the constant was wrong and every seed failed. The engine was
+    # right and my truth was stale, which is the correct direction for that failure but
+    # only because the harness happened to notice. A truth value derived by hand from
+    # what the generator "should" emit is an unsourced number sitting inside the
+    # instrument that exists to catch unsourced numbers.
+    self_dmg = 0
     auto_attempts = 0
     spell_amts = []
     kills = 0
@@ -108,6 +127,44 @@ def synth(seed):
                 nonc += 1
             else:
                 lines.append(f"{stamp(sec)} You try to kick {MOBS[e % 5]}, but miss!")
+        # FRENZY: a lane verb WHOSE OBJECT IS ALWAYS PREPOSITIONAL. Measured at 735 of
+        # 735 first-person lines here and 57,733 occurrences across both persons by
+        # Session C, with the direct-object form absent. Generated with `on` because
+        # that is what the client writes; a generator that emitted the convenient form
+        # would test a pattern the game never produces.
+        for k in range(int(dur * frenzy_rate)):
+            sec = start + int(k / frenzy_rate)
+            frenzy_attempts += 1
+            if rnd.random() < 0.8:
+                a2 = rnd.randint(30, 70)
+                lines.append(f"{stamp(sec)} You frenzy on {MOBS[e % 5]} for {a2} "
+                             f"points of damage.")
+                frenzy_landed += 1
+                dmg_in_window += a2; hits_in_window += 1
+                if a2 % 2 == 0: even += 1
+                nonc += 1
+            else:
+                lines.append(f"{stamp(sec)} You try to frenzy on {MOBS[e % 5]}, but miss!")
+        # THE COMPOUND DEFECT, GENERATED ON PURPOSE. `You frenzy on yourself` is the
+        # line that P-3 shipped without P-2 would have counted as an attack on a mob:
+        # the target captures as "on yourself" without the `(?:on )?` group, and
+        # "on yourself" is not in SELF_TARGETS. One missing group, two defects, and
+        # the second one invisible. It must reach NOTHING -- not damage, not hits,
+        # not attempts.
+        lines.append(f"{stamp(start + 1)} You frenzy on yourself for 300 points of damage.")
+        self_frenzy += 1; self_dmg += 300
+        # AN UNCLASSIFIED VERB: damage counts, and it must contribute to NO rate.
+        # This is the arm that proves `if v in LANE_VERBS / elif v in AUTO_VERBS`
+        # really does drop through for a verb in neither -- a claim I made in the
+        # handover from reading the code, and reading is not measuring.
+        for k in range(3):
+            sec = start + 3 + k * 7
+            uc = rnd.randint(40, 90)
+            lines.append(f"{stamp(sec)} You cleave {MOBS[e % 5]} for {uc} points of damage.")
+            unclassified_dmg += uc
+            dmg_in_window += uc; hits_in_window += 1
+            if uc % 2 == 0: even += 1
+            nonc += 1
         # one spell landing per engagement
         sec = start + dur // 2
         sa = rnd.randint(200, 400)
@@ -130,7 +187,7 @@ def synth(seed):
         lines.append(f"{stamp(sec)} You hit yourself for 500 points of damage.")
         lines.append(f"{stamp(sec)} You hit yourself for 40 points of unresistable "
                      f"damage by Cannibalize.")
-        self_hits += 2
+        self_hits += 2; self_dmg += 540
         t = start + dur + rnd.randint(40, 90)      # a gap well over GAP=15
 
     truth = dict(
@@ -147,9 +204,14 @@ def synth(seed):
         even_share_target=even_share,
         spell_landings=len(spell_amts),
         spell_damage_total=sum(spell_amts),
-        self_damage_excluded=540 * n_eng,
+        self_damage_excluded=self_dmg,
         auto_attempts=auto_attempts,
         lane_attempts=lane_attempts,
+        # NEW WITH 1.6.0. Each of these fails if a specific shipped path is wrong.
+        frenzy_attempts=frenzy_attempts,      # the `(?:on )?` group + the new ceiling
+        unclassified_damage=unclassified_dmg, # counted for damage, filed as nothing
+        unclassified_verbs=["cleave"],        # and NAMED in coverage, per P-5
+        self_frenzy_excluded=self_frenzy,     # the compound P-2/P-3 defect
     )
     return lines, truth
 
@@ -174,6 +236,19 @@ def measure(engine, seeds):
                                      + sd_block.get("spell_damage", 0)),
             "auto_attempts": m.get("auto_attack_attempts"),
             "lane_attempts": (m.get("lanes") or {}).get("kick", {}).get("attempts"),
+            # 1.6.0 PATHS. Read from where a CONSUMER reads them, not from internals.
+            "frenzy_attempts": (m.get("lanes") or {}).get("frenzy", {}).get("attempts"),
+            # An unclassified verb's damage is not separately reported -- correctly,
+            # it is folded into damage_dealt -- so it is checked by DIFFERENCE: remove
+            # it from the generated total and the engine must fall by exactly that.
+            # Measuring it any other way would need the engine to expose an internal,
+            # and a harness that reaches into internals stops testing the interface.
+            "unclassified_damage": None,
+            "unclassified_verbs": (cov.get("verbs_unclassified") or {}).get("verbs"),
+            # The self-frenzy must reach NOTHING. Its 300 damage is not in the truth
+            # total, so if the engine counted it, damage_dealt fails -- this row
+            # records the intent so a reader sees the arm exists.
+            "self_frenzy_excluded": truth["self_frenzy_excluded"],
         }
         # COMPARE AT THE ENGINE'S DECLARED PRECISION. crit_rate is emitted rounded to
         # 4 decimals; my truth is unrounded, so seed 2's 0.008850 against a reported
@@ -182,11 +257,19 @@ def measure(engine, seeds):
         # the difference an error is a harness defect, not an engine one -- and it is
         # the same shape as everything else this file exists to catch.
         ROUNDED_4DP = {"crit_rate"}
+        # The by-difference arm: strip every cleave line and the engine's damage must
+        # drop by exactly the generated unclassified damage. This is the only way to
+        # check a quantity the interface deliberately does not expose.
+        stripped = [l for l in lines if " You cleave " not in l]
+        got["unclassified_damage"] = (m.get("damage_dealt", 0)
+                                      - engine(stripped, {})["measured"].get("damage_dealt", 0))
         for k, want in got.items():
             exp = truth[k]
             if k in ROUNDED_4DP and exp is not None:
                 exp = round(exp, 4)
-            if exp in (None, 0) or want is None:
+            if isinstance(exp, list) or isinstance(want, list):
+                rel = 0.0 if want == exp else 1.0
+            elif exp in (None, 0) or want is None:
                 rel = None if want != exp else 0.0
             else:
                 rel = abs(want - exp) / exp
@@ -274,9 +357,21 @@ if __name__ == "__main__":
         ("killing blows NOT excluded", dict(kind="kb")),
         ("self-damage counted as output", dict(kind="self")),
         ("engagement gap widened 15s -> 600s", dict(kind="gap")),
+        # THE 1.6.0 CONTROLS. Four new quantities were added to this harness and every
+        # one of them passed on the first run. A new arm that has never failed is not
+        # evidence -- it is an arm whose ability to fail is unproven, which is the
+        # exact fault this file catches in other people's code. Each control breaks
+        # ONE path the bundle shipped.
+        ("the `(?:on )?` group removed from MELEE", dict(kind="prep")),
+        ("`cleave` moved into AUTO_VERBS -- misfiled, not unfiled", dict(kind="misfile")),
+        ("frenzy dropped from LANE_VERBS back to nothing", dict(kind="unlane")),
     ):
         saved_gap = G.GAP
         saved_self = set(G.SELF_TARGETS)
+        saved_melee = G.MELEE
+        saved_auto = set(G.AUTO_VERBS)
+        saved_lane = set(G.LANE_VERBS)
+        saved_unc = set(G.UNCLASSIFIED_VERBS)
         try:
             if patch["kind"] == "gap":
                 G.GAP = 600
@@ -285,6 +380,13 @@ if __name__ == "__main__":
             if patch["kind"] == "kb":
                 orig = G.SLAIN
                 G.SLAIN = __import__("re").compile(r"^NEVER MATCHES ANYTHING$")
+            if patch["kind"] == "prep":
+                G.MELEE = __import__("re").compile(
+                    G.MELEE.pattern.replace("(?:on )?", ""))
+            if patch["kind"] == "misfile":
+                G.UNCLASSIFIED_VERBS.discard("cleave"); G.AUTO_VERBS.add("cleave")
+            if patch["kind"] == "unlane":
+                G.LANE_VERBS.discard("frenzy")
             r2 = measure(G.gap_engine, seeds)
             ok2 = sum(1 for _, _, _, rel in r2 if rel == 0.0)
             worse = ok2 < ok
@@ -294,6 +396,10 @@ if __name__ == "__main__":
         finally:
             G.GAP = saved_gap
             G.SELF_TARGETS.clear(); G.SELF_TARGETS.update(saved_self)
+            G.MELEE = saved_melee
+            G.AUTO_VERBS.clear(); G.AUTO_VERBS.update(saved_auto)
+            G.LANE_VERBS.clear(); G.LANE_VERBS.update(saved_lane)
+            G.UNCLASSIFIED_VERBS.clear(); G.UNCLASSIFIED_VERBS.update(saved_unc)
             if patch["kind"] == "kb":
                 G.SLAIN = orig
     # ...and the declaration itself must not be able to swallow a NEW failure.
