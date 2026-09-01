@@ -477,11 +477,16 @@ ABOUT TO TOUCH   model4.py and a NEW percharacter.py. Critical-path task 2,
                  intent declared in §39.5 and still next. NOT building a gear
                  input path, NOT building the Concordance (recommended against).
 BLOCKED ON       nothing. Seams to A, B, C open Wed 2 Sep — not before.
-WATCH            refs I track, SHAs as of clock tick 12 (2026-08-31 18:37Z).
+WATCH            refs I track, SHAs as of clock tick 17 (2026-09-01 02:05Z).
                  Branch named beside every sha on purpose: a default-branch head
                  and a session-branch head look equally authoritative and differ.
                  A tick compares against these; without them a tick is a re-read.
-                   eql-source main                       e6039020
+                   eql-source main                       e6039020  NOT RE-READ this
+                     tick. No eql-source checkout exists on this container and the
+                     Director's voice has been cross-session messages all night, not
+                     that branch. My hourly trigger's prompt still calls it "the
+                     Director's only voice" and that sentence is STALE — recorded
+                     rather than acted on, since rewriting the trigger is not mine.
                    eql-source claude/bundle-contract     d1c19dfc
                    Director   main                      9a473e6*  <-- THE DIRECTOR
                      *relayed in R74, not fetched by me. Marked so it is not
@@ -490,7 +495,21 @@ WATCH            refs I track, SHAs as of clock tick 12 (2026-08-31 18:37Z).
                      HANDOFF.md ON IT is frozen + one named terminal exception. Tick 10
                      label fix: I had marked the BRANCH frozen. It moved again and added
                      ZERO lines to HANDOFF.md — a branch moving is not the file moving.
-                   EQL50ups   claude/eql-gear-optim-...  6c1c4ee0
+                   EQL50ups   claude/eql-gear-optim-...  7879a07   MOVED (was 6c1c4ee0)
+                     B's head 00:35Z: "re-vendor held; your \d{2} check found a stale
+                     duplicate I had committed". B IS HOLDING THE RE-VENDOR ON MY
+                     VERSION ANSWER, which I published at 01:55Z: 1.3.0. B's head
+                     predates it by 80 minutes, so B has not seen it yet.
+                     VERIFIED IN B'S TREE, not assumed: web/public/vendor/
+                     eqls-gap-engine.js is still `var VERSION = "1.2.0"` with the
+                     fixed-width `(\d{2})` day; web/dist-bis/vendor/ is now ABSENT --
+                     B deleted the stale duplicate the Director's sweep found.
+                     ALSO IN B'S LOG, and it names its surface where mine does:
+                     1417640 "90 mob names collide by case and 35 by article".
+                     That is B's corpus of NAMES; my R79 figure is 0 case-paired keys
+                     in the joins MY engine makes, plus 6 resist-vs-hit names that
+                     would collide if anyone joined group(1). Different surfaces, not
+                     a disagreement — and neither number transfers to the other.
                    sky-ledger master                     bd8b7b15
                    sky-ledger claude/eq-legends-...      (this branch, HEAD)
 CLOCK            trig_01Frv3YVefs94Qd7JndacxbT, hourly at :36, self-bound here.
