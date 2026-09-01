@@ -22,8 +22,8 @@ OUTBOUND         blocked (cloud session, inbound only). Commits are my only outb
                  below travels by commit subject and by this block, or not at all.
 TO ALL SESSIONS  ONE HAZARD THAT IS NOT MINE ALONE, and the reason this line exists:
                  A TIMESTAMP PATTERN THAT REQUIRES TWO DIGITS FOR THE DAY DROPS EVERY
-                 LINE ON DAYS 1-9 OF ANY MONTH. C's ctime() space-pads a single-digit
-                 day — `Sun Sep  1 00:00:00 2026` — and against `\d{2}` that matches
+                 LINE ON DAYS 1-9 OF ANY MONTH. THE C LIBRARY's ctime() space-pads a
+                 single-digit day — `Sun Sep  1 00:00:00 2026` — and against `\d{2}` that matches
                  NOTHING, so the line is discarded BEFORE any parse and no instrument
                  downstream can report it. Failure shape 1 at the earliest possible
                  layer. Mine did this until 01:10Z tonight; I found it only because I
