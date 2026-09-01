@@ -5,7 +5,27 @@
      Update these fields on EVERY push. Sections below are append-only history. -->
 
 ```
-WHAT I NEED FROM YOU   1 Sep, for when you wake. FIVE ITEMS, and four of them are
+*** TWO OF THE FIVE ASKS BELOW ARE WITHDRAWN. I HAD 117 LOGS AND WAS USING 4. ***
+                 Told at 14:45Z that all combat data is in scope, I searched the
+                 container instead of asking. §62.
+                 #4 DAYS 01-03 IS CLOSED BY MEASUREMENT, NOT BY A CAPTURE. 117 logs,
+                 282,615 stamped lines: days 01, 02 and 03 appear 9,535 / 11,561 /
+                 8,669 times and EVERY ONE IS ZERO-PADDED. Space-padded day fields in
+                 the whole corpus: ZERO. My hypothesis is refuted on my own data.
+                 Nothing was ever being dropped.
+                 #1 STANCE — ROOT CAUSE FOUND, AND IT IS MINE. The constant
+                 STANCE_EVEN_SHARE_OFFENSIVE = 0.93 is measured over a DIFFERENT
+                 POPULATION than the classifier that uses it. On jos437, the project's
+                 one fully-pinned Offensive capture: 0.9387 over every melee line with
+                 no exclusions (that is the 93.6% in validate_jos437.py), and 0.9932
+                 over the classifier's own population -- non-crit, killing blows
+                 excluded, n=732. THE SAME DEFECT AS THE 202% SHARE, inside the
+                 classifier that was blocking per-character modelling.
+                 NOT SHIPPED: correcting it changes engine behaviour, which means a
+                 bundle bump and a third B re-pin, and B is offline. Documented with
+                 its evidence, ready to apply. §63.
+
+WHAT I NEED FROM YOU   1 Sep. THREE ITEMS NOW, not five. Four of them were
                  a capture you can make in a minute or two of play. I am not
                  estimating past any of them and none of them is blocking the rest of
                  the work — they are blocking specific NUMBERS from becoming real.
@@ -7259,3 +7279,98 @@ quietly providing is to take it away** — and the corollary is the sentence I w
 
 **35.5, Call of Flame, days 01–03, the stance capture stay BLOCKED. Committing the raid
 dataset still needs a ruling.**
+
+---
+
+## 62. I had 117 logs and was using 4
+
+The owner told me at 14:45Z that every log and all combat data is in project scope, and
+to say so if I could not reach something. **The right response was not to ask. It was
+to look.** I searched the container:
+
+```
+/home/user/corpus/everquest-companion/tests/fixtures/   ~40 logs
+/home/user/corpus/eql-meter/samples/                      1
+/home/user/corpus/EQBuddy/tests/fixtures/                 1
+/home/user/sky-ledger/corpus/amp/                         2
+  ... 117 EQ-shaped log files, 282,615 stamped lines
+```
+
+**I had been measuring on four.** Every "4 logs, 189,460 lines" figure I published
+tonight was true of the four files I happened to be looking at and was reported as a
+fact about my corpus. That is the fault I have catalogued all night — **a measurement
+whose surface I named too narrowly, read as a fact about the world** — and this time
+the too-narrow surface was my own filesystem.
+
+`jos437-finishing-blow.log` was among them, which `model4.py:80` cites as the
+level-50 Offensive calibration and which `validate_jos437.py` is built on. **I ran that
+reproducer in `check.sh` twenty-nine times tonight without once asking what else was in
+the directory it reads from.**
+
+### #4, DAYS 01–03: CLOSED BY MEASUREMENT, and my hypothesis is refuted
+
+Day field captured verbatim, no stripping, so padding is visible:
+
+```
+'01'  9,535    '02'  11,561    '03'  8,669    ...    '29'  184,034
+SPACE-PADDED DAY FIELDS IN 282,615 STAMPED LINES: 0
+```
+
+**Days 01–03 are present in quantity and every one is zero-padded.** So `\d{2}` would
+never have dropped a line, **nothing was ever being dropped**, and the `([ \d]\d)`
+widening is inert tolerance exactly as shipped. C's relayed measurement is confirmed on
+my own data, at a scale I could have had at any point.
+
+**The ask is withdrawn.** It was never a capture problem.
+
+## 63. The stance root cause — a constant measured over a different population than the code that uses it
+
+`validate_jos437.py` says jos437 is *"provably in Offensive stance (93.6% even
+damage)"*. The classifier measures **99.3%** on the same file. Before calling that a
+conflict I asked which population each figure is over:
+
+```
+0.9932  n=732  all melee, non-crit, killing blows EXCLUDED   <- the CLASSIFIER's population
+0.9893  n=745  all melee, non-crit, killing blows included
+0.9414  n=819  all melee INCLUDING crits, kills excluded
+0.9957  n=462  auto-attack only, non-crit, kills excluded
+0.9889  n=270  ability lanes only, non-crit, kills excluded
+0.9387  n=832  EVERY MELEE LINE, NO EXCLUSIONS AT ALL        <- this is the 93.6%
+0.8745  n=956  spells too
+```
+
+**`STANCE_EVEN_SHARE_OFFENSIVE = 0.93` is calibrated on the unfiltered population. The
+classifier compares it against a population with crits and killing blows removed.** The
+constant and the measurement are over different populations — **the same defect as the
+202% share, sitting inside the classifier that was blocking per-character modelling**,
+and it is the reason `_stance` cannot identify a stance.
+
+For the classifier's own population the measured Offensive signature is **0.993**, from
+the project's one fully-pinned capture, n=732.
+
+**NOT SHIPPED, deliberately.** Correcting it changes engine behaviour, which means a
+bundle bump and a third B re-pin inside a day, and **B is offline and cannot respond.**
+The current failure mode is conservative — the classifier *refuses* rather than
+asserting a wrong stance — so holding costs nothing and shipping unilaterally while
+nobody can react costs trust. Documented with its evidence, ready to apply.
+
+**It does not resolve Shara and Kenkyo.** At 0.636 and 0.615 they are further from
+0.993 than from 0.93. Two plausibly-real logs at ~0.62 and two pinned captures at
+0.912 / 0.993 is still a real split, and **what drives it is a mechanism claim I am not
+making.** The stance ask survives, better posed: *not* "give me any log", but "here are
+two characters that match neither signature, and the Offensive constant was wrong for
+the population it was compared against."
+
+### The population caveat I will not let this finding outrun
+
+Most of those 117 files are **test fixtures from a third-party repository**, named for
+the scenarios they test (`w39-spellblade-switch`, `e2e-combat`, `p1-unbound-pet`).
+Four sit at *exactly* 1.000 even damage and several at *exactly* 0.500 — constructed,
+not captured. **The even-damage share across all 43 qualifying logs runs 0.397 to
+0.993 as a continuum rather than two clusters, and I am not claiming that continuum is
+real until the synthetic and captured populations are separated.** The figures above
+that carry weight are jos437 and jos438 — the files this project already treats as
+pinned captures — and the two real player logs.
+
+**35.5, Call of Flame and the stance stay BLOCKED. Days 01–03 is CLOSED. The raid
+dataset ruling stands.**
