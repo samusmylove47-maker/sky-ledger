@@ -73,6 +73,22 @@ echo "== B's hand-written contract for the measured block must be satisfied =="
 python3 check_contract.py --selftest || fail=1
 python3 check_contract.py || fail=1
 echo
+echo "== the Director's raid dataset must be pinned, and its absence must be LOUD =="
+# Added 1 Sep. residual.py's default data path was an absolute scratchpad path
+# carrying ONE SESSION'S UUID, and the file is committed nowhere -- so the published
+# 4.59x ratio and the 71.9 DPS measured median rested on a file that exists on one
+# container. That is fetch_shards.py's fault, still live in two more files.
+# ABSENT exits 0 on purpose: nothing on a fresh clone can restore a file with no
+# source, and a suite that is red for a reason nobody can fix teaches its reader to
+# ignore it. DRIFTED is fatal -- substituted bytes silently move every figure.
+python3 residual.py --check || fail=1
+echo
+echo "== every model input NO log can supply must be swept, or declared unsweepable =="
+# The list is IMPORTED from percharacter.INPUTS, never retyped, so adding an ASSUMED
+# input to the audit demands a sweep here. The full sweep is minutes and has no place
+# in a 13-second suite; this arm is the list agreement only.
+python3 sensitivity.py --check --selftest || fail=1
+echo
 echo "== the per-character audit must classify every model input, and refuse below n=30 =="
 # Added 1 Sep. Critical-path task 2, and deliberately the AUDIT rather than a fitted
 # per-character model: pointing model4 at a real log found that the log does not carry

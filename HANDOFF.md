@@ -25,6 +25,16 @@ OVERNIGHT        1 Sep 08:00Z. The owner is asleep; the local machine is off, so
                  logs of the same kind will not help. THE ASK IS A CLIENT SCREENSHOT
                  OF THE STANCE TAKEN ALONGSIDE A LOG, so the signature can be
                  calibrated against ground truth instead of assumed.
+                 §58 — THREE DEFECTS IN residual.py, AND ONE MAKES PUBLISHED FIGURES
+                 UNREPRODUCIBLE. Its default data path is an ABSOLUTE SCRATCHPAD PATH
+                 CARRYING THIS SESSION'S UUID, and the file is committed nowhere. The
+                 4.59x model-vs-measured ratio and the 71.9 DPS measured median rest
+                 on 207,239 bytes that exist on ONE CONTAINER. That is exactly the
+                 fault fetch_shards.py was written for on 31 Aug; I fixed it for the
+                 weapon shards and left it live in two more files. Now PINNED by
+                 sha256, ABSENT is loud and non-fatal, DRIFTED is fatal, and
+                 COMMITTING THE DATASET NEEDS A RULING — it is another session's
+                 measured data and not mine to take. check.sh 20 gates, 17.8s.
 AT SHUTDOWN      1 Sep ~06:00Z, owner powering the machine down. READ THIS FIRST.
                  SEAM STABLE AND DELIBERATELY MID-VERSION: B ships 1.4.0
                  (02543ec8, verified byte-identical from my side), I am at 1.5.0
@@ -6887,3 +6897,89 @@ the owner can produce. It is also the same shape as the existing published confl
 owns it. `check.sh` PASS, 18 gates.
 
 **35.5, Call of Flame, days 01–03, and the stance capture stay BLOCKED.**
+
+---
+
+## 58. Three defects in `residual.py`, found by passing it an argument
+
+I set out to extend `sensitivity.py` so the seven inputs **no log can supply** are
+swept — turning §56's *count* into a *magnitude*, because knowing seven are assumed
+does not tell the owner which capture is worth their time. The first command I ran
+failed with `FileNotFoundError: '--check'`, and unpicking that found three faults in
+one file.
+
+### 1. A module that read `sys.argv` at import time hijacked its importer
+
+```python
+DATA = sys.argv[1] if len(sys.argv) > 1 else "…"      # at MODULE SCOPE
+```
+
+`sensitivity.py` has imported `residual` since the day it was written, and it worked
+only because **nobody had ever passed `sensitivity.py` an argument.** The first one I
+passed made it try to open a file called `--check`.
+
+### 2. THE PUBLISHED FIGURES REST ON A FILE THAT EXISTS ON ONE CONTAINER
+
+The default path is an **absolute scratchpad path carrying this session's UUID**, and
+the dataset is committed nowhere:
+
+```
+/tmp/claude-0/…/caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json
+207,239 bytes   213 records   sha256 11823ae7b43509fe…
+```
+
+**So `residual.py`'s model envelope, its containment test, the `4.59×` model-vs-measured
+ratio and the `71.9 DPS` measured median are all unreproducible from a fresh clone.**
+
+That is precisely the fault `fetch_shards.py` exists for — *"check.sh had been passing
+for days on an untracked file that happened to sit on one container's disk"* — which I
+found for the weapon shards on 31 Aug **and left live in two more files.** Finding the
+same shape twice in one tree is the useful part: the first fix was a fix, not a sweep.
+
+**Fixed as far as it is mine to fix.** The bytes are pinned by sha256 and the record
+count with them, so a substituted dataset fails loudly instead of silently moving every
+figure. `residual.py --check` reports:
+
+- **ABSENT → exit 0, loudly.** Nothing on a fresh clone can restore a file that has no
+  source, and *a suite that is red for a reason nobody can fix teaches its reader to
+  ignore it.* The message names what becomes unreproducible and how to point at the
+  file.
+- **DRIFTED → exit 1.** Substituted bytes silently change every downstream figure. That
+  is the whole point of a pin.
+
+**What is NOT fixed, and needs a ruling: availability.** This dataset came from the
+Director, not from a URL I can fetch, so there is nothing to re-fetch it *from*.
+Committing it here would settle it permanently and **it is another session's measured
+data — 207 KB of the owner's raid history — and not mine to take.** Flagged, not done.
+
+### 3. It did minutes of model evaluation at import
+
+`ENV` was built at module scope: 560 trios × 4 (mode, rates) = **2,240 evaluations**,
+paid by anyone who so much as imported the module. That is most of why `sensitivity.py`
+took 1m55s — **the sweeps were never the expensive part** — and it is why a `--check`
+arm could not be fast until now, because the check would have waited on an envelope it
+does not read.
+
+Moved into `envelope()`, called from `__main__`. **`residual.py --check` went from
+minutes to 0.069s, and every published figure is unchanged** — verified by re-running
+the full report: envelope `108.5 / 336.1 / 524.3`, `0 of 213` fights exceeding the
+ceiling, floor-to-median `1.51×`.
+
+### And the thing I actually set out to do
+
+`sensitivity.py` now sweeps the assumed inputs, **and the list is IMPORTED from
+`percharacter.INPUTS` rather than retyped.** Two lists that must agree are two lists
+that will drift — and this file's six ad-hoc knobs, chosen before the audit existed,
+contain **not one** of target mitigation, wrath or strikethrough. Deriving the list
+means adding an ASSUMED input to the audit now *demands* a sweep here.
+
+Three of the seven are not scalar knobs, and they are **declared unsweepable with a
+reason** rather than silently skipped — weapon damage and delay are properties of a
+catalogue choice, not a number, and buff uptime has no constant to move. `sensitivity.py
+--check --selftest` is instant, runs in `check.sh`, and its failing mutation is an
+ASSUMED input with no sweep.
+
+`check.sh` PASS, **20 gates, 17.8s.**
+
+**35.5, Call of Flame, days 01–03 and the stance capture stay BLOCKED. Committing the
+raid dataset is a fourth item and it needs a ruling, not a capture.**

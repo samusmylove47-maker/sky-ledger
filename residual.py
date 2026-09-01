@@ -8,9 +8,60 @@ figure below is read out of the dataset at run time; nothing is typed.
 import json, math, os, sys, collections, statistics as st
 import itertools, model4 as M
 
-DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser(
-    "/tmp/claude-0/-home-user-sky-ledger/caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json")
-F = json.load(open(DATA, encoding="utf-8"))
+# TWO DEFECTS FIXED HERE 1 Sep 2026, and the second is the shards defect again.
+#
+# 1. `DATA = sys.argv[1] if len(sys.argv) > 1 else ...` ran AT MODULE SCOPE, so any
+#    script importing this module inherited its argument parsing. sensitivity.py has
+#    imported it since the day it was written and only worked because nobody ever
+#    passed sensitivity.py an argument. The first one I passed made it try to open a
+#    file called "--check". A module that reads sys.argv at import time hijacks its
+#    importer.
+#
+# 2. THE DEFAULT PATH IS AN ABSOLUTE SCRATCHPAD PATH CARRYING ONE SESSION'S UUID, and
+#    the file is not committed anywhere. So `residual.py` and everything downstream of
+#    it -- including sensitivity.py and the published 4.59x model-vs-measured ratio and
+#    the 71.9 DPS measured median -- rest on a file that exists on ONE CONTAINER and
+#    nowhere else. That is exactly the fault fetch_shards.py exists for: "check.sh had
+#    been passing for days on an untracked file that happened to sit on one container's
+#    disk." I found it there on 31 Aug and left it live in two more files.
+#
+# WHAT IS AND IS NOT FIXED. The path is now declarable and the bytes are PINNED, so a
+# substituted dataset fails loudly instead of silently changing every figure. What is
+# NOT fixed is the availability: this dataset came from the Director, not from a URL I
+# can fetch, so there is nothing to re-fetch it FROM. Committing it into this
+# repository would settle that permanently and IS NOT MINE TO DECIDE -- it is another
+# session's measured data, 207,239 bytes of it. RULING NEEDED; flagged, not taken.
+DATA_SHA256 = "11823ae7b43509feb15721b4118458707d2828c465c625a989e233a836f342d5"
+DATA_BYTES = 207239
+DATA_RECORDS = 213
+DEFAULT_DATA = ("/tmp/claude-0/-home-user-sky-ledger/"
+                "caaa72f1-a659-51f4-8828-08bfb34cde0c/scratchpad/dir/raids-measured.json")
+
+
+def resolve(path=None):
+    return os.path.expanduser(path or os.environ.get("EQLS_RAIDS_MEASURED") or DEFAULT_DATA)
+
+
+def load(path=None, require=True):
+    """Return (records, status). status is 'pinned' | 'DRIFTED' | 'ABSENT'."""
+    import hashlib
+    p = resolve(path)
+    if not os.path.exists(p):
+        if require:
+            raise FileNotFoundError(
+                f"{p} is absent. Every figure this module prints -- the model envelope, "
+                "the containment test, the 4.59x ratio and the measured median -- is "
+                "UNREPRODUCIBLE without it. It is the Director's measured dataset, "
+                f"{DATA_BYTES} bytes, sha256 {DATA_SHA256[:16]}..., and it is not "
+                "committed anywhere. Set EQLS_RAIDS_MEASURED to its path.")
+        return [], "ABSENT"
+    raw = open(p, "rb").read()
+    got = hashlib.sha256(raw).hexdigest()
+    return json.loads(raw.decode("utf-8")), ("pinned" if got == DATA_SHA256 else "DRIFTED")
+
+
+DATA = resolve()
+F, DATA_STATUS = load(require=False)
 
 def ours(x):
     """Damage dealt by OUR characters, and the count of them present.
@@ -27,12 +78,21 @@ def dps(x):
     return (d / x["seconds"] / n) if x["seconds"] else None
 
 # ---------------------------------------------------------------- model envelope
-ENV = {}
-for mode in ("avg", "raid"):
-    for rates in ("max", "med"):
-        v = sorted(M.evaluate(t, mode, front=False, charm=False, rates=rates)["total"]
-                   for t in itertools.combinations(M.CLASSES, 3))
-        ENV[(mode, rates)] = (v[0], v[len(v)//2], v[-1])
+# THIRD DEFECT, same file, found the same way. This ran AT MODULE SCOPE: 560 trios x
+# 4 (mode, rates) combinations = 2,240 model evaluations, MINUTES of work, paid by
+# anyone who so much as imports this module. sensitivity.py imports it, which is most
+# of why sensitivity.py took 1m55s -- the sweeps were never the expensive part.
+# It is also why a `--check` arm could not be fast until now: the check would have
+# waited on an envelope it does not read.
+# Nothing about the figures changes. Only WHEN they are computed.
+def envelope():
+    env = {}
+    for mode in ("avg", "raid"):
+        for rates in ("max", "med"):
+            v = sorted(M.evaluate(t, mode, front=False, charm=False, rates=rates)["total"]
+                       for t in itertools.combinations(M.CLASSES, 3))
+            env[(mode, rates)] = (v[0], v[len(v)//2], v[-1])
+    return env
 
 def band(title, rows):
     v = sorted(r for r in (dps(x) for x in rows) if r is not None)
@@ -44,6 +104,33 @@ GOLD  = [x for x in F if x["our_damage_share_pct"] == 100.0]
 CLEAN = [x for x in GOLD if not x["damage_is_floor"]]
 
 if __name__ == "__main__":
+    if "--check" in sys.argv:
+        # ABSENT is reported, not fatal: nothing on a fresh clone can restore a file
+        # that has no source, and a suite that is red for a reason nobody can fix
+        # teaches its reader to ignore it. DRIFTED IS fatal -- a substituted dataset
+        # silently changes every figure downstream, which is the whole point of a pin.
+        print(f"  dataset: {DATA}")
+        if DATA_STATUS == "ABSENT":
+            print(f"  [ABSENT] NOT REPRODUCIBLE ON THIS MACHINE. residual.py and "
+                  f"sensitivity.py print figures -- the 4.59x ratio, the measured "
+                  f"median -- that cannot be recomputed here. Expected {DATA_BYTES} "
+                  f"bytes, sha256 {DATA_SHA256[:16]}... Set EQLS_RAIDS_MEASURED.")
+            sys.exit(0)
+        if DATA_STATUS == "DRIFTED":
+            print("  [FAIL] the dataset is present and its bytes DO NOT MATCH the pin. "
+                  "Every figure downstream is a function of these bytes; a human "
+                  "decides whether the published numbers move.")
+            sys.exit(1)
+        print(f"  [ok] pinned: {DATA_BYTES} bytes, {len(F)} records, "
+              f"sha256 {DATA_SHA256[:16]}...")
+        if len(F) != DATA_RECORDS:
+            print(f"  [FAIL] record count {len(F)} != pinned {DATA_RECORDS}")
+            sys.exit(1)
+        print(f"  [ok] record count {len(F)} matches the pin")
+        sys.exit(0)
+    if DATA_STATUS == "ABSENT":
+        raise SystemExit(load(require=True))
+    ENV = envelope()
     print("=" * 92)
     print("MODEL ENVELOPE  (560 trios, level 50, best legal weapon in the corpus, Offensive stance)")
     print("=" * 92)
