@@ -63,7 +63,7 @@
   // slot where a measurement goes. Now three verdicts and three sentences.
   // IF B IS STILL ON 1.3.0, GO STRAIGHT TO 1.5.0 AND SKIP 1.4.0 -- one re-pin, not
   // two. Both changes are needed; neither is skippable in substance.
-  var VERSION = "1.6.0";
+  var VERSION = "1.7.0";
 
   // Every numeric key in `measured` is over ONE of three populations, and until
   // 1 Sep 2026 the report did not say which. Measured on the log this engine was
@@ -627,8 +627,23 @@
     // P-5. Verbs whose damage IS counted and which are filed as NEITHER auto-attack nor
     // lane. Without this a log where everything was classified and a log where a fifth of
     // the damage came from unfiled verbs emit an identical `lanes` block.
+    // P-6. Session C established that which `You <verb>` forms appear at all is a
+    // property of the LOGGING CHARACTER'S CLASSES. So a class whose auto-attack verb is
+    // one we count but do not file produces meleeSeconds = 0 and every per_melee_second
+    // becomes null -- correct, and indistinguishable from "no melee time", which is a
+    // different fact.
+    var _blocks = !!(L.unclassified && L.unclassified.length) && !L.meleeSeconds;
     report.coverage.verbs_unclassified = {
       verbs: L.unclassified || [],
+      blocks_lane_rates: _blocks,
+      blocks_lane_rates_note: _blocks
+        ? "TRUE means every per_melee_second below is null BECAUSE the only melee verbs " +
+          "this character used are ones this engine counts but does not file as " +
+          "auto-attacks -- not because the character had no melee time. The damage IS " +
+          "counted; the RATES are refused. Which `You <verb>` forms a log contains " +
+          "depends on the logging character's classes, so this is the expected shape " +
+          "for a class whose auto-attack verb is unfiled."
+        : "FALSE: lane rates, where null, are null for some other reason.",
       note: "Damage from these verbs IS in damage_dealt and dps. They contribute NOTHING " +
             "to auto_attack_attempts, melee_seconds or any lane rate, because filing a verb " +
             "without cadence evidence corrupts a denominator and that is worse than the gap " +

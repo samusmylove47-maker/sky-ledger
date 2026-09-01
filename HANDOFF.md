@@ -60,6 +60,29 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
+                 D-13 [OPEN, 1 Sep 22:39Z]  A CONTRADICTION BETWEEN model4 AND A
+                 GENUINE CAPTURE, and I cannot resolve it from what I hold.
+                 Session C found that which `You <verb>` forms appear at all is a
+                 property of the LOGGING CHARACTER'S CLASSES -- C's two characters
+                 emit ZERO first-person `smite`; Kenkyo emits 71. I went to test the
+                 obvious reading against EQLS's three-class-slot design and it came
+                 out FOUR, not three:
+                   backstab   87 first-person   model4 owner: ROG        exclusive
+                   frenzy    128 first-person   model4 owner: BER        exclusive
+                   smite      71 first-person   model4 owner: PAL        exclusive
+                   kick      119 first-person   model4 owners: BST MNK RNG WAR
+                 Three MUTUALLY EXCLUSIVE owners plus a fourth verb whose owner set
+                 does NOT intersect them. A character holds three class slots, so one
+                 of these is wrong: either `kick` is available more widely than
+                 model4.LANE_OWNER records, or that table is incomplete, or the log is
+                 not one character. I AM NOT PICKING. It is a mechanism claim about
+                 the game and R74 says those get reversed.
+                 Shara, by contrast, is consistent: bash (PAL/SHD/WAR) + kick
+                 (BST/MNK/RNG/WAR) intersect at WAR, no contradiction.
+                 WORTH RESOLVING BECAUSE model4.LANE_OWNER IS WHAT THE GAP ENGINE
+                 MEASURES A TRIO AGAINST. If a lane's ownership is wrong, the ceiling
+                 a character is compared to is the wrong ceiling.
+
                  D-12 [OPEN, 1 Sep 17:50Z]  RULING WANTED, AND IT IS A DESIGN
                  QUESTION NOT A NUMBER. THE VERB LIST SHOULD PROBABLY NOT BE CLOSED.
                  Three sessions now hold three different verb lexicons over the same
@@ -389,6 +412,7 @@ HELD-PATCH: P-2 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- apply the 
 HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- widen MELEE with (?:on )? for frenzy's preposition and add nine verbs, TIERED BY EVIDENCE: frenzy+smite to LANE_VERBS (first-person cadence measured in a genuine capture); cleave, claw, reave, bite, slice, sting, smash, shoot to MELEE ONLY, classified as NOTHING, because C's counts are all-actor and this engine is ^You-anchored. CORRECTED TWICE: claw and reave are back in on Session C's 5.6M-line capture corpus. See D-12.
 HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
 HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
+HELD-PATCH: P-6 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish coverage.verbs_unclassified.blocks_lane_rates: when a character's ONLY melee verbs are unfiled ones, melee_seconds is 0 and every per_melee_second is null -- correct, and indistinguishable from 'this character had no melee time'. Raised by Session C's class finding. Additive; no computed value moves.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -396,7 +420,14 @@ HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish co
                  DECLARING A HOLD IS NOT SHIPPING ONE. Nothing here changes engine
                  behaviour; it makes three existing decisions legible to the same
                  instrument that already reads the fourth.
-VERSION          EQLSGapEngine 1.6.0. REPIN NEEDED: 1.6.0 [OPEN]
+VERSION          EQLSGapEngine 1.7.0. REPIN NEEDED: 1.7.0 [OPEN]
+                 1.7.0 adds P-6 (1 Sep 22:37Z), from Session C's finding that
+                 which `You <verb>` forms appear AT ALL is a property of the
+                 LOGGING CHARACTER'S CLASSES. A class whose auto-attack verb is
+                 one we count but do not file gets melee_seconds = 0 and every
+                 lane rate null, with nothing saying why. Bundle -> 7ffb2a6d.
+                 Additive: coverage.verbs_unclassified.blocks_lane_rates.
+                 PRIOR: 1.6.0
                  *** THE TUESDAY BUNDLE IS BUILT, 1 Sep 18:33Z, ON THE DIRECTOR'S
                  RULING TO PREPARE IT NOW RATHER THAN ON THE DAY. *** All five held
                  patches are APPLIED and the declarations are [READY], not [HELD].
@@ -538,6 +569,8 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  handover/TO-SESSION-C-verb-census.md   claw and reave back in on C's
                    counts, and the first-person question I still need answered
                  handover/TO-SESSION-C-mailbox.md   the polled-mailbox proposal
+                 handover/TO-SESSION-C-class-finding.md   C: first-person verbs are
+                   CLASS-DEPENDENT. Shipped P-6. My three-slot hypothesis came out FOUR.
                  handover/TO-SESSION-C-mailbox-reply.md   C ADOPTED IT; my poller
                    reported '0 messages' for C's mailbox while C had one open
                  handover/TO-SESSION-C.md, handover/TO-SESSION-A.md   earlier
@@ -9249,4 +9282,68 @@ not be read.
 its own. **That is a limit on my claim, not merely on your generalisation of it** — what I
 established is that *this session* can list *its own* triggers, and I should have said so.
 **A capability verified in one session is a fact about that session.**
+
+
+## TO THE DIRECTOR — 1 Sep 22:39Z — Session C found that first-person verbs are class-dependent, which shipped P-6 and broke a hypothesis of mine
+
+### 81. C answered E-001, and the answer inverts what I expected
+
+I asked C for the first-person split, saying it would decide whether my Tier 2 verbs are
+a fix or seven branches that can never fire. **C's column: six of the seven are ZERO
+first-person in its 5.6M-line corpus.** On its face that reads as seven dead branches.
+
+**C told me not to read it that way, using my own sentence:** *absent from my corpus was
+never the same claim as absent from the game.* And it has the decisive evidence —
+**`smite` is zero first-person across both of C's characters, and 71 in a genuine capture
+here.** Both corpora are right. The characters differ.
+
+**Which `You <verb>` forms a log contains is a property of the LOGGING CHARACTER'S
+CLASSES.** That is C's finding, it is correct, and it is the thing neither of us could
+have got alone: C had the volume, I had the counter-example.
+
+**So Tier 2 ships unchanged**, and the reason is now stated rather than assumed: a verb
+that never fires for one class fires for another, and this engine is not class-scoped.
+C's column is also **not cadence evidence for any of the seven**, so the refusal to
+classify them stands exactly as shipped — counted, unclaimed.
+
+### It shipped P-6, and the defect was measured not reasoned
+
+If verb presence is class-dependent, then **a class whose auto-attack verb is one I count
+but do not file** produces:
+
+```
+damage_dealt        1360    counted correctly
+melee_seconds          0
+lanes.*.per_melee_second   null      every lane rate dies
+coverage.verbs_unclassified  ['claw']
+```
+
+**The null is correct and it is indistinguishable from "this character had no melee
+time"** — a different fact about a different character. Two situations, one output, in
+the field P-5 added to stop exactly that. `blocks_lane_rates` now says which.
+**1.6.0 → 1.7.0**, bundle `1c3a6701` → `7ffb2a6d`, additive, no computed value moves.
+
+### AND MY OWN HYPOTHESIS CAME OUT WRONG, WHICH IS D-13
+
+EQLS gives one character three class slots, so I expected Kenkyo's first-person lane
+verbs to resolve to exactly three classes. **It came out four:**
+
+```
+backstab   87   ROG                  exclusive
+frenzy    128   BER                  exclusive
+smite      71   PAL                  exclusive
+kick      119   BST MNK RNG WAR      does NOT intersect the other three
+```
+
+Three mutually exclusive owners **plus a fourth whose owner set shares nothing with
+them.** One of these is wrong: `kick` is wider than `model4.LANE_OWNER` records, or that
+table is incomplete, or the log is not one character. **I am not picking** — it is a
+mechanism claim about a game I cannot run, and R74 says those get reversed.
+
+**It matters because `model4.LANE_OWNER` is what the gap engine measures a trio
+against.** If a lane's ownership is wrong, the ceiling a character is compared to is the
+wrong ceiling. Shara is consistent by contrast — bash and kick intersect at WAR.
+
+**I formed the hypothesis, tested it against my own data, and it failed.** Reporting the
+contradiction rather than the tidy version is the whole of what I did here.
 

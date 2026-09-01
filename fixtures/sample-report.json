@@ -225,6 +225,8 @@
   ],
   "verbs_unclassified": {
    "verbs": [],
+   "blocks_lane_rates": false,
+   "blocks_lane_rates_note": "FALSE: lane rates, where null, are null for some other reason.",
    "note": "Damage from these verbs IS in damage_dealt and dps. They contribute NOTHING to auto_attack_attempts, melee_seconds or any lane rate, because filing a verb without cadence evidence corrupts a denominator and that is worse than the gap it closes. An empty list means no such verb occurred, not that the check was skipped."
   },
   "inputs_assumed": [

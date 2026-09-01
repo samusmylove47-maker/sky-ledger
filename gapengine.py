@@ -750,8 +750,28 @@ def gap_engine(lines, context=None):
     # of the damage came from unfiled verbs emit an identical `lanes` block -- the
     # `measured: {}` shape, two situations producing one output. Everywhere else in this
     # engine a refusal is published; declining to file a verb is a refusal.
+    # P-6. WHEN AN UNFILED VERB IS THE CHARACTER'S AUTO-ATTACK, EVERY LANE RATE DIES
+    # AND NOTHING SAYS WHY. Session C established that which `You <verb>` forms appear
+    # at all is a property of the LOGGING CHARACTER'S CLASSES -- its two characters emit
+    # zero first-person `smite` where a genuine capture here emits 71. So a Beastlord
+    # logging `You claw`, which this engine counts but does not file, produces
+    # melee_seconds = 0, and every `per_melee_second` becomes null.
+    # The null is CORRECT -- refusing beats dividing by zero -- and it is INDISTINGUISH-
+    # ABLE from "this character had no melee time", which is a different fact. Two
+    # situations, one output: the `measured: {}` shape, in the field P-5 added to stop it.
+    _blocks = bool(unclassified) and not melee_s
     report["coverage"]["verbs_unclassified"] = {
         "verbs": unclassified,
+        "blocks_lane_rates": _blocks,
+        "blocks_lane_rates_note": (
+            "TRUE means every per_melee_second below is null BECAUSE the only melee "
+            "verbs this character used are ones this engine counts but does not file "
+            "as auto-attacks -- not because the character had no melee time. The "
+            "damage IS counted; the RATES are refused. Which `You <verb>` forms a log "
+            "contains depends on the logging character's classes, so this is the "
+            "expected shape for a class whose auto-attack verb is unfiled."
+            if _blocks else
+            "FALSE: lane rates, where null, are null for some other reason."),
         "note": ("Damage from these verbs IS in damage_dealt and dps. They contribute "
                  "NOTHING to auto_attack_attempts, melee_seconds or any lane rate, "
                  "because filing a verb without cadence evidence corrupts a denominator "

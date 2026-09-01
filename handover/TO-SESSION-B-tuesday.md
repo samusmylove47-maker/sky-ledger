@@ -442,6 +442,49 @@ verbs currently emit identical `lanes` blocks.
 
 ---
 
+## P-6 — a lane rate can be null because of a verb, and the output does not say so
+
+**Added 1 Sep from Session C's class finding**, and it is the direct consequence of P-3
+Tier 2 landing.
+
+**Change:** `coverage.verbs_unclassified` gains `blocks_lane_rates` and a note.
+**File:** `gapengine.py`, and the mirror. **VERSION 1.6.0 → 1.7.0.**
+
+C measured that **which `You <verb>` forms appear at all is a property of the LOGGING
+CHARACTER'S CLASSES.** Its two characters emit **zero** first-person `smite`; a genuine
+capture here emits **71**. Both corpora are right; the characters differ.
+
+**The consequence for this engine, measured rather than reasoned:**
+
+```
+a log whose only melee verbs are unfiled ones (a Beastlord's `You claw`)
+   damage_dealt        1360      counted correctly
+   melee_seconds          0
+   auto_attack_attempts   0
+   lanes.kick.per_melee_second   null      <- every lane rate dies
+   coverage.verbs_unclassified   ['claw']
+```
+
+**The null is correct** — refusing beats dividing by zero — **and it is
+indistinguishable from "this character had no melee time"**, which is a different fact
+about a different character. Two situations, one output: the same shape as `measured: {}`
+for an unreadable file, in the field P-5 added to prevent it.
+
+`blocks_lane_rates: true` says which of the two it is. Both branches proven: `true` on
+the claw-only log, `false` on a log with an auto-attack present.
+
+**What it changes for you:** two new keys under `coverage.verbs_unclassified`. **No
+computed value moves.** Bundle `1c3a6701` → `7ffb2a6d`.
+
+**And it is the argument for keeping Tier 2 rather than dropping it.** C's column shows
+six of my seven Tier 2 verbs at zero first-person in its corpus — and told me *not* to
+read that as dead branches, on my own principle: *absent from my corpus was never the
+same claim as absent from the game.* A verb that never fires for one class fires for
+another, and this engine is not class-scoped. Dropping them makes a Beastlord's entire
+auto-attack invisible **with nothing in the output saying so.**
+
+---
+
 ## What I need from you when you re-pin
 
 1. **Say which of the three you take.** They are independent; P-3 alone is defensible
