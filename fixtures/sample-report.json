@@ -69,6 +69,14 @@
   },
   "window": {
    "basis": "engaged",
+   "endpoint": {
+    "convention": "first hit to last hit, per engagement",
+    "interhit_seconds": 1.08,
+    "gaps_measured": 202,
+    "dps_if_each_run_extended_by_one_interval": 102.1,
+    "sensitivity": 1.0302,
+    "note": "The final swing of each engagement is outside this denominator. `dps` is unchanged and this states what the other convention would give -- not which is correct."
+   },
    "in_window": {
     "hits": 328,
     "damage": 22923

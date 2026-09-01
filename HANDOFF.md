@@ -16,7 +16,27 @@ ON MASTER        *** CORRECTED 31 Aug: THE OLD LINE HERE IS NOW FALSE. ***
                  included. My branch is an ancestor of master, 0 commits ahead.
                  Session 0 and anyone told to watch the branch instead of master
                  was told that on my say-so — master is a live front door now.
-VERSION          EQLSGapEngine 1.3.0. B HAS RE-PINNED — no repin outstanding.
+VERSION          EQLSGapEngine 1.4.0. REPIN NEEDED: 1.4.0
+                 TO SESSION B: I am asking you to re-pin a SECOND time in an hour and
+                 I am naming the cost rather than avoiding it. Two changes, both
+                 measured, neither optional:
+                 1. THE JS BUNDLE COULD NOT READ A CRLF LOG AT ALL. `(.*)$` will not
+                    match past a carriage return, so a Windows-written log parsed to
+                    ZERO events and 1.3.0 returned `measured: {}` for it. One of the
+                    two logs committed here IS CRLF, and EverQuest runs on Windows, so
+                    CRLF IS THE NORMAL CASE and LF was the lucky one. If you shipped
+                    1.3.0 to a player, it read nothing and said so quietly.
+                 2. `measured.window.endpoint` — additive. The engaged denominator
+                    runs first hit to last hit, so the final swing's time is outside
+                    it. MEASURED cost of that choice: 14.04% on the corpus log, and
+                    2.24%–13.79% on three others, so NOT a constant. `dps` does not
+                    move; which convention is right is a mechanism claim I am not
+                    making. Refused below 30 inter-hit gaps.
+                 I considered hiding (2) inside an existing string to spare you the
+                 re-pin. That is a loophole in the rule that a changed bundle needs a
+                 changed version, and a number in prose is one you cannot compute
+                 against. Your guard is doing exactly what it was built for.
+                 PRIOR: 1.3.0 — B HAS RE-PINNED, no repin outstanding at that version.
                  THE 'REPIN NEEDED: 1.3.0' LINE THAT STOOD HERE IS NOW REMOVED AS A
                  FALSE CLAIM. B re-vendored at 33b0c79 and derived the pin
                  independently — 693ea8ad, 26,610 b, VERSION 1.3.0, from
@@ -6254,5 +6274,105 @@ If I ever do consume it, B's `contractVersion 1.0.0` **and** `contractSha256_8
 957fad1a` are both there, and B's reason for shipping both is the one this repository
 arrived at independently for the bundle: **a version says what changed on purpose, a
 hash says whether anything changed at all.**
+
+**35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**
+
+---
+
+## TO THE DIRECTOR — 1 Sep 04:05Z — CRLF DONE: the shipped bundle could not read a Windows log at all
+
+**R150 adopted** — this subject leads with what it closes. `check.sh` PASS, 17 gates.
+Bundle `693ea8ad` → **`02543ec8`**, 30,220 bytes, **VERSION 1.4.0**. `REPIN NEEDED:
+1.4.0` declared; B's second re-pin in an hour and I have named the cost rather than
+avoided it.
+
+### 52. The bundle returned an empty report for a CRLF log, and my parity gate could not have found it
+
+I went looking for the endpoint bias (§52.1) and ran the short corpus log through the
+JS bundle to check my arithmetic. It came back **`measured: {}`**.
+
+```
+corpus/amp/eqlog_Shara_rivervale_20260829.txt      CRLF   ← JS: 0 events, empty report
+corpus/amp/eqlog_..._full.txt                      LF     ← JS: fine
+```
+
+`(.*)$` will not match past a carriage return, so **every line of a CRLF log failed
+the timestamp match and the file parsed to zero events.** The engine then took its
+`if (!hits.length)` path and said, correctly and uselessly, *"no outgoing damage lines
+matched"*.
+
+**One of the two logs committed to this repository could not be read by the bundle I
+ship. EverQuest runs on Windows, so CRLF is the NORMAL case and LF was the lucky
+one.** If B had shipped 1.3.0 to a player, it would have read nothing and reported
+that quietly.
+
+**Python had the same hole and was rescued by an accident.** `raw.rstrip("\n")` leaves
+the `\r`; `gap_engine` only survived because `__main__` opens in universal-newline
+text mode. A caller that reads bytes and splits itself — **which is exactly what my
+own JS driver does** — got `dps: None`. Both engines now strip it at the parse loop.
+
+**THE PART THAT IS MINE, not the bug — the gate.** `parity.py`:
+
+- ran **one synthetic log**, and
+- its JS driver split on **`/\r?\n/`** while the temp file was written with
+  **`"\n".join(lines)`**.
+
+So **both sides always saw LF whatever was passed in.** The harness sanitised the
+input before handing it to the thing under test, and **could not have exhibited a
+line-ending fault even if handed one.** That is failure shape 1 in the instrument
+built to catch failure shape 1 — the third time tonight, and this one was in the
+witness itself.
+
+Fixed at both ends: the driver splits on `"\n"` only, so a `\r` reaches the engine as
+it does for a consumer doing `text.split('\n')`, and there is now a **second arm** that
+writes real `\r\n` bytes to both engines. **Matched pair proven** — I removed the
+strip in a scratch copy and the CRLF arm's control fires: `dps = undefined`,
+`measured` keys `0`. And the control had to be written carefully, because **before the
+fix both sides went to `measured: {}`, and two empty reports agree field for field
+perfectly.**
+
+`bundle/check-integrity.py` has guarded this bundle's **own bytes** against CRLF since
+31 Aug. **I checked the artifact for carriage returns and never checked the input for
+them.**
+
+### 52.1 The endpoint convention, and what it costs — measured, not corrected
+
+The engaged window is first hit to last hit per engagement, so **the time the final
+swing occupied is outside the denominator.** Measured, four logs:
+
+```
+Shara full      25 runs   861s   interval 4.84s   dps 1372.9 → 1203.8   14.04%
+Shara short      1 run     21s   interval 10.5s   dps  581.9 →  387.9   50.00%   ← 2 gaps
+Kenkyo           7 runs   402s   interval 1.28s   dps  101.1 →   98.9    2.24%
+Testchar         8 runs   291s   interval 5.02s   dps    8.8 →    7.7   13.79%
+```
+
+**`dps` does not move.** Which convention is correct is a mechanism claim about how
+combat time works, and R74 is the standing rule on those. What is measurable is the
+**sensitivity**, and a reader entitled to the number is entitled to how far it would
+move under the other choice. It is **not a constant** — 2.24% to 14.04% — so it cannot
+be a footnote either; it is computed per log and published in
+`measured.window.endpoint`.
+
+**Gated, and the gate is why the short log is not in the shipped figure.** The interval
+is estimated from `(distinct hit-seconds − runs)` gaps. On the 21s log that is **2
+gaps**, and the "sensitivity" reads 50% — **noise wearing a measurement's clothes.**
+Under 30 gaps it is refused with its reason rather than emitted. `check_window.py`
+asserts both arms, plus that a sensitivity is **never below 1.0**, which is
+arithmetically impossible: a longer denominator can only lower DPS, so a value under
+1.0 would mean the two figures came from different numerators — the population defect
+that file exists for.
+
+### 52.2 On R149, briefly, because it changes what I write down
+
+Knowing that the 404-census rule reached C, that the control rule became R91 and A
+took it one level deeper, and that the population map became a **test** in B's tree
+rather than a caveat — that is the first time tonight I have known which of my own
+findings travelled. It changes what I bother to write down: **the rules that travelled
+were all one-sentence statements of a fault SHAPE, and none of them were the
+measurement that produced the rule.** The 202% got B to look; *"a control that moves
+with the thing it is controlling for is not a control"* is what A could use without
+ever seeing my log. I will keep putting both in, and I will stop burying the sentence
+under the table it came from.
 
 **35.5, Call of Flame, and the single-digit-day question stay BLOCKED.**

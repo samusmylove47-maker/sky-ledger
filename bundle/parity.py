@@ -26,21 +26,50 @@ else:
     lines = build()
 py = gap_engine(lines, {"source": "parity"})
 
+# THE DRIVER SPLIT ON /\r?\n/ AND THE TEMP FILE WAS WRITTEN WITH "\n".join().
+# So BOTH SIDES ALWAYS SAW LF, whatever was passed in -- the harness sanitised the
+# input before handing it to the thing under test, and could not have exhibited a
+# line-ending fault even if handed one. It was handed one: on 1 Sep 2026 the JS
+# engine was found to return an EMPTY measured block for
+# corpus/amp/eqlog_Shara_rivervale_20260829.txt, which is CRLF, while Python read it
+# fine. One of the two logs committed to this repository could not be read by the
+# bundle we ship, and EverQuest runs on Windows, so CRLF is the NORMAL case.
+#
+# The driver now splits on "\n" ONLY, so a \r reaches the engine exactly as it does
+# for a consumer doing `text.split('\n')`, and the CRLF arm below writes real \r\n
+# bytes. The engine is what strips the carriage return; the harness must not.
 driver = """
 const fs=require('fs');
 (0,eval)(fs.readFileSync(process.argv[2],'utf8'));
-const lines=fs.readFileSync(process.argv[3],'utf8').split(/\\r?\\n/);
+const lines=fs.readFileSync(process.argv[3],'utf8').split('\\n');
 process.stdout.write(JSON.stringify(globalThis.EQLSGapEngine.gapEngine(lines,{source:'parity'})));
 """
 import tempfile
 with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as fh:
     fh.write(driver); drv = fh.name
-import tempfile as _tf
-with _tf.NamedTemporaryFile("w", suffix=".log", delete=False, encoding="utf-8") as lf:
-    lf.write("\n".join(lines)); logpath = lf.name
-js = json.loads(subprocess.run(["node", drv, "bundle/eqls-gap-engine.js", logpath],
-                               capture_output=True, text=True, check=True).stdout)
-os.unlink(drv); os.unlink(logpath)
+
+
+def js_over(lines, eol):
+    """Run the bundle over `lines` joined with `eol`, written as real bytes."""
+    with tempfile.NamedTemporaryFile("w", suffix=".log", delete=False, encoding="utf-8",
+                                     newline="") as lf:
+        lf.write(eol.join(lines)); p = lf.name
+    try:
+        return json.loads(subprocess.run(["node", drv, "bundle/eqls-gap-engine.js", p],
+                                         capture_output=True, text=True, check=True).stdout)
+    finally:
+        os.unlink(p)
+
+
+def py_over(lines, eol):
+    """The PYTHON side must see the same bytes. A caller that reads a file and splits
+    on "\n" hands the engine \r-suffixed lines; that is the shape under test, and
+    passing the clean list here would sanitise Python's input while the JS side got
+    the dirty one -- two different inputs reported as agreement."""
+    return gap_engine(eol.join(lines).split("\n"), {"source": "parity"})
+
+
+js = js_over(lines, "\n")
 
 def walk(a, b, path=""):
     out = []
@@ -86,4 +115,26 @@ if d:
     print(f"  {len(d)} DIFFERENCE(S):")
     for x in d[:20]: print(f"    {x}")
     sys.exit(1)
-print("  PARITY: the two implementations agree field for field.")
+print("  PARITY (LF): the two implementations agree field for field.")
+
+# ---- SECOND ARM: THE SAME LOG WITH CRLF LINE ENDINGS ------------------------
+# The arm that did not exist until 1 Sep 2026, and the reason the fault above lived
+# in a shipped bundle unseen. Both engines get real \r\n bytes split on "\n", so a
+# carriage return actually reaches them.
+py2 = py_over(lines, "\r\n")
+js2 = js_over(lines, "\r\n")
+d2 = walk(py2, js2)
+# POSITIVE CONTROL FIRST, and it is the one that matters here: before the fix BOTH
+# sides went to `measured: {}` on CRLF, and two empty reports agree perfectly.
+if not py2.get("measured", {}).get("dps") or not js2.get("measured", {}).get("dps"):
+    print(f"  CONTROL FAILED (CRLF): PY dps={py2.get('measured', {}).get('dps')} "
+          f"JS dps={js2.get('measured', {}).get('dps')} -- a carriage return ate the log, "
+          "and two empty reports would have agreed field for field")
+    sys.exit(1)
+print(f"  CRLF control: PY dps={py2['measured']['dps']} JS dps={js2['measured']['dps']} "
+      "-- both engines still read a log a Windows client wrote")
+if d2:
+    print(f"  {len(d2)} CRLF DIFFERENCE(S):")
+    for x in d2[:20]: print(f"    {x}")
+    sys.exit(1)
+print("  PARITY (CRLF): the two implementations agree field for field.")

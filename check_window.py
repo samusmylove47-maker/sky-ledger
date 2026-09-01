@@ -72,6 +72,26 @@ def checks(measured):
                 and (al.get("hits") or 0) >= (iw.get("hits") or 0),
                 f"all {al} vs in {iw}"))
 
+    # THE ENDPOINT CONVENTION, added 1.4.0. The engaged window runs first hit to last
+    # hit, so the final swing's time is outside the denominator. The size of that
+    # choice is 14.04% on the corpus log and is NOT a constant -- 2.24% to 13.79% on
+    # three others -- so it is computed per log, and REFUSED when the sample cannot
+    # support it rather than emitted as noise.
+    ep = w.get("endpoint") or {}
+    out.append(("window.endpoint states its convention",
+                bool(isinstance(ep.get("convention"), str) and ep.get("convention")),
+                f"got {ep.get('convention')!r}"))
+    sens, gaps = ep.get("sensitivity"), ep.get("gaps_measured")
+    if isinstance(gaps, int) and gaps >= 30:
+        out.append(("a sufficient sample yields a sensitivity",
+                    isinstance(sens, float) and sens >= 1.0,
+                    f"{gaps} gaps, sensitivity {sens!r}; must be >= 1.0 because a "
+                    "LONGER denominator can only LOWER dps"))
+    else:
+        out.append(("an insufficient sample REFUSES, and says why",
+                    sens is None and "NOT CLAIMED" in (ep.get("note") or ""),
+                    f"{gaps} gaps, sensitivity {sens!r}"))
+
     sl = measured.get("spells_landed") or {}
     sp = sum(v.get("damage_total", 0) for v in sl.values())
     out.append(("sum(spells_landed.damage_total) fits inside its OWN population",
@@ -159,6 +179,15 @@ if __name__ == "__main__":
     # log. The spell total then overflows its own denominator -- 202%.
     bad += mutate(lambda m: m["window"]["all_lines"].__setitem__("damage", m["damage_dealt"]),
                   "sum(spells_landed.damage_total) fits inside its OWN population")
+    bad += mutate(lambda m: m["window"]["endpoint"].__setitem__("convention", ""),
+                  "window.endpoint states its convention")
+    # A sensitivity BELOW 1.0 is arithmetically impossible -- a longer denominator can
+    # only LOWER dps -- so it would mean the two figures came from different
+    # numerators, which is the population defect this whole file exists for.
+    bad += mutate(lambda m: m["window"]["endpoint"].__setitem__("sensitivity", 0.5),
+                  "a sufficient sample yields a sensitivity")
+    bad += mutate(lambda m: m["window"]["endpoint"].__setitem__("sensitivity", None),
+                  "a sufficient sample yields a sensitivity")
     bad += mutate(lambda m: m.__setitem__("window", None),
                   "measured.window is present and an object")
     print(f"  {bad} self-test mutations failed to trip their check")

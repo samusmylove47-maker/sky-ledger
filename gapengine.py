@@ -120,7 +120,22 @@ def _parse(lines):
     # survives the December-January rollover the year field would also need.
     day_idx, prev_key = -1, None
     for raw in lines:
-        raw = raw.rstrip("\n")
+        # STRIP \r TOO. `rstrip("\n")` left a carriage return on every line of a CRLF
+        # log, and `(.*)$` will not match past it, so the whole file parsed to ZERO
+        # events. Python was saved only by universal-newline TEXT MODE in __main__;
+        # a caller that reads bytes and splits itself -- which is exactly what the JS
+        # driver does -- got `dps: None`. The JS engine had no such rescue and
+        # returned an EMPTY measured block for a CRLF log.
+        #
+        # corpus/amp/eqlog_Shara_rivervale_20260829.txt IS CRLF. One of the two logs
+        # committed to this repository could not be read by the bundle I ship, and
+        # EverQuest runs on Windows, so CRLF is the NORMAL case and LF is the lucky one.
+        # Found 1 Sep 2026 only because a JS run of that log returned `measured: {}`.
+        #
+        # bundle/check-integrity.py has guarded this bundle's OWN bytes against CRLF
+        # since 31 Aug. I checked the artifact for carriage returns and never checked
+        # the input for them.
+        raw = raw.rstrip("\r\n")
         m = TS.match(raw)
         if not m:
             continue
@@ -499,8 +514,53 @@ def gap_engine(lines, context=None):
     # THE POPULATIONS, stated. See POPULATIONS above for why. `all_lines` is the
     # denominator `spells_landed` and `resists` were always missing; `in_window` is
     # the one `dps` and `damage_dealt` already used without saying so.
+    # THE ENDPOINT CONVENTION, AND WHAT IT COSTS. `engaged` is the sum of
+    # (last hit - first hit) per run, so the time the FINAL SWING of each engagement
+    # occupied is not in the denominator. That is a legitimate convention -- shipped
+    # meters differ here, which is the whole point of dps_window_note -- but a
+    # convention with an unstated size is how four meters end up 2.03x apart.
+    #
+    # MEASURED, 1 Sep 2026, four logs: the alternative convention (extend each run by
+    # one mean inter-hit interval) moves DPS by 14.04%, 50.00%, 2.24% and 13.79%. It
+    # is NOT a constant, it scales with engagements-per-second-of-combat, so it cannot
+    # be a footnote either. It is computed per log and published.
+    #
+    # `dps` DOES NOT MOVE. Which convention is right is a mechanism claim about how
+    # combat time works and I am not making one -- R74 is the standing rule. What is
+    # measurable is the SENSITIVITY, and a reader entitled to the number is entitled
+    # to how far it would move under the other choice.
+    #
+    # GATED. The interval is estimated from (distinct hit-seconds - runs) gaps. On the
+    # 21s log that is 2 gaps and the "sensitivity" reads 50%, which is noise wearing a
+    # measurement's clothes. Under 30 gaps it is refused with its reason, not emitted.
+    hit_secs = sorted({h["t"] for h in in_window})
+    n_gaps = len(hit_secs) - len(runs)
+    if n_gaps >= 30 and engaged and dealt:
+        ihi = engaged / n_gaps
+        alt = dealt / (engaged + len(runs) * ihi)
+        endpoint = {
+            "convention": "first hit to last hit, per engagement",
+            "interhit_seconds": round(ihi, 2),
+            "gaps_measured": n_gaps,
+            "dps_if_each_run_extended_by_one_interval": round(alt, 1),
+            "sensitivity": round(m["dps"] / alt, 4) if alt else None,
+            "note": ("The final swing of each engagement is outside this denominator. "
+                     "`dps` is unchanged and this states what the other convention "
+                     "would give -- not which is correct."),
+        }
+    else:
+        endpoint = {
+            "convention": "first hit to last hit, per engagement",
+            "gaps_measured": n_gaps,
+            "sensitivity": None,
+            "note": (f"NOT CLAIMED: {n_gaps} inter-hit gaps is under the 30 needed to "
+                     "estimate an interval. On a 21s log this figure read 50%, which "
+                     "is noise, so it is refused rather than emitted."),
+        }
+
     m["window"] = {
         "basis": "engaged",
+        "endpoint": endpoint,
         "in_window": {"hits": len(in_window), "damage": dealt},
         "all_lines": {"hits": len(hits), "damage": sum(h["amt"] for h in hits)},
         "melee_time": {"seconds": melee_s, "auto_attack_attempts": auto_n},
