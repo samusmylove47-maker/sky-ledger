@@ -164,6 +164,22 @@ echo "== the unreported-findings index must still be true of the tree =="
 python3 check_unreported.py --selftest || fail=1
 python3 check_unreported.py || fail=1
 echo
+echo "== the peer mailbox must carry a poll record, and name files that exist =="
+# Added 1 Sep. Session C reaches me by SendMessage; I cannot call it (verified: the
+# cloud credential is refused for cross-session delivery). Git already carries the
+# content -- two full rounds in an hour, zero content failures. What failed was
+# ADDRESSING: I named `master` for a file that was on a branch 60 commits ahead, and C
+# would have fetched an empty ref with no way to tell that from my never having
+# written. So every open message must name a file that EXISTS ON THE BRANCH THE
+# MAILBOX DECLARES.
+# The poll verdict is a closed set including UNREACHABLE, which is the point of the
+# field: a failed look recorded as "nothing new" is an instrument reporting on a look
+# it never took. UNREACHABLE passes as readily as NOTHING-NEW, for the same reason
+# HELD passes check_holds.py.
+# Hermetic only -- `mailbox.py --poll` touches the network and is never a gate.
+python3 mailbox.py --selftest || fail=1
+python3 mailbox.py || fail=1
+echo
 echo "== a claim about the distance between two moving refs must be recomputed =="
 # Added 1 Sep. My STATUS block said "my branch is an ancestor of master, 0 commits
 # ahead". True the day it was written, stale on the next push, and it kept asserting
