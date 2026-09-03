@@ -22,7 +22,14 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  but the question "how many files does my measurement actually open,
                  and how many are there" costs one command and cost me a night.
 
-                 D-2 [OPEN, 1 Sep 15:00Z]  RULING WANTED, NOT URGENT. I have the
+                 D-2 [DONE, closed 3 Sep 02:20Z by P-1 reaching READY. The ruling is
+                 no longer wanted in this form: the correction is BUILT, in 1.7.0,
+                 declared as <HELD-PATCH:> P-1 [READY] until=B-OFF-1.4.0 (keyword
+                 bracketed so this note does not parse as a SIXTH declaration --
+                 the fifth time today quoting a format has asserted it), measured to
+                 change nothing on either real capture. IT STAYED OPEN FOR ELEVEN
+                 HOURS AFTER ITS SUBSTANCE WAS SETTLED.]  Original text follows.
+                 RULING WANTED, NOT URGENT. I have the
                  correction for STANCE_EVEN_SHARE_OFFENSIVE: 0.93 is calibrated on
                  every melee line unfiltered; the classifier compares it against a
                  population with crits and killing blows removed, where jos437 gives
@@ -125,7 +132,10 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  was written on the assumption that no caller-supplied identity
                  enters. I would want that re-read before, not after.
 
-                 D-10 [OPEN, 1 Sep 16:16Z]  *** I HAVE TO CORRECT D-7, AND THE
+                 D-10 [DONE, closed 3 Sep 02:20Z. A REPORT, not a request -- the
+                 Director read it and replied. It should never have carried a state
+                 implying somebody owed me something.]  Original text follows.
+                 *** I HAVE TO CORRECT D-7, AND THE
                  CORRECTION IS THE SAME FAULT THIS CHANNEL HAS BEEN CATALOGUING ALL
                  NIGHT, COMMITTED BY ME, ON MY OWN HEADLINE FINDING. ***
                  D-7 says "measured over 117 logs, 282,615 stamped lines". I never
@@ -206,7 +216,12 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  zero real-world instances; this changes published numbers. Your call
                  whether a 20% under-count forces the bump.
 
-                 D-6 [OPEN, 1 Sep 15:45Z]  A LIVE ENGINE DEFECT, found by the
+                 D-6 [DONE, closed 3 Sep 02:20Z. FIXED by P-2, shipped in 1.6.0 --
+                 the SELF_TARGETS guard now reaches _lanes, verified in the running
+                 engine. Its KNOWN_DEFECT declaration in simulate.py was RETIRED by
+                 the arm built for exactly that; the dict is now empty.]
+                 Original text follows.
+                 A LIVE ENGINE DEFECT, found by the
                  round-trip simulator on its FIRST RUN. `_lanes` counts
                  `You hit yourself` as an AUTO-ATTACK ATTEMPT: `hit` is in AUTO_VERBS
                  and `_lanes` reads the raw events, so the self-target guard I added
@@ -216,7 +231,12 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  is nil. HELD for TUESDAY'S REBUILD with D-2 and D-7, all three in one
                  bump. My earlier reason, "B is offline", WAS FALSE — see §68.
 
-                 D-5 [OPEN, 1 Sep 15:25Z]  YOUR "NAME ANYTHING ELSE ONLY YOU CAN
+                 D-5 [DONE, closed 3 Sep 02:20Z. The population it worried about was
+                 not merely unreproducible, it was WRONG -- 96% generated fixtures,
+                 corrected in section 69. verbcensus.py makes the census reproducible
+                 and is gated. The concern was right and the answer was larger than
+                 the concern.]  Original text follows.
+                 YOUR "NAME ANYTHING ELSE ONLY YOU CAN
                  REPRODUCE" — I found one AN HOUR OLD, in the finding I published
                  just before your message. §62 and §63 rest on 117 logs, and most of
                  them are NOT in this repository. Now pinned: jmoyers/
@@ -580,7 +600,18 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  wrote two documents for Session C and named neither of them here,
                  and my attempt to message C about them FAILED. They were reachable
                  only by browsing.
-LAST CHANGE      1 Sep 16:25Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
+LAST CHANGE      3 Sep 18:30Z — STATUS REPORT TO THE DIRECTOR, section 83, AND MY LEDGER
+                 IS CLEAR. Engine 1.7.0, bundle 7ffb2a6d, check.sh PASS 29 gates,
+                 round-trip 700/700 exact. Six patches BUILT and READY, all with
+                 until=B-OFF-1.4.0; only P-3 needs a published figure re-verified.
+                 FOUR OF MY OWN DIRECTOR ITEMS WERE STALE -- D-2, D-5, D-6, D-10
+                 all closed and still marked OPEN. The retirement-arm fault in my
+                 own outbound, on the day I swept six instruments for it and did
+                 not include the inbox. Retired with what closed each.
+                 THREE RULINGS OPEN (D-11 self parameter, D-12 open verb list,
+                 D-13 model4 vs a genuine capture). TWO OWNER CAPTURES BLOCKING.
+                 AVAILABLE FOR A NEW ASSIGNMENT.
+                 PRIOR: 1 Sep 16:25Z — check.sh PASS, 25 gates. *** THE ACCURACY NUMBER
                  I GAVE THE OWNER (90.0%) IS MEASURED ON A CORPUS BUILT OUT OF THE
                  ENGINE'S OWN VOCABULARY, AND MY BIGGEST FINDING WAS MEASURED ON A
                  POPULATION THAT IS 96% OTHER PROJECTS' TEST FIXTURES. Both are now
@@ -9422,4 +9453,103 @@ created it from inside a session, then there is no creating agent, and *"no agen
 remove it"* would be true — but true for a reason neither of us had, and not because
 `http_api` is a permission class. **Right answer, wrong mechanism, which is the shape this
 project has caught more than any other.**
+
+
+## TO THE DIRECTOR — 3 Sep 18:29Z — STATUS, PLANS, AND I AM AVAILABLE. Also: four of my own open items were stale.
+
+### 83. Where the gap engine actually stands
+
+**EQLSGapEngine 1.7.0**, bundle `7ffb2a6d`. `check.sh` PASS, **29 gates**. `check_fresh.sh`
+PASS. Round-trip accuracy **700/700 exact, 100.0%**, over 14 quantities — including the
+four that only exist because 1.6.0/1.7.0 shipped, each with a control that breaks it.
+
+**Six patches are BUILT, VERIFIED and READY, waiting on one thing: B moving off 1.4.0.**
+
+```
+P-1  stance constant 0.93 -> 0.993              refusal only, no real log moves
+P-2  SELF_TARGETS guard reaches _lanes          computed, measured impact ZERO / 139 logs
+P-3  nine verbs + frenzy's preposition          *** COMPUTED. dps -1.10% to +16.62% ***
+P-4  dps_window_note says shields are excluded  string only
+P-5  coverage.verbs_unclassified                additive
+P-6  ...blocks_lane_rates                       additive
+```
+
+**Only P-3 requires B to re-verify a published figure**, and the reason is its *sign*, not
+its size: a melee character's DPS is under-reported, a caster's over-reported, because a
+missing hit is also a missing second. The per-patch table is in
+`handover/TO-SESSION-B-tuesday.md`. **All six carry `until=B-OFF-1.4.0` — a condition an
+instrument evaluates, not a date.**
+
+### FOUR OF MY OWN OPEN ITEMS WERE STALE, AND I FOUND IT WRITING THIS
+
+Asked to report status, I checked the list rather than recalling it. **D-2, D-5, D-6 and
+D-10 were still marked `[OPEN]` and all four were closed.**
+
+```
+D-2   ruling wanted on the stance constant   -> IS P-1, READY. Open 11h after settling.
+D-5   a finding I could not reproduce        -> the population was WRONG, not just
+                                                unreproducible; corrected in section 69
+D-6   a live engine defect                   -> FIXED by P-2, and its KNOWN_DEFECT
+                                                declaration retired by the arm built for it
+D-10  a correction to D-7                    -> a REPORT, not a request; you replied
+```
+
+**This is the retirement-arm fault in my outbound channel, on the day I built retirement
+arms for five mechanisms and swept for exactly this pattern.** My section 79 sweep
+enumerated six declaration mechanisms and **did not include the D-list** — the one that is
+my actual outbound to you. I checked the instruments and not the inbox.
+
+**Retired, each with what closed it.** And the honest limit, declared rather than faked:
+most D-items close on a *ruling*, which I cannot detect — same class as `AWAITING-REPLY`.
+**The fix I would propose is `closes=` on each item, from a closed set, exactly as
+`until=` now works on the patches.** That is your correction applied one level up, and I
+have not built it because it changes the channel you read and that is yours to rule on.
+
+**Genuinely open now, and all three are rulings I need rather than work I owe:**
+
+```
+D-11  a `self` parameter -- the engine cannot attribute the logging player's own damage
+      shield as a matter of GRAMMAR. Interacts with the privacy refusal.
+D-12  the verb list should probably not be CLOSED. Three sessions, three lexicons; mine
+      was wrong in both directions inside a day.
+D-13  model4.LANE_OWNER contradicts a genuine capture -- FOUR exclusive lane owners on a
+      character with three class slots. It matters because LANE_OWNER is the ceiling the
+      gap engine measures a trio AGAINST.
+```
+
+(D-1 remains as a standing advisory to every session, not a request.)
+
+### And the self-test broke twice while I retired them, from one cause
+
+The closing note on D-2 **quoted the declaration it was closing**, so the self-test's
+`replace(sub, ..., count=1)` mutations edited my prose instead of the real declaration —
+twice, on two different substrings. **Fifth appearance of that law today.**
+
+The fix is better than bracketing: **the mutator now anchors on the DECL pattern and
+rewrites the first line that IS a declaration**, not the first line containing the text.
+Prose here will keep containing the formats this repository reads — that is the cost of
+documenting them — so the instrument stops being fooled by position.
+
+### Plans, and they are short
+
+**Nothing on the critical path is blocked on me.** What remains is:
+
+1. **Tuesday's re-pin**, where all six land together. Prepared, not pending.
+2. **Three rulings** above. I will not build past any of them.
+3. **Two owner captures** still blocking, unchanged and not estimated past: the **+1/tier
+   upgrade floor** and a **stance screenshot alongside a log**.
+4. One question with Session C, already answered by C and closed on my side.
+
+### SO: MY LEDGER IS CLEAR AND I AM AVAILABLE FOR A NEW ASSIGNMENT.
+
+Everything I owe is shipped, declared, or waiting on someone who is not me. The engine is
+built and gated; the handover for B is written and reachable; the channel to C is working
+in both directions.
+
+**What I am good for, on the evidence of the last two days rather than a description:**
+measuring what a claim is actually a claim *about* — populations, denominators, and the
+difference between a number and the thing it names; building gates that can be shown to
+fire; and finding the case where an instrument returns a clean-looking answer it has not
+earned. **I found more defects in my own work than in anyone else's, which I take as the
+method working rather than as a problem.**
 

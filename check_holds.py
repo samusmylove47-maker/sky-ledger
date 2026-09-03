@@ -193,6 +193,25 @@ if __name__ == "__main__":
         print(f"  {len(rows)} checks, {bad} failing")
         sys.exit(1 if bad else 0)
 
+    def on_decl(text, fn):
+        """Rewrite the FIRST LINE THAT IS ACTUALLY A DECLARATION, not the first line
+        that happens to contain the substring.
+
+        Every mutation below used `text.replace(sub, ..., count=1)`. That is fragile by
+        construction and it broke twice within one commit: a closing note that QUOTED a
+        declaration -- explaining that the declaration had been closed -- came earlier
+        in the file, so the mutation edited the prose and the real declaration was left
+        untouched. The check then reported no failure and the self-test called that a
+        FAIL, correctly.
+        Prose in this repository will keep containing the formats this repository reads;
+        that is the cost of documenting them. So the mutator anchors on the pattern."""
+        out, done = [], False
+        for line in text.split("\n"):
+            if not done and DECL.match(line):
+                line, done = fn(line), True
+            out.append(line)
+        return "\n".join(out)
+
     print("SELFTEST -- each check must fail when its own condition is broken")
     if any(not ok for _, ok, _ in audit(h, p)):
         print("  the real tree does not pass"); sys.exit(1)
@@ -208,10 +227,11 @@ if __name__ == "__main__":
         n += 0 if hit else 1
 
     mut("a state outside the closed set",
-        h.replace("HELD-PATCH: P-1 [READY]", "HELD-PATCH: P-1 [SOON]", 1), p, "state is one of")
+        on_decl(h, lambda l: l.replace("[READY]", "[SOON]")), p, "state is one of")
     # THE ONE THIS FILE EXISTS FOR: my own nine-hour false ground would not compile.
     mut("a free-text ground -- the 'B is offline' shape",
-        h.replace("ground=SCHEDULED-REBUILD", "ground=B-IS-OFFLINE", 1), p, "ground is one of")
+        on_decl(h, lambda l: l.replace("ground=SCHEDULED-REBUILD", "ground=B-IS-OFFLINE")),
+        p, "ground is one of")
     mut("a declaration that does not say what it changes",
         re.sub(r"(HELD-PATCH: P-1 \[[A-Z]+\] ground=[A-Z-]+ until=\S+ --).*", r"\1 x",
                h, count=1),
@@ -251,7 +271,7 @@ if __name__ == "__main__":
              _root_with("1.4.0"), "end condition has NOT been met", want_fire=False)
     # THE FAULT THIS WHOLE FIELD EXISTS TO CORRECT.
     mut("a DATE where a condition belongs is refused",
-        h.replace("until=B-OFF-1.4.0", "until=2026-09-08", 1), p,
+        on_decl(h, lambda l: l.replace("until=B-OFF-1.4.0", "until=2026-09-08")), p,
         "names a condition, not a date")
     # FAIL-CLOSED: an instrument that cannot look must refuse, not pass.
     mut_root("an absent contract REFUSES rather than reading as not-met",
@@ -262,9 +282,9 @@ if __name__ == "__main__":
     mut_root("a SHIPPED patch does NOT fire even when the condition is met",
              _root_with("1.6.0"), "P-1: its end condition has NOT been met",
              want_fire=False,
-             hh=h.replace("HELD-PATCH: P-1 [READY]", "HELD-PATCH: P-1 [SHIPPED]", 1))
+             hh=on_decl(h, lambda l: l.replace("[READY]", "[SHIPPED]")))
     # UNCHECKABLE is legal AND counted -- honest, not a loophole.
-    unc = h.replace("until=B-OFF-1.4.0", "until=UNCHECKABLE", 1)
+    unc = on_decl(h, lambda l: l.replace("until=B-OFF-1.4.0", "until=UNCHECKABLE"))
     # Root at 1.4.0, NOT 1.6.0: the other four holds keep a condition that is not yet
     # met, so the only thing this arm can be measuring is the UNCHECKABLE one. My first
     # version injected 1.6.0 and the other four fired correctly, which made the test
