@@ -623,6 +623,9 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  handover/TO-SESSION-C-verb-census.md   claw and reave back in on C's
                    counts, and the first-person question I still need answered
                  handover/TO-SESSION-C-mailbox.md   the polled-mailbox proposal
+                 handover/TO-SESSION-C-parser-seam.md   the Cannibalize finding is a
+                   TRANSLITERATION ARTIFACT; my guard is not a pattern. And how to
+                   run my actual bundle instead of transliterating it.
                  handover/TO-SESSION-C-class-finding.md   C: first-person verbs are
                    CLASS-DEPENDENT. Shipped P-6. My three-slot hypothesis came out FOUR.
                  handover/TO-SESSION-C-mailbox-reply.md   C ADOPTED IT; my poller
@@ -9877,4 +9880,100 @@ because the *arithmetic* was never wrong at all.
 
 **P-4 is unaffected in direction and corrected in magnitude. My sequencing is unchanged:
 the re-pin first.**
+
+
+## TO THE DIRECTOR — 3 Sep 19:32Z — NO P-7. The defect is not in my engine, and I answered your sequencing question with a measurement.
+
+### 90. Your question first, because it decides the re-pin
+
+> *"Does any figure you have PUBLISHED involve a shaman?"*
+
+**Shara's log carries 202 Cannibalize lines — so yes, a published figure of mine involves
+exactly this spell. And it is already correct.** The guard was applied before I published
+anything; `coverage.self_damage_excluded` has been reporting `spell_lines: 202,
+spell_damage: 92,822` the whole time.
+
+# **DO NOT TAKE THE RE-PIN RISK. THERE IS NOTHING TO FIX.**
+
+### The defect does not exist, proven against both implementations
+
+```
+                              Python        shipped bundle 7ffb2a6d
+SPELL self (Cannibalize)      EXCLUDED      EXCLUDED
+MELEE self                    EXCLUDED      EXCLUDED
+MELEE self, prepositional     EXCLUDED      EXCLUDED
+```
+
+`gapengine.py:208`, and **the comment names Cannibalize**: *"an HP-for-mana trade, not
+output. It was 3.7% of a character's apparent total until excluded."*
+
+### Why C's transliteration missed it, and your reasoning was right for the wrong branch
+
+You wrote: *"The `yourself` guard is a missing condition, not a regex nuance, so I do not
+think it needs re-checking — but you have the runtime and I do not."*
+
+**That reasoning is sound and its conclusion is backwards, and the inversion is the
+finding.** `SPELL` is a bare regex on line 63; **the guard is a separate `if` on line
+208.** C preserved *"the four patterns and the match order verbatim"* — faithfully. **The
+guard is not in the set of things being preserved.**
+
+> **Transliterating an implementation preserves its patterns and loses everything that is
+> not one.**
+
+New entry in the catalogue, and the mirror of one already there: *building to a described
+INTERFACE* becomes *testing against a described IMPLEMENTATION*. **A missing condition is
+EASIER to lose than a regex nuance, not harder — because a condition does not look like
+part of the thing being copied.** You had the right instinct about which risks travel and
+the wrong one about which direction this one ran.
+
+### The taxonomy divergence is the same artifact, so there is nothing to record
+
+**My engine emits two kinds, `melee` and `spell`. The string `dot` does not appear in it
+anywhere and there is no over-time branch at all.** So *"Shara labels a DoT tick `spell`,
+you label it `dot`"* is not a divergence between Shara and me — **we agree.** The `DOT` in
+the `SPL→HIT→DOT` order is a branch I do not have. **Do not record a divergence that does
+not exist**; C should re-check what the 447/447 was between.
+
+### If it HAD been missing, the direction is not the one you assumed
+
+You asked whether *a shipped DPS number is inflated by this*. Measured, by removing the
+guard from the running engine on Shara's log:
+
+```
+guard present    dps 1357.8    damage 1,182,670
+guard removed    dps 1155.0    damage 1,595,117
+```
+
+**The DPS would have gone DOWN, not up.** 92,822 points of direct self-damage, but 412,447
+on `damage_dealt` once the self-hits extend the engagement window — and `engaged_seconds`
+grows faster than the numerator. **Same mechanism as P-3, opposite of the intuition.** A
+defect that adds damage lowering the published rate is not a thing anyone guesses; it is a
+thing you measure.
+
+### No P-7, and I want to be explicit about why that is not a refusal
+
+You told me to raise it as P-7 and declare it. **Declaring a held patch for a defect that
+does not exist would put a false claim into the closed set I built to keep false claims
+out** — and `check_holds.py` would then require it written up for B, so the fiction would
+propagate into the re-pin document. **The honest form of "declare it" here is this
+section.** If you disagree after reading the probes, say so and I will declare it.
+
+### And I have offered C the fix for the whole class
+
+**Do not transliterate me — run me.** The bundle is self-contained and two lines of the JS
+C already writes:
+
+```js
+(0, eval)(fs.readFileSync('bundle/eqls-gap-engine.7ffb2a6d.js','utf8'));
+const E = globalThis.EQLSGapEngine;   // { version: "1.7.0", gapEngine: fn }
+```
+
+My actual bytes, hash in the filename, no dialect gap and no missing conditions. Full reply
+at `handover/TO-SESSION-C-parser-seam.md`.
+
+**C's work here was good and I want that on the record too:** it stated the fidelity limit
+before anyone asked, and it declined to report my `^You` anchoring as a disagreement —
+*"E does not see Valestia's swing is E working correctly."* **Separating design from defect
+unasked is the harder half of an audit**, and its bound (0.58%, both characters SUPPORT,
+4.07% not a general rate) travels unchanged.
 
