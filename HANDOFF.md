@@ -8830,7 +8830,9 @@ C measured D's damage families against its parser and found both gaps **actor-co
 
 ```
 GAP B  mob spell damage on a player, missed:  1.7% to 30.0% per actor, ONE direction
-GAP A  damage shields, unmodelled:  193,765 lines, and ONE actor is 70.7% of them
+GAP A  damage shields, unmodelled:  235,675 lines, and ONE actor is 59.0% of them
+       (CORRECTED 3 Sep -- I first recorded 193,765 / 70.7%, which was THORNS over
+        THORNS labelled as the whole family. Direction unchanged, magnitude wrong.)
 ```
 
 C's framing is the useful part: **a uniform miss rate is a scale error; an actor-correlated one is
@@ -8856,7 +8858,7 @@ figures re-verified and the others did not.
 
 **C's GAP A corroborates D-11 from a third direction, with a number I did not have.** I established
 that a player's own damage shield is never written in the first person, so my engine cannot
-attribute it as a matter of grammar. **C measured the concentration: 206 owners, one of them 70.7%
+attribute it as a matter of grammar. **C measured the concentration: 333 owners, one of them 59.0%
 of all shield damage.** A family that is 70% one actor is not a rounding error in any ranking that
 includes it, and P-4's job — saying out loud that the engine excludes it — matters more with that
 number attached than without.
@@ -9797,4 +9799,82 @@ the evidence. **I want to record that the correction only worked because you tol
 weight you meant to put on the sentence** — the same thing you did with "conservative
 failures", and the same result. **That is twice now that naming the load turned a nod into
 a measurement**, and it is a technique of yours I have started using on Session C.
+
+
+## TO THE DIRECTOR — 3 Sep 19:26Z — four figures corrected, one WITHDRAWN from B's re-pin document, and I checked my own corpus for the same disease
+
+### 89. All four were in my tree, and the withdrawn one was in the document B reads
+
+```
+193,765  ->  235,675    HANDOFF.md                      corrected
+70.7%    ->  59.0%      HANDOFF.md, twice               corrected
+206      ->  333        HANDOFF.md                      corrected
+178,267  ->  WITHDRAWN  handover/TO-SESSION-B-tuesday.md  <- B'S RE-PIN DOCUMENT
+```
+
+**The withdrawn one was the worst placement available:** the paragraph justifying P-4, in
+the file B opens at adoption. It is now replaced by a block that names the number as dead
+rather than silently swapping it — **a reader who holds 178,267 from an earlier relay needs
+to recognise it and drop it**, and cannot do that if it simply vanishes.
+
+**Withdrawn, not corrected, and I have kept your reasoning verbatim because it is the
+part that generalises:** its components cannot be reconciled with the re-measurement —
+two rose and one FELL, and no addition or removal of whole files does that. **An
+unverifiable number is worse than a wrong one, because a wrong one can be corrected.**
+
+### I could not verify the new counts, and I could verify the METHOD
+
+`scripts/damage-shield-reconcile.py` at `EQLSAuras@main ee4dafe1` runs here and **refuses
+honestly**: `FILES OPENED: 0 ... NO FILES. The corpus is not on this machine; both figures
+stay unreproducible.` **That is the right behaviour and it is why I trust the rest of it** —
+it declines rather than reporting zeros as a result.
+
+**So I have relayed counts, not verified ones, and I am labelling them as such.** But one
+claim I could check without the corpus, and it is the load-bearing one:
+
+```
+(?P<noun>[\w ]+?)     the shield noun is CAPTURED, not enumerated
+NARROW = {'thorns', 'flames', 'frost'}    used only to separate known from unknown
+```
+
+**"No fourth noun" is therefore a finding the method could have contradicted, not an
+assumption it started from.** That is the difference between a census and a list, and it
+is checkable from the source alone.
+
+### AND I APPLIED YOUR MOVING-CORPUS WARNING TO MYSELF RATHER THAN NODDING AT IT
+
+You wrote that live logs are a moving corpus and that any figure over them must print its
+file list beside it. **My published figures rest on a census taken on 1 September. It is
+now the 3rd.** So I re-ran it before answering:
+
+```
+                        1 Sep published      3 Sep re-run
+files named             472                  472
+opened as EQ logs       416                  416
+UNIQUE by sha256        139                  139
+stamped lines           282,853              282,853
+```
+
+**Identical. My corpus has not moved and my figures stand** — and the reason is a real
+difference between us rather than luck: **C's corpus is the owner's live client writing
+and splitting logs; mine is a static snapshot on a container.** Different risk, and I can
+say which I am in because I measured instead of assuming I was safe.
+
+**The 9,488 figure under P-4 is untouched**, as you said — it is my own count of
+first-person-absent shield lines in Shara's log, on my corpus, and it was never a
+restatement of C's.
+
+### The shape, which I want in my own catalogue in your words
+
+> **NO RESIDUAL, NO TOTAL AND NO INTERNAL CHECK CAN CATCH A CORRECT RATIO WITH A WRONG
+> LABEL.**
+
+Both halves reproduced exactly, as thorns, to the line. Both were internally consistent.
+**That is precisely why nothing looked wrong** — and it is C's own residual rule moved one
+level up, out of the parsing and into the labelling. My catalogue had *"the right answer
+in the wrong words"* as fault shape (2); this is the sharpest instance of it I have seen,
+because the *arithmetic* was never wrong at all.
+
+**P-4 is unaffected in direction and corrected in magnitude. My sequencing is unchanged:
+the re-pin first.**
 

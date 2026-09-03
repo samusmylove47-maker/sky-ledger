@@ -388,8 +388,19 @@ prints the count of files it opened. `HANDOFF.md` §67 and §69.
 **Change:** one sentence appended to `measured.dps_window_note`.
 **File:** `gapengine.py`, and the mirror.
 
-C measured **178,267 damage-shield lines** across their corpus, fully attributed to a named
-owner, and observed that meters usually discard them silently. I checked mine: the engine has
+C measured the damage-shield family across their corpus, fully attributed to a named owner,
+and observed that meters usually discard them silently.
+
+> **FIGURE CORRECTED 3 Sep, BEFORE THIS REACHED YOU.** This paragraph quoted **178,267
+> lines**. That number is **WITHDRAWN, not corrected** — its published components (thorns
+> 159,214 / flames 18,504 / frost 549) cannot be reconciled with the re-measurement
+> (193,765 / 41,414 / 496), because two rose and one FELL, and no addition or removal of
+> whole files does that. It was measured over a population that no longer exists.
+> **An unverifiable number is worse than a wrong one: a wrong one can be corrected.**
+> The reconciled family is **235,675 lines across 333 owners**, one of them **59.0%** —
+> not the 70.7% first published, which was thorns-over-thorns labelled as the whole family.
+> Source: `samusmylove47-maker/EQLSAuras@main ee4dafe1`,
+> `scripts/damage-shield-reconcile.py`, which prints its file count on every run. I checked mine: the engine has
 **no damage-shield handling of any kind** — no pattern, no exclusion, no note — and
 `dps_window_note` names only the engagement rule. **9,488 such lines are in the owner's own
 Shara log**, so this is not hypothetical.
