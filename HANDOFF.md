@@ -12,7 +12,9 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  or always-stale — the same defect I fixed in REPIN NEEDED, applied to
                  my own inbox. Items go [ANSWERED] in place, never deleted.
 
-                 D-1 [OPEN, 1 Sep 15:00Z]  RELAY THIS TO EVERY SESSION, IT IS NOT
+                 D-1 [ADVISORY, 1 Sep 15:00Z] closes=ADVISORY  A STANDING NOTE, NOT A
+                 REQUEST -- it never closes and nobody owes me an answer for it.
+                 RELAY THIS TO EVERY SESSION, IT IS NOT
                  ABOUT ME. I spent the night measuring on 4 log files. There are 117
                  on this container, 282,615 stamped lines, and one of the directories
                  holding them is one my own check.sh has read from twenty-nine times
@@ -67,7 +69,16 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  that punishes an honest hold teaches you to delete the declaration
                  to get green.
 
-                 D-13 [OPEN, 1 Sep 22:39Z]  A CONTRADICTION BETWEEN model4 AND A
+                 D-13 [OPEN, 1 Sep 22:39Z] closes=AWAITING-RULING  *** NARROWED 3 Sep:
+                 THE THIRD BRANCH IS ELIMINATED BY MEASUREMENT. *** The log IS one
+                 character. Backstab (ROG), frenzy (BER) and smite (PAL) occur in the
+                 SAME SECOND -- tightest window containing all three is 0s -- and 14
+                 of 15 minute-buckets contain all three. One `Logging to ... *ON*`
+                 line, zero client restarts, zero backwards time jumps in 3,328
+                 stamped lines. Two characters cannot act in the same second from one
+                 client's `You`. So the owner's question is now ONE SENTENCE: can a
+                 character holding Rogue + Berserker + Paladin lanes also KICK? Yes
+                 means model4.LANE_OWNER is too narrow for kick. A CONTRADICTION BETWEEN model4 AND A
                  GENUINE CAPTURE, and I cannot resolve it from what I hold.
                  Session C found that which `You <verb>` forms appear at all is a
                  property of the LOGGING CHARACTER'S CLASSES -- C's two characters
@@ -90,7 +101,16 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  MEASURES A TRIO AGAINST. If a lane's ownership is wrong, the ceiling
                  a character is compared to is the wrong ceiling.
 
-                 D-12 [OPEN, 1 Sep 17:50Z]  RULING WANTED, AND IT IS A DESIGN
+                 D-12 [RULED, approved 3 Sep] closes=SEQUENCED  APPROVED. The
+                 Director's framing, which is better than mine: A NULL MUST SAY WHICH
+                 NULL IT IS -- a closed alternation renders 'this verb was not
+                 counted' and 'this verb does not exist' as the same output.
+                 BINDING CONSTRAINT, now mandatory rather than my preference:
+                 PARSE OPEN, CLASSIFY CONSERVATIVELY, REPORT THE UNCLASSIFIED. I will
+                 not file a verb as auto-attack or lane without cadence evidence.
+                 SEQUENCED behind the same re-pin. P-5 ships now.
+                 ORIGINAL TEXT FOLLOWS.
+                 RULING WANTED, AND IT IS A DESIGN
                  QUESTION NOT A NUMBER. THE VERB LIST SHOULD PROBABLY NOT BE CLOSED.
                  Three sessions now hold three different verb lexicons over the same
                  game. Mine had 9 and was wrong twice today in both directions: too
@@ -110,7 +130,16 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  without cadence evidence. Misfiling corrupts a denominator, which is
                  worse than the gap it closes.
 
-                 D-11 [OPEN, 1 Sep 17:35Z]  RULING WANTED. THE ENGINE NEEDS TO
+                 D-11 [RULED, approved 3 Sep] closes=SEQUENCED  APPROVED by the
+                 Director on the merits, and the deciding factor was CONVERGENT
+                 DERIVATION: C reached the same requirement from merging corpora,
+                 I reached it from damage-shield grammar, neither knowing.
+                 SEQUENCED: not before B's 1.7.0 re-pin. `self` changes the engine's
+                 INTERFACE and B is days from release behind an exact-equality guard;
+                 changing an interface during a pin negotiation is the worst timing
+                 available. P-4 ships now and is honest about the hole meanwhile.
+                 ORIGINAL TEXT FOLLOWS.
+                 RULING WANTED. THE ENGINE NEEDS TO
                  KNOW THE LOGGING CHARACTER'S NAME, and today it does not. Session C
                  recommended a `self` parameter for a different reason (merging two
                  characters' corpora records one player under two names). I reached
@@ -9681,4 +9710,91 @@ told which one they are buying before they choose.
 column, for any window. One day would do. Without it I would be guessing, and this
 project's whole discipline is that a guess with a number attached is worse than a
 declared absence.
+
+
+## TO THE DIRECTOR — 3 Sep 19:23Z — D-13's third branch is ELIMINATED, and `closes=` is built with the contract you asked for
+
+### 87. D-13 — you were right that an instrument could kill a branch. It did.
+
+You said not to ask an owner to adjudicate a branch an instrument can eliminate. **The log
+IS one character, and the measurement is not close:**
+
+```
+tightest window containing backstab + frenzy + smite      0 SECONDS
+60-second buckets containing all three                    14 of 15
+`Logging to '...' is now *ON*` lines                      1
+client restarts / "Welcome to EverQuest Legends"          0
+backwards time jumps across 3,328 stamped lines           0
+```
+
+`backstab` is ROG-exclusive, `frenzy` BER-exclusive, `smite` PAL-exclusive in
+`model4.LANE_OWNER` — and **all three fire in the same second.** Two characters cannot act
+in the same second from one client's `You` perspective, and a concatenation of two logs
+would put them in disjoint blocks with near-zero transitions; the actual figure is **175
+verb changes across 285 transitions.**
+
+**So your question to the owner is one sentence:**
+
+> **Can a character holding Rogue + Berserker + Paladin lanes also KICK?**
+
+**Yes** means `model4.LANE_OWNER` is too narrow for `kick` — which is the branch you said
+you would bet on, and it is the one Shara is consistent with (bash + kick intersecting at
+WAR). **No** means something else is wrong and I would want to hear what before touching
+the table. **I am still not picking**, but there is only one thing left to pick between.
+
+### 88. `closes=` — built, wired, and here is the contract
+
+`check_dclaims.py`, gate 30. **The closed set, which is yours to use when you rule:**
+
+```
+EVALUATED BY THE INSTRUMENT
+  closes=PATCH-READY:P-n     MET when that patch reaches READY or SHIPPED
+  closes=GATE-EXISTS:file    MET when the file exists AND is wired into check.sh
+
+HONEST UNCHECKABLES -- legal, and COUNTED
+  closes=AWAITING-RULING     I cannot detect a ruling. You close it.
+  closes=SEQUENCED           ruled, waiting on an event outside my instruments
+  closes=ADVISORY            a standing note, never closes, not a request
+```
+
+**The two evaluated conditions are exactly the ones that would have caught the four stale
+items**, and the self-test proves it rather than claiming it — an arm injects
+`D-2 [OPEN] closes=PATCH-READY:P-1` against a READY P-1 and requires it to fire, then
+requires silence while that patch is still HELD.
+
+```
+D-2  ruling wanted on the stance constant   would have been  closes=PATCH-READY:P-1
+D-6  a live engine defect                                    closes=PATCH-READY:P-2
+D-5  a finding I could not reproduce                         closes=GATE-EXISTS:verbcensus.py
+D-10 a correction, not a request                             closes=ADVISORY
+```
+
+**A DONE item needs no end condition — it has an end.** Requiring one everywhere would be
+ceremony, and ceremony is what people stop doing. Only LIVE items are checked.
+
+**Current channel: 12 checks, 0 failing, 4 unverifiable and named as such** — D-1
+ADVISORY, D-11 and D-12 SEQUENCED behind your re-pin condition, D-13 AWAITING-RULING.
+
+### The channel now reads
+
+```
+D-1   [ADVISORY]  closes=ADVISORY          a standing note to every session
+D-11  [RULED]     closes=SEQUENCED         self parameter, approved, after B's re-pin
+D-12  [RULED]     closes=SEQUENCED         open verb parse, approved, after B's re-pin
+D-13  [OPEN]      closes=AWAITING-RULING   one sentence, now, for the owner
+```
+
+**D-11 and D-12 are RULED, not OPEN, and that distinction is the point of the state set.**
+They are not waiting on you; they are waiting on an event, and I am not building either
+before B's 1.7.0 re-pin. **Your sequencing condition is the whole of what I took from
+those two rulings** — changing an interface during a pin negotiation is the worst timing
+available, and P-4 and P-5 are already READY and already honest about the holes meanwhile.
+
+### On the concession
+
+You conceded the trade without reservation and named your own fault as generalising past
+the evidence. **I want to record that the correction only worked because you told me what
+weight you meant to put on the sentence** — the same thing you did with "conservative
+failures", and the same result. **That is twice now that naming the load turned a nod into
+a measurement**, and it is a technique of yours I have started using on Session C.
 

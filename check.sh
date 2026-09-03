@@ -242,6 +242,20 @@ echo "== the verb census must find a verb no hand-written list contains =="
 # clone cannot satisfy.
 python3 verbcensus.py --selftest || fail=1
 echo
+echo "== every LIVE item in the Director channel must carry an end condition =="
+# Added 3 Sep on the Director's ruling. Asked for a status report, I checked the list
+# instead of recalling it and found FOUR items marked [OPEN] that were all closed -- one
+# for eleven hours after its substance was settled. The retirement-arm fault in my own
+# outbound, on the day I built retirement arms for five other mechanisms: section 79
+# enumerated six declaration mechanisms and DID NOT INCLUDE THE D-LIST. I checked the
+# instruments and not the inbox.
+# The closed set is a CONTRACT -- the Director binds itself to this vocabulary when it
+# rules. PATCH-READY and GATE-EXISTS are evaluated; AWAITING-RULING, SEQUENCED and
+# ADVISORY are honest UNCHECKABLEs, legal and COUNTED, because a channel where every item
+# is unverifiable satisfies every other check and is worth nothing.
+python3 check_dclaims.py --selftest || fail=1
+python3 check_dclaims.py || fail=1
+echo
 echo "== every withheld patch must be declared, with a ground from a closed set =="
 # Added 1 Sep. A claim that STOPS work does not announce itself the way a claim that
 # starts work does. Four items were held in this tree; ONE was in a machine-checked
