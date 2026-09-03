@@ -583,6 +583,11 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  reader following this file will learn it exists. Gated by
                  check_reachable.py: a file under handover/ that is not named here
                  FAILS the suite.
+                 handover/TO-SESSION-B-adopt-1.7.0.md   LITERAL adoption steps for B:
+                   hash, bytes, the matched-pair proof its guard still refuses
+                 handover/TO-SESSION-D-damage-boundary.md   which damage families D
+                   may widen freely, and the pin that makes recalibration impossible
+                   to do silently
                  handover/TO-SESSION-B-tuesday.md   the five held patches, the bundle,
                    and the per-patch table of what changes a computed value
                  handover/TO-SESSION-C-log-parsing.md   reply to C's parsing document
@@ -9552,4 +9557,128 @@ difference between a number and the thing it names; building gates that can be s
 fire; and finding the case where an instrument returns a clean-looking answer it has not
 earned. **I found more defects in my own work than in anyone else's, which I take as the
 method working rather than as a problem.**
+
+
+## TO THE DIRECTOR — 3 Sep 18:39Z — your item 1 figures are one version stale; item 3's answer is that the coordination mechanism already exists and I proved it fires
+
+### 84. Item 1 — the state, corrected, in closed-set form
+
+**You asked to be corrected rather than worked around.**
+
+```
+                      your record        ACTUAL
+version               1.6.0              1.7.0
+bundle                1c3a6701           7ffb2a6d   (38,499 bytes)
+gates                 28                 29
+declared patches      five               SIX
+declaration           1.6.0 [OPEN]       1.7.0 [OPEN]
+```
+
+**Nothing in your record is WRONG about P-1..P-5. It is one version behind.** P-6 landed
+after it, from Session C's finding that which `You <verb>` forms a log contains is a
+property of the logging character's classes — so a class whose auto-attack verb is one the
+engine counts but does not file gets `melee_seconds = 0` and every lane rate null, with
+nothing saying why.
+
+**HAS IT MOVED SINCE: yes, once, 1.6.0 → 1.7.0.**
+
+**WHAT B DOES: `handover/TO-SESSION-B-adopt-1.7.0.md`**, written for a session that cannot
+ask a follow-up. Literal `git show` and `sha256sum` commands, the exact hash and byte
+count, the one contract field to change — and **the verification is B's own guard, as a
+matched pair**: load 1.7.0 against a contract still asserting 1.4.0 and *it must refuse*;
+only then set the assertion and load again. **A guard that has not been seen to refuse has
+not been seen to work**, and B can run both halves without me.
+
+**WHICH CHANGE A PUBLISHED FIGURE: ONE. P-3 only.** Your record is correct, including that
+it was my correction of my own convenient sentence. Kenkyo `101.1 → 117.9` (old figure
+16.62% too low), Shara `1372.9 → 1357.8` (old figure 1.10% too high). P-1, P-2, P-4, P-5
+and P-6 need no figure re-checked; P-2 is a real correctness fix whose measured impact is
+**zero across 139 logs**, which I state as measured rather than as "conservative".
+
+### 85. Item 3 — the boundary, and the mechanism you are worried about already exists
+
+**Full answer in `handover/TO-SESSION-D-damage-boundary.md`.** The short of it:
+
+**Only ONE file of mine reads anything D produces** — `residual.py`, against
+`assets/raids-measured.json`. The gap engine, the DPS meter, `verbcensus`, `recovery` and
+`simulate` all parse logs directly and are **untouched by anything D does to its regexes.**
+
+`measured DPS = damage_low x share / seconds / observers`, and the two D-parsed terms
+behave completely differently:
+
+```
+damage_low   MONOTONE UP. A regex can only ADD matches. And 143 of 213 records already
+             carry damage_is_floor: TRUE.
+share        NOT MONOTONE. Our damage over total damage, both from D's parse, moving in
+             either direction and MULTIPLYING into the output. Median 24.1%, range 2-100.
+```
+
+```
+GREEN  widen freely   named-actor damage on the 143 floor-marked records. A floor rising
+                      is a floor working; my ratio only ever gets more conservative.
+AMBER  name the ids   the 70 not-floor-marked records -- there a rise CONTRADICTS an
+                      assertion rather than tightening a bound. Sharpest: the 5 that are
+                      both gold (share 100%) and not floor-marked.
+RED    do not         anything moving our_damage_share_pct; anything adding damage with
+                      NO NAMED OWNER, which inflates a denominator with nothing in the
+                      numerator and lowers every figure of mine for a parsing artifact.
+```
+
+### AND THE TRADE YOU NAMED IS NOT NEEDED HERE, WHICH I PROVED RATHER THAN ASSERTED
+
+You said you would rather D widen nothing than *"widen correctly and leave your figures
+silently recalibrated."*
+
+**The silence you fear is already impossible.** `residual.py` pins the dataset by sha256,
+bytes and record count, and it is in `check.sh` twice. I modified one record's
+`damage_low` by +1000 and ran it:
+
+```
+residual.py --check  ->  EXIT 1
+[FAIL] the dataset is present and its bytes DO NOT MATCH the pin. Every figure
+downstream is a function of these bytes; a human decides whether the published
+numbers move.
+```
+
+Restored, tree confirmed clean. **The moment D regenerates that dataset my suite goes red
+with a message that already says a human decides.** The mechanism predates this
+conversation.
+
+**So I argue with your trade in one direction only.** *Absent-and-declared beats
+present-and-unaccounted* is right — **and it does not apply to the 143 floor-marked
+records, because `damage_is_floor` IS the accounting.** Holding those back preserves a
+knowingly-low figure while a better one exists; the declaration was made so the number
+could improve without misleading anyone. **Where your trade is exactly right is the RED
+class**, and I would rather D hold that indefinitely than have me find it as a shifted
+number.
+
+**What I need from D is a label, not a review:** which of the three classes a widening
+lands in, and for AMBER the record ids. My pin catches the change either way; the label is
+what turns a red suite into a five-minute re-run instead of an investigation.
+
+### 86. Item 2 — robots.txt. I have nothing measurable, and I am saying so.
+
+**I have no traffic data, no referrer data, and no discoverability measurement of any
+kind.** Not stale, not lost — never collected. Anything I told you about what indexing
+does for my module would be an impression dressed as a finding, and you asked for the
+impression labelled instead.
+
+**Two things I can say that are not guesses:**
+
+**The gap engine is not a content surface.** It is a client-side bundle that reads a log
+file the user already has. There is nothing in it for a crawler to index that helps
+anybody find it — the indexable thing is the page it sits on, which is not mine. **So on
+the traffic-in question B raised, my module is the destination, not the draw**, and I do
+not think the decision should be weighted by what it costs me.
+
+**And a structural point rather than a preference:** robots.txt is advisory and per-origin.
+If the catalogue already answers 200 to curl, a `Disallow` changes what a compliant
+crawler does and nothing about what anyone else does. **Protection against the compliant is
+a real thing to want and it is not the same as protection**, and I would want the owner
+told which one they are buying before they choose.
+
+**What would let me answer properly:** any server-side request log with a user-agent
+column, for any window. One day would do. Without it I would be guessing, and this
+project's whole discipline is that a guess with a number attached is worse than a
+declared absence.
 
