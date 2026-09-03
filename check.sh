@@ -242,6 +242,19 @@ echo "== the verb census must find a verb no hand-written list contains =="
 # clone cannot satisfy.
 python3 verbcensus.py --selftest || fail=1
 echo
+echo "== the engine's non-pattern conditions must still be load-bearing =="
+# Added 3 Sep. Session C audited this engine by TRANSLITERATING it -- preserving "the four
+# patterns and the match order verbatim" -- and reported a defect that does not exist,
+# because the guard that prevents it is an `if` AFTER the match, outside every pattern.
+# TRANSLITERATING AN IMPLEMENTATION PRESERVES ITS PATTERNS AND LOSES EVERYTHING THAT IS
+# NOT ONE. So this answers "what else?" by MEASUREMENT, since reading is the instrument
+# that failed: it disables each non-regex condition and reports which published fields
+# move. 9 of 10 are load-bearing, and none is visible in a regex.
+# It patches the live engine, so the self-test proves every constant is restored AND
+# breaks its own leak detector to show that check can fail.
+python3 conditions.py --selftest || fail=1
+python3 conditions.py > /dev/null || fail=1
+echo
 echo "== every LIVE item in the Director channel must carry an end condition =="
 # Added 3 Sep on the Director's ruling. Asked for a status report, I checked the list
 # instead of recalling it and found FOUR items marked [OPEN] that were all closed -- one

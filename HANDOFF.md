@@ -9977,3 +9977,68 @@ before anyone asked, and it declined to report my `^You` anchoring as a disagree
 unasked is the harder half of an audit**, and its bound (0.58%, both characters SUPPORT,
 4.07% not a general rate) travels unchanged.
 
+
+## TO THE DIRECTOR — 3 Sep 20:30Z — I asked "what ELSE is invisible to a pattern-reader" and the answer is nine of ten conditions
+
+### 91. The transliteration finding generalised, by measurement rather than reading
+
+C lost my self-target guard because it is not a pattern. **The obvious next question is what
+else** — and reading is the instrument that just failed, so I measured instead.
+`conditions.py`, gate 31: disable each non-regex condition in turn, report which published
+fields move on the owner's own log.
+
+```
+SELF_TARGETS                 27 fields move   <- the exact guard C lost
+AUTO_VERBS                   27
+GAP                          12
+MIN_ENGAGEMENT               12
+UNCLASSIFIED_VERBS           16
+LANE_VERBS                    7
+LANE_CEILING                  1
+STANCE_EVEN_SHARE_OFFENSIVE   1
+STANCE_EVEN_SHARE_BALANCED    1
+STANCE_OFFENSIVE_MULT         inert on this log
+```
+
+**Nine of ten are load-bearing and NOT ONE of them is visible in a regex.** The guard C
+missed is tied for the most consequential condition in the engine — so the transliteration
+did not lose an edge case, it lost the single biggest thing that is not a pattern.
+
+**This is the list I owe anyone comparing against me**, and it is now produced by a gate
+rather than by my memory of what matters.
+
+### THE AUDIT UNDERSTATED ITS OWN SUBJECT BY 16x AND I CAUGHT IT BEFORE PUBLISHING
+
+First run reported `UNCLASSIFIED_VERBS` moving **one** field. **The true figure is
+sixteen.**
+
+`MELEE` is compiled from `LANE_VERBS | AUTO_VERBS | UNCLASSIFIED_VERBS` **at import**, so
+mutating a set afterwards left the pattern still matching verbs the set no longer
+contained. The audit was measuring the runtime half of a condition whose other half is
+baked into a regex. **`AUTO_VERBS` was understated from 10 to 27 the same way.**
+
+**An audit that under-measures reads as a clean bill**, which is the failure mode I have
+been cataloguing all week arriving in the tool I built to catalogue it. Fixed by rebuilding
+the derived pattern inside the mutation, with a self-test arm that requires
+`UNCLASSIFIED_VERBS` to move a `measured.*` field and not merely a coverage list.
+
+**And it is a real finding for C rather than only a bug of mine: the verb sets are BOTH a
+pattern input AND a runtime condition.** Changing one without the other produces a third
+behaviour that is neither mine nor the intended mutation. Anyone reproducing my verb
+handling needs both halves.
+
+### One constant is live but never exercised, and that is worth a look later
+
+`STANCE_OFFENSIVE_MULT = 2.00` is used at two sites and moves **nothing** on the only real
+capture I hold — because Shara's stance resolves to `null` (0.636, near neither 0.5 nor
+0.993) and the branch that consumes it never runs. **It is not dead code; it is an
+unexercised value.** I am not touching it: changing an engine constant is exactly the class
+of work you sequenced behind the re-pin, and it needs the stance capture that is still
+blocked on the owner. **Recorded so it does not become the next 0.93.**
+
+### Sequencing unchanged
+
+This is a gate and a measurement, both explicitly mine. **No engine behaviour changed, no
+version bump, bundle still `7ffb2a6d` at 1.7.0.** D-11 and D-12 remain RULED and sequenced
+behind B's re-pin; I have not started either.
+
