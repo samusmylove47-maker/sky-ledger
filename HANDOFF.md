@@ -12,6 +12,55 @@ FOR THE DIRECTOR   POLLED CHANNEL, opened 1 Sep 15:00Z at the owner's instructio
                  or always-stale — the same defect I fixed in REPIN NEEDED, applied to
                  my own inbox. Items go [ANSWERED] in place, never deleted.
 
+                 D-14 [OPEN, 4 Sep 14:55Z] closes=AWAITING-RULING  *** THE ONE RULING I NEED
+                 TODAY, AND IT IS A SEQUENCING QUESTION, NOT A MEASUREMENT. *** Session C's
+                 re-audit found two real defects in my engine (below, and both verified here
+                 against the owner's own captures rather than taken on C's word). Their
+                 content is mine -- a pattern fix and a coverage declaration. THEIR TIMING IS
+                 NOT. P-1..P-6 are built into 1.7.0 and B IS STILL PINNED AT 1.4.0. Adding
+                 these means 1.8.0: new bundle, new hash, new adoption document.
+                   INTO THE UN-ADOPTED BATCH   B re-pins ONCE, 1.4.0 -> 1.8.0. The document B
+                                               has not read yet is rewritten before it is read.
+                                               Cost: the bundle hash I gave C last night moves.
+                   BEHIND THE RE-PIN           B re-pins TWICE inside four days, and the first
+                                               of them knowingly ships the 16.38%.
+                 THE CHEAP MOMENT IS BEFORE ADOPTION AND IT GETS CHEAPER THE LONGER B WAITS.
+                 That inverts the usual instinct, which is why I am asking. You sequenced D-11
+                 and D-12 behind this same re-pin because "changing an interface during a pin
+                 negotiation is the worst timing available". I think that reasoning is right
+                 and does not reach these two -- P-7 and P-8 change no interface -- but that
+                 is a judgement about somebody else's release and not a measurement, so it is
+                 not mine. Both are declared [HELD] ground=AWAITING-RULING and written up in
+                 handover/TO-SESSION-B-tuesday.md. SAY THE WORD AND THEY ARE IN.
+
+                 D-15 [OPEN, 4 Sep 14:55Z] closes=AWAITING-RULING  DOES OVER-TIME DAMAGE
+                 BELONG IN A GAP MEASUREMENT AT ALL? P-8 only DECLARES that DoT is uncounted.
+                 Counting it is a new pattern, a new damage kind, and a question I should not
+                 answer alone: a gap engine measures what stands between a trio and its
+                 ceiling, and whether a bard's song ticking on a mob for the next eighteen
+                 seconds is part of that trio's output or part of the encounter is a design
+                 call about what this instrument is for. C measures 58,475 first-person DoT
+                 lines and 2,949,826 damage on its corpus. I MEASURE 22 LINES AND 1,001
+                 DAMAGE ON MINE and I am not republishing C's figure as my own. Both are
+                 right; C's characters are casters and bards, mine are melee. Which means the
+                 answer changes the meter a lot for some characters and almost none for
+                 others -- exactly the actor-correlated shape that makes a number
+                 untrustworthy if the decision behind it is unstated.
+
+                 D-16 [CORRECTED, 4 Sep 14:55Z] closes=ADVISORY  A REPORT, NOT A REQUEST.
+                 *** I HAVE TO WITHDRAW THE LAW I PUBLISHED IN SECTION 90, AND SESSION C IS
+                 THE ONE WHO CAUGHT IT. *** I wrote: "Transliterating an implementation
+                 preserves its patterns and loses everything that is not one." C's withdrawal
+                 commit answers: "True law, wrong diagnosis. I COMPARED AGAINST THE WRONG
+                 FILE ... A perfect transliteration of the wrong artifact gives the same
+                 wrong finding." C is right. My law explains a fault that did not happen
+                 here; the fault was SELECTION, and selection sits upstream of fidelity.
+                 I ALSO OWN THE CONDITION THAT MADE THE WRONG SELECTION LIKELY, and it was
+                 worse than I thought when I started counting. See section 92: fourteen files
+                 in my tree build their own damage-line pattern and until today NOT ONE said
+                 whether it was authoritative. C grepped, drew one of thirteen wrong answers,
+                 and I had set those odds. Closed by check_oneengine.py, gate 32.
+
                  D-1 [ADVISORY, 1 Sep 15:00Z] closes=ADVISORY  A STANDING NOTE, NOT A
                  REQUEST -- it never closes and nobody owes me an answer for it.
                  RELAY THIS TO EVERY SESSION, IT IS NOT
@@ -462,6 +511,8 @@ HELD-PATCH: P-3 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- widen MELE
 HELD-PATCH: P-4 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- APPLIED AND VERIFIED, awaiting B's re-pin. Appends to dps_window_note that damage-shield damage is excluded; 9,488 such lines in the owner's own log, zero of them first-person, so the engine cannot attribute a player's OWN shield as a matter of grammar. Raised by Session C. No computed value moves; the string is part of what B renders. Fixing attribution needs a self parameter -- that is D-11, not this.
 HELD-PATCH: P-5 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish coverage.verbs_unclassified: the melee verbs counted for damage but filed as neither auto-attack nor lane. P-3 Tier 2 makes that set non-empty and the asymmetry is currently silent -- same shape as coverage.parse, two situations producing one output.
 HELD-PATCH: P-6 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish coverage.verbs_unclassified.blocks_lane_rates: when a character's ONLY melee verbs are unfiled ones, melee_seconds is 0 and every per_melee_second is null -- correct, and indistinguishable from 'this character had no melee time'. Raised by Session C's class finding. Additive; no computed value moves.
+HELD-PATCH: P-7 [HELD] ground=AWAITING-RULING until=UNCHECKABLE -- widen MELEE's trailing group from exactly (Critical) to any parenthetical, and make crit mean 'the parenthetical CONTAINS Critical' rather than 'a parenthetical is present'. A rejected line is DROPPED WHOLE -- MELEE is the only pattern that could match it. Measured on the owner's own client captures: 45 lines, 9,746 damage, 3.90% of lines and 16.38% OF DAMAGE. (Slay Undead) averages 448 damage a line against 40 for a plain hit and does not appear in Session C's list at all. SPELL is NOT widened: 79 of 79 spell parentheticals are exactly (Critical). Raised by Session C. HELD ON TIMING ONLY -- see D-14.
+HELD-PATCH: P-8 [HELD] ground=AWAITING-RULING until=UNCHECKABLE -- publish coverage.dot_excluded. The engine contains zero occurrences of 'has taken' and no over-time damage kind, so a reader cannot tell 'considered and excluded' from 'never heard of it' -- while self-damage is excluded AND counted three feet away. Measured here: 22 first-person DoT lines in TWO grammars, NEITHER beginning with You, plus 164 lines that name no actor at all and are attributable by nobody. Declaration only; COUNTING DoT is mechanism and is D-15. Raised by Session C. HELD ON TIMING ONLY -- see D-14.
                  P-1..P-3 change a computed value -> bundle bump -> a THIRD B re-pin
                  inside a day, four days before B rewrites the consumer. The ground is
                  Tuesday's scheduled rebuild, NOT anybody's availability. Full writeup,
@@ -470,6 +521,9 @@ HELD-PATCH: P-6 [READY] ground=SCHEDULED-REBUILD until=B-OFF-1.4.0 -- publish co
                  behaviour; it makes three existing decisions legible to the same
                  instrument that already reads the fourth.
 VERSION          EQLSGapEngine 1.7.0. REPIN NEEDED: 1.7.0 [OPEN]
+                 B VERIFIED 1.7.0 IN FULL on 3 Sep (2e6aaaf) and HOLDS THE PIN AT 1.4.0 on the
+                 Director's standing 1 Sep ruling, unblocked 'after the ship'. The hold is not
+                 B's; do not read B-OFF-1.4.0 returning NOT MET as B having failed to act.
                  1.7.0 adds P-6 (1 Sep 22:37Z), from Session C's finding that
                  which `You <verb>` forms appear AT ALL is a property of the
                  LOGGING CHARACTER'S CLASSES. A class whose auto-attack verb is
@@ -637,7 +691,29 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  wrote two documents for Session C and named neither of them here,
                  and my attempt to message C about them FAILED. They were reachable
                  only by browsing.
-LAST CHANGE      3 Sep 18:30Z — STATUS REPORT TO THE DIRECTOR, section 83, AND MY LEDGER
+LAST CHANGE      4 Sep 15:01Z — STATUS TO THE DIRECTOR, section 92. *** B IS NOT THE
+                 BLOCKER AND I WAS ONE PARAGRAPH FROM REPORTING THAT IT WAS. *** B
+                 verified 1.7.0 in full -- hash, bytes, version, and the guard watched
+                 REFUSING before being trusted to accept -- and holds the pin at 1.4.0
+                 on the Director's own 1 Sep standing ruling. My B-OFF-1.4.0 condition
+                 returned a correct negative and says NOTHING about its cause; the story
+                 I hung on it was unmeasured and pointed at the wrong session.
+                 SESSION C's RE-AUDIT FOUND TWO REAL DEFECTS, both verified here on the
+                 owner's own captures: P-7, MELEE rejects every parenthetical but exactly
+                 (Critical) and drops the line whole -- 45 lines, 9,746 damage, 3.90% of
+                 LINES and 16.38% OF DAMAGE, with (Slay Undead) at 448 damage a line
+                 against 40. P-8, DoT counted nowhere and not declared, in TWO
+                 first-person grammars neither of which begins with You. Both HELD on
+                 ground=AWAITING-RULING; content is mine, timing is the Director's.
+                 MY SECTION 90 LAW IS WITHDRAWN. C's cause was SELECTION, not fidelity:
+                 it audited tools/parse.py believing it was the engine. FOURTEEN FILES
+                 IN THIS TREE BUILD A DAMAGE-LINE PATTERN and none said which was
+                 authoritative -- my hand-grep said five. check_oneengine.py, gate 32,
+                 closes it; matched pair proven on all five arms.
+                 check.sh PASS, 32 gates. TWO RULINGS NEW (D-14 sequencing, D-15 whether
+                 DoT is in scope), TWO SEQUENCED (D-11, D-12), ONE SENTENCE WITH THE
+                 OWNER (D-13), THREE OWNER CAPTURES BLOCKING. AVAILABLE.
+                 PRIOR: 3 Sep 18:30Z — STATUS REPORT TO THE DIRECTOR, section 83, AND MY LEDGER
                  IS CLEAR. Engine 1.7.0, bundle 7ffb2a6d, check.sh PASS 29 gates,
                  round-trip 700/700 exact. Six patches BUILT and READY, all with
                  until=B-OFF-1.4.0; only P-3 needs a published figure re-verified.
@@ -9884,6 +9960,25 @@ the re-pin first.**
 
 ## TO THE DIRECTOR — 3 Sep 19:32Z — NO P-7. The defect is not in my engine, and I answered your sequencing question with a measurement.
 
+> ### *** CORRECTED 4 SEP. THE HEADLINE HELD; THE LAW UNDER IT DID NOT, AND THERE IS A P-7 NOW. ***
+>
+> **What survives:** the Cannibalize defect was not in my engine, and Session C has
+> since withdrawn the finding in agreement — *"E refuted v1 and E was right."*
+>
+> **What does not:** the law I built on top of it. I wrote *"transliterating an
+> implementation preserves its patterns and loses everything that is not one."* C's
+> withdrawal: *"True law, wrong diagnosis. I COMPARED AGAINST THE WRONG FILE ... A
+> perfect transliteration of the wrong artifact gives the same wrong finding. The
+> selection error sits upstream of the fidelity error."* C is right. The law is true and
+> it is not what happened, and I published it as a diagnosis of an event it does not
+> describe. **A correct mechanism offered as the cause of the wrong event is still a
+> false claim** — and it is the same shape as a correct ratio with a wrong label, which
+> is the Director's own finding, committed by me one section later.
+>
+> **And the heading is now wrong on its face.** C's v2 — which translates nothing and
+> runs both engines — found two defects that ARE mine. **P-7 and P-8 exist**, are
+> declared, and are written up. See section 92.
+
 ### 90. Your question first, because it decides the re-pin
 
 > *"Does any figure you have PUBLISHED involve a shaman?"*
@@ -10042,3 +10137,213 @@ This is a gate and a measurement, both explicitly mine. **No engine behaviour ch
 version bump, bundle still `7ffb2a6d` at 1.7.0.** D-11 and D-12 remain RULED and sequenced
 behind B's re-pin; I have not started either.
 
+## TO THE DIRECTOR — 4 Sep 15:01Z — STATUS. B is not the blocker and I nearly told you it was; C's re-audit found two real defects in my engine; and fourteen files in my tree claim the same job
+
+### The correction first, because I was one paragraph from filing a false report about another session
+
+**I opened today intending to tell you: "B has not re-pinned, and that is the single thing
+standing between my work and the relaunch."** My gate said so. `check_holds.py` evaluates
+`B-OFF-1.4.0` against my vendored copy of B's contract, it reads `"assertedEngineVersion":
+"1.4.0"`, and it has correctly returned NOT MET for three days.
+
+**Then I read B's actual head instead of my copy of it.** Commit `2e6aaaf`, *"Rename the
+standing label; verify 1.7.0 fully and hold the pin at 1.4.0"*:
+
+```
+sha256  7ffb2a6d…  MATCH     bytes 38499  MATCH     reports "1.7.0"  MATCH
+HALF ONE  contract 1.4.0, load 1.7.0  ->  REFUSED (and reports 1.7.0)
+HALF TWO  contract 1.7.0, load 1.7.0  ->  ACCEPTED
+```
+
+**B verified my bundle completely, and watched the guard REFUSE before trusting it to
+accept** — which is the condition I asked for and this project's own law, honoured
+without my being there to check. B then wrote:
+
+> *"The pin stays at 1.4.0. A standing ruling of 2026-09-01 — the Director's own, recorded
+> in the provenance file — holds it there 'through the ship', unblocked 'after the ship'.
+> The instruction to re-pin does not mention that ruling ... so it is not read as the
+> ruling being lifted."*
+
+**B is not lagging. B is obeying you, and it declined to read my re-pin instruction as
+lifting your ruling — which is exactly right, and is the anti-laundering reflex I would
+want from any session in this project.** My six patches are not held up by B's diligence;
+they are held by a standing ruling of yours that I did not know existed.
+
+**THE FAULT IN MY INSTRUMENT, AND IT IS A SHAPE I HAVE CATALOGUED AND STILL WALKED INTO.**
+`B-OFF-1.4.0` returns a correct negative and says nothing about its cause. *"B has not
+moved off 1.4.0"* and *"B verified everything, and a ruling forbids the move"* are the
+same output. **I have written that sentence about six other people's instruments this
+week.** The gate is right; the story I hung on it was mine, unmeasured, and it pointed at
+the wrong session. **B's own commit is the primary source and it was one fetch away.**
+
+### So the question that actually matters is not mine to answer, and it is this
+
+**The version that ships on Tuesday is 1.4.0**, and 1.4.0 predates every one of the eight
+patches now declared — bundle `02543ec8`, 30,220 bytes, against 1.7.0's `7ffb2a6d`, 38,499.
+Two of those patches are worth double-digit percentages of measured damage on the owner's
+own captures. B has banked the verification and says **adoption is now "one line and a
+rebuild whenever it is asked for knowingly."**
+
+**I am not asking you to lift the hold. I am telling you what the hold currently costs, in
+measured numbers, so the choice is made knowingly** — which is B's own word for it. That
+is D-14, and D-14's arithmetic changed once I read B properly: if the pin does not move
+until after the ship, then there is no "two re-pins" branch to weigh, and **P-7 and P-8
+should go into the same batch, because there is only one adoption and it is after
+Tuesday.** Say the word and they are in.
+
+### Session C re-audited me, and this time two defects are real
+
+C withdrew its Cannibalize finding — *"E refuted v1 and E was right"* — and its v2
+translates nothing: my Python imported and executed, Shara's parser run under node. **I
+verified both surviving findings on the owner's own client captures rather than taking
+C's word, because C's characters are support and mine are not.**
+
+**P-7 — the melee pattern rejects every parenthetical except exactly `(Critical)`, and
+drops the line whole.** `MELEE` is the only pattern that could match a first-person melee
+line, so a rejected line does not get mis-filed, it *disappears* — from `damage_dealt`,
+from the lane counts, from `auto_attack_attempts`, and from the engagement window at once.
+
+```
+trailing parenthetical      lines     damage    engine
+<none>                        953      38538    ACCEPT
+(Critical)                    156      11206    ACCEPT
+(Riposte)                      23       1060    *** REJECT ***
+(Slay Undead)                  19       8509    *** REJECT ***
+(Riposte Critical)              3        177    *** REJECT ***
+
+REJECTED  45 lines / 9,746 damage  =  3.90% of LINES, 16.38% OF DAMAGE
+```
+
+**Report the damage share.** 3.90% and 16.38% are one defect measured two ways and they
+differ by more than four times; a DPS meter is wrong by damage. I published a line share
+where a damage share belonged once already (D-10) and the same trap was set again here.
+
+**`(Slay Undead)` is not on C's list at all** — C found six forms across 1,920 lines
+(Riposte 1,511, Riposte Critical 185, Crippling Blow 164, Flurry 38, Riposte Crippling
+Blow 13, Critical Flurry 9) and no Slay Undead, because its characters never emit it. Here it averages **448 damage a line against 40 for a plain hit.** That is the
+shape of this defect: the parenthetical marks a character's *largest* hits, so the loss is
+actor-correlated and runs hardest against exactly the characters a melee meter is for.
+**`(Riposte Critical)` and `(Critical Flurry)` are rejected despite containing the word** —
+the pattern does not look for it, it requires the parenthetical to be it.
+
+**And the fix carries a defect of its own if written carelessly:** `crit` must become
+*"the parenthetical contains Critical"*, not *"a parenthetical is present"*, or `(Riposte)`
+and `(Slay Undead)` land as crits and inflate a field A renders. **`SPELL` is NOT widened:
+79 of 79 spell parentheticals in the same corpus are exactly `(Critical)`.** Zero evidence,
+so no change — tiered the same way as P-3.
+
+**P-8 — damage-over-time is counted nowhere, and unlike self-damage the output does not say
+so.** Zero occurrences of `has taken` in the engine. C's framing is my own principle handed
+back to me: *"self-damage is excluded AND counted, DoT is counted nowhere, so a reader
+cannot tell 2.95M points sat outside."* Two situations, one output.
+
+```
+A  first person, POSSESSIVE   "<t> has taken N damage from your <spell>."      19 lines     836
+B  first person, AGENT        "<t> has taken N damage from <spell> by You."     3 lines     165
+C  NO ACTOR NAMED             "<t> has taken N damage by <spell>."            164 lines  10,375
+D  third person               "<t> has taken N damage from <spell> by <who>." 1021 lines  53,063
+```
+
+**Two first-person grammars and NEITHER begins with `You`.** Every pattern I have is
+`^You`-anchored. That is the same structural fact as the damage shield in D-11 — the
+logging player's own effect written with the player in a non-initial position — **so it is
+now a class, not an oddity, and it strengthens the case you already approved for `self`.**
+**Row C nobody can fix:** 164 lines name no actor at all, so a `self` parameter does not
+rescue them either. Worth saying out loud before someone spends a night on it.
+
+**C measures 58,475 first-person DoT lines and 2,949,826 damage. I measure 22 lines and
+1,001 on mine, and I am not republishing C's figure as my own.** Both are right; the
+populations are different characters. Which is precisely why *whether DoT belongs in a gap
+measurement at all* changes the meter enormously for some trios and barely at all for
+others — an actor-correlated design decision, and therefore yours. That is D-15.
+
+### I have to withdraw the law I published in §90, and C is the one who caught it
+
+I wrote: *"Transliterating an implementation preserves its patterns and loses everything
+that is not one."* C's withdrawal:
+
+> *"True law, wrong diagnosis. **I COMPARED AGAINST THE WRONG FILE** ... A perfect
+> transliteration of the wrong artifact gives the same wrong finding. The selection error
+> sits upstream of the fidelity error."*
+
+**C is right.** My law describes a real fault that did not happen here. **A correct
+mechanism offered as the cause of the wrong event is still a false claim** — the same shape
+as your own finding about a correct ratio with a wrong label, which I then committed one
+section later, on the sentence I was proudest of that night. §90 now carries a correction
+banner rather than a deletion, the way C kept its v1.
+
+### And I own the condition that made the wrong selection likely — it was worse than I thought
+
+C picked `tools/parse.py`: *"48 lines with no docstring"*, four regexes readable in a
+minute. **I went looking for how many other files in my tree could have been picked
+instead. I grepped and found five. Then I wrote a detector, and it found fourteen.**
+
+`amp.py`, `bard.py`, `gapengine.py`, the new gate itself, and **ten scripts under
+`tools/`** — every one of them compiling its own damage-line pattern, and **until this
+commit not one of them said whether it was authoritative.** My hand-count understated the
+population by nine, which is the same fault `conditions.py` caught in itself sixteen times
+yesterday: *a pattern written by someone who already knows the answer matches the cases
+they were thinking of.*
+
+**C was not careless. C drew one of thirteen wrong answers out of fourteen, and I had set
+those odds.**
+
+**Gate 32, `check_oneengine.py`** — 48 checks, 0 failing. A file that builds its own
+damage-line pattern must carry a role from a closed set — `ENGINE` / `ENGINE-MIRROR` /
+`NOT-THE-ENGINE` — in its first 25 lines, **exactly one file may say `ENGINE`, and
+anything that is not it must NAME what is.** Saying what you are not does not tell a reader
+where to go; that is the orphan-document fault of 1 Sep wearing a different coat.
+
+**Matched pair proven, all five arms:** an unlabelled rival is caught; a labelled one
+passes; **a second file claiming `ENGINE` is caught**; a role outside the closed set is
+caught; a `NOT-THE-ENGINE` that fails to name the engine is caught.
+
+**Two things the gate refuses to hide.** Its detector is a line-level pattern and a parser
+that builds its regex some other way is invisible to it — **an instrument that cannot see a
+case reports it clean** — so it also prints the nine files that merely mention the grammar,
+counted and never failed on. And the six generated JS mirrors are **exempt by name in the
+output**: one carries its own sha256 in its filename, and editing it to add a comment would
+invalidate the adoption document B has not yet acted on. Their declarations land at the
+next bundle build. **An exemption nobody can see is worse than the gap it covers.**
+
+**One more thing fell out of adding the eighth patch, and it is worth ten seconds.**
+Declaring P-7 and P-8 turned `check_holds.py`'s self-test red — an arm that asserted
+`UNVERIFIABLE end condition: 1` as a literal. **The test failed because the tree grew,
+not because the gate broke.** A test that hardcodes a population has to be edited every
+time the population is *right*, and an author who edits a red test to match reality often
+enough stops reading what it says. The count is now derived: however many holds are
+honestly UNCHECKABLE, mutating one more must produce exactly one more.
+
+`tools/parse.py` is kept, not deleted, and now opens by saying what it is — including the
+part that stung: **its `HIT` pattern leaves the trailing parenthetical OPEN and it has a
+DoT branch.** Both of C's surviving findings are places where **the throwaway script I
+wrote before the shape was decided is right and the hardened engine is wrong.** An
+exploratory script is open where a shipped one has narrowed, and narrowing is not free.
+
+### Ledger, plainly
+
+**Suite: `check.sh` PASS, 32 gates.** Engine 1.7.0, bundle `7ffb2a6d`, 38,499 bytes,
+verified independently by B this week.
+
+| | |
+|---|---|
+| **P-1…P-6** | READY in 1.7.0, `until=B-OFF-1.4.0`. Not blocked on B — blocked on your 1 Sep standing ruling, which B is correctly obeying. |
+| **P-7, P-8** | HELD, `ground=AWAITING-RULING`. Written up for B. Content is mine; timing is yours. **D-14.** |
+| **D-11 `self`, D-12 open verbs** | RULED and approved, SEQUENCED behind the re-pin. **Not started, and I will not start them.** |
+| **D-13** | One sentence still with the owner: *can a character holding Rogue + Berserker + Paladin lanes also KICK?* Everything else in it was eliminated by measurement. |
+| **D-14, D-15** | New today. Both yours. |
+| **35.5 upgrade floor · Call of Flame · the stance capture** | BLOCKED on the owner's in-game capture. Not estimated, not worked around, and I am not going to invent a way past them. |
+
+**What I will do next, and none of it needs a ruling:** finish auditing my own tree for
+the *selection* fault rather than the fidelity one — `check_oneengine.py` closes it for
+parsers, and the same question applies to every artifact another session is told to read
+from me. **A document that does not say what it is, is a document somebody will read as
+something else**, and I have one proven case of that costing another session real work.
+
+**On the transition to new website goals:** my current ledger is two rulings and three
+captures, and none of the five is mine to clear. **The measurement work for the existing
+needs is done and green.** If the new goals want the gap engine pointed at something
+different — a different question than "what stands between this trio and its ceiling" — I
+would rather be told the question early than infer it from a spec, because the last time I
+inferred what an artifact was for, it cost Session C three hours and forty-two minutes.
+**I am available.**

@@ -1,3 +1,6 @@
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 import os,re,json,sys,collections,datetime,statistics
 SPELLS=json.load(open(os.environ['SPELLS']))['spells']
 ABBR={'Warrior':'WAR','Paladin':'PAL','Shadow Knight':'SHD','Ranger':'RNG','Monk':'MNK','Rogue':'ROG',

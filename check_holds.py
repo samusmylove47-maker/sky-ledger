@@ -289,9 +289,18 @@ if __name__ == "__main__":
     # met, so the only thing this arm can be measuring is the UNCHECKABLE one. My first
     # version injected 1.6.0 and the other four fired correctly, which made the test
     # read as a failure of UNCHECKABLE. The test was wrong, not the gate.
+    # THE EXPECTED COUNT IS DERIVED, NOT WRITTEN DOWN. It was the literal 1 until
+    # 4 Sep, when P-7 and P-8 were declared UNCHECKABLE for real and this arm went red
+    # -- a self-test failing because the TREE grew, not because the gate broke. A test
+    # that hardcodes a population is a test that has to be edited every time the
+    # population is right, and an author who edits a red test to match reality often
+    # enough stops reading what it says. So: however many holds are honestly
+    # UNCHECKABLE already, mutating one more must produce exactly one more.
+    already = len([1 for d in DECL.findall(h) if d[3] == "UNCHECKABLE"])
     rows = audit(unc, p, root=_root_with("1.4.0"))
     legal = not any(not ok for nm, ok, _ in rows)
-    counted = any("UNVERIFIABLE end condition: 1" in nm for nm, _, _ in rows)
+    counted = any(f"UNVERIFIABLE end condition: {already + 1}" in nm
+                  for nm, _, _ in rows)
     print(f"  [{'ok' if legal and counted else 'FAIL'}] UNCHECKABLE passes AND is "
           f"counted -- an honest 'nobody can verify this' is not punished, and not hidden")
     n += 0 if (legal and counted) else 1

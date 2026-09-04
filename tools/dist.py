@@ -1,3 +1,6 @@
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 import re,sys,collections,statistics,os
 HIT=re.compile(r'^\[.*?\] You (\w+) (.+?) for ([\d,]+) points? of damage\.(.*)$')
 SPL=re.compile(r'^\[.*?\] You (?:hit )?(.+?) for ([\d,]+) points? of (\w+) damage by (.+?)\.(.*)$')

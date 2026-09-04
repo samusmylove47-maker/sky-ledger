@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 """Does a non-weapon Exaltation deal damage?
 
 The client prints "Your <item> (Exaltation) <verb>." whenever an Exaltation fires. If those

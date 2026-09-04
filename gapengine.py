@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# PARSER-ROLE: ENGINE -- this file is the gap engine. Exactly one file in this
+# repository may say that line, and check_oneengine.py enforces it.
 """gapengine.py -- gapEngine(lines, context) -> Report. Session E.
 
 THE ENGINE, not the shape of its output. HANDOFF.md §21 is the contract;

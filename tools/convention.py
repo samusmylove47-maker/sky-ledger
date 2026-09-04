@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 """Peak-to-sustained DPS ratios — the conversion between what a model computes and what a
 player quotes.
 

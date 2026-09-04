@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 """Offensive Stance parity test.
 
 If Offensive Stance multiplies FinalDamage by exactly 2, then every damage number

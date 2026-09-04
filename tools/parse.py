@@ -1,3 +1,11 @@
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# The engine declares ENGINE in its own header. THIS FILE IS THE ONE SESSION C MISTOOK FOR IT
+# on 3 Sep -- C's words: "48 lines with no docstring", four regexes read in a minute, and a `dot` label that does not occur
+# in the engine at all. C published a defect from it and withdrew it a day
+# later. Kept, not deleted: its HIT pattern leaves the trailing parenthetical OPEN and
+# it has a DoT branch -- both places where this throwaway is RIGHT and the hardened
+# engine is not. An exploratory script written before the shape was decided is open
+# where a shipped one has narrowed. See HANDOFF.md section 92.
 import re,sys,collections,datetime,glob,os
 TS=re.compile(r'^\[(\w{3}) (\w{3}) +(\d+) (\d+):(\d+):(\d+) (\d+)\] (.*)$')
 MON={m:i+1 for i,m in enumerate('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split())}

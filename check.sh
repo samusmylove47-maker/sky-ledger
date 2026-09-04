@@ -295,6 +295,17 @@ echo "== the fixture must not drift from what the engine emits =="
 python3 fixtures/check_drift.py --selftest || fail=1
 python3 fixtures/check_drift.py || fail=1
 echo
+echo "== exactly one file in this tree may claim to be the engine =="
+# ADDED 4 Sep, from a cost somebody else paid. Session C audited "Session E's engine",
+# published a defect, and withdrew it a day later: it had grepped parse|engine|damage,
+# found tools/parse.py -- a 48-line exploratory script -- and transliterated that. The
+# transliteration was faithful. THE SELECTION WAS WRONG, AND SELECTION SITS UPSTREAM OF
+# FIDELITY: get the artifact wrong and every check below it is exact and worthless.
+# Fourteen files in this tree build their own damage-line pattern and none of them said
+# which was authoritative. My hand-grep said five; the detector found fourteen.
+python3 check_oneengine.py --selftest || fail=1
+python3 check_oneengine.py || fail=1
+echo
 if [ "$fail" -ne 0 ]; then
   echo "FAILED. Nothing ships."
   exit 1

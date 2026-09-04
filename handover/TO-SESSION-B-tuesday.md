@@ -1,4 +1,8 @@
-# TO SESSION B — three engine patches held for Tuesday's rebuild
+# TO SESSION B — EIGHT engine patches, six built into 1.7.0 and two held on a ruling
+
+*(Title corrected 4 Sep. It said "three engine patches held for Tuesday's rebuild" and
+was wrong twice: the count had reached six, and "Tuesday" is a date, not a condition —
+the Director's correction, applied to the heading that had escaped it.)*
 
 **Written for B to read directly, not relayed.** The Director asked for this in one
 place it can hand over on Tuesday; a finding that ships only in one place has not been
@@ -495,6 +499,131 @@ another, and this engine is not class-scoped. Dropping them makes a Beastlord's 
 auto-attack invisible **with nothing in the output saying so.**
 
 ---
+
+## P-7 — the melee pattern rejects every parenthetical except exactly `(Critical)`, and drops the line whole  ← THE ONE THAT MOVES NUMBERS
+
+**Added 4 Sep from Session C's re-audit. HELD ON TIMING, NOT ON MERIT — see the note at
+the end of this section. NOT IN 1.7.0.**
+
+`MELEE` ends `\.(\s*\(Critical\))?$`. Anything else in that position fails the match, and
+**`MELEE` is the only pattern that could match a first-person melee line** — so a rejected
+line is not mis-filed, it is *gone*: out of `damage_dealt`, out of the lane counts, out of
+`auto_attack_attempts`, and out of the engagement window, all at once.
+
+**Measured on the owner's own genuine client captures** — four `eqlog_<Char>_<server>.txt`
+files, deduplicated by sha256 first (the D-10 lesson: 277 of 416 files in this container
+were duplicate copies), three of which contain first-person melee:
+
+```
+trailing parenthetical      lines     damage    engine
+<none>                        953      38538    ACCEPT
+(Critical)                    156      11206    ACCEPT
+(Riposte)                      23       1060    *** REJECT ***
+(Slay Undead)                  19       8509    *** REJECT ***
+(Riposte Critical)              3        177    *** REJECT ***
+
+REJECTED 45 lines / 9,746 damage  =  3.90% of LINES, 16.38% OF DAMAGE
+```
+
+**Report the damage share, not the line share.** 3.90% and 16.38% are the same defect
+measured two ways and they differ by more than four times. A DPS meter is wrong by
+damage. I published a line share where a damage share belonged once already (D-10) and
+this is the same trap set again.
+
+**`(Slay Undead)` is not in Session C's list at all.** C found Riposte, Crippling Blow,
+Flurry, Riposte Critical, Critical Flurry, Riposte Crippling Blow — 1,920 lines across its
+corpus — and no Slay Undead, because **C's two characters are support and never emit it.**
+Here it averages **448 damage per line against 40 for a plain hit.** That is the shape of
+this defect: the parentheticals mark a character's *largest* hits, so the loss is
+actor-correlated and it runs against exactly the characters a melee meter is for.
+
+**Two of the rejected forms contain the word `Critical` and are still rejected** —
+`(Riposte Critical)`, and `(Critical Flurry)` in C's corpus. The pattern does not look for
+the word; it requires the parenthetical to be that word and nothing else.
+
+**Change:** the trailing group becomes `(\s*\([^)]*\))?$`, and `crit` becomes
+*"the parenthetical contains `Critical`"* rather than *"a parenthetical is present"*.
+**That second half is load-bearing.** Without it `(Riposte)` and `(Slay Undead)` would
+land as crits and the crit rate would inflate — a defect *introduced* by the fix,
+in a field A renders.
+
+**`SPELL` IS NOT WIDENED AND THAT IS DELIBERATE.** Same corpus, same measurement: **79 of
+79** trailing parentheticals on first-person spell lines are exactly `(Critical)`. Zero
+lines justify widening it, so it stays narrow. Tiered by evidence, the same rule as P-3.
+
+**Direction:** this one *raises* measured damage — unlike the Cannibalize case, where
+removing a guard would have *lowered* the published DPS because the engagement window grew
+faster than the numerator. Neither direction is guessable; both were measured.
+
+## P-8 — damage-over-time is counted nowhere, and unlike self-damage the output does not say so
+
+**Added 4 Sep from Session C's re-audit. HELD ON TIMING — see the note at the end. NOT IN 1.7.0.**
+
+`gapengine.py` contains **zero occurrences of `has taken`.** There is no
+damage-over-time pattern and no over-time damage kind.
+
+**C's framing, which is right and is my own principle handed back to me:** *"What is
+missing is the declaration, not the awareness. Self-damage is excluded AND counted, DoT is
+counted nowhere, so a reader cannot tell 2.95M points sat outside."* A reader of
+`coverage` today cannot distinguish **"the engine considered DoT and excluded it"** from
+**"the engine has never heard of DoT"** — two situations, one output, the exact shape P-5
+and P-6 exist to close.
+
+**Measured on the owner's own captures, and the population is not one population:**
+
+```
+A  first person, POSSESSIVE   "<t> has taken N damage from your <spell>."      19 lines     836
+B  first person, AGENT        "<t> has taken N damage from <spell> by You."     3 lines     165
+C  NO ACTOR NAMED             "<t> has taken N damage by <spell>."            164 lines  10,375
+D  third person               "<t> has taken N damage from <spell> by <who>." 1021 lines  53,063
+```
+
+**Two first-person grammars, and NEITHER begins with `You`.** Every pattern this engine
+has is `^You`-anchored. This is the same structural fact as the damage shield in D-11 —
+the logging player's own effect written with the player in a non-initial position — and it
+is now the second instance, so it is a class and not an oddity.
+
+**Row C is the one nobody can fix.** 164 lines name *no actor at all*. A `self` parameter
+(D-11) does not rescue them, because there is no name in the line to compare against. They
+are unattributable by my parser, by C's, and by Shara's. Worth saying out loud so nobody
+spends a night on it.
+
+C reports **58,475** first-person DoT lines and **2,949,826** damage on its 5.6M-line
+corpus. **I have not verified that and I am not republishing it as mine** — I report the
+population I opened. The two are consistent in shape: C's characters are casters and bards
+where mine are melee.
+
+**Change, and it is the small half on purpose:** `coverage.dot_excluded`, carrying the
+counted lines and damage the engine *saw and did not attribute*, plus a note in
+`dps_window_note`. **No computed value moves.** Two new keys.
+
+**COUNTING DoT is a different thing and I have not built it.** A new pattern, a new damage
+kind, and a decision about whether over-time damage belongs in a *gap* measurement at all.
+That is mechanism; it is the Director's, and it is D-15.
+
+## The timing note that applies to BOTH P-7 and P-8, and it is the only reason they are HELD
+
+Their **content** is a measurement and a declaration, which is mine. Their **timing** is
+not. P-1 through P-6 are already built into **1.7.0**, and **B is still pinned at 1.4.0** —
+the vendored contract reads `"assertedEngineVersion": "1.4.0"` and B's 3 Sep seam commit
+says *"answer E's version question with 1.4.0"*. Adding P-7 and P-8 means **1.8.0**, a new
+bundle, a new hash, and a new adoption document.
+
+**The arithmetic of the choice, stated plainly because it is not intuitive:**
+
+- **Into the un-adopted batch:** B re-pins **once**, off 1.4.0 and onto 1.8.0. The
+  document B has not yet read is rewritten before it is read. Cost: the bundle hash C was
+  given last night changes.
+- **Behind the re-pin:** B re-pins **twice** — 1.4.0 → 1.7.0, then 1.7.0 → 1.8.0 — four
+  days before relaunch, and the 16.38% is knowingly shipped in the first of them.
+
+**The cheap moment is before adoption, and it gets cheaper the longer B waits.** That
+inverts the usual instinct and it is why I am asking rather than deciding: the Director
+sequenced D-11 and D-12 behind this same re-pin on the reasoning that *"changing an
+interface during a pin negotiation is the worst timing available"*, and I think that
+reasoning is right and does not reach these two — P-7 and P-8 change no interface, they
+change a pattern and add two keys — but that is a judgement about somebody else's release,
+not a measurement, so it is not mine to make.
 
 ## What I need from you when you re-pin
 

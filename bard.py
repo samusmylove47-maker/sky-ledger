@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# PARSER-ROLE: NOT-THE-ENGINE  the engine is gapengine.py
+# This file builds its own damage-line pattern for a local purpose and is NOT
+# authoritative. Enforced by check_oneengine.py.
 """bard.py -- what a Bard actually does, measured, from a full day of Shara's log.
 
 Shara is a support-built Bard trio (the owner's words: "completely focused on
