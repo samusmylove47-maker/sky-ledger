@@ -69,8 +69,13 @@ REQUIRED = ("MAILBOX-VERSION", "FROM", "REPO", "BRANCH", "PEER", "PEER-REPO",
             "PEER-BRANCH", "PEER-MAILBOX")
 
 
-def audit(text, exists):
-    """exists(path) -> bool. Returns [(name, ok, detail)]."""
+def audit(text, exists, at_origin=None):
+    """exists(path) -> bool: is the path TRACKED, so a push will carry it.
+    at_origin(path) -> bool or None: is it already at origin/<branch>. Optional;
+    when given it produces a COUNTED, NON-FAILING line, never a failure -- a file
+    added in the commit this gate is guarding cannot be at origin yet, and a gate
+    that fails on that would have to be bypassed to ship, which is worse than the
+    staleness it reports. Returns [(name, ok, detail)]."""
     out = []
     hdr = dict(HDR.findall(text or ""))
     msgs = MSG.findall(text or "")
@@ -98,10 +103,28 @@ def audit(text, exists):
     refs = FILEREF.findall(text or "")
     out.append(("every message names a file", len(refs) >= len(msgs),
                 f"{len(refs)} file refs for {len(msgs)} messages"))
+    # *** THE LABEL ON THIS CHECK WAS FALSE UNTIL 4 SEP, AND IT WAS FALSE IN THE ONE
+    # DIRECTION THIS FILE EXISTS TO CLOSE. *** It read "every named file EXISTS on this
+    # branch" and it called os.path.exists on the WORKING TREE. An untracked file --
+    # exactly what a freshly written handover document is -- passed, and C fetching the
+    # branch would find nothing. That is the empty-ref defect that prompted this file,
+    # committed inside the instrument built to prevent it, and it is the right answer in
+    # the wrong words: the check was fine, the sentence it printed was not.
+    # TRACKED is the honest condition. It is what a push will carry.
     missing = [r for r in refs if not exists(r)]
-    out.append(("every named file EXISTS on this branch", not missing,
+    out.append(("every named file is TRACKED, so a push carries it to the branch",
+                not missing,
                 f"missing {missing} -- this is the exact defect that sent C to an "
                 f"empty ref"))
+    # NOT A FAILURE, NEVER SILENT. What C can actually fetch is what is at origin.
+    if at_origin is not None:
+        states = [(r, at_origin(r)) for r in refs]
+        not_yet = [r for r, v in states if v is False]
+        unknown = [r for r, v in states if v is None]
+        out.append((f"named files NOT YET at origin (counted, not a failure): "
+                    f"{len(not_yet)}; could not look: {len(unknown)}", True,
+                    f"not yet {not_yet} unknown {unknown} -- until a push these are "
+                    f"addresses the peer cannot fetch"))
 
     # THE FIELD THIS FILE EXISTS FOR.
     p = POLL.search(text or "")
@@ -116,7 +139,32 @@ def audit(text, exists):
 
 
 def here(rel):
-    return os.path.exists(os.path.join(ROOT, rel))
+    """TRACKED, not merely present. os.path.exists was the old test and it passed an
+    untracked file -- see the note in audit()."""
+    r = subprocess.run(["git", "-C", ROOT, "ls-files", "--error-unmatch", "--", rel],
+                       capture_output=True, text=True)
+    return r.returncode == 0
+
+
+def at_origin(rel):
+    """Already on the PUSHED branch. Returns None when it cannot look -- and cannot look
+    is not 'not there'."""
+    br = None
+    try:
+        br = io.open(MAILBOX, encoding="utf-8").read()
+    except OSError:
+        return None
+    m = re.search(r"^BRANCH:[ \t]+(\S+)$", br, re.M)
+    if not m:
+        return None
+    r = subprocess.run(["git", "-C", ROOT, "cat-file", "-e",
+                        f"origin/{m.group(1)}:{rel}"], capture_output=True, text=True)
+    if r.returncode == 0:
+        return True
+    # Distinguish "the ref is unreachable" from "the file is not on it".
+    q = subprocess.run(["git", "-C", ROOT, "rev-parse", "--verify", "--quiet",
+                        f"origin/{m.group(1)}"], capture_output=True, text=True)
+    return False if q.returncode == 0 else None
 
 
 def record(sha, verdict, stamp, prev_sha=None, prev_verdict=None):
@@ -189,8 +237,10 @@ if __name__ == "__main__":
             "a gate that punishes an honest 'I could not look' teaches you to write "
             "NOTHING-NEW instead")
         # THE ADDRESSING FIX.
-        chk("a named file that does NOT exist fires",
-            any("EXISTS on this branch" in x for x in fired(GOOD, lambda p: False)), "")
+        chk("a named file that is NOT TRACKED fires",
+            any("is TRACKED" in x for x in fired(GOOD, lambda p: False)),
+            "the arm matched the OLD label until 4 Sep; a self-test keyed on a string "
+            "the gate no longer prints is an arm that can only pass by accident")
         chk("a missing header fires",
             any("header BRANCH" in x for x in
                 fired(GOOD.replace("BRANCH: x", "", 1))), "")
@@ -322,7 +372,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     print(f"read 1 file: MAILBOX.md ({len(text)} bytes)")
-    rows = audit(text, here)
+    rows = audit(text, here, at_origin)
     bad = 0
     for n, ok, d in rows:
         print(f"  [{'ok' if ok else 'FAIL'}] {n}" + ("" if ok else f"  -- {d}"))

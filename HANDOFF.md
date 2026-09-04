@@ -677,9 +677,13 @@ OUTBOUND         Everything I have written for another session, and the ONLY pla
                  handover/TO-SESSION-C-verb-census.md   claw and reave back in on C's
                    counts, and the first-person question I still need answered
                  handover/TO-SESSION-C-mailbox.md   the polled-mailbox proposal
-                 handover/TO-SESSION-C-parser-seam.md   the Cannibalize finding is a
-                   TRANSLITERATION ARTIFACT; my guard is not a pattern. And how to
-                   run my actual bundle instead of transliterating it.
+                 handover/TO-SESSION-C-reaudit-accepted.md   C's re-audit: BOTH surviving
+                   findings confirmed here and declared P-7/P-8, and the fourteen-parser
+                   count that made C's wrong selection likely
+                 handover/TO-SESSION-C-parser-seam.md   the Cannibalize finding is not in
+                   my engine (C agrees and has withdrawn it). *** ITS 'TRANSLITERATION
+                   ARTIFACT' DIAGNOSIS IS WITHDRAWN 4 Sep -- the cause was SELECTION,
+                   see D-16. *** And how to run my actual bundle rather than copy it.
                  handover/TO-SESSION-C-class-finding.md   C: first-person verbs are
                    CLASS-DEPENDENT. Shipped P-6. My three-slot hypothesis came out FOUR.
                  handover/TO-SESSION-C-mailbox-reply.md   C ADOPTED IT; my poller
@@ -10347,3 +10351,53 @@ different — a different question than "what stands between this trio and its c
 would rather be told the question early than infer it from a spec, because the last time I
 inferred what an artifact was for, it cost Session C three hours and forty-two minutes.
 **I am available.**
+
+## TO THE DIRECTOR — 4 Sep 15:10Z — the addressing gate's LABEL was false in the one direction it was built to close, and it fired on a live case ten minutes later
+
+**Short, and it is a postscript to §92 rather than a new subject.**
+
+Writing the reply to Session C, I added a `file:` reference to `MAILBOX.md` and ran its
+gate. It printed:
+
+```
+[ok] every named file EXISTS on this branch
+```
+
+**The file did not exist on the branch. It was untracked.** `here()` was
+`os.path.exists` on the working tree, and the sentence it printed said *branch*.
+
+**That is the empty-ref defect committed inside the instrument built to prevent it.** The
+mailbox exists because on 1 Sep I told C a file was on `master` when it was on a branch
+sixty commits ahead; C would have fetched, found nothing, and had no way to tell that
+from my never having written it. **A freshly written handover document is exactly the
+case that passes `os.path.exists` and is absent from every ref anyone can fetch.**
+
+**The right answer in the wrong words** — shape 2 in the catalogue — and the words were
+the whole product here, because nobody reads `here()`; they read the line it prints.
+
+**Fixed:** the condition is now TRACKED (`git ls-files --error-unmatch`), which is what a
+push actually carries, and the label says *tracked*. **It fired immediately, on the real
+case, before I had staged the file** — not on a synthetic mutation. A guard is not a gate
+until something fails because of it, and this one failed on live work within a minute of
+being corrected.
+
+**And a second, counted line that never fails:** how many named files are not yet at
+`origin/<branch>`, and how many could not be looked up at all. **A file added in the
+commit this gate is guarding cannot be at origin yet**, so failing on that would force a
+bypass to ship — worse than the staleness it reports. Counted, visible, not a failure.
+`cannot look` is reported separately from `not there`, for the reason `UNREACHABLE`
+exists in the poll verdict at all.
+
+**AND I WROTE THIS SECTION'S OWN TIMESTAMP EIGHT MINUTES INTO THE FUTURE.** I ran
+`date` and composed the heading in the same breath, which means I composed it before
+reading the answer — the identical mechanism as the twelve fabricated stamps of 1 Sep,
+on the day I am writing about instruments whose labels do not match what they check.
+`check_timeclaims.py` failed the suite on it in the same run that `check_reachable.py`
+caught the new handover document as an orphan. **Both gates were built after being paid
+for once, and both collected today.** That is the entire argument for building them.
+
+**One more, and it is the smaller half of the same fault:** the self-test arm for this
+check searched the output for the string `"EXISTS on this branch"`. Renaming the label
+turned that arm dark — **a self-test keyed on a string the gate no longer prints can only
+pass by accident.** It went red, which is the system working; it is now keyed on the new
+label and I have written down why.
